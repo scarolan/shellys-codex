@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Shelly's Codex — Interactive Fiction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            color: #c0c0c0;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            text-align: center;
+            padding: 3rem 1rem 1rem;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            color: #00ffcc;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+            letter-spacing: 0.15em;
+        }
+        header p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            color: #888;
+        }
+        .stories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem 1rem;
+            max-width: 900px;
+        }
+        .card {
+            background: #12121a;
+            border: 1px solid #1a1a2e;
+            border-radius: 8px;
+            width: 320px;
+            padding: 1.5rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .card:hover {
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
+        }
+        .card h2 {
+            color: #ff6ec7;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .card .genre {
+            font-size: 0.8rem;
+            color: #00ffcc;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+        }
+        .card p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #999;
+        }
+        .card .play {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #00ffcc;
+            font-size: 0.9rem;
+        }
+        footer {
+            margin-top: auto;
+            padding: 2rem 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #555;
+        }
+        footer a { color: #00ffcc; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SHELLY'S CODEX</h1>
+        <p>Interactive fiction — playable in your browser</p>
+    </header>
+
+    <div class="stories">
+        <a class="card" href="neon-shadows/">
+            <h2>Neon Shadows</h2>
+            <div class="genre">Cyberpunk Detective Noir</div>
+            <p>You are Kira Vex, private detective in Neo-Angeles. A desperate father hires you to find his missing daughter &mdash; a neural programmer who vanished inside the walls of Zheng-Harmon Corp. Hack corporate servers, navigate the neon-soaked underworld, and confront the truth.</p>
+            <span class="play">&gt; PLAY</span>
+        </a>
+    </div>
+
+    <footer>
+        Powered by <a href="https://github.com/curiousdannii/parchment">Parchment</a>
+        &middot; Built with <a href="https://github.com/scarolan/shelly">Shelly</a>
+    </footer>
+</body>
+</html>

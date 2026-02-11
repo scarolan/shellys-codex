@@ -1,0 +1,13 @@
+# Inform 6 build artifacts (we DO commit .z5 files for GitHub Pages)
+*.z3
+*.z8
+*.ulx
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
