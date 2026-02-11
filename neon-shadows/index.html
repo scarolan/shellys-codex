@@ -5,6 +5,169 @@
     <title>Neon Shadows — A Cyberpunk Detective Noir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <style>
+        /* === RETRO GREEN TERMINAL THEME === */
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        body {
+            background: #0a0a0f;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #gameport {
+            background: #0c0c0c;
+            border: 2px solid #00cc66;
+            border-radius: 12px;
+            box-shadow:
+                0 0 15px rgba(0, 204, 102, 0.15),
+                inset 0 0 60px rgba(0, 0, 0, 0.5);
+            width: 90vw;
+            max-width: 860px;
+            height: 85vh;
+            max-height: 900px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Scanline overlay */
+        #gameport::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 10;
+            border-radius: 12px;
+        }
+
+        /* CRT screen curvature glow */
+        #gameport::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(
+                ellipse at center,
+                transparent 60%,
+                rgba(0, 0, 0, 0.4) 100%
+            );
+            pointer-events: none;
+            z-index: 11;
+            border-radius: 12px;
+        }
+
+        #windowport {
+            flex: 1;
+            overflow: auto;
+        }
+
+        .WindowFrame {
+            height: 100% !important;
+        }
+
+        /* Main text area */
+        .BufferWindow {
+            background: #0c0c0c !important;
+            color: #00cc66 !important;
+            font-family: 'VT323', 'Courier New', monospace !important;
+            font-size: 22px !important;
+            line-height: 1.5 !important;
+            padding: 1.5rem !important;
+        }
+
+        .BufferWindowInner {
+            max-width: none !important;
+        }
+
+        .BufferLine {
+            color: #00cc66 !important;
+        }
+
+        /* Grid windows (status bar) */
+        .GridWindow {
+            background: #003318 !important;
+            color: #00ff88 !important;
+            font-family: 'VT323', 'Courier New', monospace !important;
+            font-size: 20px !important;
+            border-bottom: 1px solid #00cc66 !important;
+        }
+
+        .GridLine {
+            color: #00ff88 !important;
+        }
+
+        /* Text styles */
+        .Style_header {
+            color: #00ff88 !important;
+            font-weight: bold !important;
+        }
+
+        .Style_subheader {
+            color: #00ffaa !important;
+        }
+
+        .Style_emphasized {
+            color: #66ffaa !important;
+            font-style: italic !important;
+        }
+
+        .Style_alert {
+            color: #ff6666 !important;
+        }
+
+        .Style_note {
+            color: #33aa66 !important;
+        }
+
+        .Style_input {
+            color: #00ffcc !important;
+        }
+
+        /* Input field */
+        .LineInput {
+            color: #00ffcc !important;
+            font-family: 'VT323', 'Courier New', monospace !important;
+            font-size: 22px !important;
+            caret-color: #00ffcc !important;
+            background: transparent !important;
+            border: none !important;
+        }
+
+        /* Loading pane */
+        #loadingpane {
+            color: #00cc66;
+            font-family: 'VT323', 'Courier New', monospace;
+            font-size: 22px;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Scrollbar */
+        .BufferWindow::-webkit-scrollbar {
+            width: 6px;
+        }
+        .BufferWindow::-webkit-scrollbar-track {
+            background: #0c0c0c;
+        }
+        .BufferWindow::-webkit-scrollbar-thumb {
+            background: #00cc66;
+            border-radius: 3px;
+        }
+
+        /* Hide Parchment about/footer if present */
+        #about, #footer { display: none !important; }
+    </style>
     <script src="jquery.min.js"></script>
     <script src="ie.js" nomodule></script>
     <script>
