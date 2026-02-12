@@ -5,17 +5,23 @@
     <title>Neon Shadows — A Cyberpunk Detective Noir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         /* === RETRO GREEN TERMINAL THEME === */
-        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #0a0a0f;
+            overflow: hidden;
+        }
 
         body {
-            background: #0a0a0f;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            padding: 5vh 3vw 3vh;
+            box-sizing: border-box;
         }
 
         #gameport {
@@ -23,16 +29,15 @@
             border: 2px solid #00cc66;
             border-radius: 12px;
             box-shadow:
-                0 0 15px rgba(0, 204, 102, 0.15),
+                0 0 20px rgba(0, 204, 102, 0.2),
+                0 0 60px rgba(0, 204, 102, 0.05),
                 inset 0 0 60px rgba(0, 0, 0, 0.5);
-            width: 90vw;
-            max-width: 860px;
-            height: 85vh;
-            max-height: 900px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            width: 100%;
+            max-width: 960px;
+            height: 100%;
+            margin: 0 auto;
             position: relative;
+            overflow: hidden;
         }
 
         /* Scanline overlay */
@@ -44,23 +49,23 @@
                 0deg,
                 transparent,
                 transparent 2px,
-                rgba(0, 0, 0, 0.08) 2px,
-                rgba(0, 0, 0, 0.08) 4px
+                rgba(0, 0, 0, 0.06) 2px,
+                rgba(0, 0, 0, 0.06) 4px
             );
             pointer-events: none;
             z-index: 10;
             border-radius: 12px;
         }
 
-        /* CRT screen curvature glow */
+        /* CRT vignette */
         #gameport::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: radial-gradient(
                 ellipse at center,
-                transparent 60%,
-                rgba(0, 0, 0, 0.4) 100%
+                transparent 65%,
+                rgba(0, 0, 0, 0.35) 100%
             );
             pointer-events: none;
             z-index: 11;
@@ -68,12 +73,33 @@
         }
 
         #windowport {
-            flex: 1;
-            overflow: auto;
+            height: 100% !important;
+            overflow: hidden !important;
         }
 
         .WindowFrame {
             height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        /* Status bar (grid window) */
+        .GridWindow {
+            background: #001a0d !important;
+            color: #00ff88 !important;
+            font-family: 'VT323', 'Courier New', monospace !important;
+            font-size: 22px !important;
+            border-bottom: 1px solid #00663a !important;
+            flex-shrink: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .GridLine {
+            color: #00ff88 !important;
+        }
+
+        .GridLine span {
+            color: #00ff88 !important;
         }
 
         /* Main text area */
@@ -83,7 +109,11 @@
             font-family: 'VT323', 'Courier New', monospace !important;
             font-size: 22px !important;
             line-height: 1.5 !important;
-            padding: 1.5rem !important;
+            padding: 1.2rem 1.5rem !important;
+            flex: 1 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            height: auto !important;
         }
 
         .BufferWindowInner {
@@ -94,42 +124,39 @@
             color: #00cc66 !important;
         }
 
-        /* Grid windows (status bar) */
-        .GridWindow {
-            background: #003318 !important;
-            color: #00ff88 !important;
-            font-family: 'VT323', 'Courier New', monospace !important;
-            font-size: 20px !important;
-            border-bottom: 1px solid #00cc66 !important;
+        .BufferLine span {
+            color: #00cc66 !important;
         }
 
-        .GridLine {
-            color: #00ff88 !important;
-        }
-
-        /* Text styles */
+        /* Text styles — high specificity */
+        .BufferLine .Style_header,
         .Style_header {
             color: #00ff88 !important;
             font-weight: bold !important;
         }
 
+        .BufferLine .Style_subheader,
         .Style_subheader {
             color: #00ffaa !important;
         }
 
+        .BufferLine .Style_emphasized,
         .Style_emphasized {
             color: #66ffaa !important;
             font-style: italic !important;
         }
 
+        .BufferLine .Style_alert,
         .Style_alert {
             color: #ff6666 !important;
         }
 
+        .BufferLine .Style_note,
         .Style_note {
             color: #33aa66 !important;
         }
 
+        .BufferLine .Style_input,
         .Style_input {
             color: #00ffcc !important;
         }
@@ -142,6 +169,7 @@
             caret-color: #00ffcc !important;
             background: transparent !important;
             border: none !important;
+            outline: none !important;
         }
 
         /* Loading pane */
@@ -153,7 +181,7 @@
             padding: 2rem;
         }
 
-        /* Scrollbar */
+        /* Scrollbar — thin green */
         .BufferWindow::-webkit-scrollbar {
             width: 6px;
         }
@@ -161,11 +189,14 @@
             background: #0c0c0c;
         }
         .BufferWindow::-webkit-scrollbar-thumb {
-            background: #00cc66;
+            background: #00663a;
             border-radius: 3px;
         }
+        .BufferWindow::-webkit-scrollbar-thumb:hover {
+            background: #00cc66;
+        }
 
-        /* Hide Parchment about/footer if present */
+        /* Hide Parchment chrome */
         #about, #footer { display: none !important; }
     </style>
     <script src="jquery.min.js"></script>
