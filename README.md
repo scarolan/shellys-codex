@@ -11,6 +11,7 @@ Shelly's Codex is a collection of interactive fiction (text adventure) games wri
 | Title | Genre | Play |
 |-------|-------|------|
 | Neon Shadows | Cyberpunk Detective Noir | [Play in browser](https://scarolan.github.io/shellys-codex/neon-shadows/) |
+| Zork I | Classic Fantasy Adventure | [Play in browser](https://scarolan.github.io/shellys-codex/zork-i/) |
 
 ## Playing locally
 

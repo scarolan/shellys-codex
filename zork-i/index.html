@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Zork I — The Great Underground Empire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="jquery.min.js"></script>
+    <script src="ie.js" nomodule></script>
+    <script>
+        parchment_options = {
+            lib_path: './',
+            default_story: ['./zork1.z3'],
+        };
+    </script>
+    <script src="web.js" type="module"></script>
+    <link rel="stylesheet" href="web.css">
+    <style>
+        /* === RETRO GREEN TERMINAL THEME ===
+           Rule: only override colors, fonts, and cosmetics.
+           Let Parchment handle all layout/sizing. */
+
+        body {
+            background: #0a0a0f !important;
+        }
+
+        /* Terminal border on the gameport */
+        #gameport {
+            background: #0c0c0c !important;
+            border: 2px solid #00cc66 !important;
+            border-radius: 12px !important;
+            box-shadow:
+                0 0 20px rgba(0, 204, 102, 0.2),
+                0 0 60px rgba(0, 204, 102, 0.05),
+                inset 0 0 60px rgba(0, 0, 0, 0.5) !important;
+            max-width: 960px !important;
+            margin: 3vh auto !important;
+            position: relative !important;
+        }
+
+        /* CRT scanline + vignette overlay (purely cosmetic, no layout impact) */
+        #crt-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 9999;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.06) 2px,
+                    rgba(0, 0, 0, 0.06) 4px
+                ),
+                radial-gradient(
+                    ellipse at center,
+                    transparent 65%,
+                    rgba(0, 0, 0, 0.35) 100%
+                );
+        }
+
+        /* Status bar (grid window) */
+        .GridWindow {
+            background: #001a0d !important;
+            color: #00ff88 !important;
+            font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+            font-size: 22px !important;
+            border-bottom: 1px solid #00663a !important;
+        }
+
+        .GridWindow span, .GridLine, .GridLine span {
+            color: #00ff88 !important;
+        }
+
+        /* Main text area */
+        .BufferWindow {
+            background: #0c0c0c !important;
+            color: #00cc66 !important;
+            font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+            font-size: 22px !important;
+            line-height: 1.5 !important;
+            overflow-x: hidden !important;
+        }
+
+        .BufferWindowInner {
+            max-width: none !important;
+        }
+
+        .BufferLine, .BufferLine span {
+            color: #00cc66 !important;
+        }
+
+        /* Text style overrides */
+        .Style_header, .BufferLine .Style_header { color: #00ff88 !important; font-weight: bold !important; }
+        .Style_subheader, .BufferLine .Style_subheader { color: #00ffaa !important; }
+        .Style_emphasized, .BufferLine .Style_emphasized { color: #66ffaa !important; font-style: italic !important; }
+        .Style_alert, .BufferLine .Style_alert { color: #ff6666 !important; }
+        .Style_note, .BufferLine .Style_note { color: #33aa66 !important; }
+        .Style_input, .BufferLine .Style_input { color: #00ffcc !important; }
+
+        /* Input field */
+        .LineInput {
+            color: #00ffcc !important;
+            font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+            font-size: 22px !important;
+            caret-color: #00ffcc !important;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+        }
+
+        /* Loading pane */
+        #loadingpane {
+            color: #00cc66;
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            font-size: 22px;
+        }
+
+        /* Scrollbar */
+        .BufferWindow::-webkit-scrollbar { width: 6px; }
+        .BufferWindow::-webkit-scrollbar-track { background: #0c0c0c; }
+        .BufferWindow::-webkit-scrollbar-thumb { background: #00663a; border-radius: 3px; }
+        .BufferWindow::-webkit-scrollbar-thumb:hover { background: #00cc66; }
+
+        /* Hide Parchment chrome */
+        #about, #footer { display: none !important; }
+    </style>
+</head>
+<body>
+    <div id="gameport">
+        <div id="crt-overlay"></div>
+        <div id="windowport"></div>
+        <div id="loadingpane">
+            <img src="waiting.gif" alt="LOADING"><br>
+            <em>&nbsp;&nbsp;&nbsp;Loading...</em>
+        </div>
+        <div id="errorpane" style="display:none;"><div id="errorcontent">...</div></div>
+    </div>
+</body>
+</html>

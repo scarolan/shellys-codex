@@ -1,6 +1,4 @@
-# Inform 6 build artifacts (we DO commit .z5 files for GitHub Pages)
-*.z3
-*.z8
+# Inform 6 build artifacts (we DO commit story files for GitHub Pages)
 *.ulx
 
 # OS
