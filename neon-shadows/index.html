@@ -8,79 +8,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script src="jquery.min.js"></script>
+    <script src="ie.js" nomodule></script>
+    <script>
+        parchment_options = {
+            lib_path: './',
+            default_story: ['./neon_shadows.z5'],
+        };
+    </script>
+    <script src="web.js" type="module"></script>
+    <link rel="stylesheet" href="web.css">
     <style>
-        /* === RETRO GREEN TERMINAL THEME === */
-
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background: #0a0a0f;
-            overflow: hidden;
-        }
+        /* === RETRO GREEN TERMINAL THEME ===
+           Rule: only override colors, fonts, and cosmetics.
+           Let Parchment handle all layout/sizing. */
 
         body {
-            padding: 5vh 3vw 3vh;
-            box-sizing: border-box;
+            background: #0a0a0f !important;
         }
 
+        /* Terminal border on the gameport */
         #gameport {
-            background: #0c0c0c;
-            border: 2px solid #00cc66;
-            border-radius: 12px;
+            background: #0c0c0c !important;
+            border: 2px solid #00cc66 !important;
+            border-radius: 12px !important;
             box-shadow:
                 0 0 20px rgba(0, 204, 102, 0.2),
                 0 0 60px rgba(0, 204, 102, 0.05),
-                inset 0 0 60px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 960px;
-            height: 100%;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Scanline overlay */
-        #gameport::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, 0.06) 2px,
-                rgba(0, 0, 0, 0.06) 4px
-            );
-            pointer-events: none;
-            z-index: 10;
-            border-radius: 12px;
-        }
-
-        /* CRT vignette */
-        #gameport::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(
-                ellipse at center,
-                transparent 65%,
-                rgba(0, 0, 0, 0.35) 100%
-            );
-            pointer-events: none;
-            z-index: 11;
-            border-radius: 12px;
-        }
-
-        #windowport {
-            height: 100% !important;
-            overflow: hidden !important;
-        }
-
-        .WindowFrame {
-            height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
+                inset 0 0 60px rgba(0, 0, 0, 0.5) !important;
+            max-width: 960px !important;
+            margin: 3vh auto !important;
         }
 
         /* Status bar (grid window) */
@@ -90,15 +47,9 @@
             font-family: 'VT323', 'Courier New', monospace !important;
             font-size: 22px !important;
             border-bottom: 1px solid #00663a !important;
-            flex-shrink: 0 !important;
-            overflow: hidden !important;
         }
 
-        .GridLine {
-            color: #00ff88 !important;
-        }
-
-        .GridLine span {
+        .GridWindow span, .GridLine, .GridLine span {
             color: #00ff88 !important;
         }
 
@@ -109,57 +60,24 @@
             font-family: 'VT323', 'Courier New', monospace !important;
             font-size: 22px !important;
             line-height: 1.5 !important;
-            padding: 1.2rem 1.5rem !important;
-            flex: 1 !important;
-            overflow-y: auto !important;
             overflow-x: hidden !important;
-            height: auto !important;
         }
 
         .BufferWindowInner {
             max-width: none !important;
         }
 
-        .BufferLine {
+        .BufferLine, .BufferLine span {
             color: #00cc66 !important;
         }
 
-        .BufferLine span {
-            color: #00cc66 !important;
-        }
-
-        /* Text styles — high specificity */
-        .BufferLine .Style_header,
-        .Style_header {
-            color: #00ff88 !important;
-            font-weight: bold !important;
-        }
-
-        .BufferLine .Style_subheader,
-        .Style_subheader {
-            color: #00ffaa !important;
-        }
-
-        .BufferLine .Style_emphasized,
-        .Style_emphasized {
-            color: #66ffaa !important;
-            font-style: italic !important;
-        }
-
-        .BufferLine .Style_alert,
-        .Style_alert {
-            color: #ff6666 !important;
-        }
-
-        .BufferLine .Style_note,
-        .Style_note {
-            color: #33aa66 !important;
-        }
-
-        .BufferLine .Style_input,
-        .Style_input {
-            color: #00ffcc !important;
-        }
+        /* Text style overrides */
+        .Style_header, .BufferLine .Style_header { color: #00ff88 !important; font-weight: bold !important; }
+        .Style_subheader, .BufferLine .Style_subheader { color: #00ffaa !important; }
+        .Style_emphasized, .BufferLine .Style_emphasized { color: #66ffaa !important; font-style: italic !important; }
+        .Style_alert, .BufferLine .Style_alert { color: #ff6666 !important; }
+        .Style_note, .BufferLine .Style_note { color: #33aa66 !important; }
+        .Style_input, .BufferLine .Style_input { color: #00ffcc !important; }
 
         /* Input field */
         .LineInput {
@@ -177,38 +95,17 @@
             color: #00cc66;
             font-family: 'VT323', 'Courier New', monospace;
             font-size: 22px;
-            text-align: center;
-            padding: 2rem;
         }
 
-        /* Scrollbar — thin green */
-        .BufferWindow::-webkit-scrollbar {
-            width: 6px;
-        }
-        .BufferWindow::-webkit-scrollbar-track {
-            background: #0c0c0c;
-        }
-        .BufferWindow::-webkit-scrollbar-thumb {
-            background: #00663a;
-            border-radius: 3px;
-        }
-        .BufferWindow::-webkit-scrollbar-thumb:hover {
-            background: #00cc66;
-        }
+        /* Scrollbar */
+        .BufferWindow::-webkit-scrollbar { width: 6px; }
+        .BufferWindow::-webkit-scrollbar-track { background: #0c0c0c; }
+        .BufferWindow::-webkit-scrollbar-thumb { background: #00663a; border-radius: 3px; }
+        .BufferWindow::-webkit-scrollbar-thumb:hover { background: #00cc66; }
 
         /* Hide Parchment chrome */
         #about, #footer { display: none !important; }
     </style>
-    <script src="jquery.min.js"></script>
-    <script src="ie.js" nomodule></script>
-    <script>
-        parchment_options = {
-            lib_path: './',
-            default_story: ['./neon_shadows.z5'],
-        };
-    </script>
-    <script src="web.js" type="module"></script>
-    <link rel="stylesheet" href="web.css">
 </head>
 <body>
     <div id="gameport">
