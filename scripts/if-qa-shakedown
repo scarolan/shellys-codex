@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+# if-qa-shakedown - Run a Claude-driven exploratory QA session on an IF game
+# Usage: if-qa-shakedown [path/to/game.z5]
+# Default: tests Neon Shadows. Files GitHub issues for each bug found.
+# Max runtime: 30 minutes. Reuses ask-claude lockfile to prevent conflicts.
+
+set -o pipefail
+
+LOCKFILE="/tmp/ask-claude.lock"
+MAX_RUNTIME=1800  # 30 minutes
+CLAUDE_PID_FILE="/tmp/if-qa-shakedown-claude.pid"
+
+# Default game
+DEFAULT_GAME="$HOME/shellys-arcade/interactive_fiction/neon_shadows.z5"
+GAME="${1:-$DEFAULT_GAME}"
+
+# Derive paths
+GAME_DIR="$(dirname "$GAME")"
+GAME_FILE="$(basename "$GAME")"
+GAME_NAME="${GAME_FILE%.z5}"
+SOURCE_FILE="$GAME_DIR/${GAME_NAME}.inf"
+CLAUDE_MD="$GAME_DIR/CLAUDE.md"
+
+# --- Validation ---
+
+if [ ! -f "$GAME" ]; then
+    echo "ERROR: Game file not found: $GAME"
+    exit 1
+fi
+
+if [ ! -f "$SOURCE_FILE" ]; then
+    echo "ERROR: Source file not found: $SOURCE_FILE"
+    exit 1
+fi
+
+# Enforce single instance (shared with ask-claude)
+if [ -f "$LOCKFILE" ]; then
+    LOCK_PID=$(cat "$LOCKFILE" 2>/dev/null)
+    if kill -0 "$LOCK_PID" 2>/dev/null; then
+        echo "ERROR: ask-claude or if-qa-shakedown is already running (PID $LOCK_PID). Wait for it to finish."
+        exit 1
+    else
+        rm -f "$LOCKFILE"
+    fi
+fi
+
+# Write lock
+echo $$ > "$LOCKFILE"
+
+cleanup() {
+    if [ -f "$CLAUDE_PID_FILE" ]; then
+        CPID=$(cat "$CLAUDE_PID_FILE" 2>/dev/null)
+        if [ -n "$CPID" ] && kill -0 "$CPID" 2>/dev/null; then
+            kill "$CPID" 2>/dev/null
+            sleep 1
+            kill -0 "$CPID" 2>/dev/null && kill -9 "$CPID" 2>/dev/null
+        fi
+    fi
+    rm -f "$LOCKFILE" "$CLAUDE_PID_FILE" /tmp/if-qa-shakedown-output.txt
+}
+trap cleanup EXIT
+
+# --- Compile the game ---
+
+echo "=== QA Shakedown: $GAME_NAME ==="
+echo ""
+echo "Compiling $SOURCE_FILE..."
+compile_output=$(inform6 +/usr/local/share/inform6/lib/ "$SOURCE_FILE" "$GAME" 2>&1)
+if [ $? -ne 0 ]; then
+    echo "ERROR: Compilation failed:"
+    echo "$compile_output"
+    exit 1
+fi
+echo "Compilation successful."
+echo ""
+
+# --- Read game context ---
+
+GAME_CONTEXT=""
+if [ -f "$CLAUDE_MD" ]; then
+    GAME_CONTEXT=$(cat "$CLAUDE_MD")
+fi
+
+# --- Build QA prompt ---
+
+QA_PROMPT="You are a QA tester doing an exploratory shakedown of the interactive fiction game '${GAME_NAME}'.
+
+GAME CONTEXT:
+${GAME_CONTEXT}
+
+YOUR TASK:
+1. Read the game source file at ${SOURCE_FILE} to understand the full implementation — rooms, objects, NPCs, flags, gates, and puzzle logic.
+2. Play the game using dfrotz. Run commands like:
+   echo -e 'command1\ncommand2\nquit\ny' | /usr/games/dfrotz -m -p -w 999 -Z 0 ${GAME}
+3. Systematically test these areas:
+   - Happy path: play through the full game start to finish
+   - Wrong puzzle order: skip steps, do things out of sequence
+   - Revisit locations after state changes (e.g., after freeing Lily, go back to earlier rooms)
+   - Talk to every NPC about every topic at different game states
+   - Nonsense and unexpected input (xyzzy, swear words, random verbs)
+   - Examine every object, try unusual verbs (push, pull, kick, smell, taste, listen)
+   - Try to break gates (enter areas without prerequisites)
+   - Boundary conditions: take things twice, drop and retake, use items in wrong places
+   - Check for grammar issues (article agreement, plural handling, typos)
+   - Look for missing descriptions (\"you see nothing special\") on important objects
+   - Try going in every direction from every room, including invalid ones
+4. For each bug you find, file a GitHub issue. IMPORTANT rules:
+   - Working directory for gh commands: ${HOME}/shellys-arcade
+   - Title format: '${GAME_NAME} (IF): <brief description>'
+   - Body must include: dfrotz command sequence to reproduce, expected behavior, actual behavior
+   - Labels: use ONLY 'bug' — do NOT add the 'shelly' label
+   - Example: gh issue create --repo scarolan/shellys-arcade --title '${GAME_NAME} (IF): description' --label bug --body 'body here'
+   - Do NOT file issues for things that are working as designed per the source code
+   - Do NOT file duplicate issues — check existing open issues first with: gh issue list --repo scarolan/shellys-arcade --state open --label bug
+5. After testing, print a summary to stdout:
+   - Total scenarios tested
+   - Bugs found and filed (with issue numbers)
+   - Areas that passed cleanly
+   - Any observations that aren't bugs but might be worth noting
+
+Be thorough. You have 30 minutes. Focus on finding real bugs — state inconsistencies, parser errors, broken gates, missing descriptions, grammar issues, and dialogue gaps."
+
+# --- Run Claude ---
+
+echo "Starting QA session (30 minute timeout)..."
+echo ""
+
+rm -f /tmp/if-qa-shakedown-output.txt
+
+CLAUDE_BIN="${CLAUDE_BIN:-$(command -v claude || echo /usr/bin/claude)}"
+"$CLAUDE_BIN" -p "$QA_PROMPT" --dangerously-skip-permissions > /tmp/if-qa-shakedown-output.txt 2>&1 &
+CLAUDE_PID=$!
+echo "$CLAUDE_PID" > "$CLAUDE_PID_FILE"
+
+START_TIME=$(date +%s)
+
+# Monitor loop — just a hard timeout, no stuck detection
+while true; do
+    sleep 30
+
+    if ! kill -0 $CLAUDE_PID 2>/dev/null; then
+        wait $CLAUDE_PID 2>/dev/null
+        EXIT_CODE=$?
+        echo "--- QA Session Output ---"
+        cat /tmp/if-qa-shakedown-output.txt 2>/dev/null
+        echo ""
+        echo "=== QA Shakedown Complete ==="
+        exit $EXIT_CODE
+    fi
+
+    NOW=$(date +%s)
+    ELAPSED=$((NOW - START_TIME))
+
+    if [ $ELAPSED -ge $MAX_RUNTIME ]; then
+        echo "TIMEOUT: QA session exceeded ${MAX_RUNTIME}s. Killing."
+        kill $CLAUDE_PID 2>/dev/null
+        sleep 2
+        kill -0 $CLAUDE_PID 2>/dev/null && kill -9 $CLAUDE_PID 2>/dev/null
+        echo ""
+        echo "--- QA Session Output (partial) ---"
+        cat /tmp/if-qa-shakedown-output.txt 2>/dev/null
+        echo ""
+        echo "=== QA Shakedown Timed Out ==="
+        exit 124
+    fi
+
+    echo "... QA session running (${ELAPSED}s elapsed)" >&2
+done
