@@ -1,0 +1,2085 @@
+! ===================================================================
+! THE TEMPORAL APPRENTICE
+! An Interactive Fiction Game
+! Douglas Adams meets H.G. Wells
+! ===================================================================
+
+Constant Story "The Temporal Apprentice";
+Constant Headline "^A Time-Travelling Adventure^^";
+Constant MAX_SCORE 165;
+
+Replace DrawStatusLine;
+
+Include "Parser";
+Include "VerbLib";
+
+! ===================================================================
+! GLOBAL VARIABLES
+! ===================================================================
+
+Global visited_roman = false;
+Global visited_blitz = false;
+Global visited_hawking = false;
+Global visited_future = false;
+
+Global has_lodestone = false;
+Global has_vacuum_tube = false;
+Global has_formula = false;
+Global has_processor = false;
+
+Global inscription_carved = false;
+Global capsule_buried = false;
+Global church_saved = false;
+Global eleanor_gift = false;
+
+Global hawking_convinced = false;
+Global marcus_impressed = false;
+Global livia_trusts = false;
+Global tommy_helping = false;
+Global radio_fixed = false;
+Global porter_bypassed = false;
+Global kai_helping = false;
+Global has_diving_gear = false;
+Global lab_unlocked = false;
+
+Global components_installed = false;
+Global workshop_cleaned = false;
+
+Global cat_accident = false;
+Global current_era = 0;
+Global cat_turn_count = 0;
+Global fire_event = false;
+Global hawking_phase = 0;
+
+! ===================================================================
+! NPC CONVERSATION ROUTINES
+! ===================================================================
+
+[ NPC_Talk_Hartley;
+    if (components_installed) {
+        print "~Splendid work, my boy! Absolutely splendid! I knew hiring an apprentice was the right decision. Well, the cat helped too, I suppose.~^";
+        rtrue;
+    }
+    if (cat_accident) {
+        print "Dr. Hartley isn't here. He went out for tea approximately thirty seconds before the cat destroyed everything.^";
+        rtrue;
+    }
+    print "Dr. Hartley beams at you over his spectacles. ~Ah, there you are! Welcome, welcome to the workshop. Marvellous place, isn't it? Try not to touch anything that's glowing. Or humming. Especially if it's doing both.~^^";
+    print "He gestures vaguely at the chaos around him. ~I'm just popping out for tea. Mrs. Pemberton's scones wait for no man. Do have a look around -- the journal on the workbench will bring you up to speed. And do keep an eye on Copernicus. He has... ideas.~^";
+];
+
+[ NPC_Ask_Hartley topic;
+    if (topic == 'machine' or 'time' or 'device' or 'invention') {
+        print "~The Temporal Displacement Engine! My life's work. Well, one of them. The marmalade recipe was also quite significant.~ He pats the machine fondly. ~She's nearly ready. Just needs a few calibrations.~^";
+        rtrue;
+    }
+    if (topic == 'cat' or 'copernicus') {
+        print "~Copernicus? Magnificent creature. Found him in a dustbin in Whitechapel. He has an uncanny instinct for finding the most expensive thing in any room and sitting on it.~^";
+        rtrue;
+    }
+    if (topic == 'journal' or 'notes' or 'book') {
+        print "~Yes, do read it! Contains all my research. The handwriting gets a bit wobbly around chapter seven -- that was the incident with the temporal feedback loop and the cheese sandwich.~^";
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~Help? You're the apprentice! Your job is to help ME. But I suppose reading the journal would be a start.~^";
+        rtrue;
+    }
+    print "Dr. Hartley adjusts his spectacles. ~Hmm? Oh, I'm not sure I can help you with that. Try the journal.~^";
+];
+
+[ NPC_Talk_Marcus;
+    if (marcus_impressed) {
+        print "Marcus clasps your arm in a Roman greeting. ~Hail, friend! The gods clearly favour you. Any seer who commands thunder stones is welcome on the Via Principalis.~^";
+        rtrue;
+    }
+    print "The centurion blocks your path with professional indifference. ~Halt. The Via Principalis is restricted to Roman citizens and military personnel.~ He eyes your strange clothing. ~You are clearly neither. Move along.~^";
+];
+
+[ NPC_Ask_Marcus topic;
+    if (topic == 'boudica' or 'boudicca' or 'revolt' or 'army' or 'iceni') {
+        if (marcus_impressed) {
+            print "Marcus lowers his voice. ~The Iceni queen gathers her forces to the north. Between you and me, I've requested a transfer to Gaul. The food is terrible but at least the locals aren't on fire.~^";
+        } else {
+            print "Marcus stiffens. ~I will not discuss military matters with a civilian. Especially one dressed like... whatever you are.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'temple' or 'mithras') {
+        print "~The Temple of Mithras is sacred ground. Priestess Livia guards it well. You'd need her blessing -- or mine -- to enter.~^";
+        rtrue;
+    }
+    if (topic == 'forum' or 'market') {
+        print "~The Forum is the heart of Londinium. Merchants, politicians, charlatans -- sometimes all three at once.~^";
+        rtrue;
+    }
+    if (topic == 'lodestone' or 'stone' or 'magnet' or 'thunder') {
+        if (marcus_impressed) {
+            print "~The thunder stone! Truly a gift from Jupiter himself. You wield great power, seer.~^";
+        } else {
+            print "~I have no interest in stones. Move along.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~I am a centurion of Rome, not a help desk. But if you seek passage north, you'll need to prove yourself worthy.~^";
+        rtrue;
+    }
+    print "Marcus gives you a look that suggests your question ranks somewhere below latrine duty in his list of priorities.^";
+];
+
+[ NPC_Talk_Livia;
+    if (livia_trusts) {
+        print "Livia smiles warmly. ~The mysteries of Mithras are open to you, traveller. The walls of this temple have stood for generations. May they stand for generations more.~^";
+        rtrue;
+    }
+    if (marcus_impressed) {
+        print "Livia regards you with cautious interest. ~Marcus speaks highly of you. He says you command the thunder stones. Impressive, if true. Perhaps you are worthy of the temple's secrets.~^^";
+        livia_trusts = true;
+        print "She steps aside from the inner sanctum. ~You may enter freely.~^";
+        rtrue;
+    }
+    print "Livia stands at the entrance to the inner sanctum, arms folded. ~This is a place of sacred mystery. Only the initiated may pass beyond this point.~ She doesn't look like she's in a negotiating mood.^";
+];
+
+[ NPC_Ask_Livia topic;
+    if (topic == 'mithras' or 'temple' or 'god' or 'mystery') {
+        print "~Mithras, the Unconquered Sun, slayer of the cosmic bull. His mysteries teach us that light conquers darkness.~ She pauses. ~Also, the initiation involves being buried alive for three hours, but we don't lead with that.~^";
+        rtrue;
+    }
+    if (topic == 'marcus' or 'centurion') {
+        print "~Marcus is a good man, if somewhat superstitious. He once made an offering to Jupiter because his sandal broke. Twice.~^";
+        rtrue;
+    }
+    if (topic == 'inscription' or 'wall' or 'carve' or 'carving') {
+        if (livia_trusts) {
+            print "~The walls of the inner sanctum bear the marks of many generations. You are welcome to leave your own.~^";
+        } else {
+            print "~The walls are sacred. I certainly won't let strangers go around scratching on them.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~Seek the blessing of Marcus first. The centurion's word carries weight, even in a temple.~^";
+        rtrue;
+    }
+    print "Livia considers your question with the serene patience of someone who has heard far sillier things during initiation ceremonies.^";
+];
+
+[ NPC_Talk_Peggy;
+    if (church_saved) {
+        print "Peggy gives you a curt nod of approval. ~Right. You'll do. Saved that church like a proper Londoner. Now get back to the shelter before Jerry has another go.~^";
+        rtrue;
+    }
+    print "Warden Peggy materialises from the darkness like a tweed-clad spectre. ~Put that light OUT!~ she barks, despite the fact that you don't have a light. ~We're in a blackout, in case you hadn't noticed. Jerry's up there dropping his calling cards and here you are gawping about like a tourist.~^^";
+    print "She points firmly towards the ground. ~Shelter's down below. The Crown and Anchor's east if you need liquid courage. And stay away from the rubble site west -- unexploded ordnance.~^";
+];
+
+[ NPC_Ask_Peggy topic;
+    if (topic == 'shelter' or 'underground') {
+        print "~Shelter's right below us. Tube station, repurposed. Tommy's down there with his wireless set, and little Eleanor. Poor mite won't stop drawing pictures.~^";
+        rtrue;
+    }
+    if (topic == 'church' or 'bomb' or 'fire') {
+        if (church_saved) {
+            print "~Thanks to you, St. Margaret's still stands. My grandmother was married there. Not that I'm sentimental.~ She dabs her eye briskly. ~Dust. Terrible dust.~^";
+        } else {
+            print "~St. Margaret's took a hit last week. Still standing, mostly. The inscription on the wall survived, oddly enough. Very old, that.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'rubble' or 'electronics' or 'shop') {
+        print "~The electronics shop caught it two nights ago. Whole street's rubble now. There might be salvageable parts in there, if you don't mind unexploded bombs.~^";
+        rtrue;
+    }
+    if (topic == 'tommy' or 'radio' or 'wireless') {
+        print "~Tommy's a good lad. Royal Signals, invalided out. His radio's on the blink -- needs a valve, I think. He's been trying to pick up transmissions.~^";
+        rtrue;
+    }
+    if (topic == 'eleanor' or 'girl' or 'child') {
+        print "~Eleanor? Sweet girl. Lost her mum in the first raids. She just draws and draws. Pictures of cats, mostly. Seems to cheer her up.~^";
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~Help? I'll tell you what would help. Everyone in the shelter, lights out, and Jerry sod off back to Berlin. In that order.~^";
+        rtrue;
+    }
+    print "Peggy fixes you with a look that has quelled air raids, unruly teenagers, and at least one minor fire. ~Haven't got all night. Was there a point?~^";
+];
+
+[ NPC_Talk_Tommy;
+    if (radio_fixed) {
+        print "Tommy grins and taps his headphones. ~Coming through loud and clear now, thanks to you! I'm picking up all sorts. BBC, military channels, even some French resistance traffic.~^";
+        rtrue;
+    }
+    print "Corporal Tommy sits hunched over a wireless set that has seen better days -- most of them before the Blitz. He taps at it and swears under his breath.^^";
+    print "~Blasted thing's gone dead again. If I had a working valve I could get it going. The electronics shop on the west side might have had some, but...~ He gestures upward, indicating the general direction of the Luftwaffe.^";
+];
+
+[ NPC_Ask_Tommy topic;
+    if (topic == 'radio' or 'wireless' or 'valve') {
+        if (radio_fixed) {
+            print "~Working like a charm! Though I keep picking up a signal that's just someone reading the cricket scores. In 1941. We have priorities, apparently.~^";
+        } else {
+            print "~She's a Type 18 field wireless. Took her all the way to Dunkirk and back. But without a working valve, she's just a very expensive paperweight.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'rubble' or 'dig' or 'box' or 'electronics') {
+        if (tommy_helping) {
+            print "~Right, let's get digging. Two pairs of hands are better than one. Lead the way to the rubble site.~^";
+        } else if (radio_fixed) {
+            print "~The rubble site? Dangerous, that. But I suppose I owe you one for the valve. Tell you what -- I'll help you dig if you need it. Just say the word.~^";
+            tommy_helping = true;
+            score = score + 5;
+            print "[Tommy is now willing to help you dig.]^";
+        } else {
+            print "~Can't help with the rubble, mate. Not while the radio's down. Fix the wireless and we'll talk.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'eleanor' or 'girl') {
+        print "~Poor little thing. Barely says a word since her mum... well. She draws pictures all day. Cats, mostly. Says she had one before the bombing. I think it helps.~^";
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~Fix my radio and I'll help with whatever you need. That's the deal, mate.~^";
+        rtrue;
+    }
+    print "Tommy scratches his chin. ~Can't help you there, I'm afraid. My expertise is limited to radios and digging.~^";
+];
+
+[ NPC_Talk_Hawking;
+    if (hawking_convinced) {
+        print "The speech synthesiser clicks. ~I have already given you the formula. If you need me to explain it again, I charge by the hour. Which, given the nature of your machine, is somewhat ironic.~^";
+        rtrue;
+    }
+    if (hawking_phase == 0) {
+        print "The most famous physicist alive regards you from his wheelchair with sharp, amused eyes. His speech synthesiser clicks to life.^^";
+        print "~Welcome to my party for time travellers. You are the first guest to actually arrive. I was beginning to think my experiment had failed.~^^";
+        print "The synthesiser pauses. ~Or perhaps it succeeded, and you are simply fashionably late by about a century.~^";
+        rtrue;
+    }
+    if (hawking_phase == 1) {
+        print "~You claim to be a time traveller, yet you haven't told me anything interesting about the future. Tell me something that would convince a theoretical physicist, not a tabloid editor.~^";
+        rtrue;
+    }
+    if (hawking_phase == 2) {
+        print "~Interesting. Very interesting. But I need more evidence. Show me something from your time that shouldn't exist in 2009.~^";
+        rtrue;
+    }
+];
+
+[ NPC_Ask_Hawking topic;
+    if (topic == 'time' or 'travel' or 'machine' or 'temporal') {
+        if (hawking_convinced) {
+            print "~Time travel is theoretically possible through several mechanisms: rotating black holes, cosmic strings, Alcubierre drives.~ A pause. ~Or apparently, a brass contraption built by a Victorian gentleman and activated by a cat. The universe has a sense of humour.~^";
+        } else {
+            print "~I have spent my career studying the nature of time. Closed timelike curves, chronology protection, the grandfather paradox. And now someone walks in claiming to have solved it with brass and steam.~ The synthesiser almost sounds amused. ~I'm listening.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'formula' or 'calibration' or 'equatio' or 'napkin') {
+        if (hawking_convinced) {
+            print "~The calibration formula is on the napkin. Please don't spill anything on it. It took me twenty minutes to derive and the napkins here are quite small.~^";
+        } else {
+            print "~You want a formula from me? Convince me you're a genuine time traveller first. I don't hand out my work to just anyone. Well, except in my books. But those cost money.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'party' or 'invitation') {
+        print "~I sent the invitations after the party. Only time travellers could attend. It's either a brilliant experiment or I'm about to eat a lot of canapes alone.~^";
+        rtrue;
+    }
+    if (topic == 'cat' or 'copernicus') {
+        print "~Is that a cat? In a Cambridge college?~ The synthesiser pauses. ~The cat is the most sensible guest here. Cats understand time instinctively. They spend most of it asleep.~^";
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~I suggest you talk to me about time travel and try to convince me you're genuine. Show me something impossible. Scientists respond to evidence, not speeches.~^";
+        rtrue;
+    }
+    print "The synthesiser clicks. ~That topic falls outside my area of expertise. Which, given that my area of expertise is the entire universe, is saying something.~^";
+];
+
+[ NPC_Talk_Torres;
+    if (kai_helping) {
+        print "Mayor Torres nods. ~I see Kai has taken you under her wing. Good. She knows the flooded district better than anyone. If there's something worth finding down there, she'll help you find it.~^";
+        rtrue;
+    }
+    print "Mayor Torres is a striking woman in her fifties, silver-haired and steel-spined. She runs the Climate Refuge with the calm efficiency of someone who has been managing catastrophes for decades.^^";
+    print "~Another visitor from the dry zones? Or...~ She studies your Victorian clothing. ~Something else entirely. No matter. Everyone is welcome in the Refuge, provided they contribute. We don't have room for tourists.~^";
+];
+
+[ NPC_Ask_Torres topic;
+    if (topic == 'flood' or 'water' or 'thames' or 'climate' or 'sea') {
+        print "~The Thames Barrier failed in 2038. Seven years later, we're still adapting.~ She gestures at the window, where water laps at the second floor. ~London has always been a city built on a river. Now it's a city built IN a river. The difference is significant.~^";
+        rtrue;
+    }
+    if (topic == 'museum' or 'barrier' or 'exhibit') {
+        print "~The Thames Barrier Museum preserves what we can of the old city's history. The curator keeps it running against all odds. Worth a visit, if you can get there without swimming.~^";
+        rtrue;
+    }
+    if (topic == 'kai' or 'scavenger') {
+        print "~Kai? Best scavenger in the district. Young, brave, probably a bit foolish. She found the diving gear that lets us access the submerged levels. If you need to go below the waterline, talk to her.~^";
+        rtrue;
+    }
+    if (topic == 'lab' or 'laboratory' or 'submerged') {
+        print "~There's a research laboratory on the submerged level. Locked tight -- the researchers evacuated in a hurry. Kai might know how to get in. She's explored more of the flooded district than anyone.~^";
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~Talk to Kai on the walkway. She can help you navigate the flooded areas. And visit the museum -- our curator is quite knowledgeable.~^";
+        rtrue;
+    }
+    print "Torres considers your question with the expression of someone who has seventeen more urgent problems to deal with. ~I'm afraid that's not my department. Try Kai, or the curator.~^";
+];
+
+[ NPC_Talk_Kai;
+    if (kai_helping) {
+        print "Kai grins. ~Ready when you are! The submerged level is accessible from the flooded street if you've got the gear. Just remember -- hold your breath metaphorically. The rebreather does the actual breathing.~^";
+        rtrue;
+    }
+    print "A young woman in a weathered wetsuit perches on the railing of the walkway, legs dangling over the water below. She has the easy confidence of someone who has made friends with a disaster.^^";
+    print "~Hey! You're new.~ She eyes your outfit. ~Very new. Like, historically new. I'm Kai. I salvage things from the flooded bits.~ She pats a set of diving gear beside her. ~Looking to go below?~^";
+];
+
+[ NPC_Ask_Kai topic;
+    if (topic == 'dive' or 'diving' or 'gear' or 'swim' or 'rebreather') {
+        if (has_diving_gear) {
+            print "~You've got the gear. Just head down from the flooded street. Try not to touch anything that glows. Learned that one the hard way.~^";
+        } else if (kai_helping) {
+            print "~I've got spare diving gear right here. Take it -- I've got three more sets stashed around the district. I'm like a very wet squirrel.~^";
+        } else {
+            print "~The diving gear? Sure, I'll lend it to you. But first, help me with something. There's a locked panel on the museum rooftop -- I need someone with clever hands to open it. Deal?~^";
+        }
+        rtrue;
+    }
+    if (topic == 'lab' or 'laboratory' or 'submerged') {
+        print "~The lab? Creepy place. Full of fancy equipment, mostly waterproof. The door's got an electronic lock -- you'll need a code or something.~ She shrugs. ~I just salvage the easy stuff.~^";
+        rtrue;
+    }
+    if (topic == 'panel' or 'rooftop' or 'lock' or 'museum') {
+        if (kai_helping) {
+            print "~Thanks again for the panel! Torres has been wanting that comms array fixed for months.~^";
+        } else {
+            print "~There's a maintenance panel on the museum rooftop. Communications array, I think. Torres wants it fixed but it's locked. You look like you're good with fiddly mechanical things.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'capsule' or 'time' or 'buried' or 'box') {
+        if (capsule_buried) {
+            print "~Oh yeah! The museum curator found an ancient time capsule recently. Roman-era, they think. It's on display. Pretty cool, actually.~^";
+        } else {
+            print "~Time capsule? Don't know anything about that.~^";
+        }
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~Help me open the panel on the museum rooftop and I'll lend you my diving gear. Fair trade!~^";
+        rtrue;
+    }
+    print "Kai shrugs cheerfully. ~Dunno about that. I just dive and salvage. Ask Torres or the curator for the big questions.~^";
+];
+
+! ===================================================================
+! CUSTOM STATUS LINE
+! ===================================================================
+
+[ DrawStatusLine width posa;
+    @set_window 1;
+    @set_cursor 1 1;
+    style reverse;
+    width = 0->33;
+    spaces width;
+    @set_cursor 1 1;
+    switch (current_era) {
+        0: print " Workshop, 1895";
+        1: print " Londinium, 60 AD";
+        2: print " London, 1941";
+        3: print " Cambridge, 2009";
+        4: print " London, 2045";
+    }
+    posa = width - 14;
+    @set_cursor 1 posa;
+    print "Score:", score, "/", MAX_SCORE, " ";
+    style roman;
+    @set_window 0;
+];
+
+! ===================================================================
+! BEFOREPARSING — rewrite custom verbs
+! ===================================================================
+
+[ BeforeParsing i len w;
+    wn = 1;
+    w = NextWord();
+    if (w == 'carve' or 'engrave' or 'inscribe') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'c';
+        i->2 = 'r';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'bury') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'b';
+        i->2 = 'r';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'travel' or 'teleport') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 't';
+        i->2 = 'v';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'repair' or 'fix' or 'mend') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'r';
+        i->2 = 'p';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'install' or 'attach') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'i';
+        i->2 = 'n';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'extinguish' or 'smother') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'e';
+        i->2 = 'x';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'pet' or 'stroke') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'p';
+        i->2 = 't';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'dig') {
+        i = WordAddress(1);
+        i->0 = 'z';
+        i->1 = 'd';
+        i->2 = 'g';
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'clean' or 'tidy' or 'sweep') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'c';
+        i->2 = 'l';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'open' && location == future_rooftop) {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'o';
+        i->2 = 'p';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    rfalse;
+];
+
+! ===================================================================
+! WORKSHOP HUB — 1895 London
+! ===================================================================
+
+Object workshop_entrance "Workshop Entrance"
+    with description [;
+            print "A narrow alley off Praed Street, thick with London fog and the eternal smell of coal smoke. Gas lamps throw jaundiced circles on the cobblestones. A brass plate beside a heavy oak door reads: ~DR. A. HARTLEY -- TEMPORAL ENGINEERING -- NO SALESMEN.~^^";
+            print "The workshop lies to the east. The alley continues west to the street, but you've only just arrived and you'd hate to make a bad impression on your first day.^";
+        ],
+         e_to main_workshop,
+         w_to "You've literally just started this job. Let's at least see what's inside before fleeing into the London fog.",
+    has light;
+
+Object coat_hook "coat hook" workshop_entrance
+    with name 'hook' 'coat' 'hooks' 'rack' 'peg',
+         description "A row of brass hooks by the door. Dr. Hartley's enormous overcoat hangs from one. Yours would fit inside it roughly three times.",
+    has scenery;
+
+Object pocket_watch "pocket watch" workshop_entrance
+    with name 'watch' 'pocket' 'timepi' 'fob',
+         description "Your grandfather's pocket watch. A handsome brass piece, slightly dented, perpetually three minutes fast. The irony of carrying a faulty timepiece to a job in temporal engineering has not escaped you.",
+         before [;
+            Listen:
+                "Tick. Tick. Tick. Reassuringly constant, unlike everything else in your life at the moment.";
+         ];
+
+Object main_workshop "Main Workshop"
+    with description [;
+            print "The workshop is a cathedral of improbable engineering. Brass gears the size of dinner plates mesh with copper pipes that disappear into the walls. Glass jars of luminous liquids line shelves alongside what appear to be several jars of marmalade. The ceiling is lost in a tangle of tubes and wires.^^";
+            print "The centrepiece is unmistakable: a magnificent contraption of brass, crystal, and what might be a repurposed church organ occupies the middle of the room. This would be the time machine.^^";
+            if (cat_accident == false)
+                print "Dr. Hartley's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
+            else
+                print "The workbench holds tools and the remains of Dr. Hartley's tea (cold, abandoned). The store room is north, the entrance west.^";
+        ],
+         w_to workshop_entrance,
+         n_to store_room,
+    has light;
+
+Object workbench "workbench" main_workshop
+    with name 'workbench' 'bench' 'table' 'desk',
+         description "A sturdy oak workbench buried under an archaeological layer of tools, diagrams, and biscuit crumbs. Dr. Hartley's leather-bound journal sits prominently in the centre, as if placed there for someone -- you, presumably -- to find.",
+    has scenery supporter;
+
+Object time_machine "time machine" main_workshop
+    with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal',
+         description [;
+            if (cat_accident == false) {
+                print "The Temporal Displacement Engine is a thing of terrible beauty. Brass housings encase crystal resonators connected by a bewildering maze of copper tubing. A set of controls features several levers, a compass-like dial, and what appears to be a bicycle bell. The whole thing hums with barely contained energy.^^";
+                print "Copernicus the cat is sitting on the control panel, because of course he is.^";
+            } else if (components_installed) {
+                print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
+            } else {
+                print "The time machine looks decidedly worse for wear since Copernicus's intervention. Several components are missing or damaged. You'll need to find replacements across time itself.^^";
+                print "The destination dial still works. You could travel to:^";
+                if (visited_roman) print "  Roman Londinium (60 AD)^";
+                if (visited_blitz || visited_roman) print "  Blitz London (1941)^";
+                if (visited_hawking || visited_blitz) print "  Cambridge (2009)^";
+                if (visited_future || visited_hawking) print "  Future London (2045)^";
+            }
+         ],
+         add_to_scope roman_dest blitz_dest hawking_dest future_dest,
+         before [;
+            Examine:
+                if (cat_accident == false) {
+                    cat_accident = true;
+                    visited_roman = true;
+                    current_era = 1;
+                    score = score + 5;
+                    print "You lean in to examine the controls more closely. This is a mistake.^^";
+                    print "Copernicus, with the unerring instinct of cats everywhere for finding the worst possible thing to sit on, shifts his considerable weight onto a large brass lever marked ~ABSOLUTELY DO NOT TOUCH.~^^";
+                    print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
+                    print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
+                    remove dr_hartley;
+                    StartDaemon(copernicus);
+                    PlayerTo(roman_forum);
+                    rtrue;
+                }
+         ],
+    has scenery;
+
+Object hartley_journal "leather-bound journal" main_workshop
+    with name 'journal' 'book' 'leather' 'diary' 'notes',
+         description [;
+            print "Dr. Hartley's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Key excerpts:^^";
+            print "~The Temporal Displacement Engine requires four critical components:^";
+            print "  1. A LODESTONE of sufficient magnetic purity (temporal compass)^";
+            print "  2. A VACUUM TUBE of precise oscillation frequency^";
+            print "  3. A CALIBRATION FORMULA for temporal field harmonics^";
+            print "  4. A QUANTUM PROCESSOR for the field generator~^^";
+            print "~Should the machine malfunction (entirely hypothetical), these components might be scattered across time. One would need to travel to each era to retrieve them. I have included a temporal rift generator as a safety feature. It creates a shimmering portal in each destination era for the return journey.~^^";
+            print "The margins are full of cat doodles and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
+        ],
+         initial "A leather-bound journal sits prominently on the workbench.";
+
+Object store_room "Store Room"
+    with description "A narrow room lined floor to ceiling with shelves of curiosities. Specimen jars containing things best not examined too closely jostle for space with boxes of gears, coils of copper wire, and several items that defy description in any known language. A toolkit sits on the nearest shelf.^^The workshop is back to the south.",
+         s_to main_workshop,
+    has light;
+
+Object toolkit "toolkit" store_room
+    with name 'toolkit' 'tools' 'kit' 'toolbox',
+         description "A battered leather toolkit containing an improbable number of implements: screwdrivers of seventeen sizes, a small chisel, needle-nose pliers, a magnifying glass, and something that might be a sonic spanner. Everything a Victorian temporal engineer's apprentice could need.",
+         initial "A well-worn toolkit sits on the nearest shelf.";
+
+Object specimen_jars "specimen jars" store_room
+    with name 'jars' 'jar' 'specimen' 'bottles' 'bottle',
+         description "The jars contain... things. One appears to hold a butterfly frozen in mid-flight. Another contains what looks like yesterday's weather. A third is labelled ~TUESDAY -- DO NOT OPEN UNTIL MONDAY.~ Best not to think about it.",
+    has scenery pluralname;
+
+! ===================================================================
+! DR. HARTLEY (NPC -- leaves quickly)
+! ===================================================================
+
+Object dr_hartley "Dr. Hartley" main_workshop
+    with name 'hartley' 'doctor' 'dr' 'aldric',
+         description [;
+            if (cat_accident) {
+                "Dr. Hartley is out getting tea. His timing, as always, was impeccable.";
+            }
+            "A tall, thin man with wild silver hair and spectacles perpetually about to fall off his nose. He radiates the sort of cheerful disorganisation that either produces geniuses or explosions. Often both.";
+         ],
+         life [;
+            Ask:
+                NPC_Ask_Hartley(second);
+                rtrue;
+            Tell:
+                "Dr. Hartley nods enthusiastically while clearly thinking about something else entirely.";
+            Give:
+                "~How kind! But I really must dash. Mrs. Pemberton waits for no man.~";
+         ],
+         each_turn [;
+            if (cat_accident) {
+                remove self;
+            }
+         ],
+    has animate proper male;
+
+! ===================================================================
+! ROMAN LONDINIUM — 60 AD
+! ===================================================================
+
+Object roman_forum "The Forum"
+    with description [;
+            print "The heart of Roman Londinium spreads before you in the warm Mediterranean sunlight that has no business being in London. Toga-clad citizens bustle between colonnaded buildings, haggling, gossiping, and doing whatever it is Romans do at the Forum (politics, mostly, with occasional stabbings).^^";
+            print "A temporal rift shimmers in the air beside a marble column, crackling with familiar energy.^^";
+            print "The Via Principalis leads north";
+            if (marcus_impressed == false)
+                print " (a centurion blocks the way)";
+            print ". The Temple of Mithras is to the east";
+            if (livia_trusts == false)
+                print " (a priestess guards the entrance)";
+            print ". The Bathhouse lies west, and the Merchant's Quarter south.^";
+        ],
+         n_to [;
+            if (marcus_impressed) return roman_via;
+            print "The centurion blocks your path with his shield. ~Roman citizens and military only. You are clearly neither.~^";
+            rfalse;
+         ],
+         e_to [;
+            if (livia_trusts) return roman_temple;
+            print "Priestess Livia bars the entrance. ~Only the initiated may enter the Temple of Mithras.~^";
+            rfalse;
+         ],
+         w_to roman_bath,
+         s_to roman_merchants,
+    has light;
+
+Object roman_rift "temporal rift" roman_forum
+    with name 'rift' 'temporal' 'portal' 'shimmer',
+         description "A shimmering tear in reality, crackling with temporal energy. It looks rather like someone took a pair of scissors to the fabric of spacetime and forgot to tidy up. Through it, you can faintly see brass and copper -- the workshop.",
+         before [;
+            Enter:
+                current_era = 0;
+                move copernicus to main_workshop;
+                print "You step into the rift. Reality does that thing where it turns inside out for a moment, and then you're back in the workshop. Your clothing smells faintly of olive oil and empire.^";
+                PlayerTo(main_workshop);
+                rtrue;
+         ],
+    has scenery;
+
+Object roman_via "Via Principalis"
+    with description [;
+            print "A wide, meticulously paved road stretches north towards the military barracks. Roman soldiers drill with mechanical precision, their armour catching the sunlight. The discipline is impressive, the smell less so.^^";
+            print "To the north, beyond the barracks, you can see smoke rising on the horizon. Distant figures move in ways that suggest they are not Roman and are not happy about it.^^";
+            print "The Forum lies back to the south.^";
+        ],
+         s_to roman_forum,
+    has light;
+
+Object boudica_npc "distant army" roman_via
+    with name 'army' 'boudica' 'boudicca' 'iceni' 'warrior' 'figures' 'smoke',
+         description "On the northern horizon, Boudica's Iceni army masses like a gathering storm. History remembers what happens next, but this particular Tuesday in 60 AD doesn't know it yet. The army is magnificent and terrifying in roughly equal measure.",
+         before [;
+            Take: "That's an entire army. And a very angry one at that. Let's admire it from a safe distance.";
+         ],
+    has scenery pluralname;
+
+Object roman_temple "Temple of Mithras"
+    with description [;
+            print "You descend into the underground sanctuary. Torchlight flickers across carved reliefs of Mithras slaying the cosmic bull -- an impressive feat rendered somewhat less impressive by the fact that the bull has been given a rather startled expression by the sculptor.^^";
+            print "The stone walls are ancient and covered in inscriptions from generations of worshippers.^^";
+            print "The Forum is back to the west.^";
+        ],
+         w_to roman_forum,
+    has light;
+
+Object temple_wall "stone wall" roman_temple
+    with name 'wall' 'walls' 'stone' 'inscription',
+         description [;
+            if (inscription_carved) {
+                print "Among the ancient inscriptions, your freshly carved message stands out: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, ";
+                print "60 AD.~ It's not exactly profound, but it should last a few centuries.^";
+            } else {
+                print "The walls bear inscriptions from centuries of worshippers. There's space for one more. If only you had a tool sharp enough to carve stone...^";
+            }
+         ],
+    has scenery;
+
+Object mithras_relief "carved relief" roman_temple
+    with name 'relief' 'mithras' 'bull' 'carving' 'sculpture',
+         description "Mithras is depicted in the heroic act of slaying the cosmic bull. The bull's expression suggests it was having a perfectly nice day up until that point.",
+    has scenery;
+
+Object roman_bath "Roman Bathhouse"
+    with description [;
+            print "Steam billows from heated pools where Romans lounge in varying states of undress and philosophical debate. The acoustics are extraordinary -- you can hear every argument about politics, olive oil, and whether Gaul is really worth the bother.^^";
+            print "A drain grate in the corner occasionally rattles. Something is moving down there.^^";
+            print "The Forum is back to the east.^";
+        ],
+         e_to roman_forum,
+    has light;
+
+Object bath_drain "drain grate" roman_bath
+    with name 'drain' 'grate' 'grating',
+         description [;
+            if (self hasnt general) {
+                "The drain grate is a heavy iron affair, slightly askew. Something glints in the shadows beneath it. You can hear tiny scrabbling sounds -- rats, probably.";
+            }
+            "The drain grate sits slightly askew. The rats have vacated since Copernicus's intervention.";
+         ],
+         before [;
+            Open, Pull, Push:
+                "The grate is far too heavy to move by hand. Something smaller and more determined would need to fish around down there.";
+         ],
+    has scenery;
+
+Object gold_aureus "gold aureus" roman_bath
+    with name 'gold' 'aureus' 'coin' 'money',
+         description "A gold aureus bearing the profile of Emperor Nero. He looks smug, which, to be fair, was his default expression. The coin is in excellent condition, possibly because it's only about two years old.",
+         initial "A gold aureus gleams on the wet floor, freshly batted out from under the drain by an enterprising cat.";
+
+Object roman_merchants "Merchant's Quarter"
+    with description [;
+            print "A bustling marketplace of stalls and shops squeezed together like commuters on the Central Line (if the Central Line existed yet, which it emphatically does not). Merchants hawk everything from amphorae of olive oil to dubious amulets guaranteed to ward off everything from bad luck to Gauls.^^";
+            print "One merchant's stall catches your eye -- it's piled with unusual stones, crystals, and minerals.^^";
+            print "The Forum is to the north, and a path leads south to the Thames dockside.^";
+        ],
+         n_to roman_forum,
+         s_to roman_docks,
+    has light;
+
+Object roman_docks "Thames Dockside"
+    with description [;
+            print "The Thames is narrower here than in your time, and considerably less polluted (though give the Romans a few more years). Small wooden boats bob at rickety piers while workers haul cargo -- amphorae, timber, British tin.^^";
+            print "The ground near the waterline is soft and muddy. Good for burying things, if one were so inclined.^^";
+            print "The Merchant's Quarter is back to the north.^";
+        ],
+         n_to roman_merchants,
+    has light;
+
+Object soft_mud "soft mud" roman_docks
+    with name 'mud' 'ground' 'earth' 'dirt' 'soil',
+         description [;
+            if (capsule_buried) {
+                "The mud has been patted down where you buried your pocket watch. With any luck, someone will dig it up in about two thousand years and be very confused.";
+            }
+            "The mud here is soft and deep. Ideal for burying something for posterity, if you happened to have something worth preserving.";
+         ],
+    has scenery;
+
+! --- Roman NPCs ---
+
+Object marcus "Centurion Marcus" roman_forum
+    with name 'marcus' 'centurion' 'soldier' 'guard' 'roman',
+         description [;
+            if (marcus_impressed) {
+                "Marcus stands at attention, though his expression has softened from ~bureaucratic hostility~ to ~grudging respect.~ He still thinks you dress like a lunatic, but a lunatic who commands thunder stones deserves some courtesy.";
+            }
+            "A broad-shouldered centurion in polished armour, radiating the quiet authority of a man who has spent twenty years telling people where they can and cannot walk. His name plate reads ~MARCVS RVFVS~ and his expression reads ~absolutely not.~";
+         ],
+         life [;
+            Ask:
+                NPC_Ask_Marcus(second);
+                rtrue;
+            Tell:
+                "Marcus listens with the patient expression of a man who has heard every excuse for why someone should be allowed past the checkpoint.";
+            Give:
+                if (noun == lodestone) {
+                    "~Keep your thunder stone, seer. Its magic is yours to command. I need no gifts -- only your assurance that you serve Rome.~";
+                }
+                "Marcus eyes the offering. ~I am a centurion of Rome. I am not bribed.~ A pause. ~Unless it's wine. Good wine.~";
+            Show:
+                if (noun == lodestone && marcus_impressed == false) {
+                    marcus_impressed = true;
+                    score = score + 10;
+                    print "You hold the lodestone near Marcus's iron gladius. The sword twitches towards the stone, and Marcus leaps back as if stung.^^";
+                    print "~By Jupiter!~ he breathes, eyes wide. ~The stone commands iron itself! You are a seer -- a wielder of divine power!~ He salutes hastily. ~Forgive my rudeness, great one. The Via Principalis is open to you, and I shall tell Priestess Livia of your... gifts.~^";
+                    rtrue;
+                }
+                "Marcus glances at it without interest. ~Very nice. Now move along.~";
+         ],
+    has animate proper male;
+
+Object livia "Priestess Livia" roman_forum
+    with name 'livia' 'priestess',
+         description "A tall woman in white robes, with the serene composure of someone who communes with gods on a regular basis and finds them generally less annoying than mortals.",
+         life [;
+            Ask:
+                NPC_Ask_Livia(second);
+                rtrue;
+            Tell:
+                "Livia listens with an expression that suggests she's evaluating your spiritual worth and finding it slightly below average.";
+            Give:
+                "~I have no need of material things,~ she says, in the tone of someone who has quite a nice collection of material things at home.";
+         ],
+    has animate proper female;
+
+Object felix "Felix the Merchant" roman_merchants
+    with name 'felix' 'merchant' 'trader' 'seller' 'vendor',
+         description "A rotund man with the shrewd eyes of someone who can calculate profit margins in three currencies simultaneously. His stall is piled with stones and minerals, each one, he assures you, imbued with cosmic power.",
+         life [;
+            Ask:
+                if (second == 'lodestone' or 'stone' or 'magnet' or 'thunder') {
+                    if (has_lodestone) {
+                        print "~You already have the finest lodestone in the Empire! What more could you want? ...Another lodestone? I might have one in the back, but it'll cost you.~^";
+                    } else {
+                        print "~Ah, the lodestone! A magnificent specimen. Pulls iron like a senator pulls favours.~ He strokes it lovingly. ~One gold aureus, and it's yours. A bargain!~^";
+                    }
+                    rtrue;
+                }
+                print "Felix shrugs. ~Can't help you with that. But have you considered buying a lodestone? Life-changing purchase.~^";
+                rtrue;
+            Give:
+                if (noun == gold_aureus && has_lodestone == false) {
+                    has_lodestone = true;
+                    score = score + 15;
+                    remove gold_aureus;
+                    move lodestone to player;
+                    print "Felix's eyes light up like a Saturnalia bonfire. ~SOLD! To the strangely dressed foreigner!~ He sweeps up the aureus and presses a dark, heavy stone into your hand. ~The finest lodestone in Londinium. It'll change your life. Possibly literally.~^";
+                    rtrue;
+                }
+                "Felix examines your offering and shakes his head. ~Very nice, but I deal in gold. One aureus for the lodestone. That's the price.~";
+         ],
+    has animate proper male;
+
+Object lodestone "lodestone"
+    with name 'lodestone' 'stone' 'magnet' 'thunder',
+         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs gently at any iron nearby, as if the universe itself is nudging you. Dr. Hartley's journal mentioned this: the magnetic core for the temporal compass.";
+
+Object roman_bathers "bathers" roman_bath
+    with name 'bathers' 'romans' 'bather' 'people',
+         description "Romans in various states of relaxation, debating the merits of different olive oils with an intensity usually reserved for warfare.",
+    has scenery animate pluralname;
+
+! ===================================================================
+! WWII LONDON — 1941 (The Blitz)
+! ===================================================================
+
+Object blitz_street "Blacked-Out Street"
+    with description [;
+            print "London, 1941. The darkness is absolute -- blackout regulations turn the city into a maze of shadows and stumbling. Somewhere above, the drone of bombers provides an unwelcome soundtrack. Searchlights sweep the sky like the world's worst disco.^^";
+            print "A temporal rift flickers in a doorway, its glow hastily muffled by what appears to be a curtain someone hung over it.^^";
+            print "An underground shelter entrance leads down. A bombed church looms to the north. The Crown and Anchor pub is east, and a rubble-strewn site lies to the west.^";
+        ],
+         d_to blitz_shelter,
+         n_to blitz_church,
+         e_to blitz_pub,
+         w_to blitz_rubble,
+    has light;
+
+Object blitz_rift "temporal rift" blitz_street
+    with name 'rift' 'temporal' 'portal' 'shimmer',
+         description "The rift shimmers behind a hastily-hung blackout curtain. Someone has pinned a note to it: ~UNEXPLAINED PHENOMENON -- DO NOT REPORT TO WARDEN PEGGY.~",
+         before [;
+            Enter:
+                current_era = 0;
+                move copernicus to main_workshop;
+                print "You slip through the rift. The sounds of the Blitz fade, replaced by the comforting hum of brass machinery.^";
+                PlayerTo(main_workshop);
+                rtrue;
+         ],
+    has scenery;
+
+Object blitz_shelter "Underground Shelter"
+    with description [;
+            print "The tube station has been pressed into service as an air raid shelter. Families huddle on platforms with blankets, thermoses, and the grim determination that defines the Blitz spirit. Someone is singing ~We'll Meet Again~ slightly off-key.^^";
+            print "Corporal Tommy sits in a corner with his wireless set. Young Eleanor sits nearby, drawing intently.^^";
+            print "The exit leads back up to the street.^";
+        ],
+         u_to blitz_street,
+    has light;
+
+Object tommy_radio "wireless set" blitz_shelter
+    with name 'wireless' 'radio' 'set',
+         description [;
+            if (radio_fixed) {
+                "The wireless crackles with life, picking up BBC broadcasts and military chatter. Tommy adjusts the dial with obvious satisfaction.";
+            }
+            "The wireless set sits silent and dead. A handwritten label reads ~Type 18 Mk.II.~ One of the valves is clearly burnt out -- a dark, dead tube where a warm glow should be.";
+         ],
+    has scenery;
+
+Object blitz_church "Bombed Church"
+    with description [;
+            print "St. Margaret's Church has taken a beating but refuses to fall. The roof is half gone, pews are scattered like matchsticks, and stained glass crunches underfoot. But the walls still stand, and through a gap in the masonry, candlelight flickers from what remains of the nave.^^";
+            if (inscription_carved) {
+                print "On one ancient wall, visible through the bomb damage, you can make out a carved inscription: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, 60 AD.~ Nearly two thousand years old and still legible. You feel an odd chill.^^";
+            }
+            if (fire_event && church_saved == false) {
+                print "Scorch marks show where the incendiary landed. The fire has not been contained.^^";
+            }
+            print "The street is back to the south. Stairs lead up to the fire watch rooftop.^";
+        ],
+         s_to blitz_street,
+         u_to blitz_rooftop,
+    has light;
+
+Object church_rubble "church rubble" blitz_church
+    with name 'rubble' 'debris' 'pews' 'glass' 'masonry',
+         description "Broken pews, shattered glass, chunks of masonry. War has no respect for architecture. Among the debris, you can see bits of medieval stonework that have survived since... well, since about 60 AD, actually.",
+    has scenery;
+
+Object blitz_pub "The Crown and Anchor"
+    with description [;
+            print "The pub carries on with defiant normalcy. The bar is well-stocked (rationing hasn't touched spirits yet, mercifully), and a handful of regulars nurse pints with the stoic calm of people who have decided that if a bomb has their name on it, they might as well be holding a drink.^^";
+            print "A faded poster on the wall shows a police telephone box with the caption ~FOR EMERGENCY USE ONLY.~ Someone has drawn a moustache on it.^^";
+            print "The street is back to the west.^";
+        ],
+         w_to blitz_street,
+    has light;
+
+Object tin_soldier "tin soldier" blitz_pub
+    with name 'tin' 'soldier' 'toy',
+         description "A small tin soldier, slightly dented but still standing at attention. A tiny bit of wartime defiance in miniature.",
+         initial "A small tin soldier stands on the bar, holding its ground against the Blitz.";
+
+Object pub_regulars "pub regulars" blitz_pub
+    with name 'regular' 'locals' 'patron' 'drinker',
+         description "The regulars regard you with the friendly suspicion that Londoners reserve for anyone who might be (a) a spy, (b) a German, or (c) someone who's going to ask them to move so they can check for unexploded bombs under their bar stool.",
+    has scenery animate pluralname;
+
+Object police_box "poster of police box" blitz_pub
+    with name 'poster' 'police' 'box' 'telephon',
+         description "Just an ordinary poster of an ordinary police telephone box. Nothing special about it at all. Absolutely not. It's blue, it's rectangular, and it is emphatically just a telephone box. Anyone who suggests otherwise has been watching too many documentaries.",
+    has scenery;
+
+Object blitz_rooftop "Fire Watch Rooftop"
+    with description [;
+            print "The church tower provides a commanding view of blacked-out London. Searchlights crisscross the sky, and the distant crump of explosions punctuates the night. Sandbags are stacked along the parapet -- fire watch supplies for dealing with incendiary bombs.^^";
+            if (fire_event == false) {
+                fire_event = true;
+                print "As if on cue, a cluster of incendiary bombs arcs across the sky like malevolent fireflies. One strikes the church roof below with a bright magnesium flash. Flames begin to spread along the timbers!^^";
+                print "The sandbags are right here. You could try to extinguish the fire, or flee back down the stairs.^^";
+            } else {
+                if (church_saved)
+                    print "The sandbags you used to smother the fire are scattered along the parapet. St. Margaret's still stands.^^";
+                else
+                    print "The remains of the fire smoulder below. St. Margaret's roof is gone.^^";
+            }
+            print "Stairs lead back down to the church.^";
+        ],
+         d_to blitz_church,
+    has light;
+
+Object sandbags "sandbags" blitz_rooftop
+    with name 'sandbag' 'sand' 'bags' 'bag',
+         description "Heavy burlap bags filled with sand, stacked along the parapet. Standard fire watch equipment. You grab one, it's about twenty pounds.",
+         before [;
+            Take:
+                if (church_saved) "The fire's already out. No need for more sandbags.";
+                if (fire_event == false) "No fire to fight at the moment. Enjoy the view.";
+                "You grab a sandbag. It's heavy. You could throw it at the fire below.";
+            ThrowAt:
+                "Try: extinguish fire";
+         ],
+    has scenery pluralname;
+
+Object blitz_rubble "Rubble Site"
+    with description [;
+            print "What was once Finch's Electronics Emporium is now a crater of shattered brick and twisted metal. A sign reading ~FI CH'S EL CTRO ICS~ hangs at a drunken angle. The Luftwaffe's urban redevelopment programme leaves something to be desired.^^";
+            if (self hasnt general) {
+                print "A radio valve lies in the accessible rubble near the surface. Deeper in, you can see a metal box glinting under heavy debris -- too heavy to shift alone.^^";
+            } else {
+                if (has_vacuum_tube == false)
+                    print "The excavated hole reveals a metal box, now accessible.^^";
+                else
+                    print "The rubble has been partially cleared where you and Tommy dug out the metal box.^^";
+            }
+            print "The street is back to the east.^";
+        ],
+         e_to blitz_street,
+    has light;
+
+Object radio_valve "radio valve" blitz_rubble
+    with name 'valve' 'radio',
+         description "A glass radio valve, miraculously intact. The filament inside looks good. This should work in Tommy's wireless set.",
+         initial "A radio valve lies among the accessible surface rubble, glinting in the dim light.";
+
+Object metal_box "metal box" blitz_rubble
+    with name 'metal' 'box' 'case',
+         description [;
+            if (blitz_rubble hasnt general) {
+                "A sturdy metal box is visible under several hundredweight of brick and timber. You'd need help to shift this lot.";
+            }
+            if (self has open) {
+                "The box is open. Inside, nestled in packing straw, are rows of pristine vacuum tubes. One in particular catches your eye -- it's slightly larger than the others, with unusual markings.";
+            }
+            "The excavated metal box is dented but intact. It appears to be from a military shipment.";
+         ],
+         before [;
+            Open:
+                if (blitz_rubble hasnt general) "You can't reach the box yet. It's buried under tonnes of rubble.";
+                if (self has open) "It's already open.";
+                give self open;
+                "You wrench the box open. Inside, packed in straw, are rows of vacuum tubes. One stands out -- slightly larger, with markings that match the specifications in Dr. Hartley's journal.";
+            Take:
+                "The box is too heavy to carry, but you could open it and take what's inside.";
+         ],
+    has scenery container;
+
+Object vacuum_tube "vacuum tube" metal_box
+    with name 'vacuum' 'tube' 'special' 'military',
+         description "A military-grade vacuum tube with unusual oscillation markings. It matches the specifications in Dr. Hartley's journal precisely. This is the component needed for the temporal oscillation circuit.",
+         before [;
+            Take:
+                if (blitz_rubble hasnt general) "It's buried under rubble. You need help digging it out first.";
+                if (metal_box hasnt open) "It's inside the metal box. Open the box first.";
+                if (parent(self) ~= player) {
+                    has_vacuum_tube = true;
+                    score = score + 15;
+                    move self to player;
+                    "You carefully extract the vacuum tube from its packing straw. It's warm to the touch and hums faintly -- temporal resonance. Component two of four.";
+                }
+         ];
+
+! --- WWII NPCs ---
+
+Object peggy "Warden Peggy" blitz_street
+    with name 'peggy' 'warden',
+         description "A formidable woman in a tin hat and ARP armband. Warden Peggy has the bearing of a woman who has personally told the Luftwaffe where to go and is disappointed they didn't listen.",
+         life [;
+            Ask:
+                NPC_Ask_Peggy(second);
+                rtrue;
+            Tell:
+                "Peggy listens with the expression of someone who is humouring you but has fourteen more urgent things to do.";
+            Give:
+                "~I don't need that! I need everyone in the shelters and those fires out!~";
+         ],
+    has animate proper female;
+
+Object tommy "Corporal Tommy" blitz_shelter
+    with name 'tommy' 'corporal' 'soldier',
+         description [;
+            if (radio_fixed)
+                "Tommy sits by his now-functioning wireless, headphones on, occasionally scribbling notes. He looks ten years younger with something useful to do.";
+            "A young man in a rumpled uniform, his arm in a sling from Dunkirk. He fiddles hopelessly with his dead wireless set.";
+         ],
+         life [;
+            Ask:
+                NPC_Ask_Tommy(second);
+                rtrue;
+            Tell:
+                "Tommy nods amiably. ~Right you are.~";
+            Give:
+                if (noun == radio_valve && radio_fixed == false) {
+                    radio_fixed = true;
+                    score = score + 10;
+                    remove radio_valve;
+                    print "Tommy's face lights up like a Christmas tree. ~A working valve! You beauty!~ He slots it into the wireless with practiced hands. The set crackles to life, filling the shelter with the BBC Home Service.^^";
+                    print "~...and now, the shipping forecast. Viking, North Utsire, South Utsire...~^^";
+                    print "Tommy grins. ~Music to my ears. Right then -- you helped me, I'll help you. What do you need?~^";
+                    rtrue;
+                }
+                "~Cheers, but what I really need is a valve for the wireless.~";
+         ],
+    has animate proper male;
+
+Object eleanor "Young Eleanor" blitz_shelter
+    with name 'eleanor' 'girl' 'child',
+         description [;
+            if (eleanor_gift)
+                "Eleanor clutches the pocket watch you gave her, a smile breaking through for the first time. She's already drawing a picture of it -- a brass circle with elaborate cogs, surrounded by cats.";
+            "A girl of about eight, pale and quiet, hunched over a stack of salvaged paper. She draws with intense concentration -- cats, mostly. Dozens of cats in every pose. She hasn't spoken since the bombing that took her mother.";
+         ],
+         life [;
+            Ask:
+                print "Eleanor looks up at you with enormous eyes, then goes back to drawing. She doesn't speak, but she pushes one of her drawings towards you -- a picture of a ginger cat.^";
+                rtrue;
+            Tell:
+                "Eleanor listens solemnly, then draws you a picture of what you just said. It's surprisingly accurate.";
+            Give:
+                if (noun == pocket_watch || noun == tin_soldier) {
+                    eleanor_gift = true;
+                    score = score + 5;
+                    if (noun == pocket_watch) {
+                        remove pocket_watch;
+                        print "Eleanor takes the pocket watch and turns it over in her small hands. For the first time, something like wonder crosses her face. She holds it to her ear, listening to the tick-tick-tick, and the faintest ghost of a smile appears.^^";
+                    } else {
+                        remove tin_soldier;
+                        print "Eleanor takes the tin soldier and stands it on her knee. For the first time, something like a real smile crosses her face. She makes the soldier march across her drawing pad, and a tiny giggle escapes.^^";
+                    }
+                    print "She tucks the gift carefully into her pocket, then -- solemnly -- tears out her best cat drawing and offers it to you. It shows a magnificently smug ginger tabby.^^";
+                    move eleanor_drawing_item to player;
+                    "You suspect this drawing might survive rather longer than you'd expect.";
+                }
+                "Eleanor examines the offering politely, then goes back to drawing. She's not being rude -- she just really likes drawing.";
+         ],
+    has animate proper female;
+
+Object eleanor_drawing_item "Eleanor's drawing"
+    with name 'drawing' 'picture' 'eleanor' 'cat',
+         description "A child's drawing of a ginger tabby cat, rendered with surprising skill and obvious love. The cat wears an expression of magnificent disdain. On the back, in careful letters: ~FOR THE NICE PERSON WITH THE FUNNY CLOTHES.~";
+
+! ===================================================================
+! CAMBRIDGE 2009 — Hawking's Party for Time Travellers
+! ===================================================================
+
+Object cambridge_gates "College Gates"
+    with description [;
+            print "Gonville and Caius College rises before you in all its medieval grandeur, looking exactly like the sort of place where people have been overthinking things for eight hundred years. Students in gowns hurry past, clutching books and existential crises in equal measure.^^";
+            print "A temporal rift hovers discreetly behind a bicycle rack, which in Cambridge is as good as invisible.^^";
+            print "The Porter's Lodge is to the north. A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009.~^";
+        ],
+         n_to cambridge_porter,
+    has light;
+
+Object cambridge_rift "temporal rift" cambridge_gates
+    with name 'rift' 'temporal' 'portal' 'shimmer',
+         description "The rift shimmers behind the bicycle rack. Several bikes have been chained to it, because Cambridge students will chain their bikes to literally anything.",
+         before [;
+            Enter:
+                current_era = 0;
+                move copernicus to main_workshop;
+                print "You slip through the rift, narrowly avoiding a bicycle wheel. Reality reassembles itself as the workshop materialises around you.^";
+                PlayerTo(main_workshop);
+                rtrue;
+         ],
+    has scenery;
+
+Object cambridge_bikes "bicycle rack" cambridge_gates
+    with name 'bicycle' 'bike' 'bikes' 'rack',
+         description "A tangle of bicycles in various states of repair, chained to a rack, to each other, and to at least one lamppost. This is Cambridge. Bicycles are a way of life, a mode of transport, and occasionally a philosophical statement.",
+    has scenery pluralname;
+
+Object cambridge_porter "Porter's Lodge"
+    with description [;
+            print "The Porter's Lodge is a small, warm room that serves as the gatehouse to academic paradise. A stern porter sits behind a window, radiating the quiet authority of someone who has told Nobel Prize winners they can't park there.^^";
+            if (porter_bypassed)
+                print "The way north to the Great Hall is open.^^";
+            else
+                print "The way north to the Great Hall is blocked by centuries of tradition and one very determined porter.^^";
+            print "The college gates are back to the south. The college garden is to the east.^";
+        ],
+         s_to cambridge_gates,
+         n_to [;
+            if (porter_bypassed) return cambridge_hall;
+            print "~Invitation, please,~ says the porter, in a tone that brooks no argument. He has been brooking no arguments since 1987.^";
+            rfalse;
+         ],
+         e_to cambridge_garden,
+    has light;
+
+Object porter_npc "college porter" cambridge_porter
+    with name 'porter' 'jenkins',
+         description "The college porter. Tweed jacket, stern expression, an encyclopaedic knowledge of who belongs here and who doesn't. You do not belong here. He knows this. You know this. Copernicus doesn't care.",
+         life [;
+            Ask:
+                if (second == 'party' or 'hawking' or 'invitation' or 'event') {
+                    if (porter_bypassed) {
+                        print "~The party is in the Great Hall. Professor Hawking's guests are expected to be punctual. And dressed... well. Never mind.~^";
+                    } else {
+                        print "~Professor Hawking's party is by invitation only. If you have an invitation, present it. If you don't...~ He lets the silence do the heavy lifting.^";
+                    }
+                    rtrue;
+                }
+                print "The porter regards you over his spectacles. ~I'm afraid I can't help you with that.~^";
+                rtrue;
+            Give:
+                if (noun == invitation) {
+                    porter_bypassed = true;
+                    score = score + 10;
+                    remove invitation;
+                    print "The porter examines the invitation with the forensic scrutiny of a man who has confiscated more fake invitations than you've had hot dinners.^^";
+                    print "~Hmm. This appears to be genuine.~ He sounds almost disappointed. ~Very well. The party is in the Great Hall, through to the north. Do try not to touch anything.~^";
+                    rtrue;
+                }
+                "The porter accepts nothing but invitations and the quiet dignity of academic protocol.";
+            Show:
+                if (noun == invitation) {
+                    porter_bypassed = true;
+                    score = score + 10;
+                    remove invitation;
+                    print "The porter examines the invitation. ~Genuine. Proceed to the Great Hall, north.~^";
+                    rtrue;
+                }
+                "The porter is unimpressed.";
+         ],
+    has animate proper male;
+
+Object cambridge_garden "College Garden"
+    with description [;
+            print "A perfectly manicured garden that looks like it was designed by God on a particularly good day and has been maintained by anxious gardeners ever since. Ancient trees shade immaculate lawns. A bench overlooks a carp pond.^^";
+            print "Half-hidden under the bench, something catches your eye -- a piece of card that's been dropped or blown here.^^";
+            print "The Porter's Lodge is back to the west.^";
+        ],
+         w_to cambridge_porter,
+    has light;
+
+Object garden_bench "bench" cambridge_garden
+    with name 'bench' 'seat',
+         description "A wooden bench with a brass plaque: ~IN MEMORY OF DOUGLAS ADAMS, WHO KNEW WHERE HIS TOWEL WAS.~ Someone has left a card underneath it.",
+    has scenery supporter;
+
+Object invitation "party invitation" cambridge_garden
+    with name 'invitation' 'card' 'invite' 'party',
+         description "An elegant card reads: ~Professor Stephen Hawking requests the pleasure of your company at a party for time travellers. Gonville and Caius College, June 28, 2009.~ Below, in smaller print: ~Invitations sent after the party. If you can read this, you're either a time traveller or very good at finding things under benches.~",
+         initial "A cream-coloured invitation card peeks out from under the bench.";
+
+Object cambridge_hall "Gonville Hall"
+    with description [;
+            print "The Great Hall is decked out for a party that nobody was expected to attend -- and very nearly nobody has. A banquet table groans under champagne, canapes, and a cake decorated with a clock. Balloons printed with ~WELCOME TIME TRAVELLERS~ drift against the vaulted ceiling.^^";
+            print "Professor Hawking sits at the head of the table in his wheelchair, very much at ease with the possibility that the entire event might be a magnificent failure.^^";
+            if (hawking_convinced == false)
+                print "Dr. Sarah Chen, Hawking's research assistant, hovers nearby, looking both excited and sceptical.^^";
+            print "The Porter's Lodge is back to the south. A corridor leads east to Hawking's study.^";
+        ],
+         s_to cambridge_porter,
+         e_to [;
+            if (hawking_convinced) return cambridge_study;
+            print "Dr. Chen blocks the corridor. ~Professor Hawking's study is private. Unless, of course, he invites you in himself.~^";
+            rfalse;
+         ],
+    has light;
+
+Object party_table "banquet table" cambridge_hall
+    with name 'table' 'banquet' 'food' 'champag' 'canapes' 'cake' 'balloon',
+         description "The table is a feast for one. Well, for several, but only one has shown up. The champagne is excellent (Dom Perignon, 2001), the canapes are artful, and the cake has a marzipan TARDIS on it. Professor Hawking has a sense of humour.",
+    has scenery supporter;
+
+Object cambridge_study "Hawking's Study"
+    with description [;
+            print "The study of the most famous physicist alive is surprisingly cosy. Books line every wall, a computer with a speech synthesiser sits on the desk, and models of black holes and the cosmos hang from the ceiling like a nerd's mobile.^^";
+            print "A napkin on the desk has equations scrawled on it in careful handwriting.^^";
+            print "The hall is back to the west.^";
+        ],
+         w_to cambridge_hall,
+    has light;
+
+Object napkin_formula "napkin with formula" cambridge_study
+    with name 'napkin' 'formula' 'equatio',
+         description "A cocktail napkin covered in Professor Hawking's handwriting. The equations describe temporal field calibration harmonics. You understand perhaps one word in five, but Dr. Hartley's journal mentioned exactly these calculations.",
+         initial "A napkin with equations lies on the desk.",
+         before [;
+            Take:
+                if (hawking_convinced == false) {
+                    "You shouldn't take Professor Hawking's work without permission. Convince him first.";
+                }
+                if (has_formula == false) {
+                    has_formula = true;
+                    score = score + 15;
+                    move self to player;
+                    "You carefully fold the napkin and tuck it away. The calibration formula -- component three of four. Hawking nods from the doorway. ~Try not to create any paradoxes. The paperwork is terrible.~";
+                }
+         ];
+
+! --- Cambridge NPCs ---
+
+Object hawking "Professor Hawking" cambridge_hall
+    with name 'hawking' 'professor' 'stephen',
+         description "Professor Stephen Hawking, the most famous physicist in the world, sits in his wheelchair with eyes that miss absolutely nothing. His speech synthesiser gives his words an oddly robotic gravitas that somehow makes everything he says sound even more devastatingly witty.",
+         life [;
+            Ask:
+                NPC_Ask_Hawking(second);
+                rtrue;
+            Tell:
+                if (second == 'time' or 'travel' or 'future' or 'machine') {
+                    if (hawking_phase == 0) {
+                        hawking_phase = 1;
+                        print "Hawking's eyes gleam. ~You claim to be a time traveller. Interesting. Many people have made this claim. None have provided evidence. Tell me something about the future that would convince a physicist.~^";
+                        rtrue;
+                    }
+                }
+                "The synthesiser clicks. ~Interesting, but not convincing. I need evidence, not anecdotes.~";
+            Give, Show:
+                if (noun == lodestone && hawking_phase >= 2 && hawking_convinced == false) {
+                    hawking_convinced = true;
+                    score = score + 15;
+                    print "Hawking watches as the lodestone pulls at every piece of metal in the room. His instruments go haywire. The synthesiser is silent for a long moment.^^";
+                    print "~The magnetic signature is impossible. This stone has been exposed to temporal radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
+                    print "He seems more delighted than surprised. ~I always hoped someone would come. The formula you need is in my study -- east from here. Dr. Chen will let you through. And...~ The synthesiser pauses for effect. ~Thank you for making an old physicist's day.~^";
+                    rtrue;
+                }
+                if (noun == lodestone or vacuum_tube or hartley_journal or toolkit) {
+                    if (hawking_phase >= 1 && hawking_convinced == false) {
+                        hawking_phase = 2;
+                        print "Hawking examines the object with intense curiosity. ~Unusual. The craftsmanship is clearly Victorian, but the materials...~ He trails off, calculating. ~This is not from 2009. But I need the final proof. Something that demonstrates temporal mechanics directly.~^";
+                        rtrue;
+                    }
+                }
+                "The synthesiser clicks. ~Interesting. But not enough.~";
+         ],
+    has animate proper male;
+
+Object chen "Dr. Sarah Chen" cambridge_hall
+    with name 'chen' 'sarah' 'doctor' 'dr' 'assistant',
+         description [;
+            if (hawking_convinced)
+                "Dr. Chen watches you with the expression of a scientist whose worldview has just been comprehensively rearranged. She's handling it remarkably well, all things considered.";
+            "Dr. Chen, Hawking's research assistant. Young, brilliant, and currently trying to decide whether you're a genuine time traveller or a very committed gatecrasher.";
+         ],
+         life [;
+            Ask:
+                if (second == 'hawking' or 'professor') {
+                    print "~Professor Hawking is the most brilliant mind of our generation. He also has a wicked sense of humour. This entire party is essentially an experiment. He sent the invitations AFTER the event. Only a time traveller could attend.~^";
+                    rtrue;
+                }
+                if (second == 'party' or 'time' or 'travel') {
+                    print "~I'll be honest -- I thought this would be an empty room and a lot of champagne. If you really are from another time, Professor Hawking will want proof. Talk to him.~^";
+                    rtrue;
+                }
+                print "Dr. Chen shrugs. ~I'm a physicist, not a tour guide. Talk to Professor Hawking.~^";
+                rtrue;
+            Give:
+                "Dr. Chen politely declines. ~I'm sure Professor Hawking would be more interested in that than I am.~";
+         ],
+    has animate proper female;
+
+! ===================================================================
+! FUTURE LONDON — 2045
+! ===================================================================
+
+Object future_street "Flooded Street"
+    with description [;
+            print "London, 2045. The Thames won. Water laps at what used to be the second floor of Victorian terraces. Buildings rise from the flood like stone islands, connected by catwalks and rope bridges. It's Venice, if Venice had been designed by civil engineers during a nervous breakdown.^^";
+            print "A temporal rift bobs gently on the water's surface, tethered to a lamppost like a luminous boat.^^";
+            print "The Thames Barrier Museum is north. An elevated walkway stretches east. The Climate Refuge is to the west. Below, murky water conceals whatever lies on the submerged street level";
+            if (has_diving_gear)
+                print " -- your diving gear could get you down there";
+            print ".^";
+        ],
+         n_to future_museum,
+         e_to future_walkway,
+         w_to future_refuge,
+         d_to [;
+            if (has_diving_gear) return future_lab;
+            print "The water below is dark and deep. You'd need diving gear to explore the submerged level without drowning, which is generally considered a prerequisite for time travel.^";
+            rfalse;
+         ],
+    has light;
+
+Object future_rift "temporal rift" future_street
+    with name 'rift' 'temporal' 'portal' 'shimmer',
+         description "The rift floats on the water, gently bobbing. It's been tethered to a lamppost with what appears to be a bicycle lock. Even in 2045, Londoners will chain things to lampposts.",
+         before [;
+            Enter:
+                current_era = 0;
+                move copernicus to main_workshop;
+                print "You step into the rift, getting your feet wet in the process. The workshop materialises around you, blissfully dry.^";
+                PlayerTo(main_workshop);
+                rtrue;
+         ],
+    has scenery;
+
+Object future_museum "Thames Barrier Museum"
+    with description [;
+            print "The museum occupies the upper floors of what was once the Thames Barrier control centre. Display cases hold artefacts salvaged from flooded London -- underground signs, a red telephone box, soggy copies of the Evening Standard dated 2038.^^";
+            if (capsule_buried)
+                print "A special exhibit catches your eye: ~ROMAN TIME CAPSULE -- DISCOVERED AT THAMES DOCKSIDE EXCAVATION.~ Inside the case, unmistakably, is your grandfather's pocket watch. The label reads: ~Circa 60 AD. Remarkably well-preserved. Origin unknown.~^^";
+            if (eleanor_gift)
+                print "Another display: ~WARTIME ART COLLECTION.~ Among the children's drawings is one labelled ~Eleanor Morrison, aged 8, 1941.~ It shows a ginger cat. You recognise the style immediately.^^";
+            print "A DeLorean sits in the corner with a sign reading ~TIME TRAVEL IN POPULAR CULTURE.~^^";
+            print "The flooded street is south. Stairs lead up to the rooftop.^";
+        ],
+         s_to future_street,
+         u_to future_rooftop,
+    has light;
+
+Object delorean "DeLorean" future_museum
+    with name 'delorean' 'car' 'dmc',
+         description "A stainless steel DeLorean DMC-12, mounted on a display platform. The plaque reads: ~Time Machine (Replica) -- As featured in the Back to the Future documentary trilogy (1985-1990). Note: actual time travel requires considerably more brass and considerably less plutonium.~",
+    has scenery;
+
+Object time_capsule_display "time capsule display" future_museum
+    with name 'capsule' 'display' 'exhibit',
+         description [;
+            if (capsule_buried) {
+                "Your grandfather's pocket watch sits in a museum case, nearly two thousand years after you buried it in Roman mud. The label reads: ~Circa 60 AD. Brass timepiece of unknown origin. Remarkably well-preserved. Donated by Thames Archaeological Society.~ You feel simultaneously proud and deeply weird.";
+            }
+            "You don't see any such display.";
+         ],
+    has scenery;
+
+Object eleanor_display "wartime art display" future_museum
+    with name 'wartime' 'art' 'eleanor',
+         description [;
+            if (eleanor_gift) {
+                "The display includes several children's drawings from the Blitz. One is unmistakably Eleanor's work -- the same ginger cat, the same careful lines. The label reads: ~Eleanor Morrison, aged 8, 1941. Morrison went on to become a celebrated artist.~ You smile.";
+            }
+            "You don't see any such display.";
+         ],
+    has scenery;
+
+Object future_rooftop "Museum Rooftop"
+    with description [;
+            print "The rooftop provides a staggering view of flooded London. The old skyline pokes through the water like a half-drowned city playing dead. In the distance, new structures rise on stilts -- the future adapting, as it always does.^^";
+            if (kai_helping)
+                print "The communications panel has been opened and fixed, its antenna now pointing skyward.^^";
+            else
+                print "A maintenance panel is bolted to the communications array. It looks like it needs someone with mechanical skills to open it.^^";
+            print "Stairs lead back down to the museum.^";
+        ],
+         d_to future_museum,
+    has light;
+
+Object comm_panel "maintenance panel" future_rooftop
+    with name 'panel' 'maintenance' 'communications' 'array' 'antenna',
+         description [;
+            if (kai_helping) {
+                "The panel is open, its circuits repaired. The communications array hums with renewed purpose.";
+            }
+            "A locked maintenance panel on the communications array. The bolts are rusted but the mechanism looks like standard Victorian-era engineering under all the modern casing. Someone with the right tools could open it.";
+         ],
+         before [;
+            Open:
+                if (kai_helping) "It's already open and fixed.";
+                if (toolkit notin player) "The panel needs proper tools to open. The bolts are rusted shut.";
+                kai_helping = true;
+                score = score + 10;
+                print "Your Victorian toolkit is, ironically, perfect for the job. The bolts are based on a nineteenth-century standard that never changed. You pop the panel open, reconnect a few wires, and the communications array hums to life.^^";
+                print "Kai appears at the top of the stairs, grinning. ~You fixed it! Torres has been trying to get that working for months!~ She unslings her diving gear. ~Here -- take this. Fair trade. The submerged lab is below the flooded street.~^^";
+                move diving_gear to player;
+                has_diving_gear = true;
+                "Kai disappears back down the stairs, practically bouncing.";
+         ],
+    has scenery;
+
+Object future_walkway "Elevated Walkway"
+    with description [;
+            print "A precarious catwalk of reclaimed metal and salvaged scaffolding connects the upper floors of flooded buildings. It sways gently in the wind. Below, the water is murky and occasionally something large moves in it. Best not to think about what.^^";
+            print "Kai perches on the railing with the easy balance of someone who grew up over water.^^";
+            print "The flooded street is back to the west.^";
+        ],
+         w_to future_street,
+    has light;
+
+Object future_refuge "Climate Refuge"
+    with description [;
+            print "What was once a council building has been converted into a community hub. Solar panels and wind turbines sprout from the roof. Inside, it's warm, dry, and surprisingly cheerful -- a testament to human bloody-mindedness in the face of catastrophe.^^";
+            print "Mayor Torres coordinates the settlement from a desk piled with maps and reports.^^";
+            print "The flooded street is back to the east.^";
+        ],
+         e_to future_street,
+    has light;
+
+Object future_lab "Submerged Laboratory"
+    with description [;
+            print "You descend through murky water into what was once a cutting-edge research laboratory. The diving gear keeps you breathing, but the experience is deeply eerie -- fluorescent lights still flicker underwater, illuminating desks where coffee cups float at ceiling height.^^";
+            if (lab_unlocked == false) {
+                print "A sealed cabinet marked ~QUANTUM PROCESSING UNIT -- AUTHORISED PERSONNEL ONLY~ stands against the far wall. It has an electronic keypad lock.^^";
+                if (has_formula)
+                    print "The keypad has a label: ~Default code: temporal harmonic sequence.~ The formula on Hawking's napkin might work...^^";
+            } else {
+                if (has_processor == false)
+                    print "The quantum processor cabinet stands open.^^";
+                else
+                    print "The opened cabinet stands empty.^^";
+            }
+            print "The surface is back up.^";
+        ],
+         u_to future_street,
+    has light;
+
+Object quantum_cabinet "sealed cabinet" future_lab
+    with name 'cabinet' 'sealed' 'quantum' 'keypad' 'lock',
+         description [;
+            if (lab_unlocked) {
+                if (has_processor)
+                    "The cabinet stands open and empty.";
+                "The cabinet is open, revealing a quantum processor gleaming with an otherworldly light.";
+            }
+            "A heavy-duty sealed cabinet marked ~QUANTUM PROCESSING UNIT.~ The electronic keypad lock glows faintly. A label reads: ~Default code: temporal harmonic sequence.~";
+         ],
+         before [;
+            Open:
+                if (lab_unlocked) "It's already open.";
+                if (has_formula == false) {
+                    "The keypad demands a code -- a temporal harmonic sequence. You don't know the right numbers. Perhaps someone with expertise in temporal physics could help.";
+                }
+                lab_unlocked = true;
+                give self open;
+                print "You punch in the temporal harmonic sequence from Hawking's napkin. The keypad beeps, turns green, and the cabinet clicks open with a satisfying hiss.^^";
+                "Inside, floating in a suspension field, is the quantum processor. It pulses with a soft blue light that seems to exist in slightly more dimensions than is strictly comfortable.";
+         ],
+    has scenery container;
+
+Object quantum_processor "quantum processor" quantum_cabinet
+    with name 'processor' 'quantum' 'chip' 'cpu',
+         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent. The quantum processing unit needed for the temporal field generator -- the fourth and final component.",
+         before [;
+            Take:
+                if (lab_unlocked == false) "It's locked in the cabinet. You need to open it first.";
+                if (parent(self) ~= player) {
+                    has_processor = true;
+                    score = score + 15;
+                    move self to player;
+                    "You lift the quantum processor from its suspension field. It hums in your hands, harmonising with the other components you carry. Four of four. Time to go home.";
+                }
+         ];
+
+Object diving_gear "diving gear"
+    with name 'diving' 'gear' 'rebreather' 'mask' 'scuba',
+         description "A compact rebreather kit with mask and fins. Future technology -- lighter and more efficient than anything in your era. Kai's handwritten instructions are taped to the mask: ~BREATHE NORMALLY. DON'T PANIC. IF YOU SEE SOMETHING GLOWING, THAT'S FINE.~";
+
+! --- Future NPCs ---
+
+Object torres "Mayor Torres" future_refuge
+    with name 'torres' 'mayor',
+         description "Mayor Torres has the silver hair and steel spine of someone who has been managing catastrophes for decades. She runs the Refuge with calm efficiency and zero tolerance for nonsense.",
+         life [;
+            Ask:
+                NPC_Ask_Torres(second);
+                rtrue;
+            Tell:
+                "Torres listens attentively. ~Noted.~ It's unclear whether she's genuinely noting it or just being polite.";
+            Give:
+                "~I appreciate the gesture, but the Refuge runs on cooperation, not charity.~";
+         ],
+    has animate proper female;
+
+Object kai "Kai" future_walkway
+    with name 'kai' 'scavenger' 'girl' 'woman',
+         description [;
+            if (kai_helping) {
+                "Kai grins at you from the railing. She's in an excellent mood since you fixed the communications array.";
+            }
+            "A young woman in a wetsuit, perched on the walkway railing with the casual ease of someone who considers gravity a suggestion.";
+         ],
+         life [;
+            Ask:
+                NPC_Ask_Kai(second);
+                rtrue;
+            Tell:
+                "Kai nods enthusiastically. ~Cool, cool. Sounds wild.~";
+            Give:
+                "~Thanks, but I'm good. Fix that panel for me and we'll be even.~";
+         ],
+    has animate proper female;
+
+Object curator "Museum Curator" future_museum
+    with name 'curator' 'webb' 'old',
+         description "An elderly person in a cardigan that has survived more floods than they have. The curator tends the museum with the quiet devotion of someone preserving the memory of a drowning city.",
+         life [;
+            Ask:
+                if (second == 'museum' or 'exhibit' or 'history') {
+                    print "~We preserve what we can. London has survived plague, fire, war, and now water. The Thames Barrier held for seventy years. That's not a failure -- that's an engineering triumph that bought us time.~^";
+                    rtrue;
+                }
+                if (second == 'capsule' or 'watch' or 'roman' or 'buried') {
+                    if (capsule_buried) {
+                        print "~The Roman time capsule? Remarkable find. A Victorian pocket watch buried in a Roman-era stratum. The archaeologists are still arguing about it. Personally, I think someone was playing silly games with time.~ They wink.^";
+                    } else {
+                        print "~Time capsules? We have a few. People love burying things for the future. The future, I can tell you, is mostly interested in not drowning.~^";
+                    }
+                    rtrue;
+                }
+                if (second == 'delorean' or 'car') {
+                    print "~The DeLorean? A replica from the famous documentary series. Lovely films. Completely inaccurate, of course -- everyone knows real time travel requires brass.~ They pause. ~That was a joke.~^";
+                    rtrue;
+                }
+                if (second == 'eleanor' or 'drawing' or 'art') {
+                    if (eleanor_gift) {
+                        print "~Eleanor Morrison? Wonderful artist. Survived the Blitz, became one of Britain's most celebrated painters. Her early cat drawings are quite collectible. She always credited a stranger during the war who gave her a pocket watch and, she said, hope.~^";
+                    } else {
+                        print "~We have some wartime art in the collection. Children's drawings, mostly. Poignant stuff.~^";
+                    }
+                    rtrue;
+                }
+                print "The curator adjusts their cardigan. ~I'm afraid I don't know much about that. But do look around -- the museum speaks for itself.~^";
+                rtrue;
+            Give:
+                "~How kind. We'll add it to the collection.~ They probably won't.";
+         ],
+    has animate proper;
+
+! ===================================================================
+! COPERNICUS THE CAT — Companion Daemon
+! ===================================================================
+
+Object copernicus "Copernicus" main_workshop
+    with name 'copernicus' 'cat' 'ginger' 'tabby' 'moggy',
+         description "A magnificently smug ginger tabby of considerable girth and negligible conscience. Copernicus has the air of a cat who knows exactly what he's done and feels no remorse whatsoever. His eyes are amber, his purr is thunderous, and his talent for sitting on the worst possible thing at the worst possible time is genuinely supernatural.",
+         life [;
+            Ask:
+                "Copernicus regards you with the serene indifference of a creature who has transcended the need for conversation.";
+            Tell:
+                "Copernicus flicks an ear. This is the feline equivalent of ~I hear you but I couldn't possibly care less.~";
+            Attack:
+                "Copernicus gives you a look that suggests you should reconsider every decision that led to this moment. You reconsider.";
+            Give:
+                "Copernicus sniffs your offering, finds it beneath his dignity, and looks away. He has been offered tribute by Roman centurions. Your gift does not impress.";
+            ThrowAt:
+                "Absolutely not. Copernicus has survived two thousand years of human history. He can certainly survive you.";
+         ],
+         orders [;
+            "Copernicus ignores your instruction with the magnificent disdain that only a cat can achieve. He is not your employee. He is not anyone's employee. He is a cat.";
+         ],
+         before [;
+            Take:
+                "Copernicus goes boneless with the practiced ease of a cat who has perfected the art of being unpickupable. He weighs approximately seven hundred pounds when he doesn't want to be held.";
+            Touch:
+                "Copernicus allows exactly 2.4 seconds of chin-scratching before biting your finger. Not hard enough to draw blood. Just hard enough to establish boundaries.";
+            Listen:
+                "Purrrrrrrrr. It's the sound of a small, self-satisfied engine.";
+         ],
+         daemon [;
+            if (parent(self) ~= location && cat_accident)
+                move self to location;
+            cat_turn_count++;
+            if (cat_turn_count % 7 == 0 && cat_accident) {
+                new_line;
+                switch (current_era) {
+                    0: switch (random(4)) {
+                        1: print "Copernicus hops onto the workbench and sits on something important.^";
+                        2: print "Copernicus yawns, displaying a cathedral of pink and white.^";
+                        3: print "Copernicus eyes the time machine controls with an expression that should concern you.^";
+                        4: print "Copernicus washes his paw with studied nonchalance.^";
+                       };
+                    1: switch (random(4)) {
+                        1: print "Copernicus pounces on a rat. The rat doesn't stand a chance. Nearby Romans applaud.^";
+                        2: print "A Roman citizen tries to pet Copernicus. Copernicus permits it. The citizen looks like they've been blessed by Jupiter.^";
+                        3: print "Copernicus sprawls in a sunbeam, achieving a state of feline enlightenment.^";
+                        4: print "Copernicus chases a pigeon with terrifying efficiency. The pigeon escapes. Barely.^";
+                       };
+                    2: switch (random(4)) {
+                        1: print "Copernicus curls up next to Eleanor, who immediately begins drawing him.^";
+                        2: print "Copernicus stares at the ceiling during an air raid with complete indifference. The concept of bombing has not impressed him.^";
+                        3: print "Someone in the shelter shares their spam sandwich with Copernicus. He accepts it as his due.^";
+                        4: print "Copernicus sits in a doorway and refuses to move. Several people have to step over him. He is unconcerned.^";
+                       };
+                    3: switch (random(4)) {
+                        1: print "Copernicus hops onto Professor Hawking's lap. The synthesiser says: ~I approve of this cat.~^";
+                        2: print "Copernicus bats at a champagne cork across the floor of the Great Hall.^";
+                        3: print "A Cambridge student tries to photograph Copernicus. Copernicus turns his back. Every. Single. Time.^";
+                        4: print "Copernicus sits on a stack of physics papers with the expression of a cat who is improving them.^";
+                       };
+                    4: switch (random(4)) {
+                        1: print "Copernicus peers over the edge of the walkway at the water below with the expression of a cat who finds the entire ocean personally offensive.^";
+                        2: print "Kai reaches out to pet Copernicus. He allows it, which Kai takes as the highest honour of her life.^";
+                        3: print "Copernicus sniffs the flooded air and sneezes. He gives the water a look of pure contempt.^";
+                        4: print "Copernicus finds the driest spot in the entire flooded district and sits on it. Of course he does.^";
+                       };
+                }
+            }
+         ],
+    has animate proper male;
+
+! ===================================================================
+! TIME TRAVEL DESTINATIONS (parentless scope objects)
+! ===================================================================
+
+Object roman_dest "Roman Londinium"
+    with name 'roman' 'londinium' 'rome' 'ad' '60',
+    has proper;
+
+Object blitz_dest "Blitz London"
+    with name 'blitz' 'wwii' 'ww2' '1941' 'war',
+    has proper;
+
+Object hawking_dest "Cambridge"
+    with name 'cambridge' 'hawking' '2009' 'party',
+    has proper;
+
+Object future_dest "Future London"
+    with name 'future' '2045' 'flood',
+    has proper;
+
+! ===================================================================
+! INITIALISE
+! ===================================================================
+
+[ Initialise;
+    location = workshop_entrance;
+    score = 0;
+
+    print "^^London, 1895.^^";
+    print "It's your first day as apprentice to Dr. Aldric Hartley, inventor, eccentric, and -- according to the advert in The Times -- ~pioneer of temporal engineering, seeking assistant with good penmanship and an open mind regarding the fundamental nature of causality.~^^";
+    print "You answered the advert because you needed the money. Also because ~temporal engineering~ sounded considerably more interesting than your previous position at the accounting firm of Greybaum, Tedium and Sons.^^";
+    print "Type HELP for a list of commands.^^";
+];
+
+! ===================================================================
+! DEATH MESSAGE (multiple endings)
+! ===================================================================
+
+[ PrintEnding;
+    if (score >= MAX_SCORE) {
+        print "^^=== PERFECT ENDING ===^^";
+        print "Every component recovered. Every inscription carved, every capsule buried, every church saved, every drawing inspired. You have not merely repaired the time machine -- you have woven yourself into the fabric of history.^^";
+        print "Dr. Hartley returns from tea to find his machine in better condition than when he left. Copernicus sits atop it, naturally. ~I see you've had a productive afternoon,~ he says, peering at you over his spectacles. ~Tea?~^^";
+        print "You accept. The scones are excellent.^";
+    } else if (score >= 135) {
+        print "^^=== GOOD ENDING ===^^";
+        print "The time machine hums with renewed purpose. Most of the damage has been repaired, and the timeline is... mostly intact. A few loose threads here and there, but nothing that can't be fixed with another trip or two.^^";
+        print "Dr. Hartley returns and nods approvingly. ~Well done, apprentice. There are a few calibrations I'd like to review, but overall -- not bad for a first day.~^^";
+        print "Copernicus yawns. He's had better Tuesdays.^";
+    } else if (score >= 100) {
+        print "^^=== ROUGH ENDING ===^^";
+        print "The machine works, technically. It makes some concerning noises and occasionally displays dates that haven't been invented yet, but it works. The timeline has a few dents in it, like a second-hand automobile.^^";
+        print "Dr. Hartley returns, examines the machine, and sighs. ~It'll do. Probably. Maybe don't touch anything for a while.~^^";
+        print "Copernicus has no opinion. He's asleep.^";
+    } else {
+        print "^^=== PARADOX ENDING ===^^";
+        print "The machine sputters back to life with all the confidence of a piano falling down stairs. The timeline has more holes in it than a Swiss cheese in a shooting gallery.^^";
+        print "Dr. Hartley returns and his left eye twitches. ~What,~ he says very carefully, ~did you do to my machine?~^^";
+        print "Copernicus, at least, seems proud of you both.^";
+    }
+];
+
+! ===================================================================
+! ACTION ROUTINES
+! ===================================================================
+
+[ TalkToSub;
+    if (noun == dr_hartley)         { NPC_Talk_Hartley(); rtrue; }
+    if (noun == marcus)             { NPC_Talk_Marcus(); rtrue; }
+    if (noun == livia)              { NPC_Talk_Livia(); rtrue; }
+    if (noun == peggy)              { NPC_Talk_Peggy(); rtrue; }
+    if (noun == tommy)              { NPC_Talk_Tommy(); rtrue; }
+    if (noun == hawking)            { NPC_Talk_Hawking(); rtrue; }
+    if (noun == torres)             { NPC_Talk_Torres(); rtrue; }
+    if (noun == kai)                { NPC_Talk_Kai(); rtrue; }
+    if (noun == copernicus) {
+        "Copernicus says nothing, because he is a cat. He does, however, emit a single, resonant purr that somehow conveys both affection and total superiority. It's a gift.";
+    }
+    if (noun == eleanor) {
+        "Eleanor looks up, gives you a small, shy smile, and pushes a cat drawing towards you. Words aren't really her thing right now.";
+    }
+    if (noun == felix) {
+        "Felix launches into a sales pitch for lodestones, healing crystals, and a guaranteed-authentic hair from Jupiter's beard. You suspect the last one is actually donkey.";
+    }
+    if (noun == porter_npc) {
+        "~Invitation, please,~ the porter says, in a tone that suggests this is both the first and last thing he will ever say to you.";
+    }
+    if (noun == chen) {
+        "Dr. Chen smiles politely. ~I'm Professor Hawking's assistant. If you have questions about the party or the experiment, he's the one to ask.~";
+    }
+    if (noun == curator) {
+        "The curator perks up. ~A visitor! Wonderful. Feel free to ask about any of the exhibits. We don't get many visitors since... well, since the water.~";
+    }
+    if (noun has animate) {
+        if (noun has pluralname)
+            print (The) noun, " don't seem interested in conversation.^";
+        else
+            print (The) noun, " doesn't seem interested in conversation.^";
+        rtrue;
+    }
+    "You can't have a meaningful conversation with that, though in Victorian England, people did try.";
+];
+
+[ TravelToSub;
+    if (location ~= main_workshop) {
+        "You need to be at the time machine in the workshop to travel through time. Use the temporal rift to return to the workshop first.";
+    }
+    if (cat_accident == false) {
+        "The time machine isn't activated yet. Perhaps you should examine it more closely.";
+    }
+    if (noun == roman_dest) {
+        if (visited_roman == false) visited_roman = true;
+        current_era = 1;
+        print "You set the destination dial to ~60 AD~ and pull the lever. The machine screams, the world dissolves, and when reality reassembles itself, you're standing in blazing Mediterranean sunlight that has absolutely no business being in London.^";
+        PlayerTo(roman_forum);
+        rtrue;
+    }
+    if (noun == blitz_dest) {
+        if (visited_roman == false) {
+            "The dial won't turn that far yet. Perhaps you should visit the eras in order -- the machine seems to need warming up.";
+        }
+        if (visited_blitz == false) visited_blitz = true;
+        current_era = 2;
+        print "You set the dial to ~1941~ and brace yourself. The machine roars, and suddenly it's dark, cold, and something overhead is making a very concerning droning noise.^";
+        PlayerTo(blitz_street);
+        rtrue;
+    }
+    if (noun == hawking_dest) {
+        if (visited_blitz == false) {
+            "The machine's temporal range hasn't stabilised enough for 2009 yet. Try an earlier era first.";
+        }
+        if (visited_hawking == false) visited_hawking = true;
+        current_era = 3;
+        print "You set the dial to ~2009~ and activate the machine. The transition is smoother this time -- perhaps the machine is healing. You materialise beside a bicycle rack.^";
+        PlayerTo(cambridge_gates);
+        rtrue;
+    }
+    if (noun == future_dest) {
+        if (visited_hawking == false) {
+            "The machine can't reach 2045 yet. The temporal range needs to build progressively.";
+        }
+        if (visited_future == false) visited_future = true;
+        current_era = 4;
+        print "You set the dial to ~2045~ and pull the lever. The machine shudders, groans, and deposits you somewhere very, very wet.^";
+        PlayerTo(future_street);
+        rtrue;
+    }
+    "The machine's dial doesn't seem to have that setting. Try: Roman Londinium, Blitz London, Cambridge, or Future London.";
+];
+
+[ CarveSub;
+    if (location == roman_temple) {
+        if (inscription_carved) {
+            "You've already carved your inscription. One temporal graffiti per visit, please.";
+        }
+        if (toolkit notin player) {
+            "You need something to carve with. A toolkit with a chisel would do nicely.";
+        }
+        if (livia_trusts == false) {
+            "Priestess Livia would not appreciate you vandalising her temple walls. Get her permission first.";
+        }
+        inscription_carved = true;
+        score = score + 5;
+        "You take the small chisel from your toolkit and carefully carve into the ancient stone: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, 60 AD.~ Livia watches with approval. ~A fine inscription. It will endure.~ You suspect she has no idea how right she is.";
+    }
+    "There's nothing suitable to carve here.";
+];
+
+[ BurySub;
+    if (location == roman_docks) {
+        if (capsule_buried) {
+            "You've already buried your time capsule. The mud is only so deep.";
+        }
+        if (pocket_watch notin player) {
+            "You need something worth burying for posterity. Your pocket watch, perhaps?";
+        }
+        capsule_buried = true;
+        score = score + 5;
+        remove pocket_watch;
+        "You dig a hole in the soft Thames mud and carefully bury your grandfather's pocket watch, wrapping it in a piece of cloth from your jacket. Two thousand years from now, someone will be very confused.^^You pat the mud flat. Somewhere in the far future, a museum curator has just had a very good day.";
+    }
+    "This doesn't seem like a good place to bury anything.";
+];
+
+[ DigRubbleSub;
+    if (location == blitz_rubble) {
+        if (blitz_rubble has general) {
+            "You've already cleared the rubble. The metal box is accessible.";
+        }
+        if (tommy_helping == false) {
+            "The debris is far too heavy to shift alone. You'd need someone strong to help -- someone like Corporal Tommy, perhaps, if you could get him away from his wireless.";
+        }
+        give blitz_rubble general;
+        print "You and Tommy set to work on the rubble. He's stronger than he looks -- one good arm notwithstanding -- and between you, you shift enough brick and timber to reach the metal box.^^";
+        print "~Military supply crate,~ Tommy says, wiping sweat from his brow. ~From the look of it, someone was shipping electronics. Your lucky day.~^";
+        rtrue;
+    }
+    if (location == roman_docks) {
+        "The mud here is soft enough. If you want to bury something, try BURY.";
+    }
+    "There's nothing useful to dig here.";
+];
+
+[ ExtinguishSub;
+    if (location == blitz_rooftop) {
+        if (church_saved) {
+            "The fire is already out, thanks to your efforts.";
+        }
+        if (fire_event == false) {
+            "There's no fire to extinguish at the moment.";
+        }
+        church_saved = true;
+        score = score + 10;
+        print "You heave sandbag after sandbag over the parapet onto the burning timbers below. Sand cascades onto the incendiary, smothering the magnesium flames. It's exhausting, terrifying, and deeply satisfying work.^^";
+        print "The fire sputters and dies. St. Margaret's Church will survive another night -- and, as it turns out, another few centuries. From somewhere below, you hear Warden Peggy's voice: ~About bloody time! Well done!~^";
+        rtrue;
+    }
+    "There's nothing to extinguish here.";
+];
+
+[ RepairSub;
+    if (location == main_workshop && noun == time_machine) {
+        if (components_installed) {
+            "The machine is already repaired. It hums contentedly.";
+        }
+        if (has_lodestone && has_vacuum_tube && has_formula && has_processor) {
+            <InstallComp>;
+            rtrue;
+        }
+        print "The machine needs four components to be repaired:^";
+        if (has_lodestone) print "  [x] Lodestone (temporal compass)^";
+        else print "  [ ] Lodestone (Roman Londinium, 60 AD)^";
+        if (has_vacuum_tube) print "  [x] Vacuum tube (oscillation circuit)^";
+        else print "  [ ] Vacuum tube (WWII London, 1941)^";
+        if (has_formula) print "  [x] Calibration formula (temporal harmonics)^";
+        else print "  [ ] Calibration formula (Cambridge, 2009)^";
+        if (has_processor) print "  [x] Quantum processor (field generator)^";
+        else print "  [ ] Quantum processor (Future London, 2045)^";
+        rtrue;
+    }
+    "You can't repair that.";
+];
+
+[ InstallCompSub;
+    if (location ~= main_workshop) {
+        "You need to be at the time machine in the workshop to install components.";
+    }
+    if (components_installed) {
+        "All components are already installed. The machine is ready.";
+    }
+    if (has_lodestone == false || has_vacuum_tube == false || has_formula == false || has_processor == false) {
+        "You don't have all four components yet. Check the machine to see what's still missing.";
+    }
+    components_installed = true;
+    score = score + 10;
+    print "You set to work with your toolkit, and the next hour is the most intense of your apprenticeship.^^";
+    print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube slides into the oscillation circuit, and the machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
+    print "You transcribe Hawking's formula from the napkin into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. Finally, the quantum processor drops into the field generator, and the entire machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
+    print "The Temporal Displacement Engine is repaired. Better than repaired -- it's magnificent.^^";
+    if (workshop_cleaned == false)
+        print "The workshop is still a mess, though. Dr. Hartley would probably appreciate it if you tidied up before he returned from tea. Just a thought.^";
+    else {
+        PrintEnding();
+        deadflag = 2;
+    }
+    rtrue;
+];
+
+[ CleanSub;
+    if (location == main_workshop) {
+        if (workshop_cleaned) {
+            "The workshop is already spotless. Well, as spotless as a workshop full of temporal engineering equipment can be.";
+        }
+        workshop_cleaned = true;
+        score = score + 5;
+        print "You spend a surprisingly therapeutic twenty minutes tidying the workshop. Tools are returned to their racks. Marmalade jars are alphabetised (Dr. Hartley has opinions about marmalade). Copper shavings are swept. The workbench is cleared.^^";
+        if (components_installed) {
+            print "As you hang up the dustpan, you hear the front door. Dr. Hartley has returned from tea.^";
+            PrintEnding();
+            deadflag = 2;
+        } else {
+            "The workshop gleams. Dr. Hartley will be pleased. Now, about that time machine...";
+        }
+        rtrue;
+    }
+    "There's nothing here that needs cleaning.";
+];
+
+[ PetSub;
+    if (noun == copernicus) {
+        "Copernicus permits exactly 2.4 seconds of stroking before biting your finger. Not maliciously -- just to remind you who's in charge. (Hint: not you.)";
+    }
+    if (noun has animate)
+        "That's a person, not a pet. Victorian social norms frown upon this.";
+    "You can't pet that. It wouldn't enjoy it and neither would you.";
+];
+
+[ OpenPanelSub;
+    if (location == future_rooftop) {
+        if (kai_helping) "The panel is already open and repaired.";
+        if (toolkit notin player) "You need proper tools to open the maintenance panel.";
+        kai_helping = true;
+        score = score + 10;
+        print "Your Victorian toolkit proves perfect for the job. You pop the panel, reconnect the circuits, and the array hums to life.^^";
+        print "Kai appears, grinning. ~You fixed it!~ She hands you diving gear. ~Fair trade!~^^";
+        move diving_gear to player;
+        has_diving_gear = true;
+        rtrue;
+    }
+    "There's nothing to open here in that way.";
+];
+
+[ HelpSub;
+    print "^=== THE TEMPORAL APPRENTICE -- FIELD GUIDE ===^";
+    print "   (hastily scrawled in Dr. Hartley's handwriting)^^";
+    print "[NAVIGATION]^";
+    print "  north/south/east/west/up/down^";
+    print "  enter (rift/door) -- step through something^^";
+    print "[INVESTIGATION]^";
+    print "  look ............ survey your surroundings^";
+    print "  examine X ....... inspect something closely^";
+    print "  take X .......... pick something up^";
+    print "  inventory ....... check what you're carrying^";
+    print "  open X .......... open a container or door^";
+    print "  read X .......... read something^^";
+    print "[CONVERSATION]^";
+    print "  talk to X ....... start a conversation^";
+    print "  ask X about Y ... ask someone about a topic^";
+    print "  give X to Y ..... hand something to someone^";
+    print "  show X to Y ..... display something to someone^^";
+    print "[SPECIAL ACTIONS]^";
+    print "  travel to X ..... use the time machine (in workshop)^";
+    print "  carve ........... carve an inscription^";
+    print "  bury ............ bury something for posterity^";
+    print "  dig ............. excavate rubble^";
+    print "  repair X ........ check/repair the time machine^";
+    print "  install ......... install components^";
+    print "  extinguish ...... fight a fire^";
+    print "  clean ........... tidy the workshop^";
+    print "  pet X ........... stroke the cat (at your own risk)^^";
+    print "[TIPS]^";
+    print "  - Read Dr. Hartley's journal for clues^";
+    print "  - Talk to everyone, examine everything^";
+    print "  - Actions in earlier eras affect later ones^";
+    print "  - Copernicus is not luggage^";
+    print "  - The eras must be visited in order^^";
+];
+
+[ KillHitlerSub;
+    print "Absolutely not. This is a family-friendly time travel adventure and we are not going down that particular rabbit hole. Besides, you're in 1941, not 1933, and your to-do list is quite full enough without adding ~alter the fundamental course of the twentieth century~ to it.^^";
+    print "Copernicus gives you a look of profound disappointment.^";
+];
+
+! ===================================================================
+! GRAMMAR
+! ===================================================================
+
+Include "Grammar";
+
+Verb 'talk'
+    * 'to' creature                         -> TalkTo;
+
+Verb 'help'
+    *                                       -> Help;
+
+Verb 'zcr'
+    *                                       -> Carve
+    * noun                                  -> Carve;
+
+Verb 'zbr'
+    *                                       -> Bury
+    * noun                                  -> Bury;
+
+Verb 'ztv'
+    * 'to' noun                             -> TravelTo;
+
+Verb 'zrp'
+    *                                       -> Repair
+    * noun                                  -> Repair;
+
+Verb 'zin'
+    *                                       -> InstallComp
+    * noun                                  -> InstallComp;
+
+Verb 'zex'
+    *                                       -> Extinguish
+    * noun                                  -> Extinguish;
+
+Verb 'zdg'
+    *                                       -> DigRubble
+    * noun                                  -> DigRubble;
+
+Verb 'zpt'
+    * creature                              -> Pet
+    * noun                                  -> Pet;
+
+Verb 'zop'
+    * noun                                  -> OpenPanel;
+
+Verb 'zcl'
+    *                                       -> Clean;
+
+Extend 'kill' first
+    * 'hitler'                              -> KillHitler;
+
+Extend 'give' first
+    * held 'to' creature                    -> Give;
+
+Extend 'show' first
+    * held 'to' creature                    -> Show;

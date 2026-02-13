@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>The Temporal Apprentice — A Time-Travelling Adventure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Courier+Prime&display=swap" rel="stylesheet">
+    <script src="jquery.min.js"></script>
+    <script src="ie.js" nomodule></script>
+    <script>
+        parchment_options = {
+            lib_path: './',
+            default_story: ['./temporal_apprentice.z5'],
+        };
+    </script>
+    <script src="web.js" type="module"></script>
+    <link rel="stylesheet" href="web.css">
+    <style>
+        /* === VICTORIAN BRASS & SEPIA THEME ===
+           Rule: only override colors, fonts, and cosmetics.
+           Let Parchment handle all layout/sizing. */
+
+        body {
+            background: #1a1008 !important;
+        }
+
+        /* Brass-rimmed terminal frame */
+        #gameport {
+            background: #0f0d08 !important;
+            border: 2px solid #c4943a !important;
+            border-radius: 12px !important;
+            box-shadow:
+                0 0 20px rgba(196, 148, 58, 0.2),
+                0 0 60px rgba(196, 148, 58, 0.05),
+                inset 0 0 60px rgba(0, 0, 0, 0.5) !important;
+            max-width: 960px !important;
+            margin: 3vh auto !important;
+            position: relative !important;
+        }
+
+        /* Aged paper overlay */
+        #crt-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 9999;
+            background:
+                radial-gradient(
+                    ellipse at center,
+                    transparent 65%,
+                    rgba(0, 0, 0, 0.35) 100%
+                );
+        }
+
+        /* Status bar — dark brass */
+        .GridWindow {
+            background: #1a1206 !important;
+            color: #c4943a !important;
+            font-family: 'IM Fell English SC', 'Courier Prime', 'Courier New', serif !important;
+            font-size: 22px !important;
+            border-bottom: 1px solid #6b5020 !important;
+        }
+
+        /* Main text area — warm sepia */
+        .BufferWindow {
+            background: #0f0d08 !important;
+            color: #d4b896 !important;
+            font-family: 'Courier Prime', 'Courier New', monospace !important;
+            font-size: 22px !important;
+            line-height: 1.5 !important;
+            overflow-x: hidden !important;
+        }
+
+        /* Input field — bright amber */
+        .LineInput {
+            color: #e8c060 !important;
+            font-family: 'Courier Prime', 'Courier New', monospace !important;
+            font-size: 22px !important;
+            caret-color: #e8c060 !important;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+        }
+
+        /* Hide Parchment chrome */
+        #about, #footer { display: none !important; }
+    </style>
+</head>
+<body>
+    <div id="gameport">
+        <div id="crt-overlay"></div>
+        <div id="windowport"></div>
+        <div id="loadingpane">
+            <img src="waiting.gif" alt="LOADING"><br>
+            <em>&nbsp;&nbsp;&nbsp;Loading...</em>
+        </div>
+        <div id="errorpane" style="display:none;"><div id="errorcontent">...</div></div>
+    </div>
+</body>
+</html>
