@@ -132,7 +132,18 @@ YOUR TASK:
 
 Be thorough. You have 30 minutes. Focus on finding real bugs — state inconsistencies, parser errors, broken gates, missing descriptions, grammar issues, and dialogue gaps."
 
-# --- Run Claude ---
+# --- Run Claude (or emit prompt if already inside Claude Code) ---
+
+if [ -n "$CLAUDECODE" ]; then
+    # Already inside a Claude Code session (e.g. called by Shelly's delegate).
+    # Print the QA prompt so the outer session can execute it directly.
+    echo "--- QA Prompt (execute directly — nested Claude session not possible) ---"
+    echo ""
+    echo "$QA_PROMPT"
+    echo ""
+    echo "=== QA Shakedown Ready ==="
+    exit 0
+fi
 
 echo "Starting QA session (30 minute timeout)..."
 echo ""
