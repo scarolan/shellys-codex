@@ -11,7 +11,7 @@ MAX_RUNTIME=1800  # 30 minutes
 CLAUDE_PID_FILE="/tmp/if-qa-shakedown-claude.pid"
 
 # Default game
-DEFAULT_GAME="$HOME/shellys-arcade/interactive_fiction/neon_shadows.z5"
+DEFAULT_GAME="$HOME/shellys-codex/neon-shadows/neon_shadows.z5"
 GAME="${1:-$DEFAULT_GAME}"
 
 # Derive paths
@@ -20,6 +20,18 @@ GAME_FILE="$(basename "$GAME")"
 GAME_NAME="${GAME_FILE%.z5}"
 SOURCE_FILE="$GAME_DIR/${GAME_NAME}.inf"
 CLAUDE_MD="$GAME_DIR/CLAUDE.md"
+
+# Derive repo from git remote (e.g. scarolan/shellys-codex)
+REPO_ROOT="$(cd "$GAME_DIR" && git rev-parse --show-toplevel 2>/dev/null)"
+if [ -z "$REPO_ROOT" ]; then
+    echo "ERROR: Game directory is not inside a git repo: $GAME_DIR"
+    exit 1
+fi
+REPO="$(cd "$REPO_ROOT" && git remote get-url origin 2>/dev/null | sed 's|.*github.com[:/]||; s|\.git$||')"
+if [ -z "$REPO" ]; then
+    echo "ERROR: Could not determine GitHub repo from git remote"
+    exit 1
+fi
 
 # --- Validation ---
 
@@ -105,13 +117,13 @@ YOUR TASK:
    - Look for missing descriptions (\"you see nothing special\") on important objects
    - Try going in every direction from every room, including invalid ones
 4. For each bug you find, file a GitHub issue. IMPORTANT rules:
-   - Working directory for gh commands: ${HOME}/shellys-arcade
+   - Working directory for gh commands: ${REPO_ROOT}
    - Title format: '${GAME_NAME} (IF): <brief description>'
    - Body must include: dfrotz command sequence to reproduce, expected behavior, actual behavior
    - Labels: use ONLY 'bug' — do NOT add the 'shelly' label
-   - Example: gh issue create --repo scarolan/shellys-arcade --title '${GAME_NAME} (IF): description' --label bug --body 'body here'
+   - Example: gh issue create --repo ${REPO} --title '${GAME_NAME} (IF): description' --label bug --body 'body here'
    - Do NOT file issues for things that are working as designed per the source code
-   - Do NOT file duplicate issues — check existing open issues first with: gh issue list --repo scarolan/shellys-arcade --state open --label bug
+   - Do NOT file duplicate issues — check existing open issues first with: gh issue list --repo ${REPO} --state open --label bug
 5. After testing, print a summary to stdout:
    - Total scenarios tested
    - Bugs found and filed (with issue numbers)
