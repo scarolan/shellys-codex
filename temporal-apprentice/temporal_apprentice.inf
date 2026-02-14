@@ -86,6 +86,11 @@ Global cat_turn_count = 0;
 Global fire_event = false;
 Global hawking_phase = 0;
 
+Global copernicus_named = false;
+Global thyme_departed = false;
+Global rag_stolen = false;
+Global rag_on_machine = false;
+
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
 ! ===================================================================
@@ -99,28 +104,59 @@ Global hawking_phase = 0;
         print "Dr. Thyme isn't here. He went out for tea approximately thirty seconds before the cat destroyed everything.^";
         rtrue;
     }
+    if (thyme_departed) {
+        print "Dr. Thyme has already left for tea. You can still hear him humming Rule Britannia as he disappears down the alley.^";
+        rtrue;
+    }
     print "Dr. Thyme beams at you over his spectacles. ~Ah, there you are! Welcome, welcome to the workshop. Marvellous place, isn't it? Try not to touch anything that's glowing. Or humming. Especially if it's doing both.~^^";
-    print "He gestures vaguely at the chaos around him. ~I'm just popping out for tea. Mrs. Pemberton's scones wait for no man. Do have a look around -- the journal on the workbench will bring you up to speed. And do keep an eye on Copernicus. He has... ideas.~^";
+    print "He rummages under the workbench and produces a bundle of cleaning rags, pressing them into your hands. ~First things first -- the workshop needs a good tidy. Mrs. Pemberton's scones wait for no man, so I'm popping out for tea. The journal on the workbench will bring you up to speed.~^^";
+    print "He leans in conspiratorially. ~One absolute rule: do NOT touch the machine. Not a lever, not a dial, not so much as a cog. She's temperamental.~^^";
+    if (copernicus_named)
+        print "He glances at Copernicus. ~And keep an eye on the cat. He has... ideas.~^^";
+    else
+        print "He glances at the ginger tabby cat. ~And keep an eye on the cat. He has... ideas.~^^";
+    print "With that, Dr. Thyme grabs his enormous overcoat and bustles out through the entrance.^";
+    thyme_departed = true;
+    move cleaning_rags to player;
+    remove dr_thyme;
 ];
 
 [ NPC_Ask_Thyme topic;
-    if (topic == 'machine' or 'time' or 'device' or 'invention') {
-        print "~The Temporal Displacement Engine! My life's work. Well, one of them. The marmalade recipe was also quite significant.~ He pats the machine fondly. ~She's nearly ready. Just needs a few calibrations.~^";
+    if (thyme_departed || cat_accident) {
+        print "Dr. Thyme isn't here to ask.^";
         rtrue;
     }
-    if (topic == 'cat' or 'copernicus') {
-        print "~Copernicus? Magnificent creature. Found him in a dustbin in Whitechapel. He has an uncanny instinct for finding the most expensive thing in any room and sitting on it.~^";
+    if (topic == 'machine' or 'time' or 'device' or 'invention' or 'engine' or 'temporal') {
+        print "~The Temporal Displacement Engine! My life's work. Well, one of them. The marmalade recipe was also quite significant.~ He pats the machine fondly. ~She's nearly ready. Just needs a few calibrations. But I must stress -- do NOT touch her. Not a lever, not a dial. She's temperamental. The last time someone touched the wrong thing, I lost an entire Tuesday. Just... gone. Skipped straight from Monday to Wednesday. Very disorienting.~^";
+        rtrue;
+    }
+    if (topic == 'cat' or 'copernicus' or 'ginger' or 'tabby') {
+        copernicus_named = true;
+        give copernicus proper;
+        print "~Copernicus? Magnificent creature. Found him in a dustbin in Whitechapel three years ago. Named him after the astronomer -- he has the same habit of sitting in the centre of everything and expecting the universe to revolve around him.~ Dr. Thyme chuckles. ~He has an uncanny instinct for finding the most expensive thing in any room and sitting on it. Genius-level cat. Possibly smarter than half the Royal Society.~^";
         rtrue;
     }
     if (topic == 'journal' or 'notes' or 'book') {
-        print "~Yes, do read it! Contains all my research. The handwriting gets a bit wobbly around chapter seven -- that was the incident with the temporal feedback loop and the cheese sandwich.~^";
+        print "~Yes, do read it! Contains all my research. The handwriting gets a bit wobbly around chapter seven -- that was the incident with the temporal feedback loop and the cheese sandwich. I still can't look at Wensleydale the same way.~^";
+        rtrue;
+    }
+    if (topic == 'research' or 'work' or 'science' or 'temporal') {
+        print "~My research? Oh, where to begin!~ He gestures expansively at the workshop. ~Twenty-seven years I've been working on temporal displacement. Started as a theoretical exercise at Cambridge -- they laughed at me, of course. Called it ~Thyme's Folly.~ Well, who's laughing now?~ He pauses. ~Still them, mostly. But they won't be laughing when I publish!~^";
+        rtrue;
+    }
+    if (topic == 'marmalade' or 'jam' or 'preserv') {
+        print "~Ah, the marmalade! Seville orange, my own recipe. Batch 7 is the standard. Batch 12 is experimental -- I added a pinch of temporal resonance powder. Remarkable preservative qualities. Batch 3...~ He lowers his voice. ~Do NOT eat Batch 3. It's not exactly marmalade any more. I'm not sure what it is. But it's Tuesday in one jar and Thursday in the next, and the toast between them has ceased to exist entirely.~^";
+        rtrue;
+    }
+    if (topic == 'pemberton' or 'mrs' or 'tea' or 'scone' or 'scones') {
+        print "~Mrs. Pemberton! Landlady, housekeeper, and the finest scone-maker south of the Thames. She lives two streets over and provides me with tea and scones at precisely four o'clock every afternoon. In return, I try not to cause any more explosions. It's an arrangement that suits us both, though I confess I've been... less than perfect on my end of the bargain.~ He glances at a suspicious scorch mark on the ceiling. ~The incident with the chronometric kettle was nobody's fault.~^";
         rtrue;
     }
     if (topic == 'help') {
-        print "~Help? You're the apprentice! Your job is to help ME. But I suppose reading the journal would be a start.~^";
+        print "~Help? You're the apprentice! Your job is to help ME. But I suppose reading the journal would be a start. And do have a look around -- everything in this workshop has a story. Most of them end with a small explosion, but that's science for you.~^";
         rtrue;
     }
-    print "Dr. Thyme adjusts his spectacles. ~Hmm? Oh, I'm not sure I can help you with that. Try the journal.~^";
+    print "Dr. Thyme adjusts his spectacles. ~Hmm? Oh, I'm not sure I can help you with that. Try the journal -- it's got everything in there. Somewhere. The indexing system is... aspirational.~^";
 ];
 
 [ NPC_Talk_Marcus;
@@ -599,9 +635,19 @@ Object pocket_watch "pocket watch" workshop_entrance
 Object main_workshop "Main Workshop"
     with description [;
             print "The workshop is a cathedral of improbable engineering. Brass gears the size of dinner plates mesh with copper pipes that disappear into the walls. Glass jars of luminous liquids line shelves alongside what appear to be several jars of marmalade. The ceiling is lost in a tangle of tubes and wires.^^";
-            print "The centrepiece is unmistakable: a magnificent contraption of brass, crystal, and what might be a repurposed church organ occupies the middle of the room. This would be the time machine.^^";
-            if (cat_accident == false)
-                print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
+            print "The centrepiece is unmistakable: a magnificent contraption of brass, crystal, and what might be a repurposed church organ occupies the middle of the room, humming with barely contained energy.^^";
+            if (cat_accident == false) {
+                if (rag_on_machine) {
+                    if (copernicus_named)
+                        print "Copernicus is perched atop the contraption, your cleaning rag dangling from his mouth like a trophy.^^";
+                    else
+                        print "The ginger tabby cat is perched atop the contraption, your cleaning rag dangling from his mouth like a trophy.^^";
+                }
+                if (thyme_departed == false)
+                    print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
+                else
+                    print "The workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
+            }
             else
                 print "The workbench holds tools and the remains of Dr. Thyme's tea (cold, abandoned). The store room is north, the entrance west.^";
         ],
@@ -658,8 +704,18 @@ Object time_machine "time machine" main_workshop
     with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal',
          description [;
             if (cat_accident == false) {
-                print "The Temporal Displacement Engine is a thing of terrible beauty. Brass housings encase crystal resonators connected by a bewildering maze of copper tubing. A set of controls features several levers, a compass-like dial, and what appears to be a bicycle bell. The whole thing hums with barely contained energy.^^";
-                print "Copernicus the cat is sitting on the control panel, because of course he is.^";
+                print "A magnificent contraption of brass, crystal, and what might be a repurposed church organ. Brass housings encase crystal resonators connected by a bewildering maze of copper tubing. A set of controls features several levers, a compass-like dial, and what appears to be a bicycle bell. The whole thing hums with barely contained energy.^^";
+                if (rag_on_machine) {
+                    if (copernicus_named)
+                        print "Copernicus is perched on the control panel with your cleaning rag, looking tremendously pleased with himself.^";
+                    else
+                        print "The ginger tabby cat is perched on the control panel with your cleaning rag, looking tremendously pleased with himself.^";
+                } else {
+                    if (copernicus_named)
+                        print "Copernicus is sitting near the control panel, because of course he is.^";
+                    else
+                        print "The ginger tabby cat is sitting near the control panel, because of course he is.^";
+                }
             } else if (components_installed) {
                 print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
             } else {
@@ -672,23 +728,6 @@ Object time_machine "time machine" main_workshop
             }
          ],
          add_to_scope roman_dest blitz_dest hawking_dest future_dest,
-         before [;
-            Examine:
-                if (cat_accident == false) {
-                    cat_accident = true;
-                    visited_roman = true;
-                    current_era = 1;
-                    score = score + 5;
-                    print "You lean in to examine the controls more closely. This is a mistake.^^";
-                    print "Copernicus, with the unerring instinct of cats everywhere for finding the worst possible thing to sit on, shifts his considerable weight onto a large brass lever marked ~ABSOLUTELY DO NOT TOUCH.~^^";
-                    print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
-                    print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
-                    remove dr_thyme;
-                    StartDaemon(copernicus);
-                    PlayerTo(roman_forum);
-                    rtrue;
-                }
-         ],
     has scenery;
 
 Object hartley_journal "leather-bound journal" main_workshop
@@ -701,7 +740,10 @@ Object hartley_journal "leather-bound journal" main_workshop
             print "  3. A CALIBRATION FORMULA for temporal field harmonics^";
             print "  4. A QUANTUM PROCESSOR for the field generator~^^";
             print "~Should the machine malfunction (entirely hypothetical), these components might be scattered across time. One would need to travel to each era to retrieve them. I have included a temporal rift generator as a safety feature. It creates a shimmering portal in each destination era for the return journey.~^^";
+            if (copernicus_named)
             print "The margins are full of cat doodles and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
+        else
+            print "The margins are full of cat doodles and the note: ~KEEP THE CAT AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
         ],
          initial "A leather-bound journal sits prominently on the workbench.";
 
@@ -740,9 +782,9 @@ Object store_supplies "supplies" store_room
 ! ===================================================================
 
 Object dr_thyme "Dr. Thyme" main_workshop
-    with name 'hartley' 'doctor' 'dr' 'aldric',
+    with name 'thyme' 'justin' 'hartley' 'doctor' 'dr' 'aldric',
          description [;
-            if (cat_accident) {
+            if (cat_accident || thyme_departed) {
                 "Dr. Thyme is out getting tea. His timing, as always, was impeccable.";
             }
             "A tall, thin man with wild silver hair and spectacles perpetually about to fall off his nose. He radiates the sort of cheerful disorganisation that either produces geniuses or explosions. Often both.";
@@ -755,11 +797,6 @@ Object dr_thyme "Dr. Thyme" main_workshop
                 "Dr. Thyme nods enthusiastically while clearly thinking about something else entirely.";
             Give:
                 "~How kind! But I really must dash. Mrs. Pemberton waits for no man.~";
-         ],
-         each_turn [;
-            if (cat_accident) {
-                remove self;
-            }
          ],
     has animate proper male;
 
@@ -1958,29 +1995,63 @@ Object curator "Museum Curator" future_museum
 ! COPERNICUS THE CAT — Companion Daemon
 ! ===================================================================
 
-Object copernicus "Copernicus" main_workshop
+Object copernicus "ginger tabby cat" main_workshop
     with name 'copernicus' 'cat' 'ginger' 'tabby' 'moggy',
-         description "A magnificently smug ginger tabby of considerable girth and negligible conscience. Copernicus has the air of a cat who knows exactly what he's done and feels no remorse whatsoever. His eyes are amber, his purr is thunderous, and his talent for sitting on the worst possible thing at the worst possible time is genuinely supernatural.",
+         short_name [;
+            if (copernicus_named) {
+                print "Copernicus";
+            } else {
+                print "ginger tabby cat";
+            }
+            rtrue;
+         ],
+         description [;
+            if (copernicus_named) {
+                "A magnificently smug ginger tabby of considerable girth and negligible conscience. Copernicus has the air of a cat who knows exactly what he's done and feels no remorse whatsoever. His eyes are amber, his purr is thunderous, and his talent for sitting on the worst possible thing at the worst possible time is genuinely supernatural. A small brass name tag hangs from his collar.";
+            }
+            "A magnificently smug ginger tabby of considerable girth and negligible conscience. He has the air of a cat who knows exactly what he's done and feels no remorse whatsoever. His eyes are amber, his purr is thunderous, and his talent for sitting on the worst possible thing at the worst possible time is genuinely supernatural. A small brass name tag hangs from his collar.";
+         ],
          life [;
             Ask:
-                "Copernicus regards you with the serene indifference of a creature who has transcended the need for conversation.";
+                if (copernicus_named)
+                    "Copernicus regards you with the serene indifference of a creature who has transcended the need for conversation.";
+                "The cat regards you with the serene indifference of a creature who has transcended the need for conversation.";
             Tell:
-                "Copernicus flicks an ear. This is the feline equivalent of ~I hear you but I couldn't possibly care less.~";
+                if (copernicus_named)
+                    "Copernicus flicks an ear. This is the feline equivalent of ~I hear you but I couldn't possibly care less.~";
+                "The cat flicks an ear. This is the feline equivalent of ~I hear you but I couldn't possibly care less.~";
             Attack:
-                "Copernicus gives you a look that suggests you should reconsider every decision that led to this moment. You reconsider.";
+                "The cat gives you a look that suggests you should reconsider every decision that led to this moment. You reconsider.";
             Give:
-                "Copernicus sniffs your offering, finds it beneath his dignity, and looks away. He has been offered tribute by Roman centurions. Your gift does not impress.";
+                "The cat sniffs your offering, finds it beneath his dignity, and looks away.";
             ThrowAt:
-                "Absolutely not. Copernicus has survived two thousand years of human history. He can certainly survive you.";
+                "Absolutely not. This cat has an air of invincibility about him. He can certainly survive you.";
          ],
          orders [;
-            "Copernicus ignores your instruction with the magnificent disdain that only a cat can achieve. He is not your employee. He is not anyone's employee. He is a cat.";
+            "The cat ignores your instruction with the magnificent disdain that only a cat can achieve. He is not your employee. He is not anyone's employee. He is a cat.";
          ],
          before [;
             Take:
-                "Copernicus goes boneless with the practiced ease of a cat who has perfected the art of being unpickupable. He weighs approximately seven hundred pounds when he doesn't want to be held.";
+                if (rag_on_machine) {
+                    cat_accident = true;
+                    visited_roman = true;
+                    current_era = 1;
+                    score = score + 5;
+                    rag_on_machine = false;
+                    copernicus_named = true;
+                    give self proper;
+                    remove cleaning_rags;
+                    print "You reach for the cleaning rag draped over the cat. This is a mistake.^^";
+                    print "The cat, with the unerring instinct of cats everywhere for finding the worst possible moment to be difficult, twists away from your grasp. His back legs scrabble for purchase on the control panel, and one powerful hind paw connects squarely with a large brass lever marked ~ABSOLUTELY DO NOT TOUCH.~^^";
+                    print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
+                    print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
+                    StartDaemon(copernicus);
+                    PlayerTo(roman_forum);
+                    rtrue;
+                }
+                "The cat goes boneless with the practiced ease of a cat who has perfected the art of being unpickupable. He weighs approximately seven hundred pounds when he doesn't want to be held.";
             Touch:
-                "Copernicus allows exactly 2.4 seconds of chin-scratching before biting your finger. Not hard enough to draw blood. Just hard enough to establish boundaries.";
+                "The cat allows exactly 2.4 seconds of chin-scratching before biting your finger. Not hard enough to draw blood. Just hard enough to establish boundaries.";
             Listen:
                 "Purrrrrrrrr. It's the sound of a small, self-satisfied engine.";
          ],
@@ -2024,7 +2095,51 @@ Object copernicus "Copernicus" main_workshop
                 }
             }
          ],
-    has animate proper male;
+    has animate male;
+
+Object cat_name_tag "brass name tag" main_workshop
+    with name 'tag' 'name' 'brass' 'collar' 'nametag',
+         description [;
+            copernicus_named = true;
+            give copernicus proper;
+            "A small brass tag on the cat's collar, engraved with the name ~COPERNICUS~ in tiny capitals. Below the name, a miniature solar system has been etched with extraordinary precision -- planets orbiting a central sun. Someone with a very steady hand and a very specific sense of humour made this.";
+         ],
+         before [;
+            Take:
+                "The tag is firmly attached to the cat's collar. The cat is firmly attached to doing whatever he wants. You'll have to settle for examining it.";
+         ],
+    has scenery;
+
+Object cleaning_rags "cleaning rags"
+    with name 'rags' 'rag' 'cleaning' 'cloth' 'cloths' 'bundle',
+         description [;
+            if (rag_on_machine) {
+                if (copernicus_named)
+                    "Your cleaning rag is currently in the possession of Copernicus, who is sitting on the machine with it. Getting it back would require getting the cat off the machine.";
+                "Your cleaning rag is currently in the possession of the cat, who is sitting on the machine with it. Getting it back would require getting the cat off the machine.";
+            }
+            "A bundle of soft cotton cleaning rags, slightly oil-stained. Dr. Thyme pressed them into your hands with instructions to tidy up the workshop.";
+         ],
+         before [;
+            Take:
+                if (rag_on_machine) {
+                    print "The rag is tangled up with the cat on the machine. You'll need to grab the cat to get it back.^";
+                    rtrue;
+                }
+            Drop:
+                if (location == main_workshop && thyme_departed && rag_stolen == false) {
+                    rag_stolen = true;
+                    rag_on_machine = true;
+                    move self to main_workshop;
+                    print "You set down the cleaning rags on the workbench.^^";
+                    if (copernicus_named)
+                        print "In a flash of ginger fur, Copernicus snatches a rag and bolts. Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
+                    else
+                        print "In a flash of ginger fur, the cat snatches a rag and bolts. Before you can react, he has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
+                    print "Getting that rag back is going to require getting the cat off the machine. This seems... inadvisable.^";
+                    rtrue;
+                }
+         ];
 
 ! ===================================================================
 ! TIME TRAVEL DESTINATIONS (parentless scope objects)
@@ -2117,7 +2232,9 @@ Object future_dest "Future London"
     if (noun == torres)             { NPC_Talk_Torres(); rtrue; }
     if (noun == kai)                { NPC_Talk_Kai(); rtrue; }
     if (noun == copernicus) {
-        "Copernicus says nothing, because he is a cat. He does, however, emit a single, resonant purr that somehow conveys both affection and total superiority. It's a gift.";
+        if (copernicus_named)
+            "Copernicus says nothing, because he is a cat. He does, however, emit a single, resonant purr that somehow conveys both affection and total superiority. It's a gift.";
+        "The cat says nothing, because he is a cat. He does, however, emit a single, resonant purr that somehow conveys both affection and total superiority. It's a gift.";
     }
     if (noun == eleanor) {
         "Eleanor looks up, gives you a small, shy smile, and pushes a cat drawing towards you. Words aren't really her thing right now.";
@@ -2311,8 +2428,28 @@ Object future_dest "Future London"
 
 [ CleanSub;
     if (location == main_workshop) {
+        if (cat_accident == false) {
+            if (thyme_departed == false)
+                "The workshop doesn't need cleaning yet. You've only just arrived. Perhaps talk to Dr. Thyme first.";
+            if (cleaning_rags notin player && rag_stolen == false)
+                "You don't have any cleaning rags. Dr. Thyme gave you some -- where did they go?";
+            if (rag_on_machine)
+                "You'd love to clean, but the cat has stolen your cleaning rag and is sitting on the machine with it. You'll need to get the rag back first.";
+            if (cleaning_rags in player && rag_stolen == false) {
+                rag_stolen = true;
+                rag_on_machine = true;
+                move cleaning_rags to main_workshop;
+                print "You unfurl a cleaning rag and are about to start wiping down the workbench when --^^";
+                if (copernicus_named)
+                    print "In a flash of ginger fur, Copernicus snatches the rag right out of your hand! Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
+                else
+                    print "In a flash of ginger fur, the cat snatches the rag right out of your hand! Before you can react, he has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
+                print "Getting that rag back is going to require getting the cat off the machine. This seems... inadvisable.^";
+                rtrue;
+            }
+        }
         if (cat_accident == false)
-            "The workshop doesn't need cleaning yet. You've only just arrived.";
+            "The workshop doesn't need cleaning yet.";
         if (workshop_cleaned) {
             "The workshop is already spotless. Well, as spotless as a workshop full of temporal engineering equipment can be.";
         }
@@ -2333,7 +2470,9 @@ Object future_dest "Future London"
 
 [ PetSub;
     if (noun == copernicus) {
-        "Copernicus permits exactly 2.4 seconds of stroking before biting your finger. Not maliciously -- just to remind you who's in charge. (Hint: not you.)";
+        if (copernicus_named)
+            "Copernicus permits exactly 2.4 seconds of stroking before biting your finger. Not maliciously -- just to remind you who's in charge. (Hint: not you.)";
+        "The cat permits exactly 2.4 seconds of stroking before biting your finger. Not maliciously -- just to remind you who's in charge. (Hint: not you.)";
     }
     if (noun has animate)
         "That's a person, not a pet. Victorian social norms frown upon this.";

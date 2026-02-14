@@ -55,6 +55,14 @@ echo ""
 
 echo "=== Running tests ==="
 
+# Common trigger: the multi-step cat accident sequence
+# 1) talk to dr thyme (gives rags, Thyme leaves)
+# 2) clean (cat steals rag, climbs onto machine)
+# 3) take cat (cat kicks lever, accident fires -> Roman Forum)
+CAT_ACCIDENT="talk to dr thyme
+clean
+take cat"
+
 # --- Compilation ---
 echo "[Compilation]"
 run_test "Game compiles and runs" "look" "Praed Street"
@@ -71,58 +79,110 @@ run_test "Take toolkit" "east
 north
 take toolkit" "Taken"
 run_test "Dr. Thyme present" "east" "Dr. Thyme"
-run_test "Copernicus present" "east" "Copernicus"
+run_test "Cat shown as ginger tabby" "east" "ginger tabby cat"
+run_test_absent "Cat not named Copernicus initially" "east
+look" "You can also see.*Copernicus"
+run_test "Workshop description no time machine label" "east" "humming with barely contained energy"
+run_test_absent "No 'This would be the time machine' text" "east" "This would be the time machine"
 
-# --- Cat accident ---
+# --- Cat naming ---
+echo "[Cat Naming]"
+run_test "Examine name tag reveals name" "east
+examine tag
+look" "Copernicus"
+run_test "Name tag has solar system" "east
+examine tag" "solar system"
+run_test "Ask Thyme about cat reveals name" "east
+ask dr thyme about cat
+look" "Copernicus"
+
+# --- Dr. Thyme expanded dialog ---
+echo "[Dr. Thyme Dialog]"
+run_test "Ask about machine" "east
+ask dr thyme about machine" "Temporal Displacement Engine"
+run_test "Ask about marmalade" "east
+ask dr thyme about marmalade" "Seville orange"
+run_test "Ask about Mrs Pemberton" "east
+ask dr thyme about pemberton" "scone"
+run_test "Ask about research" "east
+ask dr thyme about research" "twenty-seven years"
+run_test "Ask about journal" "east
+ask dr thyme about journal" "temporal feedback loop"
+
+# --- Multi-step accident sequence ---
 echo "[Cat Accident]"
-run_test "Cat activates machine" "east
-examine machine" "ABSOLUTELY DO NOT TOUCH"
+run_test "Talk to Thyme gives rags" "east
+talk to dr thyme" "cleaning rags"
+run_test "Thyme warns about machine" "east
+talk to dr thyme" "do NOT touch the machine"
+run_test "Thyme departs" "east
+talk to dr thyme" "bustles out"
+run_test "Clean triggers cat steal" "east
+talk to dr thyme
+clean" "snatches the rag"
+run_test "Cat on machine with rag" "east
+talk to dr thyme
+clean
+look" "cleaning rag dangling"
+run_test "Take cat triggers accident" "east
+$CAT_ACCIDENT" "ABSOLUTELY DO NOT TOUCH"
 run_test "Sent to Roman forum" "east
-examine machine" "Roman Londinium"
+$CAT_ACCIDENT" "Roman Londinium"
 run_test "Score for accident" "east
-examine machine
+$CAT_ACCIDENT
 score" "5 out of"
 
 # --- Clean guard ---
 echo "[Clean Guard]"
-run_test_absent "No cleaning before cat accident" "east
+run_test_absent "No cleaning before talking to Thyme" "east
 clean" "Tools are returned"
-run_test "Cleaning refused before cat accident" "east
+run_test "Cleaning refused before talking to Thyme" "east
 clean" "doesn.t need cleaning yet"
+run_test "Cannot clean while rag on machine" "east
+talk to dr thyme
+clean
+clean" "cat has stolen"
+
+# --- Examine machine before accident ---
+echo "[Machine Examine Pre-Accident]"
+run_test "Examine machine before accident no trigger" "east
+examine machine" "barely contained energy"
+run_test_absent "Examine machine does not trigger accident" "east
+examine machine" "ABSOLUTELY DO NOT TOUCH"
 
 # --- Roman Londinium ---
 echo "[Roman Londinium]"
 run_test "Forum description" "east
-examine machine
+$CAT_ACCIDENT
 look" "Forum"
 run_test "Marcus blocks north" "east
-examine machine
+$CAT_ACCIDENT
 north" "Roman citizens and military"
 run_test "Livia blocks temple" "east
-examine machine
+$CAT_ACCIDENT
 east" "Only the initiated"
 run_test "Bathhouse accessible" "east
-examine machine
+$CAT_ACCIDENT
 west" "Steam billows"
 run_test "Gold aureus in bath" "east
-examine machine
+$CAT_ACCIDENT
 west" "gold aureus"
 run_test "Take aureus" "east
-examine machine
+$CAT_ACCIDENT
 west
 take aureus" "Taken"
 run_test "Merchant quarter" "east
-examine machine
+$CAT_ACCIDENT
 south" "Merchant"
 run_test "Trade for lodestone" "east
-examine machine
+$CAT_ACCIDENT
 west
 take aureus
 east
 south
 give aureus to felix" "lodestone"
 run_test "Show lodestone to Marcus" "east
-examine machine
+$CAT_ACCIDENT
 west
 take aureus
 east
@@ -131,7 +191,7 @@ give aureus to felix
 north
 show lodestone to marcus" "commands iron"
 run_test "Temple accessible after Marcus" "east
-examine machine
+$CAT_ACCIDENT
 west
 take aureus
 east
@@ -147,7 +207,7 @@ take journal
 north
 take toolkit
 south
-examine machine
+$CAT_ACCIDENT
 west
 take aureus
 east
@@ -160,29 +220,29 @@ east
 carve" "TEMPUS FUGIT"
 run_test "Bury time capsule" "take watch
 east
-examine machine
+$CAT_ACCIDENT
 south
 south
 bury" "two thousand years"
 run_test "Temporal rift return" "east
-examine machine
+$CAT_ACCIDENT
 enter rift" "back in the workshop"
 
 # --- Time Travel ---
 echo "[Time Travel]"
 run_test "Travel to Blitz" "east
-examine machine
+$CAT_ACCIDENT
 enter rift
 travel to blitz" "1941"
 run_test "Eras must be sequential" "east
-examine machine
+$CAT_ACCIDENT
 enter rift
 travel to cambridge" "hasn.t stabilised"
 
 # --- WWII London ---
 echo "[WWII London]"
 BLITZ_SETUP="east
-examine machine
+$CAT_ACCIDENT
 enter rift
 travel to blitz"
 run_test "Blitz street" "$BLITZ_SETUP" "blackout"
@@ -260,7 +320,7 @@ take journal
 north
 take toolkit
 south
-examine machine
+$CAT_ACCIDENT
 west
 take aureus
 east
@@ -320,7 +380,7 @@ enter rift" "back in the workshop"
 # --- Cambridge ---
 echo "[Cambridge 2009]"
 CAMBRIDGE_SETUP="east
-examine machine
+$CAT_ACCIDENT
 enter rift
 travel to blitz
 enter rift
@@ -351,7 +411,7 @@ take journal
 north
 take toolkit
 south
-examine machine
+$CAT_ACCIDENT
 enter rift
 travel to blitz
 enter rift
@@ -372,7 +432,7 @@ take journal
 north
 take toolkit
 south
-examine machine
+$CAT_ACCIDENT
 west
 take aureus
 east
@@ -403,7 +463,7 @@ FUTURE_SETUP="east
 north
 take toolkit
 south
-examine machine
+$CAT_ACCIDENT
 enter rift
 travel to blitz
 enter rift
@@ -479,7 +539,7 @@ take journal
 north
 take toolkit
 south
-examine machine
+$CAT_ACCIDENT
 west
 take aureus
 east
@@ -538,14 +598,13 @@ run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 165"
 # --- Copernicus ---
 echo "[Copernicus]"
 run_test "Cat follows player" "east
-examine machine
+$CAT_ACCIDENT
 south
 look" "Copernicus"
 run_test "Cat examine" "east
-examine copernicus" "magnificently smug ginger tabby"
-run_test "Can't take cat" "east
-examine machine
-take copernicus" "boneless"
+examine cat" "magnificently smug ginger tabby"
+run_test "Can't take cat before accident" "east
+take cat" "boneless"
 
 # --- Help ---
 echo "[Help System]"
@@ -554,7 +613,7 @@ run_test "Help command" "help" "TEMPORAL APPRENTICE"
 # --- Kill Hitler Easter Egg ---
 echo "[Easter Eggs]"
 run_test "Kill Hitler response" "east
-examine machine
+$CAT_ACCIDENT
 enter rift
 travel to blitz
 kill hitler" "family-friendly"
@@ -562,7 +621,7 @@ kill hitler" "family-friendly"
 # --- Travel-to scope outside workshop ---
 echo "[Travel-to Scope]"
 run_test "Travel to dest outside workshop shows error" "east
-examine machine
+$CAT_ACCIDENT
 travel to blitz" "temporal rift to return to the workshop"
 run_test "Travel to dest before cat accident not in scope" "travel to roman" "can.t see any such thing"
 
@@ -575,13 +634,13 @@ examine shelves" "Floor-to-ceiling shelves"
 run_test "Examine marmalade in Main Workshop" "east
 examine marmalade" "Seville orange"
 run_test "Examine column in Roman Forum" "east
-examine machine
+$CAT_ACCIDENT
 examine column" "Corinthian column"
 run_test "Examine citizens in Roman Forum" "east
-examine machine
+$CAT_ACCIDENT
 examine citizens" "Toga-clad citizens"
 run_test "Examine pools in Roman Bathhouse" "east
-examine machine
+$CAT_ACCIDENT
 west
 examine pools" "tepidarium"
 run_test "Examine stained glass in Bombed Church" "$BLITZ_SETUP
@@ -601,11 +660,11 @@ run_test "Examine sign in Rubble Site" "$BLITZ_SETUP
 west
 examine sign" "FI CH"
 run_test "Examine stalls in Merchant Quarter" "east
-examine machine
+$CAT_ACCIDENT
 south
 examine stalls" "Ramshackle wooden stalls"
 run_test "Examine boats at Roman Docks" "east
-examine machine
+$CAT_ACCIDENT
 south
 south
 examine boats" "flat-bottomed cargo"
