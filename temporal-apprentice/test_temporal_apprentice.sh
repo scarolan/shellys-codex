@@ -407,6 +407,8 @@ open panel
 down
 south
 down" "research laboratory"
+run_test "Swim in floodwater" "$FUTURE_SETUP
+swim" "unusual method of suicide"
 run_test "Cabinet needs formula" "$FUTURE_SETUP
 north
 up

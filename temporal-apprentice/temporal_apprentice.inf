@@ -1512,6 +1512,10 @@ Object flood_water "floodwater"
             Drink:
                 "Absolutely not. You've seen what's floating in it.";
          ],
+         react_before [;
+            Swim:
+                "The water is murky, freezing, and full of debris. Swimming in it would be less ~exercise~ and more ~unusual method of suicide.~";
+         ],
     has scenery;
 
 Object quantum_cabinet "sealed cabinet" future_lab
