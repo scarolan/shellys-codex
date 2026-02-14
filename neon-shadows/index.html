@@ -7,7 +7,7 @@
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script>if(localStorage.getItem('shellys-codex-theme')==='light')document.documentElement.classList.add('light-theme');</script>
     <script src="jquery.min.js"></script>
     <script src="ie.js" nomodule></script>
@@ -102,8 +102,9 @@
         .GridWindow {
             background: var(--game-grid-bg) !important;
             color: var(--game-grid-color) !important;
-            font-family: 'Share Tech Mono', 'Courier New', monospace !important;
-            font-size: 22px !important;
+            font-family: 'Orbitron', 'Share Tech Mono', monospace !important;
+            font-size: 18px !important;
+            letter-spacing: 1px !important;
             border-bottom: 1px solid var(--game-grid-border) !important;
             transition: background 0.3s, color 0.3s, border-color 0.3s;
         }
@@ -179,8 +180,8 @@
         /* Theme toggle button */
         #theme-toggle {
             position: absolute;
-            top: -18px;
-            right: 0;
+            top: 10px;
+            right: 10px;
             z-index: 10000;
             width: 32px;
             height: 32px;
