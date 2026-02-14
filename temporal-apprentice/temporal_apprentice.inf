@@ -1760,7 +1760,7 @@ Object future_dest "Future London"
     location = workshop_entrance;
     score = 0;
 
-    print "^^London, 1895.^^";
+    print "^London, 1895.^^";
     print "It's your first day as apprentice to Dr. Aldric Hartley, inventor, eccentric, and -- according to the advert in The Times -- ~pioneer of temporal engineering, seeking assistant with good penmanship and an open mind regarding the fundamental nature of causality.~^^";
     print "You answered the advert because you needed the money. Also because ~temporal engineering~ sounded considerably more interesting than your previous position at the accounting firm of Greybaum, Tedium and Sons.^^";
     print "Type HELP for a list of commands.^^";
