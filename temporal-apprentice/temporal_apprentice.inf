@@ -426,7 +426,6 @@ Global hawking_phase = 0;
     @set_cursor 1 1;
     style reverse;
     width = 0->33;
-    if (width < 200) width = 200;
     spaces width;
     @set_cursor 1 1;
     switch (current_era) {
