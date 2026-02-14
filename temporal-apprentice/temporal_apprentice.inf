@@ -1431,6 +1431,26 @@ Object eleanor_display "wartime art display" future_museum
          ],
     has scenery;
 
+Object museum_cases "display cases" future_museum
+    with name 'case' 'cases' 'display' 'displays' 'artefacts' 'artefact',
+         description "Glass-fronted display cases line the walls, each carefully labelled. They hold the detritus of a drowned civilisation: Oyster cards, mobile phones with dead batteries, a Greggs loyalty card with nine stamps out of ten. Someone almost got a free sausage roll.",
+    has scenery pluralname;
+
+Object museum_telephone "red telephone box" future_museum
+    with name 'telephone' 'phone' 'box' 'red',
+         description "A classic red K6 telephone box, designed by Sir Giles Gilbert Scott in 1935. It survived the Blitz, privatisation, and the invention of the mobile phone, only to be finally done in by the Thames. The receiver still dangles off the hook, as if someone was mid-call when the water rose.",
+    has scenery;
+
+Object museum_signs "underground signs" future_museum
+    with name 'sign' 'signs' 'underground' 'tube',
+         description "A collection of London Underground roundels salvaged from various stations. Westminster, Bank, Waterloo -- the names read like a history of Britain rendered in enamel and mild steel. The colours have faded but the typography remains immaculate. Some things outlast everything.",
+    has scenery pluralname;
+
+Object museum_standard "Evening Standard copies" future_museum
+    with name 'standard' 'evening' 'newspaper' 'newspapers' 'paper' 'papers' 'copy' 'copies' 'soggy',
+         description "Soggy copies of the Evening Standard, dated 7th March 2038. The headline reads: ~THAMES BARRIER FAILS -- CENTRAL LONDON FLOODS.~ Below the fold: ~PROPERTY PRICES EXPECTED TO STABILISE.~ Some things never change, even when everything does.",
+    has scenery pluralname;
+
 Object future_rooftop "Museum Rooftop"
     with description [;
             print "The rooftop provides a staggering view of flooded London. The old skyline pokes through the water like a half-drowned city playing dead. In the distance, new structures rise on stilts -- the future adapting, as it always does.^^";

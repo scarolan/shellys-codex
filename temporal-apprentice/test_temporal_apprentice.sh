@@ -418,6 +418,33 @@ south
 down" "research laboratory"
 run_test "Swim in floodwater" "$FUTURE_SETUP
 swim" "unusual method of suicide"
+run_test "Museum display cases" "$FUTURE_SETUP
+north
+examine cases" "sausage roll"
+run_test "Museum display cases (displays)" "$FUTURE_SETUP
+north
+examine displays" "sausage roll"
+run_test "Museum telephone box" "$FUTURE_SETUP
+north
+examine telephone" "K6 telephone box"
+run_test "Museum telephone box (box)" "$FUTURE_SETUP
+north
+examine box" "K6 telephone box"
+run_test "Museum underground signs" "$FUTURE_SETUP
+north
+examine signs" "Underground roundels"
+run_test "Museum underground signs (underground)" "$FUTURE_SETUP
+north
+examine underground" "Underground roundels"
+run_test "Museum Evening Standard" "$FUTURE_SETUP
+north
+examine standard" "THAMES BARRIER FAILS"
+run_test "Museum Evening Standard (copies)" "$FUTURE_SETUP
+north
+examine copies" "THAMES BARRIER FAILS"
+run_test "Museum Evening Standard (newspaper)" "$FUTURE_SETUP
+north
+examine newspaper" "THAMES BARRIER FAILS"
 run_test "Cabinet needs formula" "$FUTURE_SETUP
 north
 up
