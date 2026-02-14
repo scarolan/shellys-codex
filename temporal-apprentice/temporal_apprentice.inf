@@ -1187,6 +1187,7 @@ Object cambridge_porter "Porter's Lodge"
 
 Object porter_npc "college porter" cambridge_porter
     with name 'porter' 'jenkins',
+         article "the",
          description "The college porter. Tweed jacket, stern expression, an encyclopaedic knowledge of who belongs here and who doesn't. You do not belong here. He knows this. You know this. Copernicus doesn't care.",
          life [;
             Ask:
@@ -1220,7 +1221,7 @@ Object porter_npc "college porter" cambridge_porter
                 }
                 "The porter is unimpressed.";
          ],
-    has animate proper male;
+    has animate male;
 
 Object cambridge_garden "College Garden"
     with description [;
