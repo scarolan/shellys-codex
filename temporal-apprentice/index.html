@@ -60,16 +60,23 @@
         .GridWindow {
             background: #1a1206 !important;
             color: #c4943a !important;
-            font-family: 'Special Elite', 'Courier Prime', 'Courier New', monospace !important;
+            font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
             border-bottom: 1px solid #6b5020 !important;
+        }
+
+        /* Extend status bar background full-width for proportional font */
+        .GridWindow .GridLine {
+            display: block !important;
+            width: 100% !important;
+            background: #c4943a !important;
         }
 
         /* Main text area — warm sepia */
         .BufferWindow {
             background: #0f0d08 !important;
             color: #d4b896 !important;
-            font-family: 'Courier Prime', 'Courier New', monospace !important;
+            font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
             line-height: 1.5 !important;
             overflow-x: hidden !important;
@@ -78,7 +85,7 @@
         /* Input field — bright amber */
         .LineInput {
             color: #e8c060 !important;
-            font-family: 'Courier Prime', 'Courier New', monospace !important;
+            font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
             caret-color: #e8c060 !important;
             background: transparent !important;
