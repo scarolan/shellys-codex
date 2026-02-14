@@ -1228,7 +1228,7 @@ Object blitz_rooftop "Fire Watch Rooftop"
                 if (church_saved)
                     print "The sandbags you used to smother the fire are scattered along the parapet. St. Margaret's still stands.^^";
                 else
-                    print "The remains of the fire smoulder below. St. Margaret's roof is gone.^^";
+                    print "Flames still lick at the timbers below. The sandbags are right here -- it's not too late to act!^^";
             }
             print "Stairs lead back down to the church.^";
         ],
