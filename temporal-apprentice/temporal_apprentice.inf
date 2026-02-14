@@ -2440,7 +2440,8 @@ Verb 'zop'
     * noun                                  -> OpenPanel;
 
 Verb 'zcl'
-    *                                       -> Clean;
+    *                                       -> Clean
+    * noun                                  -> Clean;
 
 Extend 'kill' first
     * 'hitler'                              -> KillHitler;
