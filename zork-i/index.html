@@ -7,7 +7,7 @@
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     <script src="jquery.min.js"></script>
     <script src="ie.js" nomodule></script>
     <script>
@@ -19,70 +19,64 @@
     <script src="web.js" type="module"></script>
     <link rel="stylesheet" href="web.css">
     <style>
-        /* === RETRO GREEN TERMINAL THEME ===
+        /* === DUNGEON PARCHMENT THEME ===
+           Aged parchment and torchlight for the Great Underground Empire.
            Rule: only override colors, fonts, and cosmetics.
            Let Parchment handle all layout/sizing. */
 
         body {
-            background: #0a0a0f !important;
+            background: #1a1008 !important;
         }
 
-        /* Terminal border on the gameport */
+        /* Worn leather border on the gameport */
         #gameport {
-            background: #0c0c0c !important;
-            border: 2px solid #00cc66 !important;
-            border-radius: 12px !important;
+            background: #120e08 !important;
+            border: 2px solid #6b4c2a !important;
+            border-radius: 8px !important;
             box-shadow:
-                0 0 20px rgba(0, 204, 102, 0.2),
-                0 0 60px rgba(0, 204, 102, 0.05),
+                0 0 30px rgba(180, 120, 50, 0.15),
+                0 0 80px rgba(0, 0, 0, 0.4),
                 inset 0 0 60px rgba(0, 0, 0, 0.5) !important;
             max-width: 960px !important;
             margin: 3vh auto !important;
             position: relative !important;
         }
 
-        /* CRT scanline + vignette overlay (purely cosmetic, no layout impact) */
+        /* Subtle parchment grain overlay */
         #crt-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 12px;
+            border-radius: 8px;
             pointer-events: none;
             z-index: 9999;
             background:
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(0, 0, 0, 0.06) 2px,
-                    rgba(0, 0, 0, 0.06) 4px
-                ),
                 radial-gradient(
                     ellipse at center,
-                    transparent 65%,
-                    rgba(0, 0, 0, 0.35) 100%
+                    transparent 60%,
+                    rgba(0, 0, 0, 0.4) 100%
                 );
         }
 
-        /* Status bar (grid window) */
+        /* Status bar — dungeon stone */
         .GridWindow {
-            background: #001a0d !important;
-            color: #00ff88 !important;
-            font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+            background: #2a1f12 !important;
+            color: #c8a96e !important;
+            font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
-            border-bottom: 1px solid #00663a !important;
+            border-bottom: 1px solid #4a3520 !important;
         }
 
         .GridWindow span, .GridLine, .GridLine span {
-            color: #00ff88 !important;
+            color: #c8a96e !important;
         }
 
-        /* Main text area */
+        /* Main text area — aged parchment */
         .BufferWindow {
-            background: #0c0c0c !important;
-            color: #00cc66 !important;
-            font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+            background: #120e08 !important;
+            color: #c4a46a !important;
+            font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
-            line-height: 1.5 !important;
+            line-height: 1.6 !important;
             overflow-x: hidden !important;
         }
 
@@ -91,23 +85,23 @@
         }
 
         .BufferLine, .BufferLine span {
-            color: #00cc66 !important;
+            color: #c4a46a !important;
         }
 
-        /* Text style overrides */
-        .Style_header, .BufferLine .Style_header { color: #00ff88 !important; font-weight: bold !important; }
-        .Style_subheader, .BufferLine .Style_subheader { color: #00ffaa !important; }
-        .Style_emphasized, .BufferLine .Style_emphasized { color: #66ffaa !important; font-style: italic !important; }
-        .Style_alert, .BufferLine .Style_alert { color: #ff6666 !important; }
-        .Style_note, .BufferLine .Style_note { color: #33aa66 !important; }
-        .Style_input, .BufferLine .Style_input { color: #00ffcc !important; }
+        /* Text style overrides — torchlight palette */
+        .Style_header, .BufferLine .Style_header { color: #e8c868 !important; font-weight: bold !important; }
+        .Style_subheader, .BufferLine .Style_subheader { color: #d4b060 !important; }
+        .Style_emphasized, .BufferLine .Style_emphasized { color: #d4a848 !important; font-style: italic !important; }
+        .Style_alert, .BufferLine .Style_alert { color: #cc6644 !important; }
+        .Style_note, .BufferLine .Style_note { color: #8a7040 !important; }
+        .Style_input, .BufferLine .Style_input { color: #e8d090 !important; }
 
-        /* Input field */
+        /* Input field — bright torchlight */
         .LineInput {
-            color: #00ffcc !important;
-            font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+            color: #e8d090 !important;
+            font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
-            caret-color: #00ffcc !important;
+            caret-color: #e8d090 !important;
             background: transparent !important;
             border: none !important;
             outline: none !important;
@@ -115,16 +109,16 @@
 
         /* Loading pane */
         #loadingpane {
-            color: #00cc66;
-            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            color: #c4a46a;
+            font-family: 'Special Elite', 'Courier New', monospace;
             font-size: 22px;
         }
 
         /* Scrollbar */
         .BufferWindow::-webkit-scrollbar { width: 6px; }
-        .BufferWindow::-webkit-scrollbar-track { background: #0c0c0c; }
-        .BufferWindow::-webkit-scrollbar-thumb { background: #00663a; border-radius: 3px; }
-        .BufferWindow::-webkit-scrollbar-thumb:hover { background: #00cc66; }
+        .BufferWindow::-webkit-scrollbar-track { background: #120e08; }
+        .BufferWindow::-webkit-scrollbar-thumb { background: #4a3520; border-radius: 3px; }
+        .BufferWindow::-webkit-scrollbar-thumb:hover { background: #6b4c2a; }
 
         /* Hide Parchment chrome */
         #about, #footer { display: none !important; }
