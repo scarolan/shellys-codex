@@ -1613,7 +1613,12 @@ Object curator "Museum Curator" future_museum
                 }
                 if (second == 'eleanor' or 'drawing' or 'art') {
                     if (eleanor_gift) {
-                        print "~Eleanor Morrison? Wonderful artist. Survived the Blitz, became one of Britain's most celebrated painters. Her early cat drawings are quite collectible. She always credited a stranger during the war who gave her a pocket watch and, she said, hope.~^";
+                        print "~Eleanor Morrison? Wonderful artist. Survived the Blitz, became one of Britain's most celebrated painters. Her early cat drawings are quite collectible. She always credited a stranger during the war who gave her ";
+                        if (eleanor_gift == 1)
+                            print "a pocket watch";
+                        else
+                            print "a tin soldier";
+                        print " and, she said, hope.~^";
                     } else {
                         print "~We have some wartime art in the collection. Children's drawings, mostly. Poignant stuff.~^";
                     }
