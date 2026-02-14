@@ -1708,6 +1708,20 @@ Object future_dest "Future London"
 ];
 
 ! ===================================================================
+! INSCOPE — make travel destinations available globally after cat accident
+! ===================================================================
+
+[ InScope actor;
+    if (actor == player && cat_accident) {
+        PlaceInScope(roman_dest);
+        PlaceInScope(blitz_dest);
+        PlaceInScope(hawking_dest);
+        PlaceInScope(future_dest);
+    }
+    rfalse;
+];
+
+! ===================================================================
 ! DEATH MESSAGE (multiple endings)
 ! ===================================================================
 

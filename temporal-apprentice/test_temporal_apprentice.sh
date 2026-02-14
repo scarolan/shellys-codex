@@ -482,6 +482,13 @@ enter rift
 travel to blitz
 kill hitler" "family-friendly"
 
+# --- Travel-to scope outside workshop ---
+echo "[Travel-to Scope]"
+run_test "Travel to dest outside workshop shows error" "east
+examine machine
+travel to blitz" "temporal rift to return to the workshop"
+run_test "Travel to dest before cat accident not in scope" "travel to roman" "can.t see any such thing"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"
