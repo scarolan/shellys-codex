@@ -549,6 +549,50 @@ examine machine
 travel to blitz" "temporal rift to return to the workshop"
 run_test "Travel to dest before cat accident not in scope" "travel to roman" "can.t see any such thing"
 
+# --- Scenery objects ---
+echo "[Scenery Objects]"
+run_test "Examine door in Workshop Entrance" "examine door" "heavy oak door"
+run_test "Examine brass plate in Workshop Entrance" "examine brass plate" "TEMPORAL ENGINEERING"
+run_test "Examine shelves in Main Workshop" "east
+examine shelves" "Floor-to-ceiling shelves"
+run_test "Examine marmalade in Main Workshop" "east
+examine marmalade" "Seville orange"
+run_test "Examine column in Roman Forum" "east
+examine machine
+examine column" "Corinthian column"
+run_test "Examine citizens in Roman Forum" "east
+examine machine
+examine citizens" "Toga-clad citizens"
+run_test "Examine pools in Roman Bathhouse" "east
+examine machine
+west
+examine pools" "tepidarium"
+run_test "Examine stained glass in Bombed Church" "$BLITZ_SETUP
+north
+examine stained glass" "fragments of saints"
+run_test "Examine church in Bombed Church" "$BLITZ_SETUP
+north
+examine church" "St. Margaret"
+run_test "Examine parapet on Rooftop" "$BLITZ_SETUP
+north
+up
+examine parapet" "low stone parapet"
+run_test "Examine pub in Crown and Anchor" "$BLITZ_SETUP
+east
+examine pub" "Crown and Anchor"
+run_test "Examine sign in Rubble Site" "$BLITZ_SETUP
+west
+examine sign" "FI CH"
+run_test "Examine stalls in Merchant Quarter" "east
+examine machine
+south
+examine stalls" "Ramshackle wooden stalls"
+run_test "Examine boats at Roman Docks" "east
+examine machine
+south
+south
+examine boats" "flat-bottomed cargo"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"

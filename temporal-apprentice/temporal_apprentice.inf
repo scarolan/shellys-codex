@@ -558,6 +558,36 @@ Object coat_hook "coat hook" workshop_entrance
          description "A row of brass hooks by the door. Dr. Hartley's enormous overcoat hangs from one. Yours would fit inside it roughly three times.",
     has scenery;
 
+Object entrance_brass_plate "brass plate" workshop_entrance
+    with name 'brass' 'plate' 'sign' 'plaque',
+         description "A tarnished brass plate beside the door, engraved with impeccable Victorian confidence: ~DR. A. HARTLEY -- TEMPORAL ENGINEERING -- NO SALESMEN.~ The 'no salesmen' has been underlined twice.",
+    has scenery;
+
+Object entrance_door "oak door" workshop_entrance
+    with name 'door' 'oak' 'heavy',
+         description "A heavy oak door, scarred by decades of London weather and possibly one or two small explosions. The brass hinges are magnificent. The dent at cat-height is suspicious.",
+    has scenery;
+
+Object entrance_gas_lamps "gas lamps" workshop_entrance
+    with name 'gas' 'lamp' 'lamps' 'light' 'lights',
+         description "The gas lamps throw circles of jaundiced light onto the cobblestones, each one a small island of visibility in the London murk. They hiss and flicker with the quiet persistence of Victorian infrastructure.",
+    has scenery pluralname;
+
+Object entrance_cobblestones "cobblestones" workshop_entrance
+    with name 'cobbleston' 'cobble' 'cobbles' 'stones' 'street',
+         description "Worn smooth by a century of cart wheels and boot heels. Each cobblestone is a small monument to the stonemason's art and London's absolute refusal to adopt modern paving.",
+    has scenery pluralname;
+
+Object entrance_fog "fog" workshop_entrance
+    with name 'fog' 'smog' 'mist' 'smoke',
+         description "London fog -- equal parts moisture, coal smoke, and municipal indifference. It clings to everything like a damp, grey cat. Visibility is roughly twelve feet, which in this neighbourhood is probably a mercy.",
+    has scenery;
+
+Object entrance_alley "alley" workshop_entrance
+    with name 'alley' 'alleyway' 'lane' 'narrow',
+         description "A narrow alley off Praed Street, barely wide enough for two people to pass without exchanging pleasantries or diseases. The walls are damp brick, the ground is damp cobblestone, and the air is damp everything.",
+    has scenery;
+
 Object pocket_watch "pocket watch" workshop_entrance
     with name 'watch' 'pocket' 'timepi' 'fob',
          description "Your grandfather's pocket watch. A handsome brass piece, slightly dented, perpetually three minutes fast. The irony of carrying a faulty timepiece to a job in temporal engineering has not escaped you.",
@@ -583,6 +613,46 @@ Object workbench "workbench" main_workshop
     with name 'workbench' 'bench' 'table' 'desk',
          description "A sturdy oak workbench buried under an archaeological layer of tools, diagrams, and biscuit crumbs. Dr. Hartley's leather-bound journal sits prominently in the centre, as if placed there for someone -- you, presumably -- to find.",
     has scenery supporter;
+
+Object workshop_shelves "shelves" main_workshop
+    with name 'shelves' 'shelf',
+         description "Floor-to-ceiling shelves sagging under the weight of glass jars, brass instruments, and the accumulated optimism of a man who never throws anything away. The organisational system appears to be ~wherever it landed.~",
+    has scenery pluralname;
+
+Object workshop_gears "brass gears" main_workshop
+    with name 'gears' 'gear' 'brass' 'cogs' 'cog',
+         description "Brass gears the size of dinner plates, meshing together with hypnotic precision. They drive... something. Possibly the machine, possibly the ventilation, possibly Dr. Hartley's toast.",
+    has scenery pluralname;
+
+Object workshop_pipes "copper pipes" main_workshop
+    with name 'pipes' 'pipe' 'copper' 'piping',
+         description "Copper pipes of varying diameter disappear into the walls, floor, and ceiling with cheerful disregard for architectural convention. Some of them hum. One of them is slightly warm. Best not to ask why.",
+    has scenery pluralname;
+
+Object workshop_tools "tools" main_workshop
+    with name 'tools' 'tool',
+         description "An assortment of tools ranging from the recognisable (spanners, pliers) to the bewildering (what appears to be a brass protractor with teeth). Most of them are in the toolkit on the shelf in the store room.",
+    has scenery pluralname;
+
+Object workshop_ceiling "ceiling" main_workshop
+    with name 'ceiling' 'roof',
+         description "The ceiling -- if it's still up there -- is lost in a tangle of tubes, wires, and what might be a dirigible's steering mechanism. Something up there occasionally drips. You've decided not to investigate.",
+    has scenery;
+
+Object workshop_tubes "tubes" main_workshop
+    with name 'tubes' 'tube' 'glass',
+         description "Glass tubes of various sizes snake across the ceiling, some filled with luminous liquids of uncertain provenance. They pulse gently, like the circulatory system of something that really ought not to have a circulatory system.",
+    has scenery pluralname;
+
+Object workshop_wires "wires" main_workshop
+    with name 'wires' 'wire' 'wiring',
+         description "A cat's cradle of copper wiring connects everything to everything else. The insulation is mostly intact. Mostly.",
+    has scenery pluralname;
+
+Object workshop_marmalade "marmalade jars" main_workshop
+    with name 'marmalade' 'jam' 'preserv',
+         description "Several jars of Seville orange marmalade, interspersed among the scientific apparatus with no apparent logic. Each one bears a handwritten label: ~AH -- BATCH 7,~ ~AH -- BATCH 12 (EXPERIMENTAL),~ and most worryingly, ~AH -- BATCH 3 (DO NOT EAT -- TEMPORAL).~",
+    has scenery pluralname;
 
 Object time_machine "time machine" main_workshop
     with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal',
@@ -648,6 +718,21 @@ Object toolkit "toolkit" store_room
 Object specimen_jars "specimen jars" store_room
     with name 'jars' 'jar' 'specimen' 'bottles' 'bottle',
          description "The jars contain... things. One appears to hold a butterfly frozen in mid-flight. Another contains what looks like yesterday's weather. A third is labelled ~TUESDAY -- DO NOT OPEN UNTIL MONDAY.~ Best not to think about it.",
+    has scenery pluralname;
+
+Object store_shelves "shelves" store_room
+    with name 'shelves' 'shelf',
+         description "Sturdy wooden shelves, bowing under the weight of Dr. Hartley's hoarding instincts. Every inch is occupied by jars, boxes, coils, and objects that defy categorisation in any language, living or dead.",
+    has scenery pluralname;
+
+Object store_copper_wire "copper wire" store_room
+    with name 'copper' 'wire' 'coil' 'coils',
+         description "Coils of copper wire in various gauges, neatly wound and labelled in Dr. Hartley's increasingly erratic handwriting. One label simply reads ~WIRE (IMPORTANT).~",
+    has scenery;
+
+Object store_supplies "supplies" store_room
+    with name 'supplies' 'boxes' 'items' 'curiosit',
+         description "Boxes of gears, springs, lenses, and components whose purpose you can only guess at. If Dr. Hartley ever needs to build a second time machine, he's got the parts. And probably a third.",
     has scenery pluralname;
 
 ! ===================================================================
@@ -720,6 +805,26 @@ Object roman_rift "temporal rift" roman_forum
                 rtrue;
          ],
     has scenery;
+
+Object forum_column "marble column" roman_forum
+    with name 'column' 'marble' 'pillar' 'columns' 'pillars',
+         description "A fine Corinthian column of imported Italian marble, fluted and gleaming in the improbable London sunshine. It supports nothing in particular but does so with tremendous authority.",
+    has scenery;
+
+Object forum_citizens "citizens" roman_forum
+    with name 'citizen' 'citizens' 'people' 'crowd',
+         description "Toga-clad citizens bustle about their daily business -- haggling, gossiping, and occasionally stabbing each other, as was the Roman custom. They eye your strange clothing with the polite bewilderment of people who have seen stranger things come up the Thames.",
+    has scenery animate pluralname;
+
+Object forum_buildings "colonnaded buildings" roman_forum
+    with name 'building' 'buildings' 'colonnade',
+         description "Grand colonnaded buildings line the Forum, housing everything from the law courts to the tax office. The Romans brought many gifts to Britain: roads, aqueducts, and bureaucracy. Especially bureaucracy.",
+    has scenery pluralname;
+
+Object forum_toga "togas" roman_forum
+    with name 'toga' 'togas' 'robe' 'robes' 'clothes' 'clothing',
+         description "The togas are uniformly white, which in a city without washing machines is either impressive or deeply suspicious. Several citizens wear the purple-bordered toga praetexta, marking them as persons of importance, or at least persons with access to expensive dye.",
+    has scenery pluralname;
 
 Object roman_via "Via Principalis"
     with description [;
@@ -802,6 +907,21 @@ Object roman_merchants "Merchant's Quarter"
          s_to roman_docks,
     has light;
 
+Object merchant_stalls "market stalls" roman_merchants
+    with name 'stall' 'stalls' 'shop' 'shops' 'market',
+         description "Ramshackle wooden stalls crammed together, selling everything from olives to oracles. The merchants shout over each other with the desperate enthusiasm of people whose entire business model depends on volume -- both commercial and vocal.",
+    has scenery pluralname;
+
+Object merchant_stones "unusual stones" roman_merchants
+    with name 'stones' 'crystal' 'crystals' 'mineral' 'minerals',
+         description "Felix's stall is piled with stones, crystals, and minerals of dubious cosmic significance. Each one comes with a certificate of authenticity written in suspiciously fresh-looking Latin. The lodestone stands out among the lesser rocks like a senator among plebeians.",
+    has scenery pluralname;
+
+Object merchant_amphorae "amphorae" roman_merchants
+    with name 'amphorae' 'amphora' 'oil' 'olive',
+         description "Tall clay amphorae line the stalls, each one stamped with its contents and origin. Olive oil from Hispania, wine from Gaul, fish sauce from... well, you can smell the fish sauce from here. The garum is particularly aggressive today.",
+    has scenery pluralname;
+
 Object roman_docks "Thames Dockside"
     with description [;
             print "The Thames is narrower here than in your time, and considerably less polluted (though give the Romans a few more years). Small wooden boats bob at rickety piers while workers haul cargo -- amphorae, timber, British tin.^^";
@@ -819,6 +939,31 @@ Object soft_mud "soft mud" roman_docks
             }
             "The mud here is soft and deep. Ideal for burying something for posterity, if you happened to have something worth preserving.";
          ],
+    has scenery;
+
+Object docks_area "docks" roman_docks
+    with name 'dock' 'docks' 'dockside' 'wharf',
+         description "Wooden jetties and loading areas stretch along the riverbank. Roman dock workers shift cargo with the cheerful efficiency of people being paid by the amphora. The smell is authentically maritime -- fish, tar, and wet rope.",
+    has scenery pluralname;
+
+Object docks_thames "the Thames" roman_docks
+    with name 'thames' 'river' 'water',
+         description "The Thames in 60 AD is narrower, cleaner, and considerably more Roman than you're used to. It flows with the quiet confidence of a river that doesn't yet know about the Industrial Revolution.",
+    has scenery;
+
+Object docks_boats "boats" roman_docks
+    with name 'boat' 'boats' 'ship' 'ships' 'vessel',
+         description "Small wooden boats bob at the piers -- flat-bottomed cargo vessels and fishing boats, each one a triumph of Roman shipbuilding and British optimism about the weather.",
+    has scenery pluralname;
+
+Object docks_piers "piers" roman_docks
+    with name 'pier' 'piers' 'jetty' 'jetties',
+         description "Rickety wooden piers jut into the Thames, creaking under the weight of cargo and commerce. They've been repaired so many times that the original Roman timber is now mostly British oak held together by stubbornness.",
+    has scenery pluralname;
+
+Object docks_cargo "cargo" roman_docks
+    with name 'cargo' 'goods' 'timber' 'tin',
+         description "Amphorae of wine and oil, bundles of British timber, ingots of Cornish tin -- the raw materials of empire, stacked on the dockside waiting for transport. The Romans are nothing if not thorough about logistics.",
     has scenery;
 
 ! --- Roman NPCs ---
@@ -905,6 +1050,21 @@ Object roman_bathers "bathers" roman_bath
          description "Romans in various states of relaxation, debating the merits of different olive oils with an intensity usually reserved for warfare.",
     has scenery animate pluralname;
 
+Object bath_pools "heated pools" roman_bath
+    with name 'pool' 'pools' 'bath' 'baths',
+         description "The pools range from tepidarium (pleasantly warm) to caldarium (volcanic). Romans recline in them like well-marinated olives, turning progressively pinker. The engineering required to heat this much water in first-century Britain is genuinely impressive.",
+    has scenery pluralname;
+
+Object bath_water "bath water" roman_bath
+    with name 'water',
+         description "The water is surprisingly clear for a communal bath, heated by an ingenious hypocaust system beneath the floor. It smells faintly of olive oil and heated arguments.",
+    has scenery;
+
+Object bath_steam "steam" roman_bath
+    with name 'steam' 'vapour' 'mist',
+         description "Great billows of steam roll through the bathhouse like miniature weather systems, occasionally revealing a debating philosopher or concealing an embarrassed bather. The acoustics make every whisper sound like a senate proclamation.",
+    has scenery;
+
 ! ===================================================================
 ! WWII LONDON — 1941 (The Blitz)
 ! ===================================================================
@@ -932,6 +1092,26 @@ Object blitz_rift "temporal rift" blitz_street
                 PlayerTo(main_workshop);
                 rtrue;
          ],
+    has scenery;
+
+Object street_searchlights "searchlights" blitz_street
+    with name 'searchli' 'lights' 'beams',
+         description "Searchlight beams sweep the sky like enormous white fingers, probing for bombers. The effect is simultaneously terrifying and oddly beautiful, like a very aggressive light show.",
+    has scenery pluralname;
+
+Object street_bombers "bombers" blitz_street
+    with name 'bombers' 'bomber' 'planes' 'plane' 'aircraft' 'drone',
+         description "The drone of Heinkel and Dornier bombers fills the sky, a mechanical buzzing that sets your teeth on edge. You can't see them in the darkness, which somehow makes it worse.",
+    has scenery pluralname;
+
+Object street_doorway "doorway" blitz_street
+    with name 'doorway' 'entrance' 'curtain',
+         description "A brick doorway with a hastily-hung blackout curtain, behind which the temporal rift shimmers with cheerful disregard for the blackout regulations. Someone has pinned a note to it suggesting everyone pretend it isn't there.",
+    has scenery;
+
+Object street_shelter "shelter entrance" blitz_street
+    with name 'shelter' 'underground',
+         description "The entrance to the underground shelter -- a tube station pressed into service as a refuge from the bombing. Steps lead down into the warm, crowded darkness below.",
     has scenery;
 
 Object blitz_shelter "Underground Shelter"
@@ -973,6 +1153,36 @@ Object church_rubble "church rubble" blitz_church
          description "Broken pews, shattered glass, chunks of masonry. War has no respect for architecture. Among the debris, you can see bits of medieval stonework that have survived since... well, since about 60 AD, actually.",
     has scenery;
 
+Object church_building "church" blitz_church
+    with name 'church' 'st' 'margaret',
+         description "St. Margaret's has taken a beating from the Luftwaffe but refuses to go down. The walls still stand with the stubborn defiance of medieval masonry that has survived plagues, fires, and several centuries of Church of England fundraising committees.",
+    has scenery;
+
+Object church_stained_glass "stained glass" blitz_church
+    with name 'stained' 'glass' 'window' 'windows',
+         description "What remains of the stained glass crunches underfoot like colourful gravel. Fragments of saints and apostles glint in the candlelight, reduced from divine narrative to abstract art by a thousand-pound bomb. Modernism via the Luftwaffe.",
+    has scenery;
+
+Object church_candlelight "candlelight" blitz_church
+    with name 'candle' 'candleli' 'candles' 'flame' 'flames',
+         description "Stubby candles flicker in the nave, casting wavering shadows across the bomb-damaged walls. Someone has been maintaining them through the raids -- an act of either faith or stubbornness, and quite possibly both.",
+    has scenery;
+
+Object church_nave "nave" blitz_church
+    with name 'nave' 'aisle',
+         description "The nave stretches towards what was once the altar, now partially obscured by fallen timbers. Despite the damage, there's a quiet dignity to the space. Churches have a talent for feeling sacred even when they're missing a roof.",
+    has scenery;
+
+Object church_walls "church walls" blitz_church
+    with name 'wall' 'walls',
+         description [;
+            if (inscription_carved) {
+                "The ancient walls bear the scars of both war and time. Through a gap in the bomb damage, a carved inscription is visible: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, 60 AD.~ Nearly two thousand years old. You feel a chill that has nothing to do with the weather.";
+            }
+            "The walls of St. Margaret's are a palimpsest of centuries -- medieval stonework, Tudor repairs, Victorian pointing, and now bomb damage. They've survived everything London has thrown at them. So far.";
+         ],
+    has scenery pluralname;
+
 Object blitz_pub "The Crown and Anchor"
     with description [;
             print "The pub carries on with defiant normalcy. The bar is well-stocked (rationing hasn't touched spirits yet, mercifully), and a handful of regulars nurse pints with the stoic calm of people who have decided that if a bomb has their name on it, they might as well be holding a drink.^^";
@@ -1000,6 +1210,11 @@ Object pub_regulars "pub regulars" blitz_pub
 Object police_box "poster of police box" blitz_pub
     with name 'poster' 'police' 'box' 'telephon',
          description "Just an ordinary poster of an ordinary police telephone box. Nothing special about it at all. Absolutely not. It's blue, it's rectangular, and it is emphatically just a telephone box. Anyone who suggests otherwise has been watching too many documentaries.",
+    has scenery;
+
+Object pub_building "pub" blitz_pub
+    with name 'pub' 'crown' 'anchor' 'tavern',
+         description "The Crown and Anchor carries on with the defiant normalcy that is the Blitz spirit distilled into architecture. The blackout curtains are drawn tight, the fire is lit, and the beer is flowing. Hitler himself couldn't close this pub, and he's certainly trying.",
     has scenery;
 
 Object blitz_rooftop "Fire Watch Rooftop"
@@ -1033,6 +1248,32 @@ Object sandbags "sandbags" blitz_rooftop
          ],
     has scenery pluralname;
 
+Object rooftop_parapet "parapet" blitz_rooftop
+    with name 'parapet' 'ledge' 'edge' 'wall',
+         description "A low stone parapet runs around the edge of the church tower, barely waist-high. It provides a commanding view of blacked-out London and absolutely no sense of personal safety. The sandbags are stacked along it for fire watch duty.",
+    has scenery;
+
+Object rooftop_searchlights "searchlights" blitz_rooftop
+    with name 'searchli' 'lights' 'beams',
+         description "From up here, the searchlights paint the sky in sweeping arcs of brilliant white, hunting for bombers among the clouds. It's war turned into a light show -- terrible and oddly beautiful.",
+    has scenery pluralname;
+
+Object rooftop_sky "night sky" blitz_rooftop
+    with name 'sky' 'night' 'stars' 'dark' 'darkness',
+         description "The sky above London is a theatre of war -- searchlight beams, the red glow of distant fires, and the silhouettes of barrage balloons drifting like enormous sleeping whales. On a clear night you might see stars, but tonight the only lights are man-made and hostile.",
+    has scenery;
+
+Object rooftop_fire "fire" blitz_rooftop
+    with name 'fire' 'flames' 'blaze' 'incendia',
+         description [;
+            if (church_saved)
+                "The fire has been extinguished, thanks to your sandbag intervention. Scorch marks on the timbers below are the only evidence of the incendiary's brief, bright career.";
+            if (fire_event)
+                "Flames leap along the church timbers below, fed by the incendiary bomb's magnesium. The fire is spreading quickly -- you need to smother it with sandbags before St. Margaret's joins the list of London's losses.";
+            "There's no fire at the moment. The church below looks peaceful, or at least as peaceful as a bomb-damaged church can.";
+         ],
+    has scenery;
+
 Object blitz_rubble "Rubble Site"
     with description [;
             print "What was once Finch's Electronics Emporium is now a crater of shattered brick and twisted metal. A sign reading ~FI CH'S EL CTRO ICS~ hangs at a drunken angle. The Luftwaffe's urban redevelopment programme leaves something to be desired.^^";
@@ -1051,6 +1292,21 @@ Object blitz_rubble "Rubble Site"
         ],
          e_to blitz_street,
     has light;
+
+Object rubble_site "rubble site" blitz_rubble
+    with name 'site' 'crater' 'ruin' 'ruins',
+         description "What remains of Finch's Electronics Emporium -- a crater of shattered brick, twisted metal, and the occasional recognisable fragment of what was once a thriving business. The Luftwaffe's approach to urban renewal leaves much to be desired.",
+    has scenery;
+
+Object rubble_sign "shop sign" blitz_rubble
+    with name 'sign' 'finch',
+         description "A battered sign reading ~FI CH'S EL CTRO ICS~ hangs at a drunken angle from a surviving wall bracket. Mr. Finch's vowels, like his shop, have not survived the bombing intact.",
+    has scenery;
+
+Object rubble_ordnance "unexploded ordnance" blitz_rubble
+    with name 'ordnance' 'bomb' 'uxb' 'unexplod',
+         description "Somewhere in this rubble, there may or may not be unexploded ordnance. The uncertainty is, in many ways, worse than the certainty. Warden Peggy's warnings echo in your mind. Best to tread carefully and dig only where you must.",
+    has scenery;
 
 Object radio_valve "radio valve" blitz_rubble
     with name 'valve' 'radio',
