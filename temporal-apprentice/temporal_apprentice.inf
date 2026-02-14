@@ -1943,6 +1943,8 @@ Object future_dest "Future London"
 
 [ CleanSub;
     if (location == main_workshop) {
+        if (cat_accident == false)
+            "The workshop doesn't need cleaning yet. You've only just arrived.";
         if (workshop_cleaned) {
             "The workshop is already spotless. Well, as spotless as a workshop full of temporal engineering equipment can be.";
         }

@@ -83,6 +83,13 @@ run_test "Score for accident" "east
 examine machine
 score" "5 out of"
 
+# --- Clean guard ---
+echo "[Clean Guard]"
+run_test_absent "No cleaning before cat accident" "east
+clean" "Tools are returned"
+run_test "Cleaning refused before cat accident" "east
+clean" "doesn.t need cleaning yet"
+
 # --- Roman Londinium ---
 echo "[Roman Londinium]"
 run_test "Forum description" "east
