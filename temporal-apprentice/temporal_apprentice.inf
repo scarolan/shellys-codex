@@ -9,9 +9,44 @@ Constant Headline "^A Time-Travelling Adventure^^";
 Constant MAX_SCORE 165;
 
 Replace DrawStatusLine;
+Replace GamePrologue;
 
 Include "Parser";
 Include "VerbLib";
+
+! Override library GamePrologue to remove the leading blank line
+[ GamePrologue i j;
+    before_first_turn = true;
+    for (i=1 : i<=100 : i++) j = random(i);
+    ChangeDefault(cant_go, CANTGO__TX);
+    real_location = thedark;
+    player = selfobj; actor = player;
+    selfobj.capacity = MAX_CARRIED;
+    #Ifdef LanguageInitialise;
+    LanguageInitialise();
+    #Endif;
+    #Ifdef EnglishNaturalLanguage;
+    old_itobj = itobj; old_himobj = himobj; old_herobj = herobj;
+    #Endif;
+    LibraryExtensions.RunAll(ext_initialise);
+    j = Initialise();
+    last_score = score;
+    initial_lookmode = lookmode;
+    objectloop (i in player) give i moved ~concealed;
+    move player to location;
+    while (parent(location)) location = parent(location);
+    real_location = location;
+    MoveFloatingObjects();
+    actor = player;
+    actors_location = location;
+    lightflag = OffersLight(parent(player));
+    if (lightflag == 0) location = thedark;
+    if (j ~= 2) Banner();
+    #Ifndef NOINITIAL_LOOK;
+    <Look>;
+    #Endif;
+    before_first_turn = false;
+];
 
 ! ===================================================================
 ! GLOBAL VARIABLES
@@ -1757,10 +1792,11 @@ Object future_dest "Future London"
 ! ===================================================================
 
 [ Initialise;
+    @split_window 1;
     location = workshop_entrance;
     score = 0;
 
-    print "^London, 1895.^^";
+    print "London, 1895.^^";
     print "It's your first day as apprentice to Dr. Aldric Hartley, inventor, eccentric, and -- according to the advert in The Times -- ~pioneer of temporal engineering, seeking assistant with good penmanship and an open mind regarding the fundamental nature of causality.~^^";
     print "You answered the advert because you needed the money. Also because ~temporal engineering~ sounded considerably more interesting than your previous position at the accounting firm of Greybaum, Tedium and Sons.^^";
     print "Type HELP for a list of commands.^^";

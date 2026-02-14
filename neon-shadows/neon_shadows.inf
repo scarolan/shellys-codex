@@ -6,9 +6,44 @@ Constant Headline "^A Cyberpunk Detective Noir^^";
 Constant MAX_SCORE 120;
 
 Replace DrawStatusLine;
+Replace GamePrologue;
 
 Include "Parser";
 Include "VerbLib";
+
+! Override library GamePrologue to remove the leading blank line
+[ GamePrologue i j;
+    before_first_turn = true;
+    for (i=1 : i<=100 : i++) j = random(i);
+    ChangeDefault(cant_go, CANTGO__TX);
+    real_location = thedark;
+    player = selfobj; actor = player;
+    selfobj.capacity = MAX_CARRIED;
+    #Ifdef LanguageInitialise;
+    LanguageInitialise();
+    #Endif;
+    #Ifdef EnglishNaturalLanguage;
+    old_itobj = itobj; old_himobj = himobj; old_herobj = herobj;
+    #Endif;
+    LibraryExtensions.RunAll(ext_initialise);
+    j = Initialise();
+    last_score = score;
+    initial_lookmode = lookmode;
+    objectloop (i in player) give i moved ~concealed;
+    move player to location;
+    while (parent(location)) location = parent(location);
+    real_location = location;
+    MoveFloatingObjects();
+    actor = player;
+    actors_location = location;
+    lightflag = OffersLight(parent(player));
+    if (lightflag == 0) location = thedark;
+    if (j ~= 2) Banner();
+    #Ifndef NOINITIAL_LOOK;
+    <Look>;
+    #Endif;
+    before_first_turn = false;
+];
 
 ! --- Global Variables ---
 Global raven_paid = false;
@@ -1418,10 +1453,11 @@ Object rooftop_voss "Director Voss" rooftop
 
 ! --- Initialization ---
 [ Initialise;
+    @split_window 1;
     location = office;
     score = 0;
 
-    print "^^You're Kira Vex, private eye. In this city, that means you're either brave or stupid -- most days, you're not sure which.^";
+    print "You're Kira Vex, private eye. In this city, that means you're either brave or stupid -- most days, you're not sure which.^";
     print "^Neo-Angeles sprawls beneath a sky that hasn't shown stars in years. The megacorps own everything above the fortieth floor; below that, it's neon, rain, and people trying to survive until tomorrow. You've carved out a life in the margins -- tracking down missing persons, pulling secrets out of corporate databases, occasionally convincing yourself you're making a difference.^";
     print "^The rain hasn't stopped in three days. It hammers against your office window in sheets, turning the street below into a river of reflected neon. Your coffee went cold an hour ago. The heater died last week. The landlord wants three months' back rent, and your last client paid in expired chits.^";
     print "^But none of that matters right now, because Kai Chen is sitting across from you, and the look on his face says this isn't a cheating-spouse case.^^";
