@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Short+Stack&display=swap" rel="stylesheet">
+    <script>if(localStorage.getItem('shellys-codex-theme')==='light')document.documentElement.classList.add('light-theme');</script>
     <script src="jquery.min.js"></script>
     <script src="ie.js" nomodule></script>
     <script>
@@ -24,22 +25,67 @@
            Rule: only override colors, fonts, and cosmetics.
            Let Parchment handle all layout/sizing. */
 
+        :root {
+            --game-body-bg: #1a1008;
+            --game-port-bg: #120e08;
+            --game-border: #6b4c2a;
+            --game-shadow: 0 0 30px rgba(180, 120, 50, 0.15), 0 0 80px rgba(0, 0, 0, 0.4), inset 0 0 60px rgba(0, 0, 0, 0.5);
+            --game-overlay-bg: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+            --game-grid-bg: #2a1f12;
+            --game-grid-color: #c8a96e;
+            --game-grid-border: #4a3520;
+            --game-buffer-bg: #120e08;
+            --game-buffer-color: #c4a46a;
+            --game-header-color: #e8c868;
+            --game-subheader-color: #d4b060;
+            --game-emphasized-color: #d4a848;
+            --game-alert-color: #cc6644;
+            --game-note-color: #8a7040;
+            --game-input-color: #e8d090;
+            --game-loading-color: #c4a46a;
+            --game-scrollbar-track: #120e08;
+            --game-scrollbar-thumb: #4a3520;
+            --game-scrollbar-hover: #6b4c2a;
+        }
+
+        html.light-theme {
+            --game-body-bg: #f0e8d8;
+            --game-port-bg: #faf5ec;
+            --game-border: #8a6a3e;
+            --game-shadow: 0 2px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(138, 106, 62, 0.2);
+            --game-overlay-bg: none;
+            --game-grid-bg: #ddd0b8;
+            --game-grid-color: #3e2e16;
+            --game-grid-border: #c4b090;
+            --game-buffer-bg: #faf5ec;
+            --game-buffer-color: #2e2010;
+            --game-header-color: #4a3010;
+            --game-subheader-color: #5a3e18;
+            --game-emphasized-color: #6a4820;
+            --game-alert-color: #b83820;
+            --game-note-color: #7a6840;
+            --game-input-color: #5a4020;
+            --game-loading-color: #2e2010;
+            --game-scrollbar-track: #f0e8d8;
+            --game-scrollbar-thumb: #c4b090;
+            --game-scrollbar-hover: #8a6a3e;
+        }
+
         body {
-            background: #1a1008 !important;
+            background: var(--game-body-bg) !important;
+            transition: background 0.3s;
         }
 
         /* Worn leather border on the gameport */
         #gameport {
-            background: #120e08 !important;
-            border: 2px solid #6b4c2a !important;
+            background: var(--game-port-bg) !important;
+            border: 2px solid var(--game-border) !important;
             border-radius: 8px !important;
-            box-shadow:
-                0 0 30px rgba(180, 120, 50, 0.15),
-                0 0 80px rgba(0, 0, 0, 0.4),
-                inset 0 0 60px rgba(0, 0, 0, 0.5) !important;
+            box-shadow: var(--game-shadow) !important;
             max-width: 960px !important;
             margin: 3vh auto !important;
             position: relative !important;
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
 
         /* Subtle parchment grain overlay */
@@ -49,35 +95,34 @@
             border-radius: 8px;
             pointer-events: none;
             z-index: 9999;
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    transparent 60%,
-                    rgba(0, 0, 0, 0.4) 100%
-                );
+            background: var(--game-overlay-bg);
+            transition: background 0.3s;
         }
 
         /* Status bar — dungeon stone */
         .GridWindow {
-            background: #2a1f12 !important;
-            color: #c8a96e !important;
+            background: var(--game-grid-bg) !important;
+            color: var(--game-grid-color) !important;
             font-family: 'MedievalSharp', 'Courier New', cursive !important;
             font-size: 22px !important;
-            border-bottom: 1px solid #4a3520 !important;
+            border-bottom: 1px solid var(--game-grid-border) !important;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
         }
 
         .GridWindow span, .GridLine, .GridLine span {
-            color: #c8a96e !important;
+            color: var(--game-grid-color) !important;
+            transition: color 0.3s;
         }
 
         /* Main text area — adventure journal */
         .BufferWindow {
-            background: #120e08 !important;
-            color: #c4a46a !important;
+            background: var(--game-buffer-bg) !important;
+            color: var(--game-buffer-color) !important;
             font-family: 'Short Stack', 'Courier New', cursive !important;
             font-size: 20px !important;
             line-height: 1.7 !important;
             overflow-x: hidden !important;
+            transition: background 0.3s, color 0.3s;
         }
 
         .BufferWindowInner {
@@ -85,47 +130,80 @@
         }
 
         .BufferLine, .BufferLine span {
-            color: #c4a46a !important;
+            color: var(--game-buffer-color) !important;
+            transition: color 0.3s;
         }
 
         /* Text style overrides — torchlight palette */
-        .Style_header, .BufferLine .Style_header { color: #e8c868 !important; font-weight: bold !important; }
-        .Style_subheader, .BufferLine .Style_subheader { color: #d4b060 !important; }
-        .Style_emphasized, .BufferLine .Style_emphasized { color: #d4a848 !important; font-style: italic !important; }
-        .Style_alert, .BufferLine .Style_alert { color: #cc6644 !important; }
-        .Style_note, .BufferLine .Style_note { color: #8a7040 !important; }
-        .Style_input, .BufferLine .Style_input { color: #e8d090 !important; }
+        .Style_header, .BufferLine .Style_header { color: var(--game-header-color) !important; font-weight: bold !important; }
+        .Style_subheader, .BufferLine .Style_subheader { color: var(--game-subheader-color) !important; }
+        .Style_emphasized, .BufferLine .Style_emphasized { color: var(--game-emphasized-color) !important; font-style: italic !important; }
+        .Style_alert, .BufferLine .Style_alert { color: var(--game-alert-color) !important; }
+        .Style_note, .BufferLine .Style_note { color: var(--game-note-color) !important; }
+        .Style_input, .BufferLine .Style_input { color: var(--game-input-color) !important; }
 
         /* Input field — bright torchlight */
         .LineInput {
-            color: #e8d090 !important;
+            color: var(--game-input-color) !important;
             font-family: 'Short Stack', 'Courier New', cursive !important;
             font-size: 22px !important;
-            caret-color: #e8d090 !important;
+            caret-color: var(--game-input-color) !important;
             background: transparent !important;
             border: none !important;
             outline: none !important;
+            transition: color 0.3s;
         }
 
         /* Loading pane */
         #loadingpane {
-            color: #c4a46a;
+            color: var(--game-loading-color);
             font-family: 'Short Stack', 'Courier New', cursive;
             font-size: 22px;
+            transition: color 0.3s;
         }
 
         /* Scrollbar */
         .BufferWindow::-webkit-scrollbar { width: 6px; }
-        .BufferWindow::-webkit-scrollbar-track { background: #120e08; }
-        .BufferWindow::-webkit-scrollbar-thumb { background: #4a3520; border-radius: 3px; }
-        .BufferWindow::-webkit-scrollbar-thumb:hover { background: #6b4c2a; }
+        .BufferWindow::-webkit-scrollbar-track { background: var(--game-scrollbar-track); }
+        .BufferWindow::-webkit-scrollbar-thumb { background: var(--game-scrollbar-thumb); border-radius: 3px; }
+        .BufferWindow::-webkit-scrollbar-thumb:hover { background: var(--game-scrollbar-hover); }
 
         /* Hide Parchment chrome */
         #about, #footer { display: none !important; }
+
+        /* Theme toggle button */
+        #theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10000;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--game-border);
+            background: var(--game-port-bg);
+            cursor: pointer;
+            opacity: 0.4;
+            transition: opacity 0.3s, background 0.3s, border-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        #theme-toggle:hover { opacity: 1; }
+        #theme-toggle .icon-sun,
+        #theme-toggle .icon-moon { width: 18px; height: 18px; }
+        #theme-toggle .icon-sun { display: none; }
+        html.light-theme #theme-toggle .icon-sun { display: block; }
+        html.light-theme #theme-toggle .icon-moon { display: none; }
     </style>
 </head>
 <body>
     <div id="gameport">
+        <button id="theme-toggle" title="Toggle light/dark theme" aria-label="Toggle theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
         <div id="crt-overlay"></div>
         <div id="windowport"></div>
         <div id="loadingpane">
@@ -134,5 +212,15 @@
         </div>
         <div id="errorpane" style="display:none;"><div id="errorcontent">...</div></div>
     </div>
+    <script>
+        (function() {
+            var btn = document.getElementById('theme-toggle');
+            btn.addEventListener('click', function() {
+                document.documentElement.classList.toggle('light-theme');
+                var isLight = document.documentElement.classList.contains('light-theme');
+                localStorage.setItem('shellys-codex-theme', isLight ? 'light' : 'dark');
+            });
+        })();
+    </script>
 </body>
 </html>

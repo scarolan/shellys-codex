@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script>if(localStorage.getItem('shellys-codex-theme')==='light')document.documentElement.classList.add('light-theme');</script>
     <script src="jquery.min.js"></script>
     <script src="ie.js" nomodule></script>
     <script>
@@ -23,22 +24,67 @@
            Rule: only override colors, fonts, and cosmetics.
            Let Parchment handle all layout/sizing. */
 
+        :root {
+            --game-body-bg: #0a0a0f;
+            --game-port-bg: #0c0c0c;
+            --game-border: #00cc66;
+            --game-shadow: 0 0 20px rgba(0, 204, 102, 0.2), 0 0 60px rgba(0, 204, 102, 0.05), inset 0 0 60px rgba(0, 0, 0, 0.5);
+            --game-overlay-bg: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 4px), radial-gradient(ellipse at center, transparent 65%, rgba(0, 0, 0, 0.35) 100%);
+            --game-grid-bg: #001a0d;
+            --game-grid-color: #00ff88;
+            --game-grid-border: #00663a;
+            --game-buffer-bg: #0c0c0c;
+            --game-buffer-color: #00cc66;
+            --game-header-color: #00ff88;
+            --game-subheader-color: #00ffaa;
+            --game-emphasized-color: #66ffaa;
+            --game-alert-color: #ff6666;
+            --game-note-color: #33aa66;
+            --game-input-color: #00ffcc;
+            --game-loading-color: #00cc66;
+            --game-scrollbar-track: #0c0c0c;
+            --game-scrollbar-thumb: #00663a;
+            --game-scrollbar-hover: #00cc66;
+        }
+
+        html.light-theme {
+            --game-body-bg: #e8f0e8;
+            --game-port-bg: #f0f8f0;
+            --game-border: #00994d;
+            --game-shadow: 0 2px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 153, 77, 0.15);
+            --game-overlay-bg: none;
+            --game-grid-bg: #d0e8d4;
+            --game-grid-color: #005530;
+            --game-grid-border: #a0c8a8;
+            --game-buffer-bg: #f0f8f0;
+            --game-buffer-color: #0a4a2a;
+            --game-header-color: #004422;
+            --game-subheader-color: #006633;
+            --game-emphasized-color: #1a6640;
+            --game-alert-color: #cc3333;
+            --game-note-color: #558855;
+            --game-input-color: #006644;
+            --game-loading-color: #0a4a2a;
+            --game-scrollbar-track: #e8f0e8;
+            --game-scrollbar-thumb: #a0c8a8;
+            --game-scrollbar-hover: #00994d;
+        }
+
         body {
-            background: #0a0a0f !important;
+            background: var(--game-body-bg) !important;
+            transition: background 0.3s;
         }
 
         /* Terminal border on the gameport */
         #gameport {
-            background: #0c0c0c !important;
-            border: 2px solid #00cc66 !important;
+            background: var(--game-port-bg) !important;
+            border: 2px solid var(--game-border) !important;
             border-radius: 12px !important;
-            box-shadow:
-                0 0 20px rgba(0, 204, 102, 0.2),
-                0 0 60px rgba(0, 204, 102, 0.05),
-                inset 0 0 60px rgba(0, 0, 0, 0.5) !important;
+            box-shadow: var(--game-shadow) !important;
             max-width: 960px !important;
             margin: 3vh auto !important;
             position: relative !important;
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
 
         /* CRT scanline + vignette overlay (purely cosmetic, no layout impact) */
@@ -48,42 +94,34 @@
             border-radius: 12px;
             pointer-events: none;
             z-index: 9999;
-            background:
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(0, 0, 0, 0.06) 2px,
-                    rgba(0, 0, 0, 0.06) 4px
-                ),
-                radial-gradient(
-                    ellipse at center,
-                    transparent 65%,
-                    rgba(0, 0, 0, 0.35) 100%
-                );
+            background: var(--game-overlay-bg);
+            transition: background 0.3s;
         }
 
         /* Status bar (grid window) */
         .GridWindow {
-            background: #001a0d !important;
-            color: #00ff88 !important;
+            background: var(--game-grid-bg) !important;
+            color: var(--game-grid-color) !important;
             font-family: 'Share Tech Mono', 'Courier New', monospace !important;
             font-size: 22px !important;
-            border-bottom: 1px solid #00663a !important;
+            border-bottom: 1px solid var(--game-grid-border) !important;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
         }
 
         .GridWindow span, .GridLine, .GridLine span {
-            color: #00ff88 !important;
+            color: var(--game-grid-color) !important;
+            transition: color 0.3s;
         }
 
         /* Main text area */
         .BufferWindow {
-            background: #0c0c0c !important;
-            color: #00cc66 !important;
+            background: var(--game-buffer-bg) !important;
+            color: var(--game-buffer-color) !important;
             font-family: 'Share Tech Mono', 'Courier New', monospace !important;
             font-size: 22px !important;
             line-height: 1.5 !important;
             overflow-x: hidden !important;
+            transition: background 0.3s, color 0.3s;
         }
 
         .BufferWindowInner {
@@ -91,47 +129,80 @@
         }
 
         .BufferLine, .BufferLine span {
-            color: #00cc66 !important;
+            color: var(--game-buffer-color) !important;
+            transition: color 0.3s;
         }
 
         /* Text style overrides */
-        .Style_header, .BufferLine .Style_header { color: #00ff88 !important; font-weight: bold !important; }
-        .Style_subheader, .BufferLine .Style_subheader { color: #00ffaa !important; }
-        .Style_emphasized, .BufferLine .Style_emphasized { color: #66ffaa !important; font-style: italic !important; }
-        .Style_alert, .BufferLine .Style_alert { color: #ff6666 !important; }
-        .Style_note, .BufferLine .Style_note { color: #33aa66 !important; }
-        .Style_input, .BufferLine .Style_input { color: #00ffcc !important; }
+        .Style_header, .BufferLine .Style_header { color: var(--game-header-color) !important; font-weight: bold !important; }
+        .Style_subheader, .BufferLine .Style_subheader { color: var(--game-subheader-color) !important; }
+        .Style_emphasized, .BufferLine .Style_emphasized { color: var(--game-emphasized-color) !important; font-style: italic !important; }
+        .Style_alert, .BufferLine .Style_alert { color: var(--game-alert-color) !important; }
+        .Style_note, .BufferLine .Style_note { color: var(--game-note-color) !important; }
+        .Style_input, .BufferLine .Style_input { color: var(--game-input-color) !important; }
 
         /* Input field */
         .LineInput {
-            color: #00ffcc !important;
+            color: var(--game-input-color) !important;
             font-family: 'Share Tech Mono', 'Courier New', monospace !important;
             font-size: 22px !important;
-            caret-color: #00ffcc !important;
+            caret-color: var(--game-input-color) !important;
             background: transparent !important;
             border: none !important;
             outline: none !important;
+            transition: color 0.3s;
         }
 
         /* Loading pane */
         #loadingpane {
-            color: #00cc66;
+            color: var(--game-loading-color);
             font-family: 'Share Tech Mono', 'Courier New', monospace;
             font-size: 22px;
+            transition: color 0.3s;
         }
 
         /* Scrollbar */
         .BufferWindow::-webkit-scrollbar { width: 6px; }
-        .BufferWindow::-webkit-scrollbar-track { background: #0c0c0c; }
-        .BufferWindow::-webkit-scrollbar-thumb { background: #00663a; border-radius: 3px; }
-        .BufferWindow::-webkit-scrollbar-thumb:hover { background: #00cc66; }
+        .BufferWindow::-webkit-scrollbar-track { background: var(--game-scrollbar-track); }
+        .BufferWindow::-webkit-scrollbar-thumb { background: var(--game-scrollbar-thumb); border-radius: 3px; }
+        .BufferWindow::-webkit-scrollbar-thumb:hover { background: var(--game-scrollbar-hover); }
 
         /* Hide Parchment chrome */
         #about, #footer { display: none !important; }
+
+        /* Theme toggle button */
+        #theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10000;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--game-border);
+            background: var(--game-port-bg);
+            cursor: pointer;
+            opacity: 0.4;
+            transition: opacity 0.3s, background 0.3s, border-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        #theme-toggle:hover { opacity: 1; }
+        #theme-toggle .icon-sun,
+        #theme-toggle .icon-moon { width: 18px; height: 18px; }
+        #theme-toggle .icon-sun { display: none; }
+        html.light-theme #theme-toggle .icon-sun { display: block; }
+        html.light-theme #theme-toggle .icon-moon { display: none; }
     </style>
 </head>
 <body>
     <div id="gameport">
+        <button id="theme-toggle" title="Toggle light/dark theme" aria-label="Toggle theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
         <div id="crt-overlay"></div>
         <div id="windowport"></div>
         <div id="loadingpane">
@@ -140,5 +211,15 @@
         </div>
         <div id="errorpane" style="display:none;"><div id="errorcontent">...</div></div>
     </div>
+    <script>
+        (function() {
+            var btn = document.getElementById('theme-toggle');
+            btn.addEventListener('click', function() {
+                document.documentElement.classList.toggle('light-theme');
+                var isLight = document.documentElement.classList.contains('light-theme');
+                localStorage.setItem('shellys-codex-theme', isLight ? 'light' : 'dark');
+            });
+        })();
+    </script>
 </body>
 </html>

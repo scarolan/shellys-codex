@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&display=swap" rel="stylesheet">
+    <script>if(localStorage.getItem('shellys-codex-theme')==='light')document.documentElement.classList.add('light-theme');</script>
     <script src="jquery.min.js"></script>
     <script src="ie.js" nomodule></script>
     <script>
@@ -23,22 +24,69 @@
            Rule: only override colors, fonts, and cosmetics.
            Let Parchment handle all layout/sizing. */
 
+        :root {
+            --game-body-bg: #1a1008;
+            --game-port-bg: #0f0d08;
+            --game-border: #c4943a;
+            --game-shadow: 0 0 20px rgba(196, 148, 58, 0.2), 0 0 60px rgba(196, 148, 58, 0.05), inset 0 0 60px rgba(0, 0, 0, 0.5);
+            --game-overlay-bg: radial-gradient(ellipse at center, transparent 65%, rgba(0, 0, 0, 0.35) 100%);
+            --game-grid-bg: #1a1206;
+            --game-grid-color: #c4943a;
+            --game-grid-border: #6b5020;
+            --game-gridline-bg: #c4943a;
+            --game-buffer-bg: #0f0d08;
+            --game-buffer-color: #d4b896;
+            --game-header-color: #e8c868;
+            --game-subheader-color: #d4b060;
+            --game-emphasized-color: #d4a848;
+            --game-alert-color: #cc6644;
+            --game-note-color: #8a7040;
+            --game-input-color: #e8c060;
+            --game-loading-color: #d4b896;
+            --game-scrollbar-track: #0f0d08;
+            --game-scrollbar-thumb: #6b5020;
+            --game-scrollbar-hover: #c4943a;
+        }
+
+        html.light-theme {
+            --game-body-bg: #f5efe6;
+            --game-port-bg: #fdf9f3;
+            --game-border: #b8882e;
+            --game-shadow: 0 2px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(184, 136, 46, 0.2);
+            --game-overlay-bg: none;
+            --game-grid-bg: #e8dcc8;
+            --game-grid-color: #5a3e1a;
+            --game-grid-border: #c8b898;
+            --game-gridline-bg: #e8dcc8;
+            --game-buffer-bg: #fdf9f3;
+            --game-buffer-color: #3d2e18;
+            --game-header-color: #4a3010;
+            --game-subheader-color: #5a3e18;
+            --game-emphasized-color: #6a4820;
+            --game-alert-color: #b83820;
+            --game-note-color: #7a6840;
+            --game-input-color: #7a5a20;
+            --game-loading-color: #3d2e18;
+            --game-scrollbar-track: #f5efe6;
+            --game-scrollbar-thumb: #c8b898;
+            --game-scrollbar-hover: #b8882e;
+        }
+
         body {
-            background: #1a1008 !important;
+            background: var(--game-body-bg) !important;
+            transition: background 0.3s;
         }
 
         /* Brass-rimmed terminal frame */
         #gameport {
-            background: #0f0d08 !important;
-            border: 2px solid #c4943a !important;
+            background: var(--game-port-bg) !important;
+            border: 2px solid var(--game-border) !important;
             border-radius: 12px !important;
-            box-shadow:
-                0 0 20px rgba(196, 148, 58, 0.2),
-                0 0 60px rgba(196, 148, 58, 0.05),
-                inset 0 0 60px rgba(0, 0, 0, 0.5) !important;
+            box-shadow: var(--game-shadow) !important;
             max-width: 960px !important;
             margin: 3vh auto !important;
             position: relative !important;
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
 
         /* Aged paper overlay */
@@ -48,57 +96,123 @@
             border-radius: 12px;
             pointer-events: none;
             z-index: 9999;
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    transparent 65%,
-                    rgba(0, 0, 0, 0.35) 100%
-                );
+            background: var(--game-overlay-bg);
+            transition: background 0.3s;
         }
 
         /* Status bar — dark brass */
         .GridWindow {
-            background: #1a1206 !important;
-            color: #c4943a !important;
+            background: var(--game-grid-bg) !important;
+            color: var(--game-grid-color) !important;
             font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
-            border-bottom: 1px solid #6b5020 !important;
+            border-bottom: 1px solid var(--game-grid-border) !important;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
         }
 
         /* Extend status bar background full-width for proportional font */
         .GridWindow .GridLine {
             display: block !important;
             width: 100% !important;
-            background: #c4943a !important;
+            background: var(--game-gridline-bg) !important;
+            transition: background 0.3s;
+        }
+
+        .GridWindow span, .GridLine span {
+            color: var(--game-grid-color) !important;
+            transition: color 0.3s;
         }
 
         /* Main text area — warm sepia */
         .BufferWindow {
-            background: #0f0d08 !important;
-            color: #d4b896 !important;
+            background: var(--game-buffer-bg) !important;
+            color: var(--game-buffer-color) !important;
             font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
             line-height: 1.5 !important;
             overflow-x: hidden !important;
+            transition: background 0.3s, color 0.3s;
         }
+
+        .BufferWindowInner {
+            max-width: none !important;
+        }
+
+        .BufferLine, .BufferLine span {
+            color: var(--game-buffer-color) !important;
+            transition: color 0.3s;
+        }
+
+        /* Text style overrides */
+        .Style_header, .BufferLine .Style_header { color: var(--game-header-color) !important; font-weight: bold !important; }
+        .Style_subheader, .BufferLine .Style_subheader { color: var(--game-subheader-color) !important; }
+        .Style_emphasized, .BufferLine .Style_emphasized { color: var(--game-emphasized-color) !important; font-style: italic !important; }
+        .Style_alert, .BufferLine .Style_alert { color: var(--game-alert-color) !important; }
+        .Style_note, .BufferLine .Style_note { color: var(--game-note-color) !important; }
+        .Style_input, .BufferLine .Style_input { color: var(--game-input-color) !important; }
 
         /* Input field — bright amber */
         .LineInput {
-            color: #e8c060 !important;
+            color: var(--game-input-color) !important;
             font-family: 'Special Elite', 'Courier New', monospace !important;
             font-size: 22px !important;
-            caret-color: #e8c060 !important;
+            caret-color: var(--game-input-color) !important;
             background: transparent !important;
             border: none !important;
             outline: none !important;
+            transition: color 0.3s;
         }
+
+        /* Loading pane */
+        #loadingpane {
+            color: var(--game-loading-color);
+            font-family: 'Special Elite', 'Courier New', monospace;
+            font-size: 22px;
+            transition: color 0.3s;
+        }
+
+        /* Scrollbar */
+        .BufferWindow::-webkit-scrollbar { width: 6px; }
+        .BufferWindow::-webkit-scrollbar-track { background: var(--game-scrollbar-track); }
+        .BufferWindow::-webkit-scrollbar-thumb { background: var(--game-scrollbar-thumb); border-radius: 3px; }
+        .BufferWindow::-webkit-scrollbar-thumb:hover { background: var(--game-scrollbar-hover); }
 
         /* Hide Parchment chrome */
         #about, #footer { display: none !important; }
+
+        /* Theme toggle button */
+        #theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10000;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--game-border);
+            background: var(--game-port-bg);
+            cursor: pointer;
+            opacity: 0.4;
+            transition: opacity 0.3s, background 0.3s, border-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        #theme-toggle:hover { opacity: 1; }
+        #theme-toggle .icon-sun,
+        #theme-toggle .icon-moon { width: 18px; height: 18px; }
+        #theme-toggle .icon-sun { display: none; }
+        html.light-theme #theme-toggle .icon-sun { display: block; }
+        html.light-theme #theme-toggle .icon-moon { display: none; }
     </style>
 </head>
 <body>
     <div id="gameport">
+        <button id="theme-toggle" title="Toggle light/dark theme" aria-label="Toggle theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
         <div id="crt-overlay"></div>
         <div id="windowport"></div>
         <div id="loadingpane">
@@ -107,5 +221,15 @@
         </div>
         <div id="errorpane" style="display:none;"><div id="errorcontent">...</div></div>
     </div>
+    <script>
+        (function() {
+            var btn = document.getElementById('theme-toggle');
+            btn.addEventListener('click', function() {
+                document.documentElement.classList.toggle('light-theme');
+                var isLight = document.documentElement.classList.contains('light-theme');
+                localStorage.setItem('shellys-codex-theme', isLight ? 'light' : 'dark');
+            });
+        })();
+    </script>
 </body>
 </html>
