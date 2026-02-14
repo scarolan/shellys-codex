@@ -11,6 +11,7 @@ Shelly's Codex is a collection of interactive fiction (text adventure) games wri
 | Title | Genre | Play |
 |-------|-------|------|
 | Neon Shadows | Cyberpunk Detective Noir | [Play in browser](https://scarolan.github.io/shellys-codex/neon-shadows/) |
+| Temporal Apprentice | Time-Travelling Adventure | [Play in browser](https://scarolan.github.io/shellys-codex/temporal-apprentice/) |
 | Zork I | Classic Fantasy Adventure | [Play in browser](https://scarolan.github.io/shellys-codex/zork-i/) |
 
 ## Playing locally
@@ -35,6 +36,12 @@ shellys-codex/
     neon_shadows.inf         # Inform 6 source code
     neon_shadows.z5          # Compiled Z-machine story
     test_neon_shadows.sh     # Test harness (dfrotz + grep)
+    CLAUDE.md                # Game-specific docs
+  temporal-apprentice/
+    index.html              # Parchment interpreter (browser player)
+    temporal_apprentice.inf  # Inform 6 source code
+    temporal_apprentice.z5   # Compiled Z-machine story
+    test_temporal_apprentice.sh  # Test harness (dfrotz + grep)
     CLAUDE.md                # Game-specific docs
 ```
 
