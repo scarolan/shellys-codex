@@ -1496,6 +1496,24 @@ Object future_lab "Submerged Laboratory"
          u_to future_street,
     has light;
 
+Object flood_water "floodwater"
+    with name 'water' 'flood' 'thames' 'floodwater' 'murky',
+         description "Murky brown water stretches in every direction, lapping at brickwork and swallowing streets whole. The Thames didn't so much burst its banks as abolish the concept of banks entirely. Debris drifts lazily on the surface -- a traffic cone, half a park bench, what might be a rubber duck.",
+         found_in future_street future_museum future_rooftop future_walkway future_refuge future_lab,
+         before [;
+            Smell:
+                "It smells of river mud, diesel, and the faintest hint of sewage -- the authentic Thames experience, now available at every floor level.";
+            Taste:
+                "You take an experimental sip and immediately regret it. It tastes of silt, rust, and approximately two thousand years of London's drainage decisions.";
+            Listen:
+                "Lap, lap, lap. The water has a patient rhythm, like it knows it's winning and is in no particular hurry.";
+            Take:
+                "You scoop up a handful. It runs through your fingers, leaving a brownish residue and a lingering sense of poor judgement.";
+            Drink:
+                "Absolutely not. You've seen what's floating in it.";
+         ],
+    has scenery;
+
 Object quantum_cabinet "sealed cabinet" future_lab
     with name 'cabinet' 'sealed' 'quantum' 'keypad' 'lock',
          description [;
