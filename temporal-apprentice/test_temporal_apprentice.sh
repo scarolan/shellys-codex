@@ -197,6 +197,28 @@ west" "Finch"
 run_test "Take radio valve" "$BLITZ_SETUP
 west
 take valve" "Taken"
+# Regression: after taking valve, room description should not mention it (issue #2)
+TOTAL=$((TOTAL + 1))
+_valve_output=$(echo "$BLITZ_SETUP
+west
+take valve
+look" | "$DFROTZ" -h 999 -w 200 "$Z5" 2>&1)
+_after_taken=$(echo "$_valve_output" | sed -n '/^Taken/,$p')
+if echo "$_after_taken" | grep -qi "A radio valve lies in the accessible rubble"; then
+    FAIL=$((FAIL + 1))
+    echo "  FAIL: Valve not in rubble desc after taking (should NOT contain: A radio valve lies in the accessible rubble)"
+else
+    PASS=$((PASS + 1))
+    echo "  PASS: Valve not in rubble desc after taking"
+fi
+TOTAL=$((TOTAL + 1))
+if echo "$_after_taken" | grep -qi "metal box glinting under heavy debris"; then
+    PASS=$((PASS + 1))
+    echo "  PASS: Metal box still mentioned after taking valve"
+else
+    FAIL=$((FAIL + 1))
+    echo "  FAIL: Metal box still mentioned after taking valve (expected: metal box glinting under heavy debris)"
+fi
 run_test "Fix Tommy's radio" "$BLITZ_SETUP
 west
 take valve

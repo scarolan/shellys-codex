@@ -997,7 +997,10 @@ Object blitz_rubble "Rubble Site"
     with description [;
             print "What was once Finch's Electronics Emporium is now a crater of shattered brick and twisted metal. A sign reading ~FI CH'S EL CTRO ICS~ hangs at a drunken angle. The Luftwaffe's urban redevelopment programme leaves something to be desired.^^";
             if (self hasnt general) {
-                print "A radio valve lies in the accessible rubble near the surface. Deeper in, you can see a metal box glinting under heavy debris -- too heavy to shift alone.^^";
+                if (radio_valve in self)
+                    print "A radio valve lies in the accessible rubble near the surface. Deeper in, you can see a metal box glinting under heavy debris -- too heavy to shift alone.^^";
+                else
+                    print "You can see a metal box glinting under heavy debris -- too heavy to shift alone.^^";
             } else {
                 if (has_vacuum_tube == false)
                     print "The excavated hole reveals a metal box, now accessible.^^";
