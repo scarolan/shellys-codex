@@ -30,7 +30,7 @@ Global has_processor = false;
 Global inscription_carved = false;
 Global capsule_buried = false;
 Global church_saved = false;
-Global eleanor_gift = false;
+Global eleanor_gift = 0;
 
 Global hawking_convinced = false;
 Global marcus_impressed = false;
@@ -1097,8 +1097,10 @@ Object tommy "Corporal Tommy" blitz_shelter
 Object eleanor "Young Eleanor" blitz_shelter
     with name 'eleanor' 'girl' 'child',
          description [;
-            if (eleanor_gift)
+            if (eleanor_gift == 1)
                 "Eleanor clutches the pocket watch you gave her, a smile breaking through for the first time. She's already drawing a picture of it -- a brass circle with elaborate cogs, surrounded by cats.";
+            if (eleanor_gift == 2)
+                "Eleanor marches the tin soldier you gave her across her drawings, a smile breaking through for the first time. She's already drawn a whole army of tin soldiers to keep it company -- all surrounded by cats, naturally.";
             "A girl of about eight, pale and quiet, hunched over a stack of salvaged paper. She draws with intense concentration -- cats, mostly. Dozens of cats in every pose. She hasn't spoken since the bombing that took her mother.";
          ],
          life [;
@@ -1109,12 +1111,13 @@ Object eleanor "Young Eleanor" blitz_shelter
                 "Eleanor listens solemnly, then draws you a picture of what you just said. It's surprisingly accurate.";
             Give:
                 if (noun == pocket_watch || noun == tin_soldier) {
-                    eleanor_gift = true;
                     score = score + 5;
                     if (noun == pocket_watch) {
+                        eleanor_gift = 1;
                         remove pocket_watch;
                         print "Eleanor takes the pocket watch and turns it over in her small hands. For the first time, something like wonder crosses her face. She holds it to her ear, listening to the tick-tick-tick, and the faintest ghost of a smile appears.^^";
                     } else {
+                        eleanor_gift = 2;
                         remove tin_soldier;
                         print "Eleanor takes the tin soldier and stands it on her knee. For the first time, something like a real smile crosses her face. She makes the soldier march across her drawing pad, and a tiny giggle escapes.^^";
                     }
