@@ -33,7 +33,7 @@ This compiles the game, then pipes commands into `dfrotz` and checks output with
 
 ## Game overview
 
-You play a newly hired apprentice to Dr. Aldric Hartley, an eccentric Victorian inventor. While cleaning his workshop, the cat (Copernicus) accidentally activates the time machine, hurling you both through time. You must travel through four historical eras collecting components to repair the machine and return home.
+You play a newly hired apprentice to Dr. Justin Thyme, an eccentric Victorian inventor. While cleaning his workshop, the cat (Copernicus) accidentally activates the time machine, hurling you both through time. You must travel through four historical eras collecting components to repair the machine and return home.
 
 **Eras and locations:**
 - **Workshop Hub (1895):** Workshop Entrance, Main Workshop, Store Room
@@ -42,7 +42,7 @@ You play a newly hired apprentice to Dr. Aldric Hartley, an eccentric Victorian 
 - **Cambridge (2009):** College Gates, Porter's Lodge, Party Hall, Hawking's Study, College Garden
 - **Future London (2045):** Flooded Street, Thames Barrier Museum, Elevated Walkway, Climate Refuge, Submerged Laboratory, Museum Rooftop
 
-**Key NPCs:** Dr. Hartley (mentor), Centurion Marcus, Priestess Livia, Warden Peggy, Corporal Tommy, Young Eleanor, Professor Hawking, Dr. Sarah Chen, Mayor Torres, Kai (scavenger), Museum Curator
+**Key NPCs:** Dr. Thyme (mentor), Centurion Marcus, Priestess Livia, Warden Peggy, Corporal Tommy, Young Eleanor, Professor Hawking, Dr. Sarah Chen, Mayor Torres, Kai (scavenger), Museum Curator
 
 **Components to collect:**
 1. Lodestone (Roman era) — temporal compass magnetic core
@@ -63,7 +63,7 @@ You play a newly hired apprentice to Dr. Aldric Hartley, an eccentric Victorian 
 3. WWII: Fix Tommy's radio, excavate machine from rubble, find vacuum tube
 4. Cambridge: Get invitation, infiltrate party, convince Hawking
 5. Future: Help Kai, get diving gear, retrieve processor from submerged lab
-6. Endgame: Install all components, clean workshop, Hartley returns
+6. Endgame: Install all components, clean workshop, Thyme returns
 
 **Global flags:** `visited_roman`, `visited_blitz`, `visited_hawking`, `visited_future`, `has_lodestone`, `has_vacuum_tube`, `has_formula`, `has_processor`, `inscription_carved`, `capsule_buried`, `church_saved`, `eleanor_gift`, `hawking_convinced`, `marcus_impressed`, `livia_trusts`, `tommy_helping`, `radio_fixed`, `machine_excavated`, `porter_bypassed`, `kai_helping`, `has_diving_gear`, `lab_unlocked`, `components_installed`, `workshop_cleaned`
 

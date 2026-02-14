@@ -70,7 +70,7 @@ north" "Store Room"
 run_test "Take toolkit" "east
 north
 take toolkit" "Taken"
-run_test "Dr. Hartley present" "east" "Dr. Hartley"
+run_test "Dr. Thyme present" "east" "Dr. Thyme"
 run_test "Copernicus present" "east" "Copernicus"
 
 # --- Cat accident ---

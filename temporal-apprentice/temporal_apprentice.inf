@@ -90,20 +90,20 @@ Global hawking_phase = 0;
 ! NPC CONVERSATION ROUTINES
 ! ===================================================================
 
-[ NPC_Talk_Hartley;
+[ NPC_Talk_Thyme;
     if (components_installed) {
         print "~Splendid work, my boy! Absolutely splendid! I knew hiring an apprentice was the right decision. Well, the cat helped too, I suppose.~^";
         rtrue;
     }
     if (cat_accident) {
-        print "Dr. Hartley isn't here. He went out for tea approximately thirty seconds before the cat destroyed everything.^";
+        print "Dr. Thyme isn't here. He went out for tea approximately thirty seconds before the cat destroyed everything.^";
         rtrue;
     }
-    print "Dr. Hartley beams at you over his spectacles. ~Ah, there you are! Welcome, welcome to the workshop. Marvellous place, isn't it? Try not to touch anything that's glowing. Or humming. Especially if it's doing both.~^^";
+    print "Dr. Thyme beams at you over his spectacles. ~Ah, there you are! Welcome, welcome to the workshop. Marvellous place, isn't it? Try not to touch anything that's glowing. Or humming. Especially if it's doing both.~^^";
     print "He gestures vaguely at the chaos around him. ~I'm just popping out for tea. Mrs. Pemberton's scones wait for no man. Do have a look around -- the journal on the workbench will bring you up to speed. And do keep an eye on Copernicus. He has... ideas.~^";
 ];
 
-[ NPC_Ask_Hartley topic;
+[ NPC_Ask_Thyme topic;
     if (topic == 'machine' or 'time' or 'device' or 'invention') {
         print "~The Temporal Displacement Engine! My life's work. Well, one of them. The marmalade recipe was also quite significant.~ He pats the machine fondly. ~She's nearly ready. Just needs a few calibrations.~^";
         rtrue;
@@ -120,7 +120,7 @@ Global hawking_phase = 0;
         print "~Help? You're the apprentice! Your job is to help ME. But I suppose reading the journal would be a start.~^";
         rtrue;
     }
-    print "Dr. Hartley adjusts his spectacles. ~Hmm? Oh, I'm not sure I can help you with that. Try the journal.~^";
+    print "Dr. Thyme adjusts his spectacles. ~Hmm? Oh, I'm not sure I can help you with that. Try the journal.~^";
 ];
 
 [ NPC_Talk_Marcus;
@@ -546,7 +546,7 @@ Global hawking_phase = 0;
 
 Object workshop_entrance "Workshop Entrance"
     with description [;
-            print "A narrow alley off Praed Street, thick with London fog and the eternal smell of coal smoke. Gas lamps throw jaundiced circles on the cobblestones. A brass plate beside a heavy oak door reads: ~DR. A. HARTLEY -- TEMPORAL ENGINEERING -- NO SALESMEN.~^^";
+            print "A narrow alley off Praed Street, thick with London fog and the eternal smell of coal smoke. Gas lamps throw jaundiced circles on the cobblestones. A brass plate beside a heavy oak door reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- NO SALESMEN.~^^";
             print "The workshop lies to the east. The alley continues west to the street, but you've only just arrived and you'd hate to make a bad impression on your first day.^";
         ],
          e_to main_workshop,
@@ -555,12 +555,12 @@ Object workshop_entrance "Workshop Entrance"
 
 Object coat_hook "coat hook" workshop_entrance
     with name 'hook' 'coat' 'hooks' 'rack' 'peg',
-         description "A row of brass hooks by the door. Dr. Hartley's enormous overcoat hangs from one. Yours would fit inside it roughly three times.",
+         description "A row of brass hooks by the door. Dr. Thyme's enormous overcoat hangs from one. Yours would fit inside it roughly three times.",
     has scenery;
 
 Object entrance_brass_plate "brass plate" workshop_entrance
     with name 'brass' 'plate' 'sign' 'plaque',
-         description "A tarnished brass plate beside the door, engraved with impeccable Victorian confidence: ~DR. A. HARTLEY -- TEMPORAL ENGINEERING -- NO SALESMEN.~ The 'no salesmen' has been underlined twice.",
+         description "A tarnished brass plate beside the door, engraved with impeccable Victorian confidence: ~DR. J. THYME -- TEMPORAL ENGINEERING -- NO SALESMEN.~ The 'no salesmen' has been underlined twice.",
     has scenery;
 
 Object entrance_door "oak door" workshop_entrance
@@ -601,9 +601,9 @@ Object main_workshop "Main Workshop"
             print "The workshop is a cathedral of improbable engineering. Brass gears the size of dinner plates mesh with copper pipes that disappear into the walls. Glass jars of luminous liquids line shelves alongside what appear to be several jars of marmalade. The ceiling is lost in a tangle of tubes and wires.^^";
             print "The centrepiece is unmistakable: a magnificent contraption of brass, crystal, and what might be a repurposed church organ occupies the middle of the room. This would be the time machine.^^";
             if (cat_accident == false)
-                print "Dr. Hartley's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
+                print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
             else
-                print "The workbench holds tools and the remains of Dr. Hartley's tea (cold, abandoned). The store room is north, the entrance west.^";
+                print "The workbench holds tools and the remains of Dr. Thyme's tea (cold, abandoned). The store room is north, the entrance west.^";
         ],
          w_to workshop_entrance,
          n_to store_room,
@@ -611,7 +611,7 @@ Object main_workshop "Main Workshop"
 
 Object workbench "workbench" main_workshop
     with name 'workbench' 'bench' 'table' 'desk',
-         description "A sturdy oak workbench buried under an archaeological layer of tools, diagrams, and biscuit crumbs. Dr. Hartley's leather-bound journal sits prominently in the centre, as if placed there for someone -- you, presumably -- to find.",
+         description "A sturdy oak workbench buried under an archaeological layer of tools, diagrams, and biscuit crumbs. Dr. Thyme's leather-bound journal sits prominently in the centre, as if placed there for someone -- you, presumably -- to find.",
     has scenery supporter;
 
 Object workshop_shelves "shelves" main_workshop
@@ -621,7 +621,7 @@ Object workshop_shelves "shelves" main_workshop
 
 Object workshop_gears "brass gears" main_workshop
     with name 'gears' 'gear' 'brass' 'cogs' 'cog',
-         description "Brass gears the size of dinner plates, meshing together with hypnotic precision. They drive... something. Possibly the machine, possibly the ventilation, possibly Dr. Hartley's toast.",
+         description "Brass gears the size of dinner plates, meshing together with hypnotic precision. They drive... something. Possibly the machine, possibly the ventilation, possibly Dr. Thyme's toast.",
     has scenery pluralname;
 
 Object workshop_pipes "copper pipes" main_workshop
@@ -651,7 +651,7 @@ Object workshop_wires "wires" main_workshop
 
 Object workshop_marmalade "marmalade jars" main_workshop
     with name 'marmalade' 'jam' 'preserv',
-         description "Several jars of Seville orange marmalade, interspersed among the scientific apparatus with no apparent logic. Each one bears a handwritten label: ~AH -- BATCH 7,~ ~AH -- BATCH 12 (EXPERIMENTAL),~ and most worryingly, ~AH -- BATCH 3 (DO NOT EAT -- TEMPORAL).~",
+         description "Several jars of Seville orange marmalade, interspersed among the scientific apparatus with no apparent logic. Each one bears a handwritten label: ~JT -- BATCH 7,~ ~JT -- BATCH 12 (EXPERIMENTAL),~ and most worryingly, ~JT -- BATCH 3 (DO NOT EAT -- TEMPORAL).~",
     has scenery pluralname;
 
 Object time_machine "time machine" main_workshop
@@ -683,7 +683,7 @@ Object time_machine "time machine" main_workshop
                     print "Copernicus, with the unerring instinct of cats everywhere for finding the worst possible thing to sit on, shifts his considerable weight onto a large brass lever marked ~ABSOLUTELY DO NOT TOUCH.~^^";
                     print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
                     print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
-                    remove dr_hartley;
+                    remove dr_thyme;
                     StartDaemon(copernicus);
                     PlayerTo(roman_forum);
                     rtrue;
@@ -694,7 +694,7 @@ Object time_machine "time machine" main_workshop
 Object hartley_journal "leather-bound journal" main_workshop
     with name 'journal' 'book' 'leather' 'diary' 'notes',
          description [;
-            print "Dr. Hartley's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Key excerpts:^^";
+            print "Dr. Thyme's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Key excerpts:^^";
             print "~The Temporal Displacement Engine requires four critical components:^";
             print "  1. A LODESTONE of sufficient magnetic purity (temporal compass)^";
             print "  2. A VACUUM TUBE of precise oscillation frequency^";
@@ -722,37 +722,37 @@ Object specimen_jars "specimen jars" store_room
 
 Object store_shelves "shelves" store_room
     with name 'shelves' 'shelf',
-         description "Sturdy wooden shelves, bowing under the weight of Dr. Hartley's hoarding instincts. Every inch is occupied by jars, boxes, coils, and objects that defy categorisation in any language, living or dead.",
+         description "Sturdy wooden shelves, bowing under the weight of Dr. Thyme's hoarding instincts. Every inch is occupied by jars, boxes, coils, and objects that defy categorisation in any language, living or dead.",
     has scenery pluralname;
 
 Object store_copper_wire "copper wire" store_room
     with name 'copper' 'wire' 'coil' 'coils',
-         description "Coils of copper wire in various gauges, neatly wound and labelled in Dr. Hartley's increasingly erratic handwriting. One label simply reads ~WIRE (IMPORTANT).~",
+         description "Coils of copper wire in various gauges, neatly wound and labelled in Dr. Thyme's increasingly erratic handwriting. One label simply reads ~WIRE (IMPORTANT).~",
     has scenery;
 
 Object store_supplies "supplies" store_room
     with name 'supplies' 'boxes' 'items' 'curiosit',
-         description "Boxes of gears, springs, lenses, and components whose purpose you can only guess at. If Dr. Hartley ever needs to build a second time machine, he's got the parts. And probably a third.",
+         description "Boxes of gears, springs, lenses, and components whose purpose you can only guess at. If Dr. Thyme ever needs to build a second time machine, he's got the parts. And probably a third.",
     has scenery pluralname;
 
 ! ===================================================================
-! DR. HARTLEY (NPC -- leaves quickly)
+! DR. THYME (NPC -- leaves quickly)
 ! ===================================================================
 
-Object dr_hartley "Dr. Hartley" main_workshop
+Object dr_thyme "Dr. Thyme" main_workshop
     with name 'hartley' 'doctor' 'dr' 'aldric',
          description [;
             if (cat_accident) {
-                "Dr. Hartley is out getting tea. His timing, as always, was impeccable.";
+                "Dr. Thyme is out getting tea. His timing, as always, was impeccable.";
             }
             "A tall, thin man with wild silver hair and spectacles perpetually about to fall off his nose. He radiates the sort of cheerful disorganisation that either produces geniuses or explosions. Often both.";
          ],
          life [;
             Ask:
-                NPC_Ask_Hartley(second);
+                NPC_Ask_Thyme(second);
                 rtrue;
             Tell:
-                "Dr. Hartley nods enthusiastically while clearly thinking about something else entirely.";
+                "Dr. Thyme nods enthusiastically while clearly thinking about something else entirely.";
             Give:
                 "~How kind! But I really must dash. Mrs. Pemberton waits for no man.~";
          ],
@@ -1043,7 +1043,7 @@ Object felix "Felix the Merchant" roman_merchants
 
 Object lodestone "lodestone"
     with name 'lodestone' 'stone' 'magnet' 'thunder',
-         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs gently at any iron nearby, as if the universe itself is nudging you. Dr. Hartley's journal mentioned this: the magnetic core for the temporal compass.";
+         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs gently at any iron nearby, as if the universe itself is nudging you. Dr. Thyme's journal mentioned this: the magnetic core for the temporal compass.";
 
 Object roman_bathers "bathers" roman_bath
     with name 'bathers' 'romans' 'bather' 'people',
@@ -1331,7 +1331,7 @@ Object metal_box "metal box" blitz_rubble
                 if (blitz_rubble hasnt general) "You can't reach the box yet. It's buried under tonnes of rubble.";
                 if (self has open) "It's already open.";
                 give self open;
-                "You wrench the box open. Inside, packed in straw, are rows of vacuum tubes. One stands out -- slightly larger, with markings that match the specifications in Dr. Hartley's journal.";
+                "You wrench the box open. Inside, packed in straw, are rows of vacuum tubes. One stands out -- slightly larger, with markings that match the specifications in Dr. Thyme's journal.";
             Take:
                 "The box is too heavy to carry, but you could open it and take what's inside.";
          ],
@@ -1339,7 +1339,7 @@ Object metal_box "metal box" blitz_rubble
 
 Object vacuum_tube "vacuum tube" metal_box
     with name 'vacuum' 'tube' 'special' 'military',
-         description "A military-grade vacuum tube with unusual oscillation markings. It matches the specifications in Dr. Hartley's journal precisely. This is the component needed for the temporal oscillation circuit.",
+         description "A military-grade vacuum tube with unusual oscillation markings. It matches the specifications in Dr. Thyme's journal precisely. This is the component needed for the temporal oscillation circuit.",
          before [;
             Take:
                 if (blitz_rubble hasnt general) "It's buried under rubble. You need help digging it out first.";
@@ -1573,7 +1573,7 @@ Object cambridge_study "Hawking's Study"
 
 Object napkin_formula "napkin with formula" cambridge_study
     with name 'napkin' 'formula' 'equatio',
-         description "A cocktail napkin covered in Professor Hawking's handwriting. The equations describe temporal field calibration harmonics. You understand perhaps one word in five, but Dr. Hartley's journal mentioned exactly these calculations.",
+         description "A cocktail napkin covered in Professor Hawking's handwriting. The equations describe temporal field calibration harmonics. You understand perhaps one word in five, but Dr. Thyme's journal mentioned exactly these calculations.",
          initial "A napkin with equations lies on the desk.",
          before [;
             Take:
@@ -2056,7 +2056,7 @@ Object future_dest "Future London"
     score = 0;
 
     print "London, 1895.^^";
-    print "It's your first day as apprentice to Dr. Aldric Hartley, inventor, eccentric, and -- according to the advert in The Times -- ~pioneer of temporal engineering, seeking assistant with good penmanship and an open mind regarding the fundamental nature of causality.~^^";
+    print "It's your first day as apprentice to Dr. Justin Thyme, inventor, eccentric, and -- according to the advert in The Times -- ~pioneer of temporal engineering, seeking assistant with good penmanship and an open mind regarding the fundamental nature of causality.~^^";
     print "You answered the advert because you needed the money. Also because ~temporal engineering~ sounded considerably more interesting than your previous position at the accounting firm of Greybaum, Tedium and Sons.^^";
     print "Type HELP for a list of commands.^^";
 ];
@@ -2083,22 +2083,22 @@ Object future_dest "Future London"
     if (score >= MAX_SCORE) {
         print "^^=== PERFECT ENDING ===^^";
         print "Every component recovered. Every inscription carved, every capsule buried, every church saved, every drawing inspired. You have not merely repaired the time machine -- you have woven yourself into the fabric of history.^^";
-        print "Dr. Hartley returns from tea to find his machine in better condition than when he left. Copernicus sits atop it, naturally. ~I see you've had a productive afternoon,~ he says, peering at you over his spectacles. ~Tea?~^^";
+        print "Dr. Thyme returns from tea to find his machine in better condition than when he left. Copernicus sits atop it, naturally. ~I see you've had a productive afternoon,~ he says, peering at you over his spectacles. ~Tea?~^^";
         print "You accept. The scones are excellent.^";
     } else if (score >= 135) {
         print "^^=== GOOD ENDING ===^^";
         print "The time machine hums with renewed purpose. Most of the damage has been repaired, and the timeline is... mostly intact. A few loose threads here and there, but nothing that can't be fixed with another trip or two.^^";
-        print "Dr. Hartley returns and nods approvingly. ~Well done, apprentice. There are a few calibrations I'd like to review, but overall -- not bad for a first day.~^^";
+        print "Dr. Thyme returns and nods approvingly. ~Well done, apprentice. There are a few calibrations I'd like to review, but overall -- not bad for a first day.~^^";
         print "Copernicus yawns. He's had better Tuesdays.^";
     } else if (score >= 100) {
         print "^^=== ROUGH ENDING ===^^";
         print "The machine works, technically. It makes some concerning noises and occasionally displays dates that haven't been invented yet, but it works. The timeline has a few dents in it, like a second-hand automobile.^^";
-        print "Dr. Hartley returns, examines the machine, and sighs. ~It'll do. Probably. Maybe don't touch anything for a while.~^^";
+        print "Dr. Thyme returns, examines the machine, and sighs. ~It'll do. Probably. Maybe don't touch anything for a while.~^^";
         print "Copernicus has no opinion. He's asleep.^";
     } else {
         print "^^=== PARADOX ENDING ===^^";
         print "The machine sputters back to life with all the confidence of a piano falling down stairs. The timeline has more holes in it than a Swiss cheese in a shooting gallery.^^";
-        print "Dr. Hartley returns and his left eye twitches. ~What,~ he says very carefully, ~did you do to my machine?~^^";
+        print "Dr. Thyme returns and his left eye twitches. ~What,~ he says very carefully, ~did you do to my machine?~^^";
         print "Copernicus, at least, seems proud of you both.^";
     }
 ];
@@ -2108,7 +2108,7 @@ Object future_dest "Future London"
 ! ===================================================================
 
 [ TalkToSub;
-    if (noun == dr_hartley)         { NPC_Talk_Hartley(); rtrue; }
+    if (noun == dr_thyme)         { NPC_Talk_Thyme(); rtrue; }
     if (noun == marcus)             { NPC_Talk_Marcus(); rtrue; }
     if (noun == livia)              { NPC_Talk_Livia(); rtrue; }
     if (noun == peggy)              { NPC_Talk_Peggy(); rtrue; }
@@ -2301,7 +2301,7 @@ Object future_dest "Future London"
     print "You transcribe Hawking's formula from the napkin into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. Finally, the quantum processor drops into the field generator, and the entire machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
     print "The Temporal Displacement Engine is repaired. Better than repaired -- it's magnificent.^^";
     if (workshop_cleaned == false)
-        print "The workshop is still a mess, though. Dr. Hartley would probably appreciate it if you tidied up before he returned from tea. Just a thought.^";
+        print "The workshop is still a mess, though. Dr. Thyme would probably appreciate it if you tidied up before he returned from tea. Just a thought.^";
     else {
         PrintEnding();
         deadflag = 2;
@@ -2318,13 +2318,13 @@ Object future_dest "Future London"
         }
         workshop_cleaned = true;
         score = score + 5;
-        print "You spend a surprisingly therapeutic twenty minutes tidying the workshop. Tools are returned to their racks. Marmalade jars are alphabetised (Dr. Hartley has opinions about marmalade). Copper shavings are swept. The workbench is cleared.^^";
+        print "You spend a surprisingly therapeutic twenty minutes tidying the workshop. Tools are returned to their racks. Marmalade jars are alphabetised (Dr. Thyme has opinions about marmalade). Copper shavings are swept. The workbench is cleared.^^";
         if (components_installed) {
-            print "As you hang up the dustpan, you hear the front door. Dr. Hartley has returned from tea.^";
+            print "As you hang up the dustpan, you hear the front door. Dr. Thyme has returned from tea.^";
             PrintEnding();
             deadflag = 2;
         } else {
-            "The workshop gleams. Dr. Hartley will be pleased. Now, about that time machine...";
+            "The workshop gleams. Dr. Thyme will be pleased. Now, about that time machine...";
         }
         rtrue;
     }
@@ -2357,7 +2357,7 @@ Object future_dest "Future London"
 
 [ HelpSub;
     print "^=== THE TEMPORAL APPRENTICE -- FIELD GUIDE ===^";
-    print "   (hastily scrawled in Dr. Hartley's handwriting)^^";
+    print "   (hastily scrawled in Dr. Thyme's handwriting)^^";
     print "[NAVIGATION]^";
     print "  north/south/east/west/up/down^";
     print "  enter (rift/door) -- step through something^^";
@@ -2384,7 +2384,7 @@ Object future_dest "Future London"
     print "  clean ........... tidy the workshop^";
     print "  pet X ........... stroke the cat (at your own risk)^^";
     print "[TIPS]^";
-    print "  - Read Dr. Hartley's journal for clues^";
+    print "  - Read Dr. Thyme's journal for clues^";
     print "  - Talk to everyone, examine everything^";
     print "  - Actions in earlier eras affect later ones^";
     print "  - Copernicus is not luggage^";
