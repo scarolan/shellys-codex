@@ -437,7 +437,7 @@ Global hawking_phase = 0;
     }
     posa = width - 14;
     @set_cursor 1 posa;
-    print "Score:", score, "/", MAX_SCORE, " ";
+    print "Score: ", score, "/", MAX_SCORE, " ";
     style roman;
     @set_window 0;
 ];
