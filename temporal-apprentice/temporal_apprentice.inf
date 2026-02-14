@@ -958,7 +958,7 @@ Object pub_bar "bar" blitz_pub
     has scenery supporter;
 
 Object pub_regulars "pub regulars" blitz_pub
-    with name 'regular' 'locals' 'patron' 'drinker',
+    with name 'regular' 'regulars' 'locals' 'patron' 'patrons' 'drinker' 'drinkers',
          description "The regulars regard you with the friendly suspicion that Londoners reserve for anyone who might be (a) a spy, (b) a German, or (c) someone who's going to ask them to move so they can check for unexploded bombs under their bar stool.",
     has scenery animate pluralname;
 

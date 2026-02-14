@@ -279,6 +279,15 @@ run_test "Fire extinguish" "$BLITZ_SETUP
 north
 up
 extinguish" "sputters and dies"
+run_test "Examine regulars by plural name" "$BLITZ_SETUP
+east
+examine regulars" "friendly suspicion"
+run_test "Examine patrons by plural name" "$BLITZ_SETUP
+east
+examine patrons" "friendly suspicion"
+run_test "Examine drinkers by plural name" "$BLITZ_SETUP
+east
+examine drinkers" "friendly suspicion"
 run_test "Police box easter egg" "$BLITZ_SETUP
 east
 examine poster" "just an ordinary"
