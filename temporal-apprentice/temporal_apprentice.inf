@@ -952,6 +952,11 @@ Object tin_soldier "tin soldier" blitz_pub
          description "A small tin soldier, slightly dented but still standing at attention. A tiny bit of wartime defiance in miniature.",
          initial "A small tin soldier stands on the bar, holding its ground against the Blitz.";
 
+Object pub_bar "bar" blitz_pub
+    with name 'bar' 'counter',
+         description "A solid oak bar, well-stocked with bottles of spirits that glint in the lamplight. It has the comfortable, ring-stained look of a surface that has supported a thousand worried elbows through a thousand worried evenings.",
+    has scenery supporter;
+
 Object pub_regulars "pub regulars" blitz_pub
     with name 'regular' 'locals' 'patron' 'drinker',
          description "The regulars regard you with the friendly suspicion that Londoners reserve for anyone who might be (a) a spy, (b) a German, or (c) someone who's going to ask them to move so they can check for unexploded bombs under their bar stool.",
