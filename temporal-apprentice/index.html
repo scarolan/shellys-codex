@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&display=swap" rel="stylesheet">
-    <script>if(localStorage.getItem('shellys-codex-theme')==='light')document.documentElement.classList.add('light-theme');</script>
+    <script>(function(){var h=document.documentElement,t=localStorage.getItem('shellys-codex-theme'),f=localStorage.getItem('shellys-codex-font');if(t==='light')h.classList.add('light-theme');if(f==='small')h.classList.add('font-sm');else if(f==='large')h.classList.add('font-lg');})();</script>
     <script src="jquery.min.js"></script>
     <script src="ie.js" nomodule></script>
     <script>
@@ -46,6 +46,17 @@
             --game-scrollbar-track: #0f0d08;
             --game-scrollbar-thumb: #6b5020;
             --game-scrollbar-hover: #c4943a;
+            --game-font-size: 18px;
+            --game-font-size-status: 18px;
+        }
+
+        html.font-sm {
+            --game-font-size: 15px;
+            --game-font-size-status: 15px;
+        }
+        html.font-lg {
+            --game-font-size: 22px;
+            --game-font-size-status: 22px;
         }
 
         html.light-theme {
@@ -105,7 +116,7 @@
             background: var(--game-grid-bg) !important;
             color: var(--game-grid-color) !important;
             font-family: 'Special Elite', 'Courier New', monospace !important;
-            font-size: 22px !important;
+            font-size: var(--game-font-size-status) !important;
             border-bottom: 1px solid var(--game-grid-border) !important;
             transition: background 0.3s, color 0.3s, border-color 0.3s;
         }
@@ -131,7 +142,7 @@
             background: var(--game-buffer-bg) !important;
             color: var(--game-buffer-color) !important;
             font-family: 'Special Elite', 'Courier New', monospace !important;
-            font-size: 22px !important;
+            font-size: var(--game-font-size) !important;
             line-height: 1.5 !important;
             overflow-x: hidden !important;
             transition: background 0.3s, color 0.3s;
@@ -158,7 +169,7 @@
         .LineInput {
             color: var(--game-input-color) !important;
             font-family: 'Special Elite', 'Courier New', monospace !important;
-            font-size: 22px !important;
+            font-size: var(--game-font-size) !important;
             caret-color: var(--game-input-color) !important;
             background: transparent !important;
             border: none !important;
@@ -170,7 +181,7 @@
         #loadingpane {
             color: var(--game-loading-color);
             font-family: 'Special Elite', 'Courier New', monospace;
-            font-size: 22px;
+            font-size: var(--game-font-size);
             transition: color 0.3s;
         }
 
@@ -183,11 +194,10 @@
         /* Hide Parchment chrome */
         #about, #footer { display: none !important; }
 
-        /* Theme toggle button */
-        #theme-toggle {
+        /* Control buttons (shared style) */
+        .game-control {
             position: absolute;
             top: 10px;
-            right: 10px;
             z-index: 10000;
             width: 32px;
             height: 32px;
@@ -203,17 +213,32 @@
             justify-content: center;
             padding: 0;
         }
-        #theme-toggle:hover { opacity: 1; }
+        .game-control:hover { opacity: 1; }
+
+        /* Theme toggle */
+        #theme-toggle { right: 10px; }
         #theme-toggle .icon-sun,
         #theme-toggle .icon-moon { width: 18px; height: 18px; }
         #theme-toggle .icon-sun { display: none; }
         html.light-theme #theme-toggle .icon-sun { display: block; }
         html.light-theme #theme-toggle .icon-moon { display: none; }
+
+        /* Font size toggle */
+        #font-toggle {
+            right: 48px;
+            font-family: 'Special Elite', monospace;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 1;
+        }
+        html.font-sm #font-toggle { font-size: 11px; }
+        html.font-lg #font-toggle { font-size: 17px; }
     </style>
 </head>
 <body>
     <div id="gameport">
-        <button id="theme-toggle" title="Toggle light/dark theme" aria-label="Toggle theme">
+        <button id="font-toggle" class="game-control" title="Font size: medium" aria-label="Cycle font size">A</button>
+        <button id="theme-toggle" class="game-control" title="Toggle light/dark theme" aria-label="Toggle theme">
             <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         </button>
@@ -227,11 +252,34 @@
     </div>
     <script>
         (function() {
-            var btn = document.getElementById('theme-toggle');
-            btn.addEventListener('click', function() {
-                document.documentElement.classList.toggle('light-theme');
-                var isLight = document.documentElement.classList.contains('light-theme');
-                localStorage.setItem('shellys-codex-theme', isLight ? 'light' : 'dark');
+            var html = document.documentElement;
+
+            // Theme toggle
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                html.classList.toggle('light-theme');
+                localStorage.setItem('shellys-codex-theme', html.classList.contains('light-theme') ? 'light' : 'dark');
+            });
+
+            // Font size toggle
+            var sizes = ['medium', 'large', 'small'];
+            var classes = { small: 'font-sm', large: 'font-lg' };
+            var fontBtn = document.getElementById('font-toggle');
+
+            function currentSize() {
+                if (html.classList.contains('font-sm')) return 'small';
+                if (html.classList.contains('font-lg')) return 'large';
+                return 'medium';
+            }
+
+            fontBtn.title = 'Font size: ' + currentSize();
+
+            fontBtn.addEventListener('click', function() {
+                var cur = currentSize();
+                var next = sizes[(sizes.indexOf(cur) + 1) % sizes.length];
+                html.classList.remove('font-sm', 'font-lg');
+                if (classes[next]) html.classList.add(classes[next]);
+                localStorage.setItem('shellys-codex-font', next);
+                fontBtn.title = 'Font size: ' + next;
             });
         })();
     </script>
