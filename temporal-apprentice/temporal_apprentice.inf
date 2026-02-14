@@ -1236,15 +1236,17 @@ Object blitz_rooftop "Fire Watch Rooftop"
     has light;
 
 Object sandbags "sandbags" blitz_rooftop
-    with name 'sandbag' 'sand' 'bags' 'bag',
+    with name 'sandbag' 'sandbags' 'sand' 'bags' 'bag',
          description "Heavy burlap bags filled with sand, stacked along the parapet. Standard fire watch equipment. You grab one, it's about twenty pounds.",
          before [;
             Take:
+                if (onotheld_mode == 1)
+                    <<Extinguish rooftop_fire>>;
                 if (church_saved) "The fire's already out. No need for more sandbags.";
                 if (fire_event == false) "No fire to fight at the moment. Enjoy the view.";
                 "You grab a sandbag. It's heavy. You could throw it at the fire below.";
             ThrowAt:
-                "Try: extinguish fire";
+                <<Extinguish rooftop_fire>>;
          ],
     has scenery pluralname;
 

@@ -279,6 +279,23 @@ run_test "Fire extinguish" "$BLITZ_SETUP
 north
 up
 extinguish" "sputters and dies"
+run_test "Throw sandbag at fire extinguishes" "$BLITZ_SETUP
+north
+up
+throw sandbag at fire" "sputters and dies"
+run_test "Throw sandbag at fire awards points" "$BLITZ_SETUP
+north
+up
+throw sandbag at fire" "score has just gone up"
+run_test "Throw sandbag at fire already out" "$BLITZ_SETUP
+north
+up
+extinguish
+throw sandbag at fire" "already out"
+run_test_absent "Throw sandbag at fire no hint text" "$BLITZ_SETUP
+north
+up
+throw sandbag at fire" "Try: extinguish"
 run_test "Examine regulars by plural name" "$BLITZ_SETUP
 east
 examine regulars" "friendly suspicion"
