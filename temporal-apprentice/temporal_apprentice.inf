@@ -1245,7 +1245,7 @@ Object docks_area "docks" roman_docks
 Object docks_thames "the Thames" roman_docks
     with name 'thames' 'river' 'water',
          description "The Thames in 60 AD is narrower, cleaner, and considerably more Roman than you're used to. It flows with the quiet confidence of a river that doesn't yet know about the Industrial Revolution.",
-    has scenery;
+    has scenery proper;
 
 Object docks_boats "boats" roman_docks
     with name 'boat' 'boats' 'ship' 'ships' 'vessel',
