@@ -2470,7 +2470,8 @@ Object cleaning_rags "cleaning rags"
                     print "Getting that rag back is going to require getting the cat off the machine. This seems... inadvisable.^";
                     rtrue;
                 }
-         ];
+         ]
+    has pluralname;
 
 ! ===================================================================
 ! TIME TRAVEL DESTINATIONS (parentless scope objects)
