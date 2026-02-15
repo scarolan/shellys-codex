@@ -313,26 +313,69 @@ $CAT_ACCIDENT
 south
 south
 bury" "two thousand years"
-run_test "Temporal rift return" "$ENTER_WORKSHOP
+run_test "Machine present after accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-enter rift" "back in the solarium"
+look" "surrounded by wary Roman soldiers"
+run_test "Machine gate: soldiers block travel" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+travel to blitz" "impress their centurion"
+run_test "Travel to workshop from Roman" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to workshop" "back in the solarium"
+run_test "Solarium has machine after travel home" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to workshop
+look" "worse for wear"
 
 # --- Time Travel ---
 echo "[Time Travel]"
 run_test "Travel to Blitz" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-enter rift
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
 travel to blitz" "1941"
 run_test "Eras must be sequential" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-enter rift
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
 travel to cambridge" "hasn.t stabilised"
 
 # --- WWII London ---
 echo "[WWII London]"
+# Get lodestone, impress Marcus, then travel to Blitz
 BLITZ_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
-enter rift
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
 travel to blitz"
 run_test "Blitz street" "$BLITZ_SETUP" "blackout"
 run_test "Shelter accessible" "$BLITZ_SETUP
@@ -422,7 +465,7 @@ talk to livia
 east
 carve
 west
-enter rift
+south
 travel to blitz
 north" "TEMPUS FUGIT"
 run_test "Fire extinguish" "$BLITZ_SETUP
@@ -464,18 +507,55 @@ take soldier
 west
 down
 give soldier to eleanor" "tin soldier"
-run_test "Blitz rift return" "$BLITZ_SETUP
-enter rift" "back in the solarium"
+run_test "Blitz machine buried" "$BLITZ_SETUP
+look" "half-buried under rubble"
+run_test "Blitz dig without Tommy" "$BLITZ_SETUP
+dig" "someone strong"
+run_test "Blitz dig machine with Tommy" "$BLITZ_SETUP
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+dig" "stands free"
+run_test "Travel home from Blitz" "$BLITZ_SETUP
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+dig
+travel to workshop" "back in the solarium"
 
 # --- Cambridge ---
 echo "[Cambridge 2009]"
+# Get lodestone, impress Marcus, travel to Blitz, dig machine, travel to Cambridge
 CAMBRIDGE_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
-enter rift
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
 travel to blitz
-enter rift
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+dig
 travel to cambridge"
 run_test "Cambridge gates" "$CAMBRIDGE_SETUP" "Gonville"
+run_test "Cambridge machine dial jammed" "$CAMBRIDGE_SETUP
+travel to future" "dial has seized"
 run_test "Find invitation" "$CAMBRIDGE_SETUP
 north
 east" "invitation"
@@ -502,9 +582,22 @@ north
 take toolkit
 south
 $CAT_ACCIDENT
-enter rift
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
 travel to blitz
-enter rift
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+dig
 travel to cambridge
 north
 east
@@ -529,9 +622,16 @@ east
 south
 give aureus to felix
 north
-enter rift
+show lodestone to marcus
 travel to blitz
-enter rift
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+dig
 travel to cambridge
 north
 east
@@ -549,18 +649,50 @@ take napkin" "calibration formula"
 
 # --- Future London ---
 echo "[Future London 2045]"
+# Full path: Roman (lodestone + marcus) -> Blitz (dig) -> Cambridge (formula) -> Future
 FUTURE_SETUP="$ENTER_WORKSHOP
+take journal
 north
 take toolkit
 south
 $CAT_ACCIDENT
-enter rift
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
 travel to blitz
-enter rift
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+dig
 travel to cambridge
-enter rift
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show lodestone to hawking
+east
+take napkin
+west
+south
+south
 travel to future"
 run_test "Future flooded street" "$FUTURE_SETUP" "Thames won"
+run_test "Future machine sank" "$FUTURE_SETUP
+look" "sank on arrival"
+run_test "Future gate blocks without diving gear" "$FUTURE_SETUP
+travel to workshop" "sank when it arrived"
 run_test "Museum accessible" "$FUTURE_SETUP
 north" "Thames Barrier Museum"
 run_test "DeLorean easter egg" "$FUTURE_SETUP
@@ -624,6 +756,7 @@ open cabinet" "temporal harmonic sequence"
 # --- Endgame ---
 echo "[Endgame]"
 # Minimal run: just get the 4 required components
+# Full endgame: collect all 4 components, travel home, install, clean
 ENDGAME_CMD="$ENTER_WORKSHOP
 take journal
 north
@@ -637,7 +770,6 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-enter rift
 travel to blitz
 west
 take valve
@@ -651,7 +783,7 @@ dig
 open box
 take tube
 east
-enter rift
+dig
 travel to cambridge
 north
 east
@@ -667,7 +799,6 @@ take napkin
 west
 south
 south
-enter rift
 travel to future
 north
 up
@@ -678,13 +809,13 @@ down
 open cabinet
 take processor
 up
-enter rift
+travel to workshop
 install
 west
 clean"
 run_test "Install all components" "$ENDGAME_CMD" "Temporal Displacement Engine is repaired"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
-run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 170"
+run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 175"
 
 # --- Copernicus ---
 echo "[Copernicus]"
@@ -703,17 +834,15 @@ run_test "Help command" "help" "TEMPORAL APPRENTICE"
 
 # --- Kill Hitler Easter Egg ---
 echo "[Easter Eggs]"
-run_test "Kill Hitler response" "$ENTER_WORKSHOP
-$CAT_ACCIDENT
-enter rift
-travel to blitz
+run_test "Kill Hitler response" "$BLITZ_SETUP
 kill hitler" "family-friendly"
 
 # --- Travel-to scope outside workshop ---
 echo "[Travel-to Scope]"
-run_test "Travel to dest outside solarium shows error" "$ENTER_WORKSHOP
+run_test "Travel to dest where machine is not" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-travel to blitz" "temporal rift to return"
+south
+travel to blitz" "time machine isn.t here"
 run_test "Travel to dest before cat accident not in scope" "travel to roman" "can.t see any such thing"
 
 # --- Scenery objects ---

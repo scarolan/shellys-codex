@@ -57,15 +57,21 @@ You play a newly hired apprentice to Dr. Justin Thyme, an eccentric Victorian in
 - Saving the church (1941) → building exists in 2009 and 2045
 - Hawking's formula (2009) → needed to identify processor (2045)
 
-**Puzzle flow:**
-1. Workshop: Read journal, discover machine, cat triggers mishap
-2. Roman: Trade for lodestone, impress Marcus, recover machine from temple
-3. WWII: Fix Tommy's radio, excavate machine from rubble, find vacuum tube
-4. Cambridge: Get invitation, infiltrate party, convince Hawking
-5. Future: Help Kai, get diving gear, retrieve processor from submerged lab
-6. Endgame: Install all components, clean workshop, Thyme returns
+**Time machine travel:** The machine travels WITH the player (Wells-style). Each era has a gate that prevents immediate departure:
+- **Roman:** Soldiers surround the machine → impress Marcus (show lodestone) to clear them
+- **Blitz:** Machine buried under rubble → dig it out with Tommy's help
+- **Cambridge:** Destination dial jammed → apply Hawking's calibration formula
+- **Future:** Machine sank underwater → haul it up with diving gear
 
-**Global flags:** `visited_roman`, `visited_blitz`, `visited_hawking`, `visited_future`, `has_lodestone`, `has_vacuum_tube`, `has_formula`, `has_processor`, `inscription_carved`, `capsule_buried`, `church_saved`, `eleanor_gift`, `hawking_convinced`, `marcus_impressed`, `livia_trusts`, `tommy_helping`, `radio_fixed`, `machine_excavated`, `porter_bypassed`, `kai_helping`, `has_diving_gear`, `lab_unlocked`, `components_installed`, `workshop_cleaned`
+**Puzzle flow:**
+1. Workshop: Read journal, discover machine, cat triggers mishap (machine travels to Roman)
+2. Roman: Trade for lodestone, impress Marcus to unlock machine, travel to Blitz
+3. WWII: Fix Tommy's radio, dig out machine, find vacuum tube, travel to Cambridge
+4. Cambridge: Get invitation, infiltrate party, convince Hawking, get formula to unlock machine
+5. Future: Help Kai, get diving gear to unlock machine, retrieve processor from submerged lab
+6. Endgame: Travel to workshop, install all components, clean workshop, Thyme returns
+
+**Global flags:** `visited_roman`, `visited_blitz`, `visited_hawking`, `visited_future`, `has_lodestone`, `has_vacuum_tube`, `has_formula`, `has_processor`, `inscription_carved`, `capsule_buried`, `church_saved`, `eleanor_gift`, `hawking_convinced`, `marcus_impressed`, `livia_trusts`, `tommy_helping`, `radio_fixed`, `machine_dug_out`, `machine_recalibrated`, `machine_raised`, `porter_bypassed`, `kai_helping`, `has_diving_gear`, `lab_unlocked`, `components_installed`, `workshop_cleaned`
 
 ## Inform 6 notes
 

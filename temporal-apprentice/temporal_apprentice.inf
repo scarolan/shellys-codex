@@ -6,7 +6,7 @@
 
 Constant Story "The Temporal Apprentice";
 Constant Headline "^A Time-Travelling Adventure^^";
-Constant MAX_SCORE 170;
+Constant MAX_SCORE 175;
 
 Replace DrawStatusLine;
 Replace GamePrologue;
@@ -96,6 +96,10 @@ Global door_open = false;
 Global spanner_given = false;
 Global solarium_unlocked = false;
 Global solarium_entered = false;
+
+Global machine_dug_out = false;
+Global machine_recalibrated = false;
+Global machine_raised = false;
 
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
@@ -835,11 +839,16 @@ Object solarium "The Solarium"
                     }
                     print "The corridor leads back west to the workshop.^";
                 } else {
-                    print "The solarium. Grey light filters through the rain-streaked glass ceiling. The time machine dominates the room, ";
-                    if (components_installed)
-                        print "humming with renewed purpose. All four components are installed.^^";
-                    else
-                        print "looking worse for wear since the cat's intervention.^^";
+                    print "The solarium. Grey light filters through the rain-streaked glass ceiling. ";
+                    if (time_machine in self) {
+                        print "The time machine dominates the room, ";
+                        if (components_installed)
+                            print "humming with renewed purpose. All four components are installed.^^";
+                        else
+                            print "looking worse for wear since the cat's intervention.^^";
+                    } else {
+                        print "Potted ferns and brass instruments crowd the perimeter. The space where the time machine stood is conspicuously empty, marked by scuff marks on the tiled floor.^^";
+                    }
                     print "The corridor leads back west to the workshop.^";
                 }
             }
@@ -882,30 +891,48 @@ Object time_machine "time machine" solarium
                 print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
             } else {
                 print "The time machine looks decidedly worse for wear since Copernicus's intervention. Several components are missing or damaged. You'll need to find replacements across time itself.^^";
-                print "The destination dial still works. You could travel to:^";
+                if (location == roman_forum && marcus_impressed == false)
+                    print "Roman soldiers have formed a nervous perimeter around the machine. Their centurion eyes it with deep suspicion.^^";
+                if (location == blitz_street && machine_dug_out == false)
+                    print "The machine is half-buried under bomb rubble. You'll need help shifting it.^^";
+                if (location == cambridge_gates && has_formula == false)
+                    print "The destination dial is jammed solid -- the calibration is completely off.^^";
+                else if (location == cambridge_gates && machine_recalibrated == false)
+                    print "You have Hawking's formula. You could recalibrate the dial.^^";
+                if (location == future_street && has_diving_gear == false)
+                    print "The machine is mostly underwater. You'd need diving gear to reach the controls.^^";
+                else if (location == future_street && machine_raised == false)
+                    print "With your diving gear, you could haul the machine up from the water.^^";
+                print "The destination dial ";
+                if (location == cambridge_gates && has_formula == false)
+                    print "is jammed";
+                else if (location == future_street && has_diving_gear == false)
+                    print "is underwater";
+                else
+                    print "still works";
+                print ". You could travel to:^";
                 if (visited_roman) print "  Roman Londinium (60 AD)^";
                 if (visited_blitz || visited_roman) print "  Blitz London (1941)^";
                 if (visited_hawking || visited_blitz) print "  Cambridge (2009)^";
                 if (visited_future || visited_hawking) print "  Future London (2045)^";
+                print "  Workshop (1895)^";
             }
          ],
-         add_to_scope roman_dest blitz_dest hawking_dest future_dest,
+         add_to_scope roman_dest blitz_dest hawking_dest future_dest solarium_dest,
     has scenery;
 
 Object hartley_journal "leather-bound journal" main_workshop
     with name 'journal' 'book' 'leather' 'diary' 'notes',
          description [;
             print "Dr. Thyme's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Key excerpts:^^";
-            print "~The Temporal Displacement Engine requires four critical components:^";
-            print "  1. A LODESTONE of sufficient magnetic purity (temporal compass)^";
-            print "  2. A VACUUM TUBE of precise oscillation frequency^";
-            print "  3. A CALIBRATION FORMULA for temporal field harmonics^";
-            print "  4. A QUANTUM PROCESSOR for the field generator~^^";
-            print "~Should the machine malfunction (entirely hypothetical), these components might be scattered across time. One would need to travel to each era to retrieve them. I have included a temporal rift generator as a safety feature. It creates a shimmering portal in each destination era for the return journey.~^^";
+            print "~The Romans knew the power of lodestones -- magnetic iron, gifts from Jupiter, they called them. A stone of sufficient purity could serve as the temporal compass core. The merchants of Londinium would have traded in such things.~^^";
+            print "~The oscillation circuit requires a vacuum tube of military grade. Civilian manufacturing lacks the precision. One would need wartime production -- the kind of engineering that only emerges under existential threat.~^^";
+            print "~The temporal harmonics remain my greatest challenge. Perhaps Hawking's theoretical framework could provide the calibration formula I need. A pity he won't be born for another sixty-odd years.~^^";
+            print "~Current technology cannot produce a quantum processor. Future technology, however... if one could reach the mid-twenty-first century, the computational power would be trivial. Getting there is the hard part.~^^";
             if (copernicus_named)
-            print "The margins are full of cat doodles and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
-        else
-            print "The margins are full of cat doodles and the note: ~KEEP THE CAT AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
+                print "The margins are full of cat doodles and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
+            else
+                print "The margins are full of cat doodles and the note: ~KEEP THE CAT AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
         ],
          initial "A leather-bound journal sits prominently on the workbench.";
 
@@ -979,7 +1006,10 @@ Object dr_thyme "Dr. Thyme" main_workshop
 Object roman_forum "The Forum"
     with description [;
             print "The heart of Roman Londinium spreads before you in the warm Mediterranean sunlight that has no business being in London. Toga-clad citizens bustle between colonnaded buildings, haggling, gossiping, and doing whatever it is Romans do at the Forum (politics, mostly, with occasional stabbings).^^";
-            print "A temporal rift shimmers in the air beside a marble column, crackling with familiar energy.^^";
+            if (time_machine in self && marcus_impressed == false)
+                print "The time machine sits beside a marble column, surrounded by wary Roman soldiers who are prodding it with their swords and debating whether it's Greek.^^";
+            else if (time_machine in self)
+                print "The time machine sits beside a marble column, gleaming incongruously in the Mediterranean sun.^^";
             print "The Via Principalis leads north";
             if (marcus_impressed == false)
                 print " (a centurion blocks the way)";
@@ -1001,19 +1031,6 @@ Object roman_forum "The Forum"
          w_to roman_bath,
          s_to roman_merchants,
     has light;
-
-Object roman_rift "temporal rift" roman_forum
-    with name 'rift' 'temporal' 'portal' 'shimmer',
-         description "A shimmering tear in reality, crackling with temporal energy. It looks rather like someone took a pair of scissors to the fabric of spacetime and forgot to tidy up. Through it, you can faintly see brass and ferns -- the solarium.",
-         before [;
-            Enter:
-                current_era = 0;
-                move copernicus to solarium;
-                print "You step into the rift. Reality does that thing where it turns inside out for a moment, and then you're back in the solarium. Your clothing smells faintly of olive oil and empire.^";
-                PlayerTo(solarium);
-                rtrue;
-         ],
-    has scenery;
 
 Object forum_column "marble column" roman_forum
     with name 'column' 'marble' 'pillar' 'columns' 'pillars',
@@ -1281,7 +1298,10 @@ Object bath_steam "steam" roman_bath
 Object blitz_street "Blacked-Out Street"
     with description [;
             print "London, 1941. The darkness is absolute -- blackout regulations turn the city into a maze of shadows and stumbling. Somewhere above, the drone of bombers provides an unwelcome soundtrack. Searchlights sweep the sky like the world's worst disco.^^";
-            print "A temporal rift flickers in a doorway, its glow hastily muffled by what appears to be a curtain someone hung over it.^^";
+            if (time_machine in self && machine_dug_out == false)
+                print "The time machine is half-buried under rubble from the last raid, brass fittings poking through the debris like the bones of some mechanical beast.^^";
+            else if (time_machine in self)
+                print "The time machine stands in the street, dusted with plaster and looking thoroughly out of place in wartime London.^^";
             print "An underground shelter entrance leads down. A bombed church looms to the north. The Crown and Anchor pub is east, and a rubble-strewn site lies to the west.^";
         ],
          d_to blitz_shelter,
@@ -1289,19 +1309,6 @@ Object blitz_street "Blacked-Out Street"
          e_to blitz_pub,
          w_to blitz_rubble,
     has light;
-
-Object blitz_rift "temporal rift" blitz_street
-    with name 'rift' 'temporal' 'portal' 'shimmer',
-         description "The rift shimmers behind a hastily-hung blackout curtain. Someone has pinned a note to it: ~UNEXPLAINED PHENOMENON -- DO NOT REPORT TO WARDEN PEGGY.~",
-         before [;
-            Enter:
-                current_era = 0;
-                move copernicus to solarium;
-                print "You slip through the rift. The sounds of the Blitz fade, replaced by the comforting hum of brass machinery.^";
-                PlayerTo(solarium);
-                rtrue;
-         ],
-    has scenery;
 
 Object street_searchlights "searchlights" blitz_street
     with name 'searchli' 'lights' 'beams',
@@ -1315,7 +1322,7 @@ Object street_bombers "bombers" blitz_street
 
 Object street_doorway "doorway" blitz_street
     with name 'doorway' 'entrance' 'curtain',
-         description "A brick doorway with a hastily-hung blackout curtain, behind which the temporal rift shimmers with cheerful disregard for the blackout regulations. Someone has pinned a note to it suggesting everyone pretend it isn't there.",
+         description "A brick doorway with a hastily-hung blackout curtain. Beyond it, nothing but darkness and the smell of damp brick.",
     has scenery;
 
 Object street_shelter "shelter entrance" blitz_street
@@ -1651,24 +1658,16 @@ Object eleanor_drawing_item "Eleanor's drawing"
 Object cambridge_gates "College Gates"
     with description [;
             print "Gonville and Caius College rises before you in all its medieval grandeur, looking exactly like the sort of place where people have been overthinking things for eight hundred years. Students in gowns hurry past, clutching books and existential crises in equal measure.^^";
-            print "A temporal rift hovers discreetly behind a bicycle rack, which in Cambridge is as good as invisible.^^";
+            if (time_machine in self && has_formula == false)
+                print "The time machine sits beside the bicycle rack, its destination dial jammed solid. The calibration is completely off after the rough landing.^^";
+            else if (time_machine in self && machine_recalibrated == false)
+                print "The time machine sits beside the bicycle rack. You have the calibration formula -- perhaps you could fix the jammed dial.^^";
+            else if (time_machine in self)
+                print "The time machine sits beside the bicycle rack, its dial spinning freely once more. Several bikes have been chained to it.^^";
             print "The Porter's Lodge is to the north. A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009.~^";
         ],
          n_to cambridge_porter,
     has light;
-
-Object cambridge_rift "temporal rift" cambridge_gates
-    with name 'rift' 'temporal' 'portal' 'shimmer',
-         description "The rift shimmers behind the bicycle rack. Several bikes have been chained to it, because Cambridge students will chain their bikes to literally anything.",
-         before [;
-            Enter:
-                current_era = 0;
-                move copernicus to solarium;
-                print "You slip through the rift, narrowly avoiding a bicycle wheel. Reality reassembles itself as the solarium materialises around you.^";
-                PlayerTo(solarium);
-                rtrue;
-         ],
-    has scenery;
 
 Object cambridge_bikes "bicycle rack" cambridge_gates
     with name 'bicycle' 'bike' 'bikes' 'rack',
@@ -1866,7 +1865,12 @@ Object chen "Dr. Sarah Chen" cambridge_hall
 Object future_street "Flooded Street"
     with description [;
             print "London, 2045. The Thames won. Water laps at what used to be the second floor of Victorian terraces. Buildings rise from the flood like stone islands, connected by catwalks and rope bridges. It's Venice, if Venice had been designed by civil engineers during a nervous breakdown.^^";
-            print "A temporal rift bobs gently on the water's surface, tethered to a lamppost like a luminous boat.^^";
+            if (time_machine in self && has_diving_gear == false)
+                print "The time machine sank on arrival. You can just see its brass fittings glinting below the waterline, taunting you.^^";
+            else if (time_machine in self && machine_raised == false)
+                print "The time machine is just below the surface. With your diving gear, you could haul it up.^^";
+            else if (time_machine in self)
+                print "The time machine stands on a makeshift platform, dripping Thames water and looking thoroughly sorry for itself.^^";
             print "The Thames Barrier Museum is north. An elevated walkway stretches east. The Climate Refuge is to the west. Below, murky water conceals whatever lies on the submerged street level";
             if (has_diving_gear)
                 print " -- your diving gear could get you down there";
@@ -1881,19 +1885,6 @@ Object future_street "Flooded Street"
             rfalse;
          ],
     has light;
-
-Object future_rift "temporal rift" future_street
-    with name 'rift' 'temporal' 'portal' 'shimmer',
-         description "The rift floats on the water, gently bobbing. It's been tethered to a lamppost with what appears to be a bicycle lock. Even in 2045, Londoners will chain things to lampposts.",
-         before [;
-            Enter:
-                current_era = 0;
-                move copernicus to solarium;
-                print "You step into the rift, getting your feet wet in the process. The solarium materialises around you, blissfully dry.^";
-                PlayerTo(solarium);
-                rtrue;
-         ],
-    has scenery;
 
 Object future_museum "Thames Barrier Museum"
     with description [;
@@ -2218,6 +2209,7 @@ Object copernicus "ginger tabby cat" main_workshop
                     print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
                     print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
                     StartDaemon(copernicus);
+                    move time_machine to roman_forum;
                     PlayerTo(roman_forum);
                     rtrue;
                 }
@@ -2334,6 +2326,10 @@ Object future_dest "Future London"
     with name 'future' '2045' 'flood',
     has proper;
 
+Object solarium_dest "Workshop"
+    with name 'workshop' 'solarium' 'home' '1895' 'victorian',
+    has proper;
+
 ! ===================================================================
 ! INITIALISE
 ! ===================================================================
@@ -2362,6 +2358,7 @@ Object future_dest "Future London"
         PlaceInScope(blitz_dest);
         PlaceInScope(hawking_dest);
         PlaceInScope(future_dest);
+        PlaceInScope(solarium_dest);
     }
     rfalse;
 ];
@@ -2457,15 +2454,48 @@ Object future_dest "Future London"
 ];
 
 [ TravelToSub;
-    if (location ~= solarium) {
-        "You need to be at the time machine in the solarium to travel through time. Use the temporal rift to return first.";
-    }
     if (cat_accident == false) {
         "The time machine isn't activated yet. Perhaps you should examine it more closely.";
+    }
+    if (time_machine notin location) {
+        "The time machine isn't here. You'll need to find it first.";
+    }
+    ! Era-specific access gates
+    if (location == roman_forum && marcus_impressed == false) {
+        "Roman soldiers have surrounded the machine, treating it as a curiosity -- or possibly a siege weapon. You'll need to impress their centurion before they'll let you near it.";
+    }
+    if (location == blitz_street && machine_dug_out == false) {
+        "The time machine is half-buried under rubble from the last bombing raid. You'll need to dig it out before you can use it.";
+    }
+    if (location == cambridge_gates && has_formula == false) {
+        "The destination dial has seized up -- the temporal calibration is completely off after the rough landing. You'd need some kind of recalibration formula to fix it.";
+    }
+    if (location == future_street && has_diving_gear == false) {
+        "The time machine sank when it arrived. You can see it just below the waterline, but you'd need diving gear to reach it.";
+    }
+    ! One-time fix text for Cambridge
+    if (location == cambridge_gates && machine_recalibrated == false) {
+        machine_recalibrated = true;
+        print "You apply Hawking's calibration formula to the destination dial. The seized mechanism clicks, whirs, and frees itself. The dial spins smoothly once more.^^";
+    }
+    ! One-time fix text for Future
+    if (location == future_street && machine_raised == false) {
+        machine_raised = true;
+        print "You strap on the diving gear and haul the time machine up from the murky water. It surfaces with a reluctant gurgle, shedding Thames water and what appears to be a very confused eel.^^";
+    }
+    if (noun == solarium_dest) {
+        current_era = 0;
+        move copernicus to solarium;
+        move time_machine to solarium;
+        print "You set the dial to ~1895~ and pull the lever. The machine hums, reality folds neatly like a well-pressed handkerchief, and you're back in the solarium. Home.^";
+        PlayerTo(solarium);
+        rtrue;
     }
     if (noun == roman_dest) {
         if (visited_roman == false) visited_roman = true;
         current_era = 1;
+        move time_machine to roman_forum;
+        move copernicus to roman_forum;
         print "You set the destination dial to ~60 AD~ and pull the lever. The machine screams, the world dissolves, and when reality reassembles itself, you're standing in blazing Mediterranean sunlight that has absolutely no business being in London.^";
         PlayerTo(roman_forum);
         rtrue;
@@ -2476,6 +2506,8 @@ Object future_dest "Future London"
         }
         if (visited_blitz == false) visited_blitz = true;
         current_era = 2;
+        move time_machine to blitz_street;
+        move copernicus to blitz_street;
         print "You set the dial to ~1941~ and brace yourself. The machine roars, and suddenly it's dark, cold, and something overhead is making a very concerning droning noise.^";
         PlayerTo(blitz_street);
         rtrue;
@@ -2486,6 +2518,8 @@ Object future_dest "Future London"
         }
         if (visited_hawking == false) visited_hawking = true;
         current_era = 3;
+        move time_machine to cambridge_gates;
+        move copernicus to cambridge_gates;
         print "You set the dial to ~2009~ and activate the machine. The transition is smoother this time -- perhaps the machine is healing. You materialise beside a bicycle rack.^";
         PlayerTo(cambridge_gates);
         rtrue;
@@ -2496,11 +2530,13 @@ Object future_dest "Future London"
         }
         if (visited_future == false) visited_future = true;
         current_era = 4;
+        move time_machine to future_street;
+        move copernicus to future_street;
         print "You set the dial to ~2045~ and pull the lever. The machine shudders, groans, and deposits you somewhere very, very wet.^";
         PlayerTo(future_street);
         rtrue;
     }
-    "The machine's dial doesn't seem to have that setting. Try: Roman Londinium, Blitz London, Cambridge, or Future London.";
+    "The machine's dial doesn't seem to have that setting. Try: Roman Londinium, Blitz London, Cambridge, Future London, or Workshop.";
 ];
 
 [ CarveSub;
@@ -2538,6 +2574,24 @@ Object future_dest "Future London"
 ];
 
 [ DigRubbleSub;
+    if (location == blitz_street) {
+        if (machine_dug_out) {
+            "You've already dug the machine out. It stands free and clear.";
+        }
+        if (time_machine notin blitz_street) {
+            "There's nothing to dig out here.";
+        }
+        if (tommy_helping == false) {
+            "The rubble burying the machine is far too heavy to shift alone. You'd need someone strong to help -- someone like Corporal Tommy, perhaps.";
+        }
+        machine_dug_out = true;
+        score = score + 5;
+        print "You and Tommy attack the rubble burying the time machine. Brick by brick, beam by beam, you clear the debris. Tommy works with the cheerful determination of a man who has seen worse things this week.^^";
+        print "~Funny-looking contraption,~ Tommy says, wiping plaster dust from his face. ~What is it, some kind of engine?~^^";
+        print "~Something like that,~ you reply.^^";
+        print "The time machine stands free, battered but functional.^";
+        rtrue;
+    }
     if (location == blitz_rubble) {
         if (blitz_rubble has general) {
             "You've already cleared the rubble. The metal box is accessible.";
@@ -2574,7 +2628,7 @@ Object future_dest "Future London"
 ];
 
 [ RepairSub;
-    if (location == solarium && noun == time_machine) {
+    if (time_machine in location && noun == time_machine) {
         if (components_installed) {
             "The machine is already repaired. It hums contentedly.";
         }
@@ -2704,7 +2758,7 @@ Object future_dest "Future London"
     print "   (hastily scrawled in Dr. Thyme's handwriting)^^";
     print "[NAVIGATION]^";
     print "  north/south/east/west/up/down^";
-    print "  enter (rift/door) -- step through something^^";
+    print "  enter (door) ....... step through something^^";
     print "[INVESTIGATION]^";
     print "  look ............ survey your surroundings^";
     print "  examine X ....... inspect something closely^";
@@ -2718,7 +2772,7 @@ Object future_dest "Future London"
     print "  give X to Y ..... hand something to someone^";
     print "  show X to Y ..... display something to someone^^";
     print "[SPECIAL ACTIONS]^";
-    print "  travel to X ..... use the time machine (in solarium)^";
+    print "  travel to X ..... use the time machine (where it is)^";
     print "  carve ........... carve an inscription^";
     print "  bury ............ bury something for posterity^";
     print "  dig ............. excavate rubble^";
