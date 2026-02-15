@@ -3065,6 +3065,7 @@ Object solarium_dest "Workshop"
         ! Install lodestone
         if (has_lodestone && lodestone_installed == false) {
             lodestone_installed = true;
+            remove lodestone;
             score = score + 2;
             print "You ease the new lodestone into the compass housing. It clicks home with a satisfying snap, and the needle swings wildly before settling, trembling, on true north. The housing glows -- faintly at first, then steady, warm amber. The machine's navigational field hums back to life.^^";
             print "One component down.^";
@@ -3083,6 +3084,7 @@ Object solarium_dest "Workshop"
                 "The vacuum tube won't fit -- the contacts are bent at the wrong angle for Thyme's housing. You'd need the toolkit, specifically the needle-nose pliers, to coax them into alignment.";
             }
             tube_installed = true;
+            remove vacuum_tube;
             score = score + 2;
             print "You take the needle-nose pliers from your toolkit and spend ten careful minutes bending each contact pin into alignment. The military-spec tube is close but not quite right -- wider tolerances, heavier glass. But pin by pin, you coax it into the oscillation circuit housing. It slides home. The machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
             print "The oscillation circuit is restored.^";
@@ -3110,6 +3112,7 @@ Object solarium_dest "Workshop"
                 "The crystalline processor needs to be soldered into the brass harness with precision. You'd need the toolkit for this kind of delicate work.";
             }
             processor_installed = true;
+            remove quantum_processor;
             score = score + 2;
             print "The crystalline processor slides into the brass harness -- the same harness, the same copper solder tabs, the same perfect fit. Whoever built that adapter knew exactly what shape this crystal would be. You solder the connections with steady hands.^^";
             print "The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself. The temporal field generator is restored.^";
