@@ -126,7 +126,7 @@ Global machine_raised = false;
     print "~Front door key. Lock up when I'm back. Or before. Temporal engineering.~ He's already halfway out. ~DO tidy up while I'm out. Place is a state. And do NOT go into the solarium. The door at the end of the corridor. Under ANY circumstances.~^^";
     print "The front door slams. You are alone. Well -- alone except for the cat, who watches you from atop a shelf with an expression of absolute calculation.^";
     thyme_departed = true;
-    move cleaning_rags to player;
+    move cleaning_rag to player;
     move front_door_key to player;
     remove dr_thyme;
 ];
@@ -978,7 +978,18 @@ Object time_machine "time machine" solarium
             } else if (components_installed) {
                 print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
             } else {
-                print "The time machine looks decidedly worse for wear since Copernicus's intervention. Several components are missing or damaged. The compass housing is empty, the Crookes tube shattered, the calibration dial seized, and the field generator's crystalline component -- the one that arrived in the mysterious parcel -- is cracked clean through. The brass harness and copper solder tabs are intact, though. Whatever goes back in there just needs to be the right shape. You'll need to find replacements across time itself.^^";
+                print "The time machine looks decidedly worse for wear since Copernicus's intervention.";
+                ! Progressive damage: only report what's actually broken
+                if (visited_blitz == false && visited_future == false) {
+                    ! Only lodestone is damaged (Roman era)
+                    print " The compass housing is dark -- the lodestone burned out during the uncontrolled transit. Everything else seems intact, but the machine won't navigate without a new lodestone.^^";
+                } else if (visited_future == false) {
+                    ! Lodestone + Crookes tube (Blitz era)
+                    print " The compass housing is dark -- no lodestone. And the Crookes tube is shattered, shards of hand-blown glass glinting in the oscillation circuit housing. Two components down.^^";
+                } else {
+                    ! All three damaged (Future era)
+                    print " The compass housing is dark. The Crookes tube is shattered. And the crystalline processor -- the one from the mysterious parcel -- is cracked clean through. The brass harness and copper solder tabs are intact, but the crystal itself is useless. You'll need replacements for all three, plus Hawking's formula to make sense of the navigation.^^";
+                }
                 if (location == roman_forum && marcus_impressed == false)
                     print "Roman soldiers have formed a nervous perimeter around the machine. Their centurion eyes it with deep suspicion.^^";
                 if (location == blitz_street && machine_dug_out == false)
@@ -2524,10 +2535,11 @@ Object copernicus "ginger tabby cat" main_workshop
                     rag_on_machine = false;
                     copernicus_named = true;
                     give self proper;
-                    remove cleaning_rags;
+                    remove cleaning_rag;
                     print "You reach for the cleaning rag draped over the cat. This is a mistake.^^";
                     print "The cat, with the unerring instinct of cats everywhere for finding the worst possible moment to be difficult, twists away from your grasp. His back legs scrabble for purchase on the control panel, and one powerful hind paw connects squarely with a large brass lever marked ~ABSOLUTELY DO NOT TOUCH.~^^";
                     print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
+                    print "Something inside the machine gives a grinding lurch -- the compass housing glows white-hot for an instant, then goes dark. The lodestone. Eight hundred and forty-seven test activations, and this uncontrolled transit was one too many.^^";
                     print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
                     StartDaemon(copernicus);
                     move time_machine to roman_forum;
@@ -2596,15 +2608,15 @@ Object cat_name_tag "brass name tag"
          ],
     has scenery;
 
-Object cleaning_rags "cleaning rags"
-    with name 'rags' 'rag' 'cleaning' 'cloth' 'cloths' 'bundle',
+Object cleaning_rag "cleaning rag"
+    with name 'rag' 'cleaning' 'cloth',
          description [;
             if (rag_on_machine) {
                 if (copernicus_named)
                     "Your cleaning rag is currently in the possession of Copernicus, who is sitting on the machine with it. Getting it back would require getting the cat off the machine.";
                 "Your cleaning rag is currently in the possession of the cat, who is sitting on the machine with it. Getting it back would require getting the cat off the machine.";
             }
-            "A bundle of soft cotton cleaning rags, slightly oil-stained. Dr. Thyme pressed them into your hands with instructions to tidy up the workshop.";
+            "A soft cotton cleaning rag, slightly oil-stained. Dr. Thyme pressed it into your hands with instructions to tidy up the workshop.";
          ],
          before [;
             Take:
@@ -2617,16 +2629,15 @@ Object cleaning_rags "cleaning rags"
                     rag_stolen = true;
                     rag_on_machine = true;
                     move self to solarium;
-                    print "You set down the cleaning rags beside the machine.^^";
+                    print "You set down the cleaning rag beside the machine.^^";
                     if (copernicus_named)
-                        print "In a flash of ginger fur, Copernicus snatches a rag and bolts. Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
+                        print "In a flash of ginger fur, Copernicus snatches the rag and bolts. Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
                     else
-                        print "In a flash of ginger fur, the cat snatches a rag and bolts. Before you can react, he has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
+                        print "In a flash of ginger fur, the cat snatches the rag and bolts. Before you can react, he has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
                     print "Getting that rag back is going to require getting the cat off the machine. This seems... inadvisable.^";
                     rtrue;
                 }
-         ]
-    has pluralname;
+         ];
 
 ! ===================================================================
 ! TIME TRAVEL DESTINATIONS (parentless scope objects)
@@ -2832,7 +2843,8 @@ Object solarium_dest "Workshop"
         current_era = 2;
         move time_machine to blitz_street;
         move copernicus to blitz_street;
-        print "You set the dial to ~1941~ and brace yourself. The machine roars, and suddenly it's dark, cold, and something overhead is making a very concerning droning noise.^";
+        print "You set the dial to ~1941~ and brace yourself. The machine roars -- and mid-transit, something inside makes a sound like a champagne flute hitting a marble floor. The Crookes tube. Hand-blown, marginal tolerances, and it has finally given up the ghost.^^";
+        print "The machine deposits you somewhere dark, cold, and something overhead is making a very concerning droning noise.^";
         PlayerTo(blitz_street);
         rtrue;
     }
@@ -2862,9 +2874,10 @@ Object solarium_dest "Workshop"
         current_era = 4;
         move time_machine to future_street;
         move copernicus to future_street;
-        print "You set the dial to ~2045~ and pull the lever. The machine shudders, groans, and deposits you somewhere very, very wet.^";
+        print "You set the dial to ~2045~ and pull the lever. The machine shudders, groans -- and mid-transit there is a sharp, crystalline CRACK from the field generator housing. The crystalline processor. The one from the mysterious parcel. The brass harness holds, but the crystal itself has fractured clean through.^^";
+        print "The machine deposits you somewhere very, very wet.^";
         if (newspaper in player) {
-            print "^The transit is rougher than any before -- the machine screams in frequencies you can feel in your teeth. The newspaper is ripped from your hands by the temporal wind. The pages tumble into the vortex, scattering through centuries like leaves in a storm, and vanish.^";
+            print "^The temporal wind rips the newspaper from your hands. The pages tumble into the vortex, scattering through centuries like leaves in a storm, and vanish.^";
             move newspaper to future_museum;
             give newspaper scenery;
         }
@@ -2971,15 +2984,26 @@ Object solarium_dest "Workshop"
             <InstallComp>;
             rtrue;
         }
-        print "The machine needs four components to be repaired:^";
+        ! Progressive checklist: only show damage the player knows about
+        print "The machine needs repairs:^";
+        ! Lodestone is always known (broke in the cat accident)
         if (has_lodestone) print "  [x] Lodestone (temporal compass)^";
-        else print "  [ ] Lodestone (Roman Londinium, 60 AD)^";
-        if (has_vacuum_tube) print "  [x] Vacuum tube (oscillation circuit)^";
-        else print "  [ ] Vacuum tube (WWII London, 1941)^";
-        if (has_formula) print "  [x] Hawking's formula (temporal harmonics)^";
-        else print "  [ ] Navigation formula (temporal harmonics)^";
-        if (has_processor) print "  [x] Crystalline processor (field generator)^";
-        else print "  [ ] Crystalline processor (Future London, 2045)^";
+        else print "  [ ] Lodestone (temporal compass -- depleted)^";
+        ! Crookes tube only after Blitz transit
+        if (visited_blitz) {
+            if (has_vacuum_tube) print "  [x] Vacuum tube (oscillation circuit)^";
+            else print "  [ ] Vacuum tube (oscillation circuit -- shattered)^";
+        }
+        ! Formula only after visiting Cambridge
+        if (visited_hawking) {
+            if (has_formula) print "  [x] Hawking's formula (temporal harmonics)^";
+            else print "  [ ] Hawking's formula (temporal harmonics)^";
+        }
+        ! Crystal only after Future transit
+        if (visited_future) {
+            if (has_processor) print "  [x] Crystalline processor (field generator)^";
+            else print "  [ ] Crystalline processor (field generator -- cracked)^";
+        }
         rtrue;
     }
     "You can't repair that.";
@@ -3017,20 +3041,20 @@ Object solarium_dest "Workshop"
                 "You haven't even introduced yourself yet. Find the spanner Dr. Thyme wants first.";
             if (thyme_departed == false)
                 "The workshop doesn't need cleaning yet. Perhaps talk to Dr. Thyme first.";
-            if (cleaning_rags notin player && rag_stolen == false)
-                "You don't have any cleaning rags. Dr. Thyme gave you some -- where did they go?";
+            if (cleaning_rag notin player && rag_stolen == false)
+                "You don't have your cleaning rag. Dr. Thyme gave you one -- where did it go?";
             if (rag_on_machine) {
                 if (location == main_workshop)
                     "The cat has your cleaning rag in the solarium. You should go and retrieve it.";
                 "You'd love to clean, but the cat has stolen your cleaning rag and is sitting on the machine with it. You'll need to get the rag back first.";
             }
-            if (cleaning_rags in player && rag_stolen == false) {
+            if (cleaning_rag in player && rag_stolen == false) {
                 if (location == main_workshop)
                     "You straighten a few things on the workbench. The workshop looks marginally less chaotic, but it hardly counts as a proper tidy.";
                 ! In solarium - trigger cat sequence
                 rag_stolen = true;
                 rag_on_machine = true;
-                move cleaning_rags to solarium;
+                move cleaning_rag to solarium;
                 print "You unfurl a cleaning rag and are about to start on the nearest brass surface when --^^";
                 if (copernicus_named)
                     print "In a flash of ginger fur, Copernicus snatches the rag right out of your hand! Before you can react, the cat has leapt atop the contraption, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";

@@ -214,6 +214,8 @@ run_test "Take cat triggers accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "ABSOLUTELY DO NOT TOUCH"
 run_test "Sent to Roman forum" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "Roman Londinium"
+run_test "Lodestone depleted in cat accident" "$ENTER_WORKSHOP
+$CAT_ACCIDENT" "lodestone"
 run_test "Score for accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 score" "9 out of"
@@ -241,6 +243,27 @@ examine machine" "barely contained energy"
 run_test_absent "Examine machine does not trigger accident" "$ENTER_SOLARIUM
 examine machine" "ABSOLUTELY DO NOT TOUCH"
 
+echo "[Progressive Damage]"
+# After cat accident (Roman): only lodestone mentioned
+run_test "Roman era: lodestone burned out" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine machine" "lodestone burned out"
+run_test_absent "Roman era: no Crookes tube damage yet" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine machine" "Crookes tube is shattered"
+# After Blitz transit: Crookes tube also broken
+run_test "Blitz transit: Crookes tube shattered" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to blitz
+examine machine" "Crookes tube is shattered"
+# Crystal cracking during Future transit
 # --- Roman Londinium ---
 echo "[Roman Londinium]"
 run_test "Forum description" "$ENTER_WORKSHOP
@@ -390,6 +413,16 @@ give aureus to felix
 north
 show lodestone to marcus
 travel to blitz" "1941"
+run_test "Crookes tube shatters in Blitz transit" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to blitz" "champagne flute"
 run_test "Eras must be sequential" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -725,6 +758,9 @@ west
 south
 south
 travel to future"
+run_test "Future transit: crystal cracked" "$FUTURE_SETUP" "crystalline CRACK"
+run_test "Future machine: all three damaged" "$FUTURE_SETUP
+examine machine" "cracked clean through"
 run_test "Future flooded street" "$FUTURE_SETUP" "Thames won"
 run_test "Future machine sank" "$FUTURE_SETUP
 look" "sank on arrival"
@@ -1565,7 +1601,7 @@ south
 examine newspaper" "600TH ANNIVERSARY"
 
 # Newspaper lost during Future transit
-run_test "Newspaper torn away message" "$FUTURE_SETUP" "ripped from your hands"
+run_test "Newspaper torn away message" "$FUTURE_SETUP" "rips the newspaper from your hands"
 TOTAL=$((TOTAL + 1))
 _future_inv_output=$(echo "$FUTURE_SETUP
 inventory" | "$DFROTZ" -h 999 -w 200 "$Z5" 2>&1)
