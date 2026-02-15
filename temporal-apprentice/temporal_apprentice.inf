@@ -1047,7 +1047,7 @@ Object time_machine "time machine" solarium
          add_to_scope roman_dest blitz_dest hawking_dest future_dest solarium_dest,
     has scenery;
 
-Object hartley_journal "leather-bound journal" main_workshop
+Object hartley_journal "leather-bound journal" workbench
     with name 'journal' 'book' 'leather' 'diary' 'notes',
          description [;
             print "Dr. Thyme's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Certain entries are dated with alarming notation such as ~TUESDAY (THE FIRST ONE)~ and ~SOME TIME AFTER WEDNESDAY BUT POSSIBLY BEFORE.~ Key excerpts:^^";
