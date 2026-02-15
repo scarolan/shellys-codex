@@ -98,7 +98,6 @@ Global solarium_unlocked = false;
 Global solarium_entered = false;
 
 Global machine_dug_out = false;
-Global machine_recalibrated = false;
 Global machine_raised = false;
 
 ! ===================================================================
@@ -369,9 +368,9 @@ Global machine_raised = false;
         }
         rtrue;
     }
-    if (topic == 'formula' or 'calibration' or 'equatio' or 'napkin') {
+    if (topic == 'formula' or 'calibration' or 'equatio' or 'printout') {
         if (hawking_convinced) {
-            print "~The formula is the seed. Thirty years of my work, on a cocktail napkin.~ The synthesiser pauses. ~When I publish, others will build on it. Better instruments. Better materials. Perhaps even...~ He trails off, looking at something only a theoretical physicist could see. ~Well. The future will surprise us both.~^";
+            print "~The formula is the seed. Thirty years of my work, printed on tractor-feed paper by a dot-matrix printer older than most of my students.~ The synthesiser pauses. ~When I publish, others will build on it. Better instruments. Better materials. Perhaps even...~ He trails off, looking at something only a theoretical physicist could see. ~Well. The future will surprise us both.~^";
         } else {
             print "~You want a formula from me? Convince me you're a genuine time traveller first. I don't hand out my work to just anyone. Well, except in my books. But those cost money.~^";
         }
@@ -984,17 +983,13 @@ Object time_machine "time machine" solarium
                     print "Roman soldiers have formed a nervous perimeter around the machine. Their centurion eyes it with deep suspicion.^^";
                 if (location == blitz_street && machine_dug_out == false)
                     print "The machine is half-buried under bomb rubble. You'll need help shifting it.^^";
-                if (location == cambridge_gates && has_formula == false)
-                    print "The destination dial is jammed solid -- the calibration is completely off.^^";
-                else if (location == cambridge_gates && machine_recalibrated == false)
-                    print "You have Hawking's formula. You could recalibrate the dial.^^";
+                if (location == cambridge_gates)
+                    print "The machine seems stable here. The transition was smoother than the last.^^";
                 if (location == future_street && has_diving_gear == false)
                     print "The machine is mostly underwater. You'd need diving gear to reach the controls.^^";
                 else if (location == future_street && machine_raised == false)
                     print "With your diving gear, you could haul the machine up from the water.^^";
-                if (location == cambridge_gates && has_formula == false) {
-                    ! dial jammed — already described above, skip destination list
-                } else if (location == future_street && has_diving_gear == false) {
+                if (location == future_street && has_diving_gear == false) {
                     ! dial underwater — already described above, skip destination list
                 } else {
                     print "The destination dial still works. You could travel to:^";
@@ -1845,12 +1840,8 @@ Object eleanor_drawing_item "Eleanor's drawing"
 Object cambridge_gates "College Gates"
     with description [;
             print "Gonville and Caius College rises before you in all its medieval grandeur, looking exactly like the sort of place where people have been overthinking things for eight hundred years. Students in gowns hurry past, clutching books and existential crises in equal measure.^^";
-            if (time_machine in self && has_formula == false)
-                print "The time machine sits beside the bicycle rack, its destination dial jammed solid. The calibration is completely off after the rough landing.^^";
-            else if (time_machine in self && machine_recalibrated == false)
-                print "The time machine sits beside the bicycle rack. You have the calibration formula -- perhaps you could fix the jammed dial.^^";
-            else if (time_machine in self)
-                print "The time machine sits beside the bicycle rack, its dial spinning freely once more. Several bikes have been chained to it.^^";
+            if (time_machine in self)
+                print "The time machine sits beside the bicycle rack, humming quietly. Several bikes have been chained to it.^^";
             print "The Porter's Lodge is to the north. A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009.~^";
         ],
          n_to cambridge_porter,
@@ -2015,8 +2006,8 @@ Object hall_ceiling "vaulted ceiling" cambridge_hall
 Object cambridge_study "Hawking's Study"
     with description [;
             print "The study of the most famous physicist alive is surprisingly cosy. Books line every wall, a computer with a speech synthesiser sits on the desk, and models of black holes and the cosmos hang from the ceiling like a nerd's mobile.^^";
-            if (napkin_formula in cambridge_study)
-                print "A napkin on the desk has equations scrawled on it in careful handwriting.^^";
+            if (formula_printout in cambridge_study)
+                print "A dot-matrix printout hangs from the printer, its perforated edges still attached.^^";
             print "The hall is back to the west.^";
         ],
          w_to cambridge_hall,
@@ -2037,20 +2028,20 @@ Object study_models "models" cambridge_study
          description "Models of black holes and the cosmos hang from the ceiling like a physicist's mobile. They spin gently in the draft, miniature universes rotating with the casual grace of things that don't need to worry about grant applications.",
     has scenery pluralname;
 
-Object napkin_formula "napkin with formula" cambridge_study
-    with name 'napkin' 'formula' 'equatio',
-         description "A cocktail napkin covered in Professor Hawking's handwriting. Thirty years of theoretical physics, condensed onto a square of absorbent paper. The equations describe the geometry of time itself -- the framework that the journal said simply did not exist yet. When Hawking publishes this, others will build on it. Better instruments. Better materials. You wonder what, exactly, the future will build.",
-         initial "A napkin with equations lies on the desk.",
+Object formula_printout "printout" cambridge_study
+    with name 'printout' 'formula' 'equatio' 'tractor' 'feed' 'dot' 'matrix',
+         description "A dot-matrix printout on perforated tractor-feed paper. Thirty years of theoretical physics, printed by a machine older than most of Hawking's students. The equations describe the geometry of time itself -- the mathematical framework that the journal said simply did not exist yet. When Hawking publishes this, others will build on it. Better instruments. Better materials. You wonder what, exactly, the future will build.",
+         initial "A dot-matrix printout hangs from the printer.",
          before [;
             Take:
                 if (hawking_convinced == false) {
-                    "You shouldn't take Professor Hawking's work without permission. Convince him first.";
+                    "The printer is silent. Professor Hawking hasn't printed anything yet. Perhaps convince him first.";
                 }
                 if (has_formula == false) {
                     has_formula = true;
                     score = score + 8;
                     move self to player;
-                    "You carefully fold the napkin and tuck it away. The calibration formula -- component three of four. Hawking nods from the doorway. ~That napkin is the seed of everything that comes after. Take good care of it.~ A pause. ~Also, try not to create any paradoxes. The paperwork is terrible.~";
+                    "You tear the printout along its perforations and fold it carefully. Hawking nods from the doorway. ~That printout is the seed of everything that comes after. Take good care of it.~ A pause. ~Also, try not to create any paradoxes. The paperwork is terrible.~";
                 }
          ];
 
@@ -2080,7 +2071,8 @@ Object hawking "Professor Hawking" cambridge_hall
                     print "~The magnetic signature is impossible. This stone has been exposed to temporal radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
                     print "The silence that follows is not empty. You can almost hear the future rearranging itself.^^";
                     print "~I have spent thirty years developing a theoretical framework for temporal harmonics. I was going to destroy my notes if no one came tonight. What would be the point?~ The synthesiser pauses. ~But you came. Which means the theory works. Which means I should publish.~^^";
-                    print "~The formula is in my study -- east from here. Dr. Chen will let you through. Take it. Use it. And when the future builds on my work...~ Another pause. ~Well. You'll understand in time.~^";
+                    print "He gives a command to his computer. In the study to the east, a dot-matrix printer whirs to life -- the unmistakable sound of perforated paper being fed through an ancient mechanism.^^";
+                    print "~The formula is printing now. Dr. Chen will let you through. Take it. Use it. And when the future builds on my work...~ Another pause. ~Well. You'll understand in time.~^";
                     rtrue;
                 }
                 if (noun == lodestone or vacuum_tube or hartley_journal or toolkit) {
@@ -2314,7 +2306,7 @@ Object future_lab "Submerged Laboratory"
             if (lab_unlocked == false) {
                 print "A sealed cabinet marked ~CRYSTALLINE PROCESSING UNIT -- AUTHORISED PERSONNEL ONLY~ stands against the far wall. It has an electronic keypad lock.^^";
                 if (has_formula)
-                    print "The keypad has a label: ~Default code: temporal harmonic sequence.~ The formula on Hawking's napkin might work...^^";
+                    print "The keypad has a label: ~Default code: temporal harmonic sequence.~ The formula on Hawking's printout might work...^^";
             } else {
                 if (has_processor == false)
                     print "The cabinet stands open.^^";
@@ -2376,7 +2368,7 @@ Object quantum_cabinet "sealed cabinet" future_lab
                 }
                 lab_unlocked = true;
                 give self open;
-                print "You punch in the temporal harmonic sequence from Hawking's napkin. The keypad beeps, turns green, and the cabinet clicks open with a satisfying hiss.^^";
+                print "You punch in the temporal harmonic sequence from Hawking's printout. The keypad beeps, turns green, and the cabinet clicks open with a satisfying hiss.^^";
                 "Inside, floating in a suspension field, is a crystalline component. It pulses with a soft blue light that seems to exist in slightly more dimensions than is strictly comfortable. You recognise the material instantly.";
          ],
     has scenery container;
@@ -2798,16 +2790,8 @@ Object solarium_dest "Workshop"
     if (location == blitz_street && machine_dug_out == false) {
         "The time machine is half-buried under rubble from the last bombing raid. You'll need to dig it out before you can use it.";
     }
-    if (location == cambridge_gates && has_formula == false) {
-        "The destination dial has seized up -- the temporal calibration is completely off after the rough landing. You'd need some kind of recalibration formula to fix it.";
-    }
     if (location == future_street && has_diving_gear == false) {
         "The time machine sank when it arrived. You can see it just below the waterline, but you'd need diving gear to reach it.";
-    }
-    ! One-time fix text for Cambridge
-    if (location == cambridge_gates && machine_recalibrated == false) {
-        machine_recalibrated = true;
-        print "You apply Hawking's calibration formula to the destination dial. The seized mechanism clicks, whirs, and frees itself. The dial spins smoothly once more.^^";
     }
     ! One-time fix text for Future
     if (location == future_street && machine_raised == false) {
@@ -2992,10 +2976,10 @@ Object solarium_dest "Workshop"
         else print "  [ ] Lodestone (Roman Londinium, 60 AD)^";
         if (has_vacuum_tube) print "  [x] Vacuum tube (oscillation circuit)^";
         else print "  [ ] Vacuum tube (WWII London, 1941)^";
-        if (has_formula) print "  [x] Calibration formula (temporal harmonics)^";
-        else print "  [ ] Calibration formula (Cambridge, 2009)^";
-        if (has_processor) print "  [x] Quantum processor (field generator)^";
-        else print "  [ ] Quantum processor (Future London, 2045)^";
+        if (has_formula) print "  [x] Hawking's formula (temporal harmonics)^";
+        else print "  [ ] Navigation formula (temporal harmonics)^";
+        if (has_processor) print "  [x] Crystalline processor (field generator)^";
+        else print "  [ ] Crystalline processor (Future London, 2045)^";
         rtrue;
     }
     "You can't repair that.";
@@ -3015,7 +2999,7 @@ Object solarium_dest "Workshop"
     score = score + 5;
     print "You set to work with your toolkit, and the next hour is the most intense of your apprenticeship.^^";
     print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube slides into the oscillation circuit -- mass-produced precision where a hand-blown Crookes tube once sat -- and the machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
-    print "You transcribe Hawking's formula from the napkin into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. For the first time, the machine can AIM. Finally, the crystalline processor slides into the brass harness -- the same harness, the same copper solder tabs, the same perfect fit. Whoever built that adapter knew exactly what shape this crystal would be. The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
+    print "You transcribe Hawking's formula from the printout into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. For the first time, the machine can AIM. Finally, the crystalline processor slides into the brass harness -- the same harness, the same copper solder tabs, the same perfect fit. Whoever built that adapter knew exactly what shape this crystal would be. The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
     print "The Temporal Displacement Engine is repaired. Better than repaired -- it's magnificent.^^";
     if (workshop_cleaned == false)
         print "The workshop is still a mess, though. Dr. Thyme would probably appreciate it if you tidied up before he returned from tea. Just a thought.^";

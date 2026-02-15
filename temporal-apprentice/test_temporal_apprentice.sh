@@ -591,8 +591,8 @@ up
 dig
 travel to cambridge"
 run_test "Cambridge gates" "$CAMBRIDGE_SETUP" "Gonville"
-run_test "Cambridge machine dial jammed" "$CAMBRIDGE_SETUP
-travel to future" "dial has seized"
+run_test "Cambridge machine stable" "$CAMBRIDGE_SETUP
+examine machine" "stable here"
 run_test "Find invitation" "$CAMBRIDGE_SETUP
 north
 east" "invitation"
@@ -680,9 +680,9 @@ tell hawking about time
 show journal to hawking
 show lodestone to hawking"
 run_test "Convince Hawking" "$CONVINCE_SETUP" "you really are a time traveller"
-run_test "Get formula napkin" "$CONVINCE_SETUP
+run_test "Get formula printout" "$CONVINCE_SETUP
 east
-take napkin" "calibration formula"
+take printout" "seed of everything"
 
 # --- Future London ---
 echo "[Future London 2045]"
@@ -720,7 +720,7 @@ tell hawking about time
 show journal to hawking
 show lodestone to hawking
 east
-take napkin
+take printout
 west
 south
 south
@@ -832,7 +832,7 @@ tell hawking about time
 show journal to hawking
 show lodestone to hawking
 east
-take napkin
+take printout
 west
 south
 south
@@ -904,7 +904,7 @@ tell hawking about time
 show journal to hawking
 show lodestone to hawking
 east
-take napkin
+take printout
 west
 south
 south
@@ -978,7 +978,7 @@ tell hawking about time
 show journal to hawking
 show lodestone to hawking
 east
-take napkin
+take printout
 west
 south
 south
@@ -1057,7 +1057,7 @@ tell hawking about time
 show journal to hawking
 show lodestone to hawking
 east
-take napkin
+take printout
 west
 south
 south
