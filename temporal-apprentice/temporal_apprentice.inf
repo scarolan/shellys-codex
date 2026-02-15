@@ -595,15 +595,6 @@ Global machine_raised = false;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
-    if (w == 'open' && location == future_rooftop) {
-        i = WordAddress(1);
-        len = WordLength(1);
-        i->0 = 'z';
-        i->1 = 'o';
-        i->2 = 'p';
-        while (len > 3) { len--; i->len = ' '; }
-        Tokenise__(buffer, parse);
-    }
     rfalse;
 ];
 
@@ -2916,20 +2907,6 @@ Object solarium_dest "Workshop"
     "You can't pet that. It wouldn't enjoy it and neither would you.";
 ];
 
-[ OpenPanelSub;
-    if (location == future_rooftop) {
-        if (kai_helping) "The panel is already open and repaired.";
-        if (toolkit notin player) "You need proper tools to open the maintenance panel.";
-        kai_helping = true;
-        score = score + 5;
-        print "Your Victorian toolkit proves perfect for the job. You pop the panel, reconnect the circuits, and the array hums to life.^^";
-        print "Kai appears, grinning. ~You fixed it!~ She hands you diving gear. ~Fair trade!~^^";
-        move diving_gear to player;
-        has_diving_gear = true;
-        rtrue;
-    }
-    "There's nothing to open here in that way.";
-];
 
 [ HelpSub;
     print "^=== THE TEMPORAL APPRENTICE -- FIELD GUIDE ===^";
@@ -3015,8 +2992,6 @@ Verb 'zpt'
     * creature                              -> Pet
     * noun                                  -> Pet;
 
-Verb 'zop'
-    * noun                                  -> OpenPanel;
 
 Verb 'zkn'
     *                                       -> Knock
