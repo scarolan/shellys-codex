@@ -1252,7 +1252,7 @@ Object temple_altar "altar" roman_temple
     has scenery;
 
 Object mithras_relief "carved relief" roman_temple
-    with name 'relief' 'mithras' 'bull' 'carving' 'carvings' 'sculpture',
+    with name 'relief' 'reliefs' 'mithras' 'bull' 'carving' 'carvings' 'sculpture',
          description "Mithras is depicted in the heroic act of slaying the cosmic bull. The bull's expression suggests it was having a perfectly nice day up until that point.",
     has scenery;
 
@@ -2080,7 +2080,7 @@ Object study_models "models" cambridge_study
     has scenery pluralname;
 
 Object formula_printout "printout" cambridge_study
-    with name 'printout' 'formula' 'equatio' 'tractor' 'feed' 'dot' 'matrix',
+    with name 'printout' 'formula' 'equatio' 'tractor' 'feed' 'dot' 'matrix' 'printer',
          description "A dot-matrix printout on perforated tractor-feed paper. Thirty years of theoretical physics, printed by a machine older than most of Hawking's students. The equations describe the geometry of time itself -- the mathematical framework that the journal said simply did not exist yet. When Hawking publishes this, others will build on it. Better instruments. Better materials. You wonder what, exactly, the future will build.",
          initial "A dot-matrix printout hangs from the printer.",
          before [;
@@ -2641,7 +2641,7 @@ Object copernicus "ginger tabby cat" main_workshop
     has animate male;
 
 Object cat_name_tag "brass name tag"
-    with name 'tag' 'name' 'collar' 'nametag',
+    with name 'tag' 'name' 'collar' 'nametag' 'brass',
          found_in [; return (location == parent(copernicus)); ],
          description [;
             copernicus_named = true;
