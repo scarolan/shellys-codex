@@ -6,7 +6,7 @@
 
 Constant Story "The Temporal Apprentice";
 Constant Headline "^A Time-Travelling Adventure^^";
-Constant MAX_SCORE 180;
+Constant MAX_SCORE 183;
 
 Replace DrawStatusLine;
 Replace GamePrologue;
@@ -61,6 +61,11 @@ Global has_lodestone = false;
 Global has_vacuum_tube = false;
 Global has_formula = false;
 Global has_processor = false;
+
+Global lodestone_installed = false;
+Global tube_installed = false;
+Global formula_transcribed = false;
+Global processor_installed = false;
 
 Global inscription_carved = false;
 Global capsule_buried = false;
@@ -550,8 +555,8 @@ Global machine_raised = false;
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
-        i->1 = 'i';
-        i->2 = 'n';
+        i->1 = 'r';
+        i->2 = 'p';
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
@@ -924,11 +929,21 @@ Object solarium "The Solarium"
                 } else {
                     print "The solarium. Grey light filters through the rain-streaked glass ceiling. ";
                     if (time_machine in self) {
-                        print "The time machine dominates the room, ";
+                        print "The time machine dominates the room";
                         if (components_installed)
-                            print "humming with renewed purpose. All four components are installed.^^";
-                        else
-                            print "looking worse for wear since the cat's intervention.^^";
+                            print ", humming with renewed purpose. All four components are installed and the machine sings with quiet confidence.^^";
+                        else {
+                            print ", looking worse for wear since the cat's intervention.";
+                            if (lodestone_installed || tube_installed || formula_transcribed || processor_installed) {
+                                print " Though some repairs have been made --";
+                                if (lodestone_installed) print " the new lodestone glows steady";
+                                if (tube_installed) print ", the replacement tube hums";
+                                if (formula_transcribed) print ", the formula is transcribed";
+                                if (processor_installed) print ", the new processor gleams";
+                                print ".";
+                            }
+                            print "^^";
+                        }
                     } else {
                         print "Potted ferns and brass instruments crowd the perimeter. The space where the time machine stood is conspicuously empty, marked by scuff marks on the tiled floor.^^";
                     }
@@ -979,17 +994,34 @@ Object time_machine "time machine" solarium
                 print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
             } else {
                 print "The time machine looks decidedly worse for wear since Copernicus's intervention.";
-                ! Progressive damage: only report what the player has seen fail
-                if (visited_blitz == false && visited_future == false) {
-                    ! Only lodestone is weakened (Roman era)
-                    print " The compass housing glows faintly -- the lodestone is fading, drained by the uncontrolled transit. It might have a few hops left in it, but not many. Everything else seems intact, for now.^^";
-                } else if (visited_future == false) {
-                    ! Lodestone + Crookes tube (Blitz era)
-                    print " The compass housing barely glows -- the lodestone is nearly spent. And the Crookes tube is webbed with fractures, a hairline crack running from base to tip. It still oscillates, but the glass could give way at any moment. Two components failing.^^";
-                } else {
-                    ! All three failing (Future era)
-                    print " The lodestone is almost dark. The Crookes tube is fractured. And a crack runs clean through the crystalline processor -- the one from the mysterious parcel. The brass harness and copper solder tabs are intact, but the crystal is barely holding together. This machine has given everything it has. You'll need replacements for all three, plus Hawking's formula to make sense of the navigation.^^";
+                ! Progressive damage + installed status
+                ! Lodestone status (always known)
+                if (lodestone_installed)
+                    print " The new lodestone glows steady in the compass housing.";
+                else
+                    print " The compass housing glows faintly -- the lodestone is fading.";
+                ! Crookes tube (after Blitz transit)
+                if (visited_blitz) {
+                    if (tube_installed)
+                        print " The military vacuum tube hums in the oscillation circuit.";
+                    else
+                        print " The Crookes tube is webbed with fractures.";
                 }
+                ! Formula (after Cambridge)
+                if (visited_hawking) {
+                    if (formula_transcribed)
+                        print " Hawking's formula is transcribed into the calibration matrix -- the machine can aim.";
+                    else
+                        print " Navigation is imprecise -- you need a formula for the temporal harmonics.";
+                }
+                ! Crystal (after Future)
+                if (visited_future) {
+                    if (processor_installed)
+                        print " The crystalline processor sits in its brass harness, glowing steadily.";
+                    else
+                        print " A crack runs clean through the crystalline processor.";
+                }
+                print "^^";
                 if (location == roman_forum && marcus_impressed == false)
                     print "Roman soldiers have formed a nervous perimeter around the machine. Their centurion eyes it with deep suspicion.^^";
                 if (location == blitz_street && machine_dug_out == false)
@@ -2819,10 +2851,17 @@ Object solarium_dest "Workshop"
         if (location == solarium) {
             "You're already home. The machine hums contentedly in the corner, as if to say it agrees.";
         }
+        if (location == future_street && processor_installed == false) {
+            "The crystal is cracked. The field generator won't sustain another transit. You need to install a replacement.";
+        }
         current_era = 0;
         move copernicus to solarium;
         move time_machine to solarium;
-        print "You set the dial to ~1895~ and pull the lever. The machine hums, reality folds neatly like a well-pressed handkerchief, and you're back in the solarium. Home.^";
+        if (components_installed) {
+            print "You set the dial to ~1895~ and pull the lever. For the first time, the machine moves through time like silk through water -- no screaming, no bucking, no ominous sounds from the engineering. Just a smooth, confident hum and the gentle sensation of reality rearranging itself politely. You're back in the solarium. Home.^";
+        } else {
+            print "You set the dial to ~1895~ and pull the lever. The machine hums, reality folds neatly like a well-pressed handkerchief, and you're back in the solarium. Home.^";
+        }
         PlayerTo(solarium);
         rtrue;
     }
@@ -2845,11 +2884,14 @@ Object solarium_dest "Workshop"
         if (visited_roman == false) {
             "The dial won't turn that far. With the lodestone this weak, the machine can only reach nearby eras. You'll need to build up temporal range one hop at a time.";
         }
+        if (lodestone_installed == false) {
+            "The compass housing is dark. The machine can't navigate without a working lodestone. You need to install a replacement.";
+        }
         if (visited_blitz == false) visited_blitz = true;
         current_era = 2;
         move time_machine to blitz_street;
         move copernicus to blitz_street;
-        print "You set the dial to ~1941~ and brace yourself. The machine roars -- and mid-transit, something inside makes a sound like a champagne flute being set down too hard. The Crookes tube. You can see a web of fractures spreading through the glass. Hand-blown, marginal tolerances, and each transit is pushing it closer to the edge.^^";
+        print "You set the dial to ~1941~ and brace yourself. The new lodestone glows bright as you pull the lever -- the transit is stronger than before, the navigational field sharp and confident. But mid-transit, something inside makes a sound like a champagne flute being set down too hard. The Crookes tube. The fresh lodestone is pushing more power through the circuit than the old tube can handle. You can see a web of fractures spreading through the glass.^^";
         print "The machine deposits you somewhere dark, cold, and something overhead is making a very concerning droning noise.^";
         PlayerTo(blitz_street);
         rtrue;
@@ -2861,11 +2903,14 @@ Object solarium_dest "Workshop"
         if (visited_blitz == false) {
             "The lodestone can't reach that far yet. Each hop seems to extend the range a little, but you'll need to work your way there.";
         }
+        if (tube_installed == false) {
+            "The Crookes tube is fractured. The oscillation circuit can't sustain a transit. You need to install a replacement.";
+        }
         if (visited_hawking == false) visited_hawking = true;
         current_era = 3;
         move time_machine to cambridge_gates;
         move copernicus to cambridge_gates;
-        print "You set the dial to ~2009~ and activate the machine. The lodestone flickers, the Crookes tube whines dangerously -- but mid-transit you feel the machine lock onto something, pulled toward a specific date like a compass needle swinging north. Something in 2009 is doing half the work for you. Someone has left a light on for time travellers. You materialise beside a bicycle rack.^";
+        print "You set the dial to ~2009~ and activate the machine. With fresh lodestone and tube, the transit is the smoothest yet -- the navigational field holds steady, the oscillation circuit hums without complaint. Mid-transit you feel the machine lock onto something, pulled toward a specific date like a compass needle swinging north. Something in 2009 is doing half the work for you. Someone has left a light on for time travellers. You materialise beside a bicycle rack.^";
         PlayerTo(cambridge_gates);
         rtrue;
     }
@@ -2876,11 +2921,14 @@ Object solarium_dest "Workshop"
         if (visited_hawking == false) {
             "The machine strains but can't reach 2045 yet. The failing lodestone limits your range. One more hop might extend it far enough.";
         }
+        if (formula_transcribed == false) {
+            "The machine can travel but can't aim this far. You need to transcribe the navigation formula into the calibration matrix.";
+        }
         if (visited_future == false) visited_future = true;
         current_era = 4;
         move time_machine to future_street;
         move copernicus to future_street;
-        print "You set the dial to ~2045~ and pull the lever. The lodestone barely glows. The Crookes tube screams. Mid-transit there is a sharp, crystalline CRACK from the field generator housing -- a fracture line running through the processor like a fault through glass. The machine bucks, nearly throws you out of the seat, and deposits you somewhere very wet with the air of a horse that has given absolutely everything and has nothing left.^^";
+        print "You set the dial to ~2045~ and pull the lever. The machine aims true for the first time -- Hawking's formula works, the destination dial clicking to precise coordinates with mechanical confidence. But mid-transit there is a sharp, crystalline CRACK from the field generator housing. The formula is demanding more from the processor than it was ever designed to handle -- a fracture line runs through the crystal like a fault through glass. The machine bucks, nearly throws you out of the seat, and deposits you somewhere very wet.^^";
         if (newspaper in player) {
             print "^The temporal wind rips the newspaper from your hands. The pages tumble into the vortex, scattering through centuries like leaves in a storm, and vanish.^";
             move newspaper to future_museum;
@@ -2981,32 +3029,92 @@ Object solarium_dest "Workshop"
 ];
 
 [ RepairSub;
+    ! Handle bare "repair" or "install" with no noun when machine is present
+    if (noun == 0 && time_machine in location)
+        noun = time_machine;
     if (time_machine in location && noun == time_machine) {
         if (components_installed) {
             "The machine is already repaired. It hums contentedly.";
         }
-        if (has_lodestone && has_vacuum_tube && has_formula && has_processor) {
-            <InstallComp>;
+        ! Install lodestone
+        if (has_lodestone && lodestone_installed == false) {
+            lodestone_installed = true;
+            score = score + 2;
+            print "You ease the new lodestone into the compass housing. It clicks home with a satisfying snap, and the needle swings wildly before settling, trembling, on true north. The housing glows -- faintly at first, then steady, warm amber. The machine's navigational field hums back to life.^^";
+            print "One component down.^";
+            if (has_vacuum_tube && tube_installed == false && has_formula && formula_transcribed == false && has_processor && processor_installed == false) {
+                ! Don't check for all-installed yet, let the player install more
+            }
+            if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
+                components_installed = true;
+                print "^The Temporal Displacement Engine is fully repaired.^";
+            }
             rtrue;
         }
-        ! Progressive checklist: only show damage the player knows about
+        ! Install vacuum tube (needs toolkit)
+        if (has_vacuum_tube && tube_installed == false) {
+            if (toolkit notin player) {
+                "The vacuum tube won't fit -- the contacts are bent at the wrong angle for Thyme's housing. You'd need the toolkit, specifically the needle-nose pliers, to coax them into alignment.";
+            }
+            tube_installed = true;
+            score = score + 2;
+            print "You take the needle-nose pliers from your toolkit and spend ten careful minutes bending each contact pin into alignment. The military-spec tube is close but not quite right -- wider tolerances, heavier glass. But pin by pin, you coax it into the oscillation circuit housing. It slides home. The machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
+            print "The oscillation circuit is restored.^";
+            if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
+                components_installed = true;
+                print "^The Temporal Displacement Engine is fully repaired.^";
+            }
+            rtrue;
+        }
+        ! Transcribe formula
+        if (has_formula && formula_transcribed == false) {
+            formula_transcribed = true;
+            score = score + 2;
+            print "You unfold Hawking's printout and begin transcribing the equations into the calibration matrix. The mathematics are breathtaking -- temporal harmonics expressed as intersecting wave functions, each variable dependent on seventeen others. Your hand trembles as you enter the final coefficient.^^";
+            print "The machine shudders. The destination dial, which has always felt approximate, suddenly clicks with precision. For the first time, the machine can AIM.^";
+            if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
+                components_installed = true;
+                print "^The Temporal Displacement Engine is fully repaired.^";
+            }
+            rtrue;
+        }
+        ! Install processor (needs toolkit)
+        if (has_processor && processor_installed == false) {
+            if (toolkit notin player) {
+                "The crystalline processor needs to be soldered into the brass harness with precision. You'd need the toolkit for this kind of delicate work.";
+            }
+            processor_installed = true;
+            score = score + 2;
+            print "The crystalline processor slides into the brass harness -- the same harness, the same copper solder tabs, the same perfect fit. Whoever built that adapter knew exactly what shape this crystal would be. You solder the connections with steady hands.^^";
+            print "The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself. The temporal field generator is restored.^";
+            if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
+                components_installed = true;
+                print "^The Temporal Displacement Engine is fully repaired.^";
+            }
+            rtrue;
+        }
+        ! Nothing to install -- show progressive checklist
         print "The machine needs repairs:^";
         ! Lodestone is always known (broke in the cat accident)
-        if (has_lodestone) print "  [x] Lodestone (temporal compass)^";
+        if (lodestone_installed) print "  [x] Lodestone (temporal compass -- installed)^";
+        else if (has_lodestone) print "  [>] Lodestone (temporal compass -- ready to install)^";
         else print "  [ ] Lodestone (temporal compass -- fading)^";
         ! Crookes tube only after Blitz transit
         if (visited_blitz) {
-            if (has_vacuum_tube) print "  [x] Vacuum tube (oscillation circuit)^";
+            if (tube_installed) print "  [x] Vacuum tube (oscillation circuit -- installed)^";
+            else if (has_vacuum_tube) print "  [>] Vacuum tube (oscillation circuit -- ready to install)^";
             else print "  [ ] Vacuum tube (oscillation circuit -- fracturing)^";
         }
         ! Formula only after visiting Cambridge
         if (visited_hawking) {
-            if (has_formula) print "  [x] Hawking's formula (temporal harmonics)^";
+            if (formula_transcribed) print "  [x] Hawking's formula (temporal harmonics -- transcribed)^";
+            else if (has_formula) print "  [>] Hawking's formula (temporal harmonics -- ready to transcribe)^";
             else print "  [ ] Hawking's formula (temporal harmonics)^";
         }
         ! Crystal only after Future transit
         if (visited_future) {
-            if (has_processor) print "  [x] Crystalline processor (field generator)^";
+            if (processor_installed) print "  [x] Crystalline processor (field generator -- installed)^";
+            else if (has_processor) print "  [>] Crystalline processor (field generator -- ready to install)^";
             else print "  [ ] Crystalline processor (field generator -- cracked)^";
         }
         rtrue;
@@ -3014,30 +3122,7 @@ Object solarium_dest "Workshop"
     "You can't repair that.";
 ];
 
-[ InstallCompSub;
-    if (location ~= solarium) {
-        "You need to be at the time machine in the solarium to install components.";
-    }
-    if (components_installed) {
-        "All components are already installed. The machine is ready.";
-    }
-    if (has_lodestone == false || has_vacuum_tube == false || has_formula == false || has_processor == false) {
-        "You don't have all four components yet. Check the machine to see what's still missing.";
-    }
-    components_installed = true;
-    score = score + 5;
-    print "You set to work with your toolkit, and the next hour is the most intense of your apprenticeship.^^";
-    print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube is close but not quite right -- the contacts are bent at the wrong angle for Thyme's housing. You spend ten minutes with the needle-nose pliers, coaxing each pin into alignment. It slides home. The machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
-    print "You transcribe Hawking's formula from the printout into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. For the first time, the machine can AIM. Finally, the crystalline processor slides into the brass harness -- the same harness, the same copper solder tabs, the same perfect fit. Whoever built that adapter knew exactly what shape this crystal would be. The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
-    print "The Temporal Displacement Engine is repaired. Better than repaired -- it's magnificent.^^";
-    if (workshop_cleaned == false)
-        print "The workshop is still a mess, though. Dr. Thyme would probably appreciate it if you tidied up before he returned from tea. Just a thought.^";
-    else {
-        PrintEnding();
-        deadflag = 2;
-    }
-    rtrue;
-];
+! InstallCompSub removed — RepairSub now handles individual component installs
 
 [ CleanSub;
     if (location == main_workshop || location == solarium) {
@@ -3127,7 +3212,6 @@ Object solarium_dest "Workshop"
     print "  bury ............ bury something for posterity^";
     print "  dig ............. excavate rubble^";
     print "  repair X ........ check/repair the time machine^";
-    print "  install ......... install components^";
     print "  extinguish ...... fight a fire^";
     print "  clean ........... tidy the workshop^";
     print "  pet X ........... stroke the cat (at your own risk)^^";
@@ -3170,10 +3254,6 @@ Verb 'ztv'
 Verb 'zrp'
     *                                       -> Repair
     * noun                                  -> Repair;
-
-Verb 'zin'
-    *                                       -> InstallComp
-    * noun                                  -> InstallComp;
 
 Verb 'zex'
     *                                       -> Extinguish

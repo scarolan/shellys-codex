@@ -261,9 +261,126 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 examine machine" "Crookes tube is webbed"
 # Crystal cracking during Future transit
+
+# --- Install-As-You-Go ---
+echo "[Install-As-You-Go]"
+# Roman: repair machine installs lodestone
+run_test "Roman: repair installs lodestone" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+repair machine" "lodestone into the compass housing"
+
+# Roman: can't travel to Blitz without lodestone installed
+run_test "Roman: blocked without lodestone installed" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to blitz" "compass housing is dark"
+
+# Blitz: repair machine installs tube (needs toolkit)
+run_test "Blitz: repair installs tube" "$ENTER_WORKSHOP
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+repair machine
+travel to blitz
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+repair machine" "oscillation circuit is restored"
+
+# Blitz: tube install needs toolkit
+run_test "Blitz: tube needs toolkit" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+repair machine
+travel to blitz
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+repair machine" "needle-nose pliers"
+
+# Blitz: can't travel to Cambridge without tube installed
+run_test "Blitz: blocked without tube installed" "$ENTER_WORKSHOP
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+repair machine
+travel to blitz
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+travel to cambridge" "Crookes tube is fractured"
+
+# (Cambridge and Future install-as-you-go tests are below, after their setups are defined)
+
 # --- Roman Londinium ---
 echo "[Roman Londinium]"
 run_test "Forum description" "$ENTER_WORKSHOP
@@ -412,6 +529,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz" "1941"
 run_test "Crookes tube shatters in Blitz transit" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
@@ -422,6 +540,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz" "champagne flute"
 run_test "Eras must be sequential" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
@@ -432,11 +551,12 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to cambridge" "reach that far yet"
 
 # --- WWII London ---
 echo "[WWII London]"
-# Get lodestone, impress Marcus, then travel to Blitz
+# Get lodestone, impress Marcus, install lodestone, then travel to Blitz
 BLITZ_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -446,6 +566,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz"
 run_test "Blitz street" "$BLITZ_SETUP" "blackout"
 run_test "Shelter accessible" "$BLITZ_SETUP
@@ -536,6 +657,7 @@ east
 carve
 west
 south
+repair machine
 travel to blitz
 north" "TEMPUS FUGIT"
 run_test "Fire extinguish" "$BLITZ_SETUP
@@ -603,8 +725,12 @@ travel to workshop" "back in the solarium"
 
 # --- Cambridge ---
 echo "[Cambridge 2009]"
-# Get lodestone, impress Marcus, travel to Blitz, dig machine, travel to Cambridge
+# Get lodestone, impress Marcus, install lodestone, travel to Blitz, get tube, install tube, dig machine, travel to Cambridge
 CAMBRIDGE_SETUP="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
 $CAT_ACCIDENT
 west
 take aureus
@@ -613,6 +739,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 west
 take valve
@@ -621,7 +748,13 @@ down
 give valve to tommy
 ask tommy about rubble
 up
+west
 dig
+open box
+take tube
+east
+dig
+repair machine
 travel to cambridge"
 run_test "Cambridge gates" "$CAMBRIDGE_SETUP" "Gonville"
 run_test "Cambridge machine stable" "$CAMBRIDGE_SETUP
@@ -659,6 +792,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 west
 take valve
@@ -667,7 +801,13 @@ down
 give valve to tommy
 ask tommy about rubble
 up
+west
 dig
+open box
+take tube
+east
+dig
+repair machine
 travel to cambridge
 north
 east
@@ -693,6 +833,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 west
 take valve
@@ -701,7 +842,13 @@ down
 give valve to tommy
 ask tommy about rubble
 up
+west
 dig
+open box
+take tube
+east
+dig
+repair machine
 travel to cambridge
 north
 east
@@ -717,9 +864,47 @@ run_test "Get formula printout" "$CONVINCE_SETUP
 east
 take printout" "seed of everything"
 
+# --- Cambridge Install-As-You-Go ---
+echo "[Cambridge Install-As-You-Go]"
+# Cambridge: repair machine transcribes formula
+run_test "Cambridge: repair transcribes formula" "$CAMBRIDGE_SETUP
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show lodestone to hawking
+east
+take printout
+west
+south
+south
+repair machine" "machine can AIM"
+
+# Cambridge: can't travel to Future without formula transcribed
+run_test "Cambridge: blocked without formula" "$CAMBRIDGE_SETUP
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show lodestone to hawking
+east
+take printout
+west
+south
+south
+travel to future" "can.t aim this far"
+
 # --- Future London ---
 echo "[Future London 2045]"
-# Full path: Roman (lodestone + marcus) -> Blitz (dig) -> Cambridge (formula) -> Future
+# Full path: Roman (lodestone + repair + marcus) -> Blitz (tube + repair + dig) -> Cambridge (formula + repair) -> Future
 FUTURE_SETUP="$ENTER_WORKSHOP
 take journal
 north
@@ -733,6 +918,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 west
 take valve
@@ -741,7 +927,13 @@ down
 give valve to tommy
 ask tommy about rubble
 up
+west
 dig
+open box
+take tube
+east
+dig
+repair machine
 travel to cambridge
 north
 east
@@ -757,6 +949,7 @@ take printout
 west
 south
 south
+repair machine
 travel to future"
 run_test "Future transit: crystal cracked" "$FUTURE_SETUP" "fracture line"
 run_test "Future machine: all three damaged" "$FUTURE_SETUP
@@ -826,10 +1019,37 @@ south
 down
 open cabinet" "temporal harmonic sequence"
 
+# --- Future Install-As-You-Go ---
+echo "[Future Install-As-You-Go]"
+# Future: repair machine installs processor
+run_test "Future: repair installs processor" "$FUTURE_SETUP
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take processor
+up
+repair machine" "temporal field generator is restored"
+
+# Future: can't travel to Workshop without processor installed
+run_test "Future: blocked without processor" "$FUTURE_SETUP
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take processor
+up
+travel to workshop" "crystal is cracked"
+
 # --- Endgame ---
 echo "[Endgame]"
-# Minimal run: just get the 4 required components
-# Full endgame: collect all 4 components, travel home, install, clean
+# Full endgame: repair at each era, collect components, travel home, clean
 ENDGAME_CMD="$ENTER_WORKSHOP
 take journal
 north
@@ -843,6 +1063,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 west
 take valve
@@ -857,6 +1078,7 @@ open box
 take tube
 east
 dig
+repair machine
 travel to cambridge
 north
 east
@@ -872,6 +1094,7 @@ take printout
 west
 south
 south
+repair machine
 travel to future
 north
 up
@@ -882,13 +1105,13 @@ down
 open cabinet
 take processor
 up
+repair machine
 travel to workshop
-install
 west
 clean"
-run_test "Install all components" "$ENDGAME_CMD" "Temporal Displacement Engine is repaired"
+run_test "Install all components" "$ENDGAME_CMD" "fully repaired"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
-run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 180"
+run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 183"
 
 # --- Ending Tiers ---
 echo "[Ending Tiers]"
@@ -909,6 +1132,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 east
 take soldier
@@ -929,6 +1153,7 @@ open box
 take tube
 east
 dig
+repair machine
 travel to cambridge
 north
 east
@@ -944,6 +1169,7 @@ take printout
 west
 south
 south
+repair machine
 travel to future
 north
 up
@@ -954,8 +1180,8 @@ down
 open cabinet
 take processor
 up
+repair machine
 travel to workshop
-install
 west
 clean"
 run_test "Rough ending (critical path + Eleanor gift)" "$ROUGH_ENDGAME" "ROUGH ENDING"
@@ -983,6 +1209,7 @@ south
 bury
 north
 north
+repair machine
 travel to blitz
 east
 take soldier
@@ -1003,6 +1230,7 @@ open box
 take tube
 east
 dig
+repair machine
 travel to cambridge
 north
 east
@@ -1018,6 +1246,7 @@ take printout
 west
 south
 south
+repair machine
 travel to future
 north
 up
@@ -1028,8 +1257,8 @@ down
 open cabinet
 take processor
 up
+repair machine
 travel to workshop
-install
 west
 clean"
 run_test "Good ending (critical path + 3 side quests)" "$GOOD_ENDGAME" "GOOD ENDING"
@@ -1057,6 +1286,7 @@ south
 bury
 north
 north
+repair machine
 travel to blitz
 east
 take soldier
@@ -1082,6 +1312,7 @@ open box
 take tube
 east
 dig
+repair machine
 travel to cambridge
 north
 east
@@ -1097,6 +1328,7 @@ take printout
 west
 south
 south
+repair machine
 travel to future
 north
 up
@@ -1107,8 +1339,8 @@ down
 open cabinet
 take processor
 up
+repair machine
 travel to workshop
-install
 west
 clean"
 run_test "Perfect ending (all side quests)" "$PERFECT_ENDGAME" "PERFECT ENDING"
@@ -1375,6 +1607,7 @@ east
 carve
 west
 south
+repair machine
 travel to blitz
 north
 examine inscription" "TEMPUS FUGIT"
@@ -1573,6 +1806,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 east
 take soldier
@@ -1592,6 +1826,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+repair machine
 travel to blitz
 north
 up

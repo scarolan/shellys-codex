@@ -20,9 +20,10 @@ flowchart TD
         R4 -->|"🪨 Carve inscription"| R4a["Temple wall inscription<br/>(inscription_carved)"]
         R4 -->|"⌚ Bury watch"| R4b["Thames dock time capsule<br/>(capsule_buried)"]
         R3 --> R5["GATE: Soldiers surround machine<br/>Show lodestone to Marcus"]
+        R5 --> R6["🔧 REPAIR: Install lodestone<br/>Compass housing glows steady"]
     end
 
-    R5 ==>|"⚡ CROOKES TUBE FRACTURES<br/>web of cracks through hand-blown glass"| B1
+    R6 ==>|"⚡ CROOKES TUBE FRACTURES<br/>Fresh lodestone pushes too much power<br/>through marginal glass"| B1
 
     subgraph BLITZ["BLITZ LONDON (1941)"]
         B1[Arrive in blackout] --> B2[Fix Tommy's radio]
@@ -32,9 +33,10 @@ flowchart TD
         B5 -->|"🔥 Extinguish fire"| B5a["Save St. Margaret's Church<br/>(church_saved)"]
         B5 -->|"🎁 Give item to Eleanor"| B5b["Eleanor becomes artist<br/>(eleanor_gift)"]
         B3 --> B6["GATE: Machine buried under rubble<br/>Dig with Tommy's help"]
+        B6 --> B7["🔧 REPAIR: Install vacuum tube<br/>Bend contacts with pliers, hum shifts"]
     end
 
-    B6 ==>|"Lodestone flickers, tube whines<br/>Hawking's beacon does the heavy lifting"| C1
+    B7 ==>|"Lodestone + tube restored<br/>Smoothest transit yet<br/>Hawking's beacon assists"| C1
 
     subgraph CAMBRIDGE["CAMBRIDGE (2009)"]
         C1["Arrive at College Gates<br/>Hawking's Time Traveller's Party"] --> C2[Find invitation in garden]
@@ -43,31 +45,27 @@ flowchart TD
         C4 --> C5["Tell about time + show journal + show lodestone"]
         C5 --> C6["Hawking convinced → prints formula"]
         C6 --> C7[Take dot-matrix printout]
-        C7 --> C8["GATE: None — convince Hawking,<br/>take printout, depart"]
+        C7 --> C8["🔧 REPAIR: Transcribe formula<br/>Machine can AIM for the first time"]
     end
 
-    C8 ==>|"⚡ CRYSTAL CRACKS<br/>fracture line through processor<br/>📰 Newspaper torn away by temporal wind"| F1
+    C8 ==>|"⚡ CRYSTAL CRACKS<br/>Formula demands more than crystal can handle<br/>📰 Newspaper torn away by temporal wind"| F1
 
     subgraph FUTURE["FUTURE LONDON (2045)"]
-        F1["Arrive in flooded street<br/>Machine barely functional"] --> F2[Help Kai → get diving gear]
+        F1["Arrive in flooded street<br/>Crystal cracked"] --> F2[Help Kai → get diving gear]
         F2 --> F3["GATE: Machine underwater<br/>Haul up with diving gear"]
         F2 --> F4[Enter submerged lab]
         F4 --> F5["Hawking Temporal Research Centre<br/>(Founded 2031)"]
         F5 --> F6["Find dispatch log:<br/>UNIT 0001-ALPHA → J. THYME<br/>DO NOT LOG SENDER"]
         F5 --> F7[Open cabinet with formula code]
         F7 --> F8[Take crystalline processor]
+        F8 --> F9["🔧 REPAIR: Install processor<br/>Same harness, same perfect fit<br/>Machine fully repaired"]
     end
 
-    F3 & F8 ==> E1
+    F3 & F9 ==>|"Silk through water —<br/>first smooth transit"| E1
 
     subgraph ENDGAME["ENDGAME — WORKSHOP (1895)"]
-        E1[Return to workshop] --> E2["Install all 4 components"]
-        E2 --> E3["Lodestone → compass housing (click)"]
-        E3 --> E4["Vacuum tube → bend contacts with pliers"]
-        E4 --> E5["Formula → calibration matrix (machine can AIM)"]
-        E5 --> E6["Crystal → brass harness (same perfect fit)"]
-        E6 --> E7[Clean workshop]
-        E7 --> E8["Dr. Thyme returns from tea ☕"]
+        E1["Return to workshop<br/>(all 4 components installed)"] --> E2[Clean workshop]
+        E2 --> E3["Dr. Thyme returns from tea ☕"]
     end
 ```
 
@@ -114,13 +112,16 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph DAMAGE["Machine Degradation"]
+    subgraph DAMAGE["Machine Damage → Repair Cycle"]
         D0["PRE-ACCIDENT<br/>✅ Lodestone (847 activations)<br/>✅ Crookes tube (marginal)<br/>✅ Crystal (mysterious parcel)<br/>❌ Navigation (imprecise)"]
-        D0 -->|"Cat accident"| D1["ROMAN ERA<br/>⚠️ Lodestone FADING<br/>✅ Crookes tube<br/>✅ Crystal<br/>Range: limited"]
-        D1 -->|"Transit"| D2["BLITZ ERA<br/>⚠️ Lodestone FADING<br/>⚠️ Tube FRACTURED<br/>✅ Crystal<br/>Range: extending"]
-        D2 -->|"Transit<br/>(beacon assists)"| D3["CAMBRIDGE<br/>⚠️ Lodestone FADING<br/>⚠️ Tube FRACTURED<br/>✅ Crystal<br/>Narrative stop"]
-        D3 -->|"Transit"| D4["FUTURE ERA<br/>⚠️ Lodestone NEAR DARK<br/>⚠️ Tube FRACTURED<br/>⚠️ Crystal CRACKED<br/>Machine exhausted"]
-        D4 -->|"Repair"| D5["REPAIRED<br/>✅ New lodestone<br/>✅ Military tube (bent pins)<br/>✅ Formula transcribed<br/>✅ New crystal (same harness)"]
+        D0 -->|"Cat accident"| D1["ROMAN ERA<br/>⚠️ Lodestone FADING<br/>✅ Crookes tube<br/>✅ Crystal"]
+        D1 -->|"🔧 Install lodestone"| D1R["ROMAN (repaired)<br/>✅ New lodestone<br/>✅ Crookes tube<br/>✅ Crystal"]
+        D1R -->|"Transit<br/>(fresh lodestone<br/>overpowers tube)"| D2["BLITZ ERA<br/>✅ New lodestone<br/>⚠️ Tube FRACTURED<br/>✅ Crystal"]
+        D2 -->|"🔧 Install tube<br/>(needs toolkit)"| D2R["BLITZ (repaired)<br/>✅ New lodestone<br/>✅ Military tube<br/>✅ Crystal"]
+        D2R -->|"Transit<br/>(smooth, beacon<br/>assists)"| D3["CAMBRIDGE<br/>✅ New lodestone<br/>✅ Military tube<br/>✅ Crystal<br/>❌ Navigation imprecise"]
+        D3 -->|"🔧 Transcribe formula"| D3R["CAMBRIDGE (repaired)<br/>✅ New lodestone<br/>✅ Military tube<br/>✅ Crystal<br/>✅ Machine can AIM"]
+        D3R -->|"Transit<br/>(formula demands<br/>too much)"| D4["FUTURE ERA<br/>✅ New lodestone<br/>✅ Military tube<br/>⚠️ Crystal CRACKED<br/>✅ Formula works"]
+        D4 -->|"🔧 Install processor<br/>(needs toolkit)"| D5["FULLY REPAIRED<br/>✅ New lodestone<br/>✅ Military tube<br/>✅ Formula transcribed<br/>✅ New crystal (same harness)<br/>🎵 Machine sings"]
     end
 ```
 
