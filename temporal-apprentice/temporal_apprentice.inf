@@ -1304,7 +1304,13 @@ Object merchant_stalls "market stalls" roman_merchants
 
 Object merchant_stones "unusual stones" roman_merchants
     with name 'stones' 'crystal' 'crystals' 'mineral' 'minerals',
-         description "Felix's stall is piled with stones, crystals, and minerals of dubious cosmic significance. Each one comes with a certificate of authenticity written in suspiciously fresh-looking Latin. The lodestone stands out among the lesser rocks like a senator among plebeians.",
+         description [;
+            if (has_lodestone) {
+                "Felix's stall is piled with stones, crystals, and minerals of dubious cosmic significance. Each one comes with a certificate of authenticity written in suspiciously fresh-looking Latin. There's a conspicuous gap where the lodestone used to sit, which Felix has filled with a hand-lettered sign reading ~SOLD -- ASK ABOUT OUR OTHER FINE SPECIMENS~.";
+            } else {
+                "Felix's stall is piled with stones, crystals, and minerals of dubious cosmic significance. Each one comes with a certificate of authenticity written in suspiciously fresh-looking Latin. The lodestone stands out among the lesser rocks like a senator among plebeians.";
+            }
+         ],
     has scenery pluralname;
 
 Object merchant_people "merchants" roman_merchants
@@ -1426,7 +1432,11 @@ Object felix "Felix the Merchant" roman_merchants
                     }
                     rtrue;
                 }
-                print "Felix shrugs. ~Can't help you with that. But have you considered buying a lodestone? Life-changing purchase.~^";
+                if (has_lodestone) {
+                    print "Felix shrugs. ~Can't help you with that. But I must say, you have excellent taste -- that lodestone I sold you is the finest in the Empire.~^";
+                } else {
+                    print "Felix shrugs. ~Can't help you with that. But have you considered buying a lodestone? Life-changing purchase.~^";
+                }
                 rtrue;
             Give:
                 if (noun == gold_aureus && has_lodestone == false) {
