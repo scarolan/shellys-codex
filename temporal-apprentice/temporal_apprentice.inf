@@ -979,7 +979,7 @@ Object time_machine "time machine" solarium
             } else if (components_installed) {
                 print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
             } else {
-                print "The time machine looks decidedly worse for wear since Copernicus's intervention. Several components are missing or damaged. You'll need to find replacements across time itself.^^";
+                print "The time machine looks decidedly worse for wear since Copernicus's intervention. Several components are missing or damaged. The compass housing is empty, the Crookes tube shattered, the calibration dial seized, and the field generator's crystalline component -- the one Dr. Thyme always said he didn't build -- is cracked clean through. You'll need to find replacements across time itself.^^";
                 if (location == roman_forum && marcus_impressed == false)
                     print "Roman soldiers have formed a nervous perimeter around the machine. Their centurion eyes it with deep suspicion.^^";
                 if (location == blitz_street && machine_dug_out == false)
@@ -1013,14 +1013,14 @@ Object hartley_journal "leather-bound journal" main_workshop
     with name 'journal' 'book' 'leather' 'diary' 'notes',
          description [;
             print "Dr. Thyme's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Certain entries are dated with alarming notation such as ~TUESDAY (THE FIRST ONE)~ and ~SOME TIME AFTER WEDNESDAY BUT POSSIBLY BEFORE.~ Key excerpts:^^";
-            print "~The Romans knew the power of lodestones -- magnetic iron, gifts from Jupiter, they called them. A stone of sufficient purity could serve as the temporal compass core. I have tested fourteen specimens. Thirteen were inadequate. The fourteenth pulled every nail out of the floorboards. I need one like that. The merchants of Londinium would have traded in such things.~^^";
-            print "~The oscillation circuit relies on a Crookes tube of my own manufacture. Hand-blown, one of a kind, exquisitely fragile. I have broken three. Mass production of such tubes may be achievable in future decades? Note to self -- visit future for replacement parts. SECOND NOTE TO SELF -- remember to come back AFTER you left. Hiding in the pantry for six hours was undignified.~^^";
-            print "~The navigation problem persists. I can move through time but I cannot AIM. Ended up in next Thursday when I wanted last March. The mathematics of temporal harmonics are beyond me -- I need a framework for describing the geometry of time itself. Caught a glimpse during Tuesday's hop (the SECOND Tuesday, not the one I lost) of a lecture hall, equations on a blackboard, a fellow in a remarkable chair. Cambridge? The machine seemed drawn to the place, as if someone had left a light on. If I could only read my own notes.~^^";
-            print "~The field generator requires calculations beyond any Babbage engine. I have done them by hand and it takes MONTHS. Glimpsed, during a particularly fuzzy hop, machines that think -- crystalline, luminous, operating in more dimensions than is decent. The future will build what Mr. Babbage only dreamed. Getting there remains the problem.~^^";
+            print "~TEMPORAL COMPASS -- The compass core requires a lodestone of exceptional purity. Naturally magnetic iron ore, the stronger the better. I have tested fourteen specimens from various suppliers; thirteen were inadequate and the fourteenth pulled every nail out of the floorboards. Lodestones of sufficient quality are exceedingly rare. The finest magnetite deposits are quarried in the Mediterranean basin. My current stone has weakened noticeably after 847 test activations and will need replacing.~^^";
+            print "~OSCILLATION CIRCUIT -- The circuit employs a modified Crookes tube: an evacuated glass envelope through which cathode rays pass at controlled intervals, generating the temporal oscillation field. I have hand-blown seven; four shattered during calibration, two proved insufficiently evacuated, and the seventh serves adequately though its tolerances are marginal. The precision required exceeds what any single craftsman can reliably achieve. A manufacturing process capable of producing tubes to exact specification would solve this, but no such process exists.~^^";
+            print "~NAVIGATION -- REMAINS THE CENTRAL PROBLEM. The machine moves through time but landings are imprecise. I set coordinates for March and arrive in November, aim for London and materialise in Croydon (arguably worse). Precise navigation requires a mathematical framework for describing the geometry of time itself. The temporal harmonics governing exact positioning are beyond anything I can derive. The mathematics simply do not exist yet.~^^";
+            print "~FIELD GENERATOR -- Requires continuous recalculation of seventeen simultaneous differential equations, each dependent on the others. I have attempted these by hand. It takes eleven weeks per set of coordinates and the error margin remains unacceptable. Mr. Babbage's engine falls short by several orders of magnitude. THE FOLLOWING TROUBLES ME: upon disassembling the field generator housing I found a crystalline component I did not install. No maker's mark. No correspondence to any material I recognise. It appears to have been performing the bulk of the field calculations. I do not know who put it there, or when. I am choosing not to think about this too carefully.~^^";
             if (copernicus_named)
-                print "The margins are full of cat doodles and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY.~^";
+                print "The margins are full of cat doodles, tea stains, and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY. NOTE TO SELF -- when hiding from yourself in the pantry, bring a sandwich.~^";
             else
-                print "The margins are full of cat doodles and the note: ~KEEP THE CAT AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY.~^";
+                print "The margins are full of cat doodles, tea stains, and the note: ~KEEP THE CAT AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY. NOTE TO SELF -- when hiding from yourself in the pantry, bring a sandwich.~^";
         ],
          initial "A leather-bound journal sits prominently on the workbench.";
 
@@ -1405,7 +1405,7 @@ Object felix "Felix the Merchant" roman_merchants
 
 Object lodestone "lodestone"
     with name 'lodestone' 'stone' 'magnet' 'thunder',
-         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs at any iron nearby with startling force -- the kind of lodestone that, according to the journal, pulled every nail out of Dr. Thyme's floorboards. The magnetic core for the temporal compass.";
+         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs at any iron nearby with startling force -- the kind of lodestone that would pull every nail out of a floorboard. Mediterranean magnetite of exceptional purity. The magnetic core for the temporal compass.";
 
 Object roman_bathers "bathers" roman_bath
     with name 'bathers' 'romans' 'bather' 'people',
@@ -1733,7 +1733,7 @@ Object metal_box "metal box" blitz_rubble
                 if (blitz_rubble hasnt general) "You can't reach the box yet. It's buried under tonnes of rubble.";
                 if (self has open) "It's already open.";
                 give self open;
-                "You wrench the box open. Inside, packed in straw, are rows of vacuum tubes -- the military-grade descendants of the Crookes tubes Dr. Thyme blew by hand. One stands out -- slightly larger, with oscillation markings that look eerily similar to the ones in the journal.";
+                "You wrench the box open. Inside, packed in straw, are rows of vacuum tubes -- evacuated glass envelopes, the same principle as a Crookes tube but manufactured to military precision. One stands out -- slightly larger, with oscillation markings that look eerily familiar.";
             Take:
                 if (blitz_rubble hasnt general) "You can't reach the box yet. It's buried under tonnes of rubble.";
                 "The box is too heavy to carry, but you could open it and take what's inside.";
@@ -1742,7 +1742,7 @@ Object metal_box "metal box" blitz_rubble
 
 Object vacuum_tube "vacuum tube" metal_box
     with name 'vacuum' 'tube' 'special' 'military',
-         description "A military-grade vacuum tube, mass-produced with a precision no Victorian glassblower could match. The oscillation markings are different from Dr. Thyme's hand-blown Crookes tube, but the principle is the same -- fifty years of engineering have perfected what Thyme built by intuition and candlelight. This is the component needed for the temporal oscillation circuit.",
+         description "A military-grade vacuum tube, mass-produced with a precision no Victorian glassblower could achieve. The principle is identical to a Crookes tube -- evacuated glass, cathode rays -- but manufactured to tolerances that would make Dr. Thyme weep with envy. This is the component needed for the temporal oscillation circuit.",
          before [;
             Take:
                 if (blitz_rubble hasnt general) "It's buried under rubble. You need help digging it out first.";
@@ -2039,7 +2039,7 @@ Object study_models "models" cambridge_study
 
 Object napkin_formula "napkin with formula" cambridge_study
     with name 'napkin' 'formula' 'equatio',
-         description "A cocktail napkin covered in Professor Hawking's handwriting. The equations describe temporal field calibration harmonics -- the mathematics of aiming through time. You understand perhaps one word in five, but these are the navigational equations Dr. Thyme couldn't derive, the ones he scrawled ~IF I COULD ONLY READ MY OWN NOTES~ next to in the journal.",
+         description "A cocktail napkin covered in Professor Hawking's handwriting. The equations describe the geometry of time -- a mathematical framework for temporal harmonics. You understand perhaps one word in five, but you recognise the problem. This is what the journal called ~THE CENTRAL PROBLEM.~ The mathematics that did not exist yet. Until now.",
          initial "A napkin with equations lies on the desk.",
          before [;
             Take:
@@ -2310,12 +2310,12 @@ Object future_lab "Submerged Laboratory"
     with description [;
             print "You descend through murky water into what was once a cutting-edge research laboratory. The diving gear keeps you breathing, but the experience is deeply eerie -- fluorescent lights still flicker underwater, illuminating desks where coffee cups float at ceiling height.^^";
             if (lab_unlocked == false) {
-                print "A sealed cabinet marked ~QUANTUM PROCESSING UNIT -- AUTHORISED PERSONNEL ONLY~ stands against the far wall. It has an electronic keypad lock.^^";
+                print "A sealed cabinet marked ~CRYSTALLINE PROCESSING UNIT -- AUTHORISED PERSONNEL ONLY~ stands against the far wall. It has an electronic keypad lock.^^";
                 if (has_formula)
                     print "The keypad has a label: ~Default code: temporal harmonic sequence.~ The formula on Hawking's napkin might work...^^";
             } else {
                 if (has_processor == false)
-                    print "The quantum processor cabinet stands open.^^";
+                    print "The cabinet stands open.^^";
                 else
                     print "The opened cabinet stands empty.^^";
             }
@@ -2375,13 +2375,13 @@ Object quantum_cabinet "sealed cabinet" future_lab
                 lab_unlocked = true;
                 give self open;
                 print "You punch in the temporal harmonic sequence from Hawking's napkin. The keypad beeps, turns green, and the cabinet clicks open with a satisfying hiss.^^";
-                "Inside, floating in a suspension field, is the quantum processor. It pulses with a soft blue light that seems to exist in slightly more dimensions than is strictly comfortable.";
+                "Inside, floating in a suspension field, is a crystalline component. It pulses with a soft blue light that seems to exist in slightly more dimensions than is strictly comfortable. You recognise the material instantly.";
          ],
     has scenery container;
 
 Object quantum_processor "quantum processor" quantum_cabinet
     with name 'processor' 'quantum' 'chip' 'cpu',
-         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent -- beyond anything Babbage could have dreamed. This is what Dr. Thyme glimpsed during his fuzzy hops: machines that think. The computational power needed for the temporal field generator -- the fourth and final component.",
+         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent. You feel a lurch of recognition -- this is the same material as the cracked component in the time machine's field generator. The one Dr. Thyme said he didn't install. The one with no maker's mark. You're looking at its replacement. Or its original. The distinction may not matter.",
          before [;
             Take:
                 if (lab_unlocked == false) "It's locked in the cabinet. You need to open it first.";
@@ -2389,7 +2389,7 @@ Object quantum_processor "quantum processor" quantum_cabinet
                     has_processor = true;
                     score = score + 8;
                     move self to player;
-                    "You lift the quantum processor from its suspension field. It hums in your hands, harmonising with the other components you carry. Four of four. Time to go home.";
+                    "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. You're not finding a new component. You're completing a loop. Four of four. Time to go home.";
                 }
          ];
 
@@ -3012,8 +3012,8 @@ Object solarium_dest "Workshop"
     components_installed = true;
     score = score + 5;
     print "You set to work with your toolkit, and the next hour is the most intense of your apprenticeship.^^";
-    print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube slides into the oscillation circuit where Thyme's hand-blown Crookes tube once sat -- mass-produced precision replacing Victorian intuition -- and the machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
-    print "You transcribe Hawking's formula from the napkin into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. For the first time, the machine can AIM. Finally, the quantum processor drops into the field generator -- the calculations that took Thyme months by hand now running in crystalline silence -- and the entire machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
+    print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube slides into the oscillation circuit -- mass-produced precision where a hand-blown Crookes tube once sat -- and the machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
+    print "You transcribe Hawking's formula from the napkin into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. For the first time, the machine can AIM. Finally, the crystalline processor drops into the field generator housing -- fitting perfectly, as if it was always meant to be there. Because it was. The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
     print "The Temporal Displacement Engine is repaired. Better than repaired -- it's magnificent.^^";
     if (workshop_cleaned == false)
         print "The workshop is still a mess, though. Dr. Thyme would probably appreciate it if you tidied up before he returned from tea. Just a thought.^";
