@@ -3109,6 +3109,7 @@ Verb 'zpt'
 
 Verb 'zkn'
     *                                       -> Knock
+    * 'on' noun                             -> Knock
     * noun                                  -> Knock;
 
 Verb 'zcl'
