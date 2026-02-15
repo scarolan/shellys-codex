@@ -341,7 +341,7 @@ Global machine_raised = false;
 
 [ NPC_Talk_Hawking;
     if (hawking_convinced) {
-        print "The speech synthesiser clicks. ~I have already given you the formula. If you need me to explain it again, I charge by the hour. Which, given the nature of your machine, is somewhat ironic.~^";
+        print "The speech synthesiser clicks. ~I am going to publish the temporal harmonics framework. Everything changes now.~ A pause. ~I wonder what they'll build with it.~^";
         rtrue;
     }
     if (hawking_phase == 0) {
@@ -363,7 +363,7 @@ Global machine_raised = false;
 [ NPC_Ask_Hawking topic;
     if (topic == 'time' or 'travel' or 'machine' or 'temporal') {
         if (hawking_convinced) {
-            print "~Time travel is theoretically possible through several mechanisms: rotating black holes, cosmic strings, Alcubierre drives.~ A pause. ~Or apparently, a brass contraption built by a Victorian gentleman and activated by a cat. The universe has a sense of humour.~^";
+            print "~Here is what fascinates me. You came here in a machine that works. But the theory explaining WHY it works didn't exist until tonight. If I hadn't thrown this party, if you hadn't come, if I'd destroyed my notes...~ The synthesiser pauses. ~Would your machine still function? Would you still be here?~ Another pause. ~I suspect the universe does not permit that question to have a comfortable answer.~^";
         } else {
             print "~I have spent my career studying the nature of time. Closed timelike curves, chronology protection, the grandfather paradox. And now someone walks in claiming to have solved it with brass and steam.~ The synthesiser almost sounds amused. ~I'm listening.~^";
         }
@@ -371,7 +371,7 @@ Global machine_raised = false;
     }
     if (topic == 'formula' or 'calibration' or 'equatio' or 'napkin') {
         if (hawking_convinced) {
-            print "~The calibration formula is on the napkin. Please don't spill anything on it. It took me twenty minutes to derive and the napkins here are quite small.~^";
+            print "~The formula is the seed. Thirty years of my work, on a cocktail napkin.~ The synthesiser pauses. ~When I publish, others will build on it. Better instruments. Better materials. Perhaps even...~ He trails off, looking at something only a theoretical physicist could see. ~Well. The future will surprise us both.~^";
         } else {
             print "~You want a formula from me? Convince me you're a genuine time traveller first. I don't hand out my work to just anyone. Well, except in my books. But those cost money.~^";
         }
@@ -2039,7 +2039,7 @@ Object study_models "models" cambridge_study
 
 Object napkin_formula "napkin with formula" cambridge_study
     with name 'napkin' 'formula' 'equatio',
-         description "A cocktail napkin covered in Professor Hawking's handwriting. The equations describe the geometry of time -- a mathematical framework for temporal harmonics. You understand perhaps one word in five, but you recognise the problem. This is what the journal called ~THE CENTRAL PROBLEM.~ The mathematics that did not exist yet. Until now.",
+         description "A cocktail napkin covered in Professor Hawking's handwriting. Thirty years of theoretical physics, condensed onto a square of absorbent paper. The equations describe the geometry of time itself -- the framework that the journal said simply did not exist yet. When Hawking publishes this, others will build on it. Better instruments. Better materials. You wonder what, exactly, the future will build.",
          initial "A napkin with equations lies on the desk.",
          before [;
             Take:
@@ -2050,7 +2050,7 @@ Object napkin_formula "napkin with formula" cambridge_study
                     has_formula = true;
                     score = score + 8;
                     move self to player;
-                    "You carefully fold the napkin and tuck it away. The calibration formula -- component three of four. Hawking nods from the doorway. ~Try not to create any paradoxes. The paperwork is terrible.~";
+                    "You carefully fold the napkin and tuck it away. The calibration formula -- component three of four. Hawking nods from the doorway. ~That napkin is the seed of everything that comes after. Take good care of it.~ A pause. ~Also, try not to create any paradoxes. The paperwork is terrible.~";
                 }
          ];
 
@@ -2078,7 +2078,9 @@ Object hawking "Professor Hawking" cambridge_hall
                     score = score + 8;
                     print "Hawking watches as the lodestone pulls at every piece of metal in the room. His instruments go haywire. The synthesiser is silent for a long moment.^^";
                     print "~The magnetic signature is impossible. This stone has been exposed to temporal radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
-                    print "He seems more delighted than surprised. ~I always hoped someone would come. The formula you need is in my study -- east from here. Dr. Chen will let you through. And...~ The synthesiser pauses for effect. ~Thank you for making an old physicist's day.~^";
+                    print "The silence that follows is not empty. You can almost hear the future rearranging itself.^^";
+                    print "~I have spent thirty years developing a theoretical framework for temporal harmonics. I was going to destroy my notes if no one came tonight. What would be the point?~ The synthesiser pauses. ~But you came. Which means the theory works. Which means I should publish.~^^";
+                    print "~The formula is in my study -- east from here. Dr. Chen will let you through. Take it. Use it. And when the future builds on my work...~ Another pause. ~Well. You'll understand in time.~^";
                     rtrue;
                 }
                 if (noun == lodestone or vacuum_tube or hartley_journal or toolkit) {
@@ -2096,7 +2098,7 @@ Object chen "Dr. Sarah Chen" cambridge_hall
     with name 'chen' 'sarah' 'doctor' 'dr' 'assistant',
          description [;
             if (hawking_convinced)
-                "Dr. Chen watches you with the expression of a scientist whose worldview has just been comprehensively rearranged. She's handling it remarkably well, all things considered.";
+                "Dr. Chen watches you with the expression of a scientist whose worldview has just been comprehensively rearranged. She's already making notes. You suspect you've just witnessed the beginning of a very significant research programme.";
             "Dr. Chen, Hawking's research assistant. Young, brilliant, and currently trying to decide whether you're a genuine time traveller or a very committed gatecrasher.";
          ],
          life [;
@@ -2308,7 +2310,7 @@ Object refuge_desk "desk" future_refuge
 
 Object future_lab "Submerged Laboratory"
     with description [;
-            print "You descend through murky water into what was once a cutting-edge research laboratory. The diving gear keeps you breathing, but the experience is deeply eerie -- fluorescent lights still flicker underwater, illuminating desks where coffee cups float at ceiling height.^^";
+            print "You descend through murky water into what was once a cutting-edge research laboratory. A plaque on the wall reads: ~HAWKING TEMPORAL RESEARCH CENTRE -- FOUNDED 2031.~ So he published. The diving gear keeps you breathing, but the experience is deeply eerie -- fluorescent lights still flicker underwater, illuminating desks where coffee cups float at ceiling height.^^";
             if (lab_unlocked == false) {
                 print "A sealed cabinet marked ~CRYSTALLINE PROCESSING UNIT -- AUTHORISED PERSONNEL ONLY~ stands against the far wall. It has an electronic keypad lock.^^";
                 if (has_formula)
@@ -2381,7 +2383,7 @@ Object quantum_cabinet "sealed cabinet" future_lab
 
 Object quantum_processor "quantum processor" quantum_cabinet
     with name 'processor' 'quantum' 'chip' 'cpu',
-         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent. You feel a lurch of recognition -- this is the same material as the cracked component in the time machine's field generator. The one that arrived in a parcel with no return address. ~YOU WILL UNDERSTAND IN TIME.~ You're beginning to.",
+         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent. You feel a lurch of recognition -- this is the same material as the cracked component in the time machine's field generator. Built in a lab founded on Hawking's temporal harmonics framework. The framework he almost destroyed. The framework he only published because you showed up at his party. ~YOU WILL UNDERSTAND IN TIME.~ You do now.",
          before [;
             Take:
                 if (lab_unlocked == false) "It's locked in the cabinet. You need to open it first.";
@@ -2389,7 +2391,7 @@ Object quantum_processor "quantum processor" quantum_cabinet
                     has_processor = true;
                     score = score + 8;
                     move self to player;
-                    "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. Somewhere, somewhen, someone is going to pack one of these in straw, write a cryptic note, and post it to 14 Praed Street. Four of four. Time to go home.";
+                    "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. Built on Hawking's theory. Which exists because you went to his party. Which you could only attend because of a machine powered by this crystal. Somewhere, somewhen, someone is going to pack one of these into a brass harness, write a cryptic note, and post it to 14 Praed Street. Four of four. Time to go home.";
                 }
          ];
 
