@@ -679,7 +679,7 @@ Object newspaper "newspaper"
             ! Phase 3: Museum display (scenery = in museum case)
             if (self has scenery) {
                 print "Through the climate-controlled glass, you can make out a single yellowed page of the Times. Your stomach lurches with recognition. There -- the tea stain from your last cup at Greybaum, Tedium and Sons. There -- the circled advert for TEMPORAL ENGINEERING. There -- the fold where you always tucked it under your arm.^^";
-                print "A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM ROMAN-ERA THAMES SEDIMENT. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
+                print "A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
                 if (capsule_buried)
                     print "A smaller note adds: ~Found alongside brass pocket watch. See Roman Time Capsule exhibit.~^^";
                 ! Show headlines through the glass
@@ -979,16 +979,16 @@ Object time_machine "time machine" solarium
                 print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
             } else {
                 print "The time machine looks decidedly worse for wear since Copernicus's intervention.";
-                ! Progressive damage: only report what's actually broken
+                ! Progressive damage: only report what the player has seen fail
                 if (visited_blitz == false && visited_future == false) {
-                    ! Only lodestone is damaged (Roman era)
-                    print " The compass housing is dark -- the lodestone burned out during the uncontrolled transit. Everything else seems intact, but the machine won't navigate without a new lodestone.^^";
+                    ! Only lodestone is weakened (Roman era)
+                    print " The compass housing glows faintly -- the lodestone is fading, drained by the uncontrolled transit. It might have a few hops left in it, but not many. Everything else seems intact, for now.^^";
                 } else if (visited_future == false) {
                     ! Lodestone + Crookes tube (Blitz era)
-                    print " The compass housing is dark -- no lodestone. And the Crookes tube is shattered, shards of hand-blown glass glinting in the oscillation circuit housing. Two components down.^^";
+                    print " The compass housing barely glows -- the lodestone is nearly spent. And the Crookes tube is webbed with fractures, a hairline crack running from base to tip. It still oscillates, but the glass could give way at any moment. Two components failing.^^";
                 } else {
-                    ! All three damaged (Future era)
-                    print " The compass housing is dark. The Crookes tube is shattered. And the crystalline processor -- the one from the mysterious parcel -- is cracked clean through. The brass harness and copper solder tabs are intact, but the crystal itself is useless. You'll need replacements for all three, plus Hawking's formula to make sense of the navigation.^^";
+                    ! All three failing (Future era)
+                    print " The lodestone is almost dark. The Crookes tube is fractured. And a crack runs clean through the crystalline processor -- the one from the mysterious parcel. The brass harness and copper solder tabs are intact, but the crystal is barely holding together. This machine has given everything it has. You'll need replacements for all three, plus Hawking's formula to make sense of the navigation.^^";
                 }
                 if (location == roman_forum && marcus_impressed == false)
                     print "Roman soldiers have formed a nervous perimeter around the machine. Their centurion eyes it with deep suspicion.^^";
@@ -2171,7 +2171,7 @@ Object future_museum "Thames Barrier Museum"
             else
                 print "A photograph shows a gap-toothed London skyline. The caption reads: ~Site of St. Margaret's Church, destroyed by incendiary bomb, 1941. One of many irreplaceable buildings lost to the Blitz.~^^";
             if (newspaper in self)
-                print "Near the entrance, a climate-controlled case holds a single yellowed page of the Times. You feel a jolt of recognition -- the tea stain, the circled advert, the fold where you always tuck it under your arm. A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM ROMAN-ERA THAMES SEDIMENT. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
+                print "Near the entrance, a climate-controlled case holds a single yellowed page of the Times. You feel a jolt of recognition -- the tea stain, the circled advert, the fold where you always tuck it under your arm. A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
             print "A DeLorean sits in the corner with a sign reading ~TIME TRAVEL IN POPULAR CULTURE.~^^";
             print "The flooded street is south. Stairs lead up to the rooftop.^";
         ],
@@ -2328,6 +2328,12 @@ Object future_lab "Submerged Laboratory"
         ],
          u_to future_street,
     has light;
+
+Object lab_dispatch "dispatch log" future_lab
+    with name 'dispatch' 'log' 'clipboard' 'ledger' 'manifest',
+         description "A waterlogged clipboard, still legible under the laminate. It's a dispatch log for the lab's crystalline processors. Most entries are routine -- serial numbers, calibration dates, recipient labs. But the final entry, in different handwriting, reads: ~UNIT 0001-ALPHA. DISPATCH TO: J. THYME, 12 PRAED STREET, LONDON. DISPATCH DATE: [ILLEGIBLE]. NOTE: INCLUDE BRASS HARNESS (SPEC ATTACHED). INCLUDE NOTE. DO NOT LOG SENDER.~ The rest of the page is water-damaged beyond reading.",
+         initial "A clipboard floats near the cabinet, bumping gently against the wall.",
+    has;
 
 Object lab_equipment "laboratory equipment" future_lab
     with name 'desk' 'desks' 'equipment' 'coffee' 'cup' 'cups',
@@ -2539,7 +2545,7 @@ Object copernicus "ginger tabby cat" main_workshop
                     print "You reach for the cleaning rag draped over the cat. This is a mistake.^^";
                     print "The cat, with the unerring instinct of cats everywhere for finding the worst possible moment to be difficult, twists away from your grasp. His back legs scrabble for purchase on the control panel, and one powerful hind paw connects squarely with a large brass lever marked ~ABSOLUTELY DO NOT TOUCH.~^^";
                     print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
-                    print "Something inside the machine gives a grinding lurch -- the compass housing glows white-hot for an instant, then goes dark. The lodestone. Eight hundred and forty-seven test activations, and this uncontrolled transit was one too many.^^";
+                    print "Something inside the machine gives a grinding lurch -- the compass housing flares white-hot, dims, flares again, and settles to a feeble glow. The lodestone. Eight hundred and forty-seven careful test activations, and one uncontrolled transit has nearly finished it off.^^";
                     print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
                     StartDaemon(copernicus);
                     move time_machine to roman_forum;
@@ -2837,13 +2843,13 @@ Object solarium_dest "Workshop"
             "You're already in wartime London.";
         }
         if (visited_roman == false) {
-            "The dial won't turn that far yet. Perhaps you should visit the eras in order -- the machine seems to need warming up.";
+            "The dial won't turn that far. With the lodestone this weak, the machine can only reach nearby eras. You'll need to build up temporal range one hop at a time.";
         }
         if (visited_blitz == false) visited_blitz = true;
         current_era = 2;
         move time_machine to blitz_street;
         move copernicus to blitz_street;
-        print "You set the dial to ~1941~ and brace yourself. The machine roars -- and mid-transit, something inside makes a sound like a champagne flute hitting a marble floor. The Crookes tube. Hand-blown, marginal tolerances, and it has finally given up the ghost.^^";
+        print "You set the dial to ~1941~ and brace yourself. The machine roars -- and mid-transit, something inside makes a sound like a champagne flute being set down too hard. The Crookes tube. You can see a web of fractures spreading through the glass. Hand-blown, marginal tolerances, and each transit is pushing it closer to the edge.^^";
         print "The machine deposits you somewhere dark, cold, and something overhead is making a very concerning droning noise.^";
         PlayerTo(blitz_street);
         rtrue;
@@ -2853,13 +2859,13 @@ Object solarium_dest "Workshop"
             "You're already in Cambridge.";
         }
         if (visited_blitz == false) {
-            "The machine's temporal range hasn't stabilised enough for 2009 yet. Try an earlier era first.";
+            "The lodestone can't reach that far yet. Each hop seems to extend the range a little, but you'll need to work your way there.";
         }
         if (visited_hawking == false) visited_hawking = true;
         current_era = 3;
         move time_machine to cambridge_gates;
         move copernicus to cambridge_gates;
-        print "You set the dial to ~2009~ and activate the machine. The transition is smoother this time -- perhaps the machine is healing. As you travel, you feel the machine lock onto something, pulled toward a specific date like a compass needle swinging north. Someone in 2009 has left a light on for time travellers. You materialise beside a bicycle rack.^";
+        print "You set the dial to ~2009~ and activate the machine. The lodestone flickers, the Crookes tube whines dangerously -- but mid-transit you feel the machine lock onto something, pulled toward a specific date like a compass needle swinging north. Something in 2009 is doing half the work for you. Someone has left a light on for time travellers. You materialise beside a bicycle rack.^";
         PlayerTo(cambridge_gates);
         rtrue;
     }
@@ -2868,14 +2874,13 @@ Object solarium_dest "Workshop"
             "You're already in future London.";
         }
         if (visited_hawking == false) {
-            "The machine can't reach 2045 yet. The temporal range needs to build progressively.";
+            "The machine strains but can't reach 2045 yet. The failing lodestone limits your range. One more hop might extend it far enough.";
         }
         if (visited_future == false) visited_future = true;
         current_era = 4;
         move time_machine to future_street;
         move copernicus to future_street;
-        print "You set the dial to ~2045~ and pull the lever. The machine shudders, groans -- and mid-transit there is a sharp, crystalline CRACK from the field generator housing. The crystalline processor. The one from the mysterious parcel. The brass harness holds, but the crystal itself has fractured clean through.^^";
-        print "The machine deposits you somewhere very, very wet.^";
+        print "You set the dial to ~2045~ and pull the lever. The lodestone barely glows. The Crookes tube screams. Mid-transit there is a sharp, crystalline CRACK from the field generator housing -- a fracture line running through the processor like a fault through glass. The machine bucks, nearly throws you out of the seat, and deposits you somewhere very wet with the air of a horse that has given absolutely everything and has nothing left.^^";
         if (newspaper in player) {
             print "^The temporal wind rips the newspaper from your hands. The pages tumble into the vortex, scattering through centuries like leaves in a storm, and vanish.^";
             move newspaper to future_museum;
@@ -2988,11 +2993,11 @@ Object solarium_dest "Workshop"
         print "The machine needs repairs:^";
         ! Lodestone is always known (broke in the cat accident)
         if (has_lodestone) print "  [x] Lodestone (temporal compass)^";
-        else print "  [ ] Lodestone (temporal compass -- depleted)^";
+        else print "  [ ] Lodestone (temporal compass -- fading)^";
         ! Crookes tube only after Blitz transit
         if (visited_blitz) {
             if (has_vacuum_tube) print "  [x] Vacuum tube (oscillation circuit)^";
-            else print "  [ ] Vacuum tube (oscillation circuit -- shattered)^";
+            else print "  [ ] Vacuum tube (oscillation circuit -- fracturing)^";
         }
         ! Formula only after visiting Cambridge
         if (visited_hawking) {
@@ -3022,7 +3027,7 @@ Object solarium_dest "Workshop"
     components_installed = true;
     score = score + 5;
     print "You set to work with your toolkit, and the next hour is the most intense of your apprenticeship.^^";
-    print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube slides into the oscillation circuit -- mass-produced precision where a hand-blown Crookes tube once sat -- and the machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
+    print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube is close but not quite right -- the contacts are bent at the wrong angle for Thyme's housing. You spend ten minutes with the needle-nose pliers, coaxing each pin into alignment. It slides home. The machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
     print "You transcribe Hawking's formula from the printout into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. For the first time, the machine can AIM. Finally, the crystalline processor slides into the brass harness -- the same harness, the same copper solder tabs, the same perfect fit. Whoever built that adapter knew exactly what shape this crystal would be. The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
     print "The Temporal Displacement Engine is repaired. Better than repaired -- it's magnificent.^^";
     if (workshop_cleaned == false)

@@ -245,12 +245,12 @@ examine machine" "ABSOLUTELY DO NOT TOUCH"
 
 echo "[Progressive Damage]"
 # After cat accident (Roman): only lodestone mentioned
-run_test "Roman era: lodestone burned out" "$ENTER_WORKSHOP
+run_test "Roman era: lodestone fading" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-examine machine" "lodestone burned out"
+examine machine" "lodestone is fading"
 run_test_absent "Roman era: no Crookes tube damage yet" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-examine machine" "Crookes tube is shattered"
+examine machine" "Crookes tube is webbed"
 # After Blitz transit: Crookes tube also broken
 run_test "Blitz transit: Crookes tube shattered" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
@@ -262,7 +262,7 @@ give aureus to felix
 north
 show lodestone to marcus
 travel to blitz
-examine machine" "Crookes tube is shattered"
+examine machine" "Crookes tube is webbed"
 # Crystal cracking during Future transit
 # --- Roman Londinium ---
 echo "[Roman Londinium]"
@@ -432,7 +432,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-travel to cambridge" "hasn.t stabilised"
+travel to cambridge" "reach that far yet"
 
 # --- WWII London ---
 echo "[WWII London]"
@@ -758,9 +758,9 @@ west
 south
 south
 travel to future"
-run_test "Future transit: crystal cracked" "$FUTURE_SETUP" "crystalline CRACK"
+run_test "Future transit: crystal cracked" "$FUTURE_SETUP" "fracture line"
 run_test "Future machine: all three damaged" "$FUTURE_SETUP
-examine machine" "cracked clean through"
+examine machine" "crack runs clean through"
 run_test "Future flooded street" "$FUTURE_SETUP" "Thames won"
 run_test "Future machine sank" "$FUTURE_SETUP
 look" "sank on arrival"
@@ -1624,8 +1624,8 @@ fi
 # Museum newspaper display
 run_test "Museum newspaper display: tea stain" "$FUTURE_SETUP
 north" "tea stain"
-run_test "Museum newspaper display: ROMAN-ERA THAMES SEDIMENT" "$FUTURE_SETUP
-north" "ROMAN-ERA THAMES SEDIMENT"
+run_test "Museum newspaper display: SEALED AMPHORA" "$FUTURE_SETUP
+north" "SEALED AMPHORA"
 run_test "Museum newspaper examine: display case sealed" "$FUTURE_SETUP
 north
 take newspaper" "display case is sealed"
