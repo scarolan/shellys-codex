@@ -246,7 +246,11 @@ Global machine_raised = false;
         rtrue;
     }
     if (topic == 'help') {
-        print "~Seek the blessing of Marcus first. The centurion's word carries weight, even in a temple.~^";
+        if (livia_trusts) {
+            print "~You have proven yourself worthy. Explore the inner sanctum and study the inscriptions upon the walls — they hold the wisdom of those who came before you.~^";
+        } else {
+            print "~Seek the blessing of Marcus first. The centurion's word carries weight, even in a temple.~^";
+        }
         rtrue;
     }
     print "Livia considers your question with the serene patience of someone who has heard far sillier things during initiation ceremonies.^";
