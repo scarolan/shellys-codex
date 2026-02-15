@@ -216,7 +216,7 @@ run_test "Sent to Roman forum" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "Roman Londinium"
 run_test "Score for accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-score" "15 out of"
+score" "9 out of"
 
 # --- Clean guard ---
 echo "[Clean Guard]"
@@ -853,6 +853,229 @@ clean"
 run_test "Install all components" "$ENDGAME_CMD" "Temporal Displacement Engine is repaired"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
 run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 180"
+
+# --- Ending Tiers ---
+echo "[Ending Tiers]"
+# Paradox ending: critical path only, no side quests (score = 85)
+run_test "Paradox ending (critical path only)" "$ENDGAME_CMD" "PARADOX ENDING"
+
+# Rough ending: critical path + give soldier to Eleanor (+25 = 110)
+ROUGH_ENDGAME="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to blitz
+east
+take soldier
+west
+down
+give soldier to eleanor
+up
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+travel to cambridge
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show lodestone to hawking
+east
+take napkin
+west
+south
+south
+travel to future
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take processor
+up
+travel to workshop
+install
+west
+clean"
+run_test "Rough ending (critical path + Eleanor gift)" "$ROUGH_ENDGAME" "ROUGH ENDING"
+
+# Good ending: critical path + Eleanor (+25) + inscription (+20) + capsule (+20) = 150
+GOOD_ENDGAME="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+carve
+west
+south
+south
+bury
+north
+north
+travel to blitz
+east
+take soldier
+west
+down
+give soldier to eleanor
+up
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+travel to cambridge
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show lodestone to hawking
+east
+take napkin
+west
+south
+south
+travel to future
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take processor
+up
+travel to workshop
+install
+west
+clean"
+run_test "Good ending (critical path + 3 side quests)" "$GOOD_ENDGAME" "GOOD ENDING"
+
+# Perfect ending: all events (score = 180)
+PERFECT_ENDGAME="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+carve
+west
+south
+south
+bury
+north
+north
+travel to blitz
+east
+take soldier
+west
+down
+give soldier to eleanor
+up
+north
+up
+extinguish
+down
+south
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+travel to cambridge
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show lodestone to hawking
+east
+take napkin
+west
+south
+south
+travel to future
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take processor
+up
+travel to workshop
+install
+west
+clean"
+run_test "Perfect ending (all side quests)" "$PERFECT_ENDGAME" "PERFECT ENDING"
 
 # --- Copernicus ---
 echo "[Copernicus]"

@@ -317,7 +317,7 @@ Global machine_raised = false;
         } else if (radio_fixed) {
             print "~The rubble site? Dangerous, that. But I suppose I owe you one for the valve. Tell you what -- I'll help you dig if you need it. Just say the word.~^";
             tommy_helping = true;
-            score = score + 5;
+            score = score + 3;
             print "[Tommy is now willing to help you dig.]^";
         } else {
             print "~Can't help with the rubble, mate. Not while the radio's down. Fix the wireless and we'll talk.~^";
@@ -836,7 +836,7 @@ Object solarium "The Solarium"
     with description [;
             if (solarium_entered == false) {
                 solarium_entered = true;
-                score = score + 5;
+                score = score + 3;
                 move copernicus to solarium;
                 move cat_name_tag to solarium;
                 print "The solarium is drenched in grey London light filtering through a glass ceiling streaked with rain and pigeon evidence. Potted ferns and brass instruments crowd the perimeter. And in the centre --^^";
@@ -1018,7 +1018,7 @@ Object dr_thyme "Dr. Thyme" main_workshop
             Give:
                 if (noun == brass_spanner && spanner_given == false) {
                     spanner_given = true;
-                    score = score + 5;
+                    score = score + 3;
                     remove brass_spanner;
                     print "He takes the spanner without looking, makes a minute adjustment to whatever he's working on, and finally turns. You get your first proper look at Dr. Thyme.^^";
                     print "He has the face of a man who has spent twenty years thinking about something that nobody else can see -- dark eyes set deep beneath heavy brows, skin the warm brown of old tea, and an expression that suggests he has just remembered you exist and is moderately pleased about it.^^";
@@ -1286,7 +1286,7 @@ Object marcus "Centurion Marcus" roman_forum
             Show:
                 if (noun == lodestone && marcus_impressed == false) {
                     marcus_impressed = true;
-                    score = score + 10;
+                    score = score + 5;
                     print "You hold the lodestone near Marcus's iron gladius. The sword twitches towards the stone, and Marcus leaps back as if stung.^^";
                     print "~By Jupiter!~ he breathes, eyes wide. ~The stone commands iron itself! You are a seer -- a wielder of divine power!~ He salutes hastily. ~Forgive my rudeness, great one. The Via Principalis is open to you, and I shall tell Priestess Livia of your... gifts.~^";
                     rtrue;
@@ -1327,7 +1327,7 @@ Object felix "Felix the Merchant" roman_merchants
             Give:
                 if (noun == gold_aureus && has_lodestone == false) {
                     has_lodestone = true;
-                    score = score + 15;
+                    score = score + 8;
                     remove gold_aureus;
                     move lodestone to player;
                     print "Felix's eyes light up like a Saturnalia bonfire. ~SOLD! To the strangely dressed foreigner!~ He sweeps up the aureus and presses a dark, heavy stone into your hand. ~The finest lodestone in Londinium. It'll change your life. Possibly literally.~^";
@@ -1682,7 +1682,7 @@ Object vacuum_tube "vacuum tube" metal_box
                 if (metal_box hasnt open) "It's inside the metal box. Open the box first.";
                 if (parent(self) ~= player) {
                     has_vacuum_tube = true;
-                    score = score + 15;
+                    score = score + 8;
                     move self to player;
                     "You carefully extract the vacuum tube from its packing straw. It's warm to the touch and hums faintly -- temporal resonance. Component two of four.";
                 }
@@ -1720,7 +1720,7 @@ Object tommy "Corporal Tommy" blitz_shelter
             Give:
                 if (noun == radio_valve && radio_fixed == false) {
                     radio_fixed = true;
-                    score = score + 10;
+                    score = score + 5;
                     remove radio_valve;
                     print "Tommy's face lights up like a Christmas tree. ~A working valve! You beauty!~ He slots it into the wireless with practiced hands. The set crackles to life, filling the shelter with the BBC Home Service.^^";
                     print "~...and now, the shipping forecast. Viking, North Utsire, South Utsire...~^^";
@@ -1749,7 +1749,7 @@ Object eleanor "Young Eleanor" blitz_shelter
             Give:
                 if (eleanor_gift) "Eleanor clutches her gift and smiles at you. She doesn't need anything else.";
                 if (noun == pocket_watch || noun == tin_soldier) {
-                    score = score + 5;
+                    score = score + 25;
                     if (noun == pocket_watch) {
                         eleanor_gift = 1;
                         remove pocket_watch;
@@ -1841,7 +1841,7 @@ Object porter_npc "college porter" cambridge_porter
             Give:
                 if (noun == invitation) {
                     porter_bypassed = true;
-                    score = score + 10;
+                    score = score + 5;
                     remove invitation;
                     print "The porter examines the invitation with the forensic scrutiny of a man who has confiscated more fake invitations than you've had hot dinners.^^";
                     print "~Hmm. This appears to be genuine.~ He sounds almost disappointed. ~Very well. The party is in the Great Hall, through to the north. Do try not to touch anything.~^";
@@ -1851,7 +1851,7 @@ Object porter_npc "college porter" cambridge_porter
             Show:
                 if (noun == invitation) {
                     porter_bypassed = true;
-                    score = score + 10;
+                    score = score + 5;
                     remove invitation;
                     print "The porter examines the invitation. ~Genuine. Proceed to the Great Hall, north.~^";
                     rtrue;
@@ -1950,7 +1950,7 @@ Object napkin_formula "napkin with formula" cambridge_study
                 }
                 if (has_formula == false) {
                     has_formula = true;
-                    score = score + 15;
+                    score = score + 8;
                     move self to player;
                     "You carefully fold the napkin and tuck it away. The calibration formula -- component three of four. Hawking nods from the doorway. ~Try not to create any paradoxes. The paperwork is terrible.~";
                 }
@@ -1977,7 +1977,7 @@ Object hawking "Professor Hawking" cambridge_hall
             Give, Show:
                 if (noun == lodestone && hawking_phase >= 2 && hawking_convinced == false) {
                     hawking_convinced = true;
-                    score = score + 15;
+                    score = score + 8;
                     print "Hawking watches as the lodestone pulls at every piece of metal in the room. His instruments go haywire. The synthesiser is silent for a long moment.^^";
                     print "~The magnetic signature is impossible. This stone has been exposed to temporal radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
                     print "He seems more delighted than surprised. ~I always hoped someone would come. The formula you need is in my study -- east from here. Dr. Chen will let you through. And...~ The synthesiser pauses for effect. ~Thank you for making an old physicist's day.~^";
@@ -2135,7 +2135,7 @@ Object comm_panel "maintenance panel" future_rooftop
                 if (kai_helping) "It's already open and fixed.";
                 if (toolkit notin player) "The panel needs proper tools to open. The bolts are rusted shut.";
                 kai_helping = true;
-                score = score + 10;
+                score = score + 5;
                 print "Your Victorian toolkit is, ironically, perfect for the job. The bolts are based on a nineteenth-century standard that never changed. You pop the panel open, reconnect a few wires, and the communications array hums to life.^^";
                 print "Kai appears at the top of the stairs, grinning. ~You fixed it! Torres has been trying to get that working for months!~ She unslings her diving gear. ~Here -- take this. Fair trade. The submerged lab is below the flooded street.~^^";
                 move diving_gear to player;
@@ -2243,7 +2243,7 @@ Object quantum_processor "quantum processor" quantum_cabinet
                 if (lab_unlocked == false) "It's locked in the cabinet. You need to open it first.";
                 if (parent(self) ~= player) {
                     has_processor = true;
-                    score = score + 15;
+                    score = score + 8;
                     move self to player;
                     "You lift the quantum processor from its suspension field. It hums in your hands, harmonising with the other components you carry. Four of four. Time to go home.";
                 }
@@ -2374,7 +2374,7 @@ Object copernicus "ginger tabby cat" main_workshop
                     cat_accident = true;
                     visited_roman = true;
                     current_era = 1;
-                    score = score + 5;
+                    score = score + 3;
                     rag_on_machine = false;
                     copernicus_named = true;
                     give self proper;
@@ -2729,7 +2729,7 @@ Object solarium_dest "Workshop"
             "Priestess Livia would not appreciate you vandalising her temple walls. Get her permission first.";
         }
         inscription_carved = true;
-        score = score + 5;
+        score = score + 20;
         "You take the small chisel from your toolkit and carefully carve into the ancient stone: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, 60 AD.~ Livia watches with approval. ~A fine inscription. It will endure.~ You suspect she has no idea how right she is.";
     }
     "There's nothing suitable to carve here.";
@@ -2744,7 +2744,7 @@ Object solarium_dest "Workshop"
             "You need something worth burying for posterity. Your pocket watch, perhaps?";
         }
         capsule_buried = true;
-        score = score + 5;
+        score = score + 20;
         remove pocket_watch;
         "You dig a hole in the soft Thames mud and carefully bury your grandfather's pocket watch, wrapping it in a piece of cloth from your jacket. Two thousand years from now, someone will be very confused.^^You pat the mud flat. Somewhere in the far future, a museum curator has just had a very good day.";
     }
@@ -2763,7 +2763,7 @@ Object solarium_dest "Workshop"
             "The rubble burying the machine is far too heavy to shift alone. You'd need someone strong to help -- someone like Corporal Tommy, perhaps.";
         }
         machine_dug_out = true;
-        score = score + 5;
+        score = score + 3;
         print "You and Tommy attack the rubble burying the time machine. Brick by brick, beam by beam, you clear the debris. Tommy works with the cheerful determination of a man who has seen worse things this week.^^";
         print "~Funny-looking contraption,~ Tommy says, wiping plaster dust from his face. ~What is it, some kind of engine?~^^";
         print "~Something like that,~ you reply.^^";
@@ -2797,7 +2797,7 @@ Object solarium_dest "Workshop"
             "There's no fire to extinguish at the moment.";
         }
         church_saved = true;
-        score = score + 10;
+        score = score + 30;
         print "You heave sandbag after sandbag over the parapet onto the burning timbers below. Sand cascades onto the incendiary, smothering the magnesium flames. It's exhausting, terrifying, and deeply satisfying work.^^";
         print "The fire sputters and dies. St. Margaret's Church will survive another night -- and, as it turns out, another few centuries. From somewhere below, you hear Warden Peggy's voice: ~About bloody time! Well done!~^";
         rtrue;
@@ -2839,7 +2839,7 @@ Object solarium_dest "Workshop"
         "You don't have all four components yet. Check the machine to see what's still missing.";
     }
     components_installed = true;
-    score = score + 10;
+    score = score + 5;
     print "You set to work with your toolkit, and the next hour is the most intense of your apprenticeship.^^";
     print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube slides into the oscillation circuit, and the machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
     print "You transcribe Hawking's formula from the napkin into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. Finally, the quantum processor drops into the field generator, and the entire machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
@@ -2921,7 +2921,7 @@ Object solarium_dest "Workshop"
         if (kai_helping) "The panel is already open and repaired.";
         if (toolkit notin player) "You need proper tools to open the maintenance panel.";
         kai_helping = true;
-        score = score + 10;
+        score = score + 5;
         print "Your Victorian toolkit proves perfect for the job. You pop the panel, reconnect the circuits, and the array hums to life.^^";
         print "Kai appears, grinning. ~You fixed it!~ She hands you diving gear. ~Fair trade!~^^";
         move diving_gear to player;
