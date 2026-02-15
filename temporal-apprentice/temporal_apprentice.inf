@@ -6,7 +6,7 @@
 
 Constant Story "The Temporal Apprentice";
 Constant Headline "^A Time-Travelling Adventure^^";
-Constant MAX_SCORE 165;
+Constant MAX_SCORE 170;
 
 Replace DrawStatusLine;
 Replace GamePrologue;
@@ -94,7 +94,8 @@ Global rag_on_machine = false;
 Global knock_count = 0;
 Global door_open = false;
 Global spanner_given = false;
-Global tarp_removed = false;
+Global solarium_unlocked = false;
+Global solarium_entered = false;
 
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
@@ -137,7 +138,7 @@ Global tarp_removed = false;
         rtrue;
     }
     if (topic == 'machine' or 'time' or 'device' or 'invention' or 'engine' or 'temporal') {
-        print "~The Temporal Displacement Engine! My life's work. Well, one of them. The marmalade recipe was also quite significant.~ He pats the machine fondly. ~She's nearly ready. Just needs a few calibrations. But I must stress -- do NOT touch her. Not a lever, not a dial. She's temperamental. The last time someone touched the wrong thing, I lost an entire Tuesday. Just... gone. Skipped straight from Monday to Wednesday. Very disorienting.~^";
+        print "~The Temporal Displacement Engine! My life's work. Well, one of them. The marmalade recipe was also quite significant.~ He gestures vaguely towards the corridor. ~She's in the solarium. Nearly ready. Just needs a few calibrations. But I must stress -- do NOT touch her. Not a lever, not a dial. She's temperamental. The last time someone touched the wrong thing, I lost an entire Tuesday. Just... gone. Skipped straight from Monday to Wednesday. Very disorienting.~^";
         rtrue;
     }
     if (topic == 'cat' or 'copernicus' or 'ginger' or 'tabby') {
@@ -493,6 +494,13 @@ Global tarp_removed = false;
 ! ===================================================================
 
 [ BeforeParsing i len w;
+    ! Strip period from "dr." to prevent parser confusion
+    for (i = 4: i < 2 + buffer->1: i++) {
+        if (buffer->i == '.' && buffer->(i-1) == 'r' && buffer->(i-2) == 'd') {
+            buffer->i = ' ';
+            Tokenise__(buffer, parse);
+        }
+    }
     wn = 1;
     w = NextWord();
     if (w == 'carve' or 'engrave' or 'inscribe') {
@@ -612,6 +620,10 @@ Object workshop_entrance "Workshop Entrance"
             if (door_open) return main_workshop;
             "The heavy oak door is firmly closed. Perhaps you should knock.";
          ],
+         in_to [;
+            if (door_open) return main_workshop;
+            "The heavy oak door is firmly closed. Perhaps you should knock.";
+         ],
          w_to "You've literally just started this job. Let's at least see what's inside before fleeing into the London fog.",
     has light;
 
@@ -675,32 +687,34 @@ Object pocket_watch "pocket watch"
 Object main_workshop "Main Workshop"
     with description [;
             print "The workshop is a cathedral of improbable engineering. Brass gears the size of dinner plates mesh with copper pipes that disappear into the walls. Glass jars of luminous liquids line shelves alongside what appear to be several jars of marmalade. The ceiling is lost in a tangle of tubes and wires.^^";
-            if (tarp_removed == false)
-                print "The centrepiece of the room is hidden beneath an enormous canvas tarpaulin, its shape a mystery of lumps and protrusions. Whatever is under there is humming.^^";
-            else
-                print "The centrepiece is unmistakable: a magnificent contraption of brass, crystal, and what might be a repurposed church organ occupies the middle of the room, humming with barely contained energy.^^";
             if (cat_accident == false) {
                 if (spanner_given == false && thyme_departed == false)
                     print "A man is hunched over the workbench with his back to you. ~The number four spanner,~ he says, without turning around. ~On the shelf behind you. The brass one. Not the steel one. The steel one is for Tuesdays.~^^";
-                if (rag_on_machine) {
-                    if (copernicus_named)
-                        print "Copernicus is perched atop the contraption, your cleaning rag dangling from his mouth like a trophy.^^";
-                    else
-                        print "The ginger tabby cat is perched atop the contraption, your cleaning rag dangling from his mouth like a trophy.^^";
-                }
                 if (thyme_departed == false) {
                     if (spanner_given)
-                        print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
+                        print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
                     else
-                        print "The workbench is cluttered with tools and a leather-bound journal. A brass spanner glints on the shelf behind you. The store room is to the north, and the entrance is back to the west.^";
+                        print "The workbench is cluttered with tools and a leather-bound journal. A brass spanner glints on the shelf behind you. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
                 } else
-                    print "The workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
+                    print "The workbench is cluttered with tools and a leather-bound journal. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
             }
             else
-                print "The workbench holds tools and the remains of Dr. Thyme's tea (cold, abandoned). The store room is north, the entrance west.^";
+                print "The workbench holds tools and the remains of Dr. Thyme's tea (cold, abandoned). The store room is north, the entrance west, and the corridor east.^";
         ],
          w_to workshop_entrance,
          n_to store_room,
+         e_to [;
+            if (thyme_departed == false)
+                "A narrow corridor leads east, ending in a heavy door. But right now Dr. Thyme seems to need your attention.";
+            if (solarium_unlocked == false) {
+                if (front_door_key in player) {
+                    solarium_unlocked = true;
+                    print "You walk down the narrow corridor. The door at the end is locked, but -- on a whim -- you try the front door key. It turns with a smooth click. A master key, perhaps. Or Dr. Thyme simply doesn't believe in having more than one key.^^";
+                } else
+                    "You walk down the narrow corridor. The door at the end is locked.";
+            }
+            return solarium;
+         ],
     has light;
 
 Object workbench "workbench" main_workshop
@@ -745,23 +759,112 @@ Object workshop_wires "wires" main_workshop
 
 Object brass_spanner "brass spanner" main_workshop
     with name 'spanner' 'brass' 'number' 'four' 'wrench',
-         description "A well-worn brass spanner, number four. It has the comfortable weight of a tool that has been used ten thousand times for purposes its manufacturer never imagined.",
-         initial "A brass spanner sits on the shelf behind you.";
+         description "A well-worn brass spanner, number four. It has the comfortable weight of a tool that has been used ten thousand times for purposes its manufacturer never imagined.";
 
 Object workshop_marmalade "marmalade jars" main_workshop
     with name 'marmalade' 'jam' 'preserv',
          description "Several jars of Seville orange marmalade, interspersed among the scientific apparatus with no apparent logic. Each one bears a handwritten label: ~JT -- BATCH 7,~ ~JT -- BATCH 12 (EXPERIMENTAL),~ and most worryingly, ~JT -- BATCH 3 (DO NOT EAT -- TEMPORAL).~",
     has scenery pluralname;
 
+Object corridor_door "corridor door" main_workshop
+    with name 'corridor' 'door',
+         description [;
+            if (solarium_unlocked)
+                "The door at the end of the narrow corridor stands open. Beyond it, grey light spills from the solarium.";
+            "A heavy door at the end of a narrow corridor running east from the workshop. Dr. Thyme was quite emphatic that you shouldn't go through it.";
+         ],
+         before [;
+            Open:
+                if (solarium_unlocked)
+                    "The door is already open.";
+                if (front_door_key in player) {
+                    solarium_unlocked = true;
+                    "You try the front door key in the lock. It shouldn't work -- it's for the front door -- but it turns with a smooth click. A master key, perhaps. Or Dr. Thyme simply doesn't believe in having more than one key. The door swings open, revealing a glass-roofed room beyond.";
+                }
+                "The door is locked. You'd need a key.";
+            Unlock:
+                if (solarium_unlocked)
+                    "The door is already unlocked.";
+                if (front_door_key in player) {
+                    solarium_unlocked = true;
+                    "You try the front door key in the lock. It shouldn't work -- it's for the front door -- but it turns with a smooth click. A master key, perhaps. Or Dr. Thyme simply doesn't believe in having more than one key. The door swings open, revealing a glass-roofed room beyond.";
+                }
+                "You don't have a key that fits this lock.";
+            Lock, Close:
+                "You've come this far. No point locking it now.";
+            Push, Pull:
+                if (solarium_unlocked)
+                    "The door is already open. The solarium is to the east.";
+                "The door doesn't budge. It's locked.";
+         ],
+    has scenery;
+
 Object front_door_key "front door key"
     with name 'key' 'front' 'door' 'brass',
          description "A heavy brass key, warm from Dr. Thyme's waistcoat pocket. It opens the front door of 14 Praed Street. Presumably.";
 
-Object time_machine "time machine" main_workshop
+! ===================================================================
+! THE SOLARIUM — forbidden room, houses the time machine
+! ===================================================================
+
+Object solarium "The Solarium"
+    with description [;
+            if (solarium_entered == false) {
+                solarium_entered = true;
+                score = score + 5;
+                move copernicus to solarium;
+                move cat_name_tag to solarium;
+                print "The solarium is drenched in grey London light filtering through a glass ceiling streaked with rain and pigeon evidence. Potted ferns and brass instruments crowd the perimeter. And in the centre --^^";
+                print "Something extraordinary.^^";
+                print "A contraption of brass, crystal, and what might be a repurposed church organ, occupying most of the floor space. Dials, levers, and components you have no name for. It hums with barely contained energy, as if the air itself is vibrating at a frequency just below hearing.^^";
+                print "As you step through the doorway, you catch a flicker of movement in the corner of your eye -- a shadow, there and gone, behind the far side of the machine. You spin around. Nothing. Just the ferns swaying slightly, as if someone brushed past them.^^";
+                print "Your heart is hammering. You could have sworn --^^";
+                print "But no. Old building. Drafts. Your imagination.^^";
+                if (copernicus_named)
+                    print "Copernicus is already here, naturally. The concept of a forbidden room is entirely beneath him.^";
+                else
+                    print "The ginger tabby cat is already here, naturally. Forbidden rooms hold no meaning for cats.^";
+            } else {
+                if (cat_accident == false) {
+                    print "The solarium is drenched in grey London light filtering through the glass ceiling. Potted ferns and brass instruments crowd the perimeter. The contraption -- the time machine, you suppose -- dominates the centre of the room, humming with barely contained energy.^^";
+                    if (rag_on_machine) {
+                        if (copernicus_named)
+                            print "Copernicus is perched atop the contraption, your cleaning rag dangling from his mouth like a trophy.^^";
+                        else
+                            print "The ginger tabby cat is perched atop the contraption, your cleaning rag dangling from his mouth like a trophy.^^";
+                    }
+                    print "The corridor leads back west to the workshop.^";
+                } else {
+                    print "The solarium. Grey light filters through the rain-streaked glass ceiling. The time machine dominates the room, ";
+                    if (components_installed)
+                        print "humming with renewed purpose. All four components are installed.^^";
+                    else
+                        print "looking worse for wear since the cat's intervention.^^";
+                    print "The corridor leads back west to the workshop.^";
+                }
+            }
+        ],
+         w_to main_workshop,
+    has light;
+
+Object solarium_ferns "potted ferns" solarium
+    with name 'fern' 'ferns' 'potted' 'plants' 'plant',
+         description "A collection of aspidistras and maidenhair ferns in brass pots, thriving in the humid glass-roofed space. They sway occasionally in drafts that have no obvious source.",
+    has scenery pluralname;
+
+Object solarium_ceiling "glass ceiling" solarium
+    with name 'ceiling' 'glass' 'roof' 'skylight',
+         description "A vaulted glass ceiling, streaked with rain and the unmistakable evidence of London's pigeon population. Grey light filters through, giving the room an underwater quality.",
+    has scenery;
+
+Object solarium_instruments "brass instruments" solarium
+    with name 'instrument' 'instruments' 'brass' 'device' 'devices',
+         description "An assortment of brass measuring instruments crowd the perimeter -- barometers, hygrometers, and several devices whose purpose you couldn't begin to guess. One of them appears to be measuring something that doesn't exist yet.",
+    has scenery pluralname;
+
+Object time_machine "time machine" solarium
     with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal',
          description [;
-            if (cat_accident == false && tarp_removed == false)
-                "Whatever it is, it's under a heavy tarpaulin. You can hear it humming beneath the canvas.";
             if (cat_accident == false) {
                 print "A magnificent contraption of brass, crystal, and what might be a repurposed church organ. Brass housings encase crystal resonators connected by a bewildering maze of copper tubing. A set of controls features several levers, a compass-like dial, and what appears to be a bicycle bell. The whole thing hums with barely contained energy.^^";
                 if (rag_on_machine) {
@@ -787,19 +890,6 @@ Object time_machine "time machine" main_workshop
             }
          ],
          add_to_scope roman_dest blitz_dest hawking_dest future_dest,
-    has scenery;
-
-Object workshop_tarpaulin "tarpaulin" main_workshop
-    with name 'tarpaulin' 'tarp' 'canvas' 'cover' 'sheet',
-         description [;
-            if (tarp_removed == false)
-                "A heavy canvas tarpaulin draped over something large in the centre of the room. Whatever is underneath is humming.";
-            "The tarpaulin lies folded in the corner.";
-         ],
-         before [;
-            Take, Pull, Push:
-                "Better not disturb it yet.";
-         ],
     has scenery;
 
 Object hartley_journal "leather-bound journal" main_workshop
@@ -914,13 +1004,13 @@ Object roman_forum "The Forum"
 
 Object roman_rift "temporal rift" roman_forum
     with name 'rift' 'temporal' 'portal' 'shimmer',
-         description "A shimmering tear in reality, crackling with temporal energy. It looks rather like someone took a pair of scissors to the fabric of spacetime and forgot to tidy up. Through it, you can faintly see brass and copper -- the workshop.",
+         description "A shimmering tear in reality, crackling with temporal energy. It looks rather like someone took a pair of scissors to the fabric of spacetime and forgot to tidy up. Through it, you can faintly see brass and ferns -- the solarium.",
          before [;
             Enter:
                 current_era = 0;
-                move copernicus to main_workshop;
-                print "You step into the rift. Reality does that thing where it turns inside out for a moment, and then you're back in the workshop. Your clothing smells faintly of olive oil and empire.^";
-                PlayerTo(main_workshop);
+                move copernicus to solarium;
+                print "You step into the rift. Reality does that thing where it turns inside out for a moment, and then you're back in the solarium. Your clothing smells faintly of olive oil and empire.^";
+                PlayerTo(solarium);
                 rtrue;
          ],
     has scenery;
@@ -1206,9 +1296,9 @@ Object blitz_rift "temporal rift" blitz_street
          before [;
             Enter:
                 current_era = 0;
-                move copernicus to main_workshop;
+                move copernicus to solarium;
                 print "You slip through the rift. The sounds of the Blitz fade, replaced by the comforting hum of brass machinery.^";
-                PlayerTo(main_workshop);
+                PlayerTo(solarium);
                 rtrue;
          ],
     has scenery;
@@ -1573,9 +1663,9 @@ Object cambridge_rift "temporal rift" cambridge_gates
          before [;
             Enter:
                 current_era = 0;
-                move copernicus to main_workshop;
-                print "You slip through the rift, narrowly avoiding a bicycle wheel. Reality reassembles itself as the workshop materialises around you.^";
-                PlayerTo(main_workshop);
+                move copernicus to solarium;
+                print "You slip through the rift, narrowly avoiding a bicycle wheel. Reality reassembles itself as the solarium materialises around you.^";
+                PlayerTo(solarium);
                 rtrue;
          ],
     has scenery;
@@ -1798,9 +1888,9 @@ Object future_rift "temporal rift" future_street
          before [;
             Enter:
                 current_era = 0;
-                move copernicus to main_workshop;
-                print "You step into the rift, getting your feet wet in the process. The workshop materialises around you, blissfully dry.^";
-                PlayerTo(main_workshop);
+                move copernicus to solarium;
+                print "You step into the rift, getting your feet wet in the process. The solarium materialises around you, blissfully dry.^";
+                PlayerTo(solarium);
                 rtrue;
          ],
     has scenery;
@@ -2179,8 +2269,9 @@ Object copernicus "ginger tabby cat" main_workshop
          ],
     has animate male;
 
-Object cat_name_tag "brass name tag" main_workshop
-    with name 'tag' 'name' 'brass' 'collar' 'nametag',
+Object cat_name_tag "brass name tag"
+    with name 'tag' 'name' 'collar' 'nametag',
+         found_in [; return (location == parent(copernicus)); ],
          description [;
             copernicus_named = true;
             give copernicus proper;
@@ -2366,8 +2457,8 @@ Object future_dest "Future London"
 ];
 
 [ TravelToSub;
-    if (location ~= main_workshop) {
-        "You need to be at the time machine in the workshop to travel through time. Use the temporal rift to return to the workshop first.";
+    if (location ~= solarium) {
+        "You need to be at the time machine in the solarium to travel through time. Use the temporal rift to return first.";
     }
     if (cat_accident == false) {
         "The time machine isn't activated yet. Perhaps you should examine it more closely.";
@@ -2483,7 +2574,7 @@ Object future_dest "Future London"
 ];
 
 [ RepairSub;
-    if (location == main_workshop && noun == time_machine) {
+    if (location == solarium && noun == time_machine) {
         if (components_installed) {
             "The machine is already repaired. It hums contentedly.";
         }
@@ -2506,8 +2597,8 @@ Object future_dest "Future London"
 ];
 
 [ InstallCompSub;
-    if (location ~= main_workshop) {
-        "You need to be at the time machine in the workshop to install components.";
+    if (location ~= solarium) {
+        "You need to be at the time machine in the solarium to install components.";
     }
     if (components_installed) {
         "All components are already installed. The machine is ready.";
@@ -2531,7 +2622,7 @@ Object future_dest "Future London"
 ];
 
 [ CleanSub;
-    if (location == main_workshop) {
+    if (location == main_workshop || location == solarium) {
         if (cat_accident == false) {
             if (spanner_given == false)
                 "You haven't even introduced yourself yet. Find the spanner Dr. Thyme wants first.";
@@ -2539,25 +2630,31 @@ Object future_dest "Future London"
                 "The workshop doesn't need cleaning yet. Perhaps talk to Dr. Thyme first.";
             if (cleaning_rags notin player && rag_stolen == false)
                 "You don't have any cleaning rags. Dr. Thyme gave you some -- where did they go?";
-            if (rag_on_machine)
+            if (rag_on_machine) {
+                if (location == main_workshop)
+                    "The cat has your cleaning rag in the solarium. You should go and retrieve it.";
                 "You'd love to clean, but the cat has stolen your cleaning rag and is sitting on the machine with it. You'll need to get the rag back first.";
+            }
             if (cleaning_rags in player && rag_stolen == false) {
+                if (location == main_workshop)
+                    "You straighten a few things on the workbench. The workshop looks marginally less chaotic, but it hardly counts as a proper tidy.";
+                ! In solarium - trigger cat sequence
                 rag_stolen = true;
                 rag_on_machine = true;
-                move cleaning_rags to main_workshop;
-                tarp_removed = true;
-                print "You start by pulling the tarpaulin off the large... whatever-it-is in the centre of the room. Underneath is a magnificent contraption of brass, crystal, and what might be a repurposed church organ, humming with barely contained energy. Right. Best not touch that.^^";
-                print "You unfurl a cleaning rag and are about to start wiping down the workbench when --^^";
+                move cleaning_rags to solarium;
+                print "You unfurl a cleaning rag and are about to start on the nearest brass surface when --^^";
                 if (copernicus_named)
-                    print "In a flash of ginger fur, Copernicus snatches the rag right out of your hand! Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
+                    print "In a flash of ginger fur, Copernicus snatches the rag right out of your hand! Before you can react, the cat has leapt atop the contraption, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
                 else
-                    print "In a flash of ginger fur, the cat snatches the rag right out of your hand! Before you can react, he has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
+                    print "In a flash of ginger fur, the cat snatches the rag right out of your hand! Before you can react, he has leapt atop the contraption, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
                 print "Getting that rag back is going to require getting the cat off the machine. This seems... inadvisable.^";
                 rtrue;
             }
         }
         if (cat_accident == false)
-            "The workshop doesn't need cleaning yet.";
+            "There's nothing that needs cleaning right now.";
+        if (location == solarium)
+            "The solarium doesn't need tidying. The workshop is where the mess is.";
         if (workshop_cleaned) {
             "The workshop is already spotless. Well, as spotless as a workshop full of temporal engineering equipment can be.";
         }
@@ -2621,7 +2718,7 @@ Object future_dest "Future London"
     print "  give X to Y ..... hand something to someone^";
     print "  show X to Y ..... display something to someone^^";
     print "[SPECIAL ACTIONS]^";
-    print "  travel to X ..... use the time machine (in workshop)^";
+    print "  travel to X ..... use the time machine (in solarium)^";
     print "  carve ........... carve an inscription^";
     print "  bury ............ bury something for posterity^";
     print "  dig ............. excavate rubble^";

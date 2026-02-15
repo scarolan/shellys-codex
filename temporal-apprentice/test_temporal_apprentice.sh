@@ -61,14 +61,26 @@ knock
 knock
 east"
 
+# Enter workshop, do Thyme sequence, auto-unlock and enter solarium
+ENTER_SOLARIUM="knock
+knock
+knock
+east
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+east"
+
 # Common trigger: the multi-step cat accident sequence
 # 1) give spanner to dr thyme (introduces you)
 # 2) talk to dr thyme (gives rags + key, Thyme leaves)
-# 3) clean (cat steals rag, climbs onto machine)
-# 4) take cat (cat kicks lever, accident fires -> Roman Forum)
+# 3) east (auto-unlocks and enters solarium)
+# 4) clean (cat steals rag, climbs onto machine in solarium)
+# 5) take cat (cat kicks lever, accident fires -> Roman Forum)
 CAT_ACCIDENT="take spanner
 give spanner to dr thyme
 talk to dr thyme
+east
 clean
 take cat"
 
@@ -87,6 +99,10 @@ knock
 knock" "beginning to rain"
 run_test "East blocked before knock" "east" "should knock"
 run_test "East open after knock" "$ENTER_WORKSHOP" "cathedral"
+run_test "Enter works after knock" "knock
+knock
+knock
+enter" "cathedral"
 
 # --- Spanner Puzzle ---
 echo "[Spanner Puzzle]"
@@ -124,12 +140,20 @@ run_test "Dr. Thyme present" "$ENTER_WORKSHOP" "Dr. Thyme"
 run_test "Cat shown as ginger tabby" "$ENTER_WORKSHOP" "ginger tabby cat"
 run_test_absent "Cat not named Copernicus initially" "$ENTER_WORKSHOP
 look" "You can also see.*Copernicus"
-run_test "Machine hidden under tarp" "$ENTER_WORKSHOP
-look" "tarpaulin"
-run_test_absent "No contraption before tarp" "$ENTER_WORKSHOP
-look" "magnificent contraption"
-run_test "Workshop description no time machine label" "$ENTER_WORKSHOP" "tarpaulin"
+run_test "Workshop mentions corridor" "$ENTER_WORKSHOP" "corridor runs east"
+run_test_absent "No time machine in workshop" "$ENTER_WORKSHOP" "magnificent contraption"
 run_test_absent "No 'This would be the time machine' text" "$ENTER_WORKSHOP" "This would be the time machine"
+
+# --- Solarium ---
+echo "[Solarium]"
+run_test "Corridor blocked before Thyme departs" "$ENTER_WORKSHOP
+east" "Dr. Thyme seems to need your attention"
+run_test "Solarium auto-unlock with key" "$ENTER_SOLARIUM" "master key"
+run_test "First entry glimpse" "$ENTER_SOLARIUM" "flicker of movement"
+run_test "Machine in solarium" "$ENTER_SOLARIUM
+look" "contraption"
+run_test "Ferns in solarium" "$ENTER_SOLARIUM" "ferns"
+run_test "Cat appears in solarium" "$ENTER_SOLARIUM" "already here"
 
 # --- Cat naming ---
 echo "[Cat Naming]"
@@ -181,16 +205,10 @@ run_test "Thyme departs" "$ENTER_WORKSHOP
 take spanner
 give spanner to dr thyme
 talk to dr thyme" "front door slams"
-run_test "Cat on machine with rag" "$ENTER_WORKSHOP
-take spanner
-give spanner to dr thyme
-talk to dr thyme
+run_test "Cat on machine with rag" "$ENTER_SOLARIUM
 clean
 look" "cleaning rag dangling"
-run_test "Cat steals rag" "$ENTER_WORKSHOP
-take spanner
-give spanner to dr thyme
-talk to dr thyme
+run_test "Cat steals rag" "$ENTER_SOLARIUM
 clean" "snatches the rag"
 run_test "Take cat triggers accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "ABSOLUTELY DO NOT TOUCH"
@@ -198,7 +216,7 @@ run_test "Sent to Roman forum" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "Roman Londinium"
 run_test "Score for accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-score" "10 out of"
+score" "15 out of"
 
 # --- Clean guard ---
 echo "[Clean Guard]"
@@ -209,17 +227,18 @@ clean" "spanner"
 run_test "Cleaning refused before talking to Thyme" "$ENTER_WORKSHOP
 give spanner to dr thyme
 clean" "talk to Dr. Thyme"
-run_test "Cannot clean while rag on machine" "$ENTER_WORKSHOP
-give spanner to dr thyme
-talk to dr thyme
+run_test "Workshop clean is superficial" "$ENTER_SOLARIUM
+west
+clean" "marginally less chaotic"
+run_test "Cannot clean while rag on machine" "$ENTER_SOLARIUM
 clean
 clean" "cat has stolen"
 
 # --- Examine machine before accident ---
 echo "[Machine Examine Pre-Accident]"
-run_test "Examine machine before accident no trigger" "$ENTER_WORKSHOP
-examine machine" "under a heavy tarpaulin"
-run_test_absent "Examine machine does not trigger accident" "$ENTER_WORKSHOP
+run_test "Examine machine in solarium" "$ENTER_SOLARIUM
+examine machine" "barely contained energy"
+run_test_absent "Examine machine does not trigger accident" "$ENTER_SOLARIUM
 examine machine" "ABSOLUTELY DO NOT TOUCH"
 
 # --- Roman Londinium ---
@@ -296,7 +315,7 @@ south
 bury" "two thousand years"
 run_test "Temporal rift return" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-enter rift" "back in the workshop"
+enter rift" "back in the solarium"
 
 # --- Time Travel ---
 echo "[Time Travel]"
@@ -446,7 +465,7 @@ west
 down
 give soldier to eleanor" "tin soldier"
 run_test "Blitz rift return" "$BLITZ_SETUP
-enter rift" "back in the workshop"
+enter rift" "back in the solarium"
 
 # --- Cambridge ---
 echo "[Cambridge 2009]"
@@ -661,10 +680,11 @@ take processor
 up
 enter rift
 install
+west
 clean"
 run_test "Install all components" "$ENDGAME_CMD" "Temporal Displacement Engine is repaired"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
-run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 165"
+run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 170"
 
 # --- Copernicus ---
 echo "[Copernicus]"
@@ -691,9 +711,9 @@ kill hitler" "family-friendly"
 
 # --- Travel-to scope outside workshop ---
 echo "[Travel-to Scope]"
-run_test "Travel to dest outside workshop shows error" "$ENTER_WORKSHOP
+run_test "Travel to dest outside solarium shows error" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-travel to blitz" "temporal rift to return to the workshop"
+travel to blitz" "temporal rift to return"
 run_test "Travel to dest before cat accident not in scope" "travel to roman" "can.t see any such thing"
 
 # --- Scenery objects ---
