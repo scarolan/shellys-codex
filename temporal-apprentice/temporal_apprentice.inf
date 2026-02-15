@@ -1795,6 +1795,11 @@ Object cambridge_bikes "bicycle rack" cambridge_gates
          description "A tangle of bicycles in various states of repair, chained to a rack, to each other, and to at least one lamppost. This is Cambridge. Bicycles are a way of life, a mode of transport, and occasionally a philosophical statement.",
     has scenery pluralname;
 
+Object cambridge_students "students" cambridge_gates
+    with name 'student' 'students' 'gown' 'gowns' 'book' 'books',
+         description "Students in billowing black gowns hurry past in every direction, clutching books, folders, and the unmistakable air of people who have read too much and slept too little. They move with the purposeful speed of the academically terrified.",
+    has scenery pluralname animate;
+
 Object cambridge_porter "Porter's Lodge"
     with description [;
             print "The Porter's Lodge is a small, warm room that serves as the gatehouse to academic paradise. A stern porter sits behind a window, radiating the quiet authority of someone who has told Nobel Prize winners they can't park there.^^";
@@ -1812,6 +1817,11 @@ Object cambridge_porter "Porter's Lodge"
          ],
          e_to cambridge_garden,
     has light;
+
+Object porter_window "window" cambridge_porter
+    with name 'window' 'desk',
+         description "A small, sturdy window behind which the porter sits in judgement. The desk beyond it is immaculate -- a logbook, a telephone, and a mug of tea arranged with military precision. A sign on the glass reads: ~ALL VISITORS MUST REPORT.~",
+    has scenery;
 
 Object porter_npc "college porter" cambridge_porter
     with name 'porter' 'jenkins',
@@ -1919,6 +1929,11 @@ Object party_table "banquet table" cambridge_hall
 Object hall_wheelchair "wheelchair" cambridge_hall
     with name 'wheelchair' 'chair' 'wheels',
          description "Professor Hawking's wheelchair is a marvel of technology, bristling with controls and the speech synthesiser that gives his words their distinctive robotic authority. It is, in its own way, as much a scientific instrument as anything in the laboratory.",
+    has scenery;
+
+Object hall_ceiling "vaulted ceiling" cambridge_hall
+    with name 'ceiling' 'vaulted',
+         description "The vaulted ceiling arches high above, its medieval stonework now decorated with balloons printed ~WELCOME TIME TRAVELLERS~ in cheerful colours. The balloons drift and bump against the ancient beams with a faintly absurd dignity, as if even inflatable latex respects eight centuries of academic tradition.",
     has scenery;
 
 Object cambridge_study "Hawking's Study"
@@ -2058,6 +2073,11 @@ Object future_catwalks "catwalks" future_street
          description "A precarious network of catwalks and rope bridges connects the upper floors of flooded buildings. They sway in the wind with a confidence-undermining enthusiasm. The engineering is creative, the safety standards are aspirational, and the views are spectacular if you can stop looking down.",
     has scenery pluralname;
 
+Object future_buildings "buildings" future_street
+    with name 'building' 'buildings' 'terrace' 'terraces' 'victorian' 'house' 'houses',
+         description "Victorian terraces rise from the floodwater like rows of red-brick teeth. The ground floors are submerged, their windows dark and silted. Upper floors have been converted into living spaces, connected by the network of catwalks. Washing lines stretch between buildings, and window boxes defy the apocalypse with geraniums.",
+    has scenery pluralname;
+
 Object future_museum "Thames Barrier Museum"
     with description [;
             print "The museum occupies the upper floors of what was once the Thames Barrier control centre. Display cases hold artefacts salvaged from flooded London -- underground signs, a red telephone box, soggy copies of the Evening Standard dated 2038.^^";
@@ -2143,6 +2163,11 @@ Object future_rooftop "Museum Rooftop"
          d_to future_museum,
     has light;
 
+Object rooftop_view "view of flooded London" future_rooftop
+    with name 'view' 'skyline' 'london' 'structures' 'stilts',
+         description "Flooded London stretches to every horizon. The old skyline -- the Shard, the Gherkin, the towers of Canary Wharf -- stands half-submerged, their lower floors drowned. Between them, new structures rise on stilts and pontoons: a city rebuilding itself one storey higher. It's simultaneously devastating and magnificent.",
+    has scenery;
+
 Object comm_panel "maintenance panel" future_rooftop
     with name 'panel' 'maintenance' 'communications' 'array' 'antenna',
          description [;
@@ -2180,7 +2205,7 @@ Object walkway_railing "railing" future_walkway
     has scenery;
 
 Object walkway_scaffolding "scaffolding" future_walkway
-    with name 'scaffolding' 'scaffold' 'catwalk' 'metal',
+    with name 'scaffolding' 'scaffold' 'catwalk' 'metal' 'walkway',
          description "The walkway is built from reclaimed scaffolding and salvaged metal, lashed together with cable ties and determination. It sways gently underfoot, which is either the wind or the structure expressing its opinion about your weight.",
     has scenery;
 
@@ -2192,6 +2217,16 @@ Object future_refuge "Climate Refuge"
         ],
          e_to future_street,
     has light;
+
+Object refuge_panels "solar panels and wind turbines" future_refuge
+    with name 'solar' 'panel' 'panels' 'wind' 'turbine' 'turbines' 'roof',
+         description "Solar panels cover the roof in neat rows, angled to catch every scrap of London's grudging sunlight. Between them, small wind turbines spin with quiet determination. Together they power the Refuge -- heating, lighting, and the communications equipment. The future runs on ingenuity and weather.",
+    has scenery pluralname;
+
+Object refuge_desk "desk" future_refuge
+    with name 'desk' 'maps' 'map' 'reports' 'report' 'papers',
+         description "Torres's desk is a command centre disguised as furniture. Maps of flooded London cover every surface, annotated with supply routes, safe passages, and tide tables. Reports are stacked in colour-coded folders -- red for urgent, yellow for pending, green for resolved. The green stack is noticeably thin.",
+    has scenery;
 
 Object future_lab "Submerged Laboratory"
     with description [;
@@ -2210,6 +2245,16 @@ Object future_lab "Submerged Laboratory"
         ],
          u_to future_street,
     has light;
+
+Object lab_equipment "laboratory equipment" future_lab
+    with name 'desk' 'desks' 'equipment' 'coffee' 'cup' 'cups',
+         description "Desks and workstations are frozen in the moment the water rose. Computer monitors stare blankly into the murk, keyboards trail cables like tentacles, and coffee cups drift at ceiling height in a surreal slow-motion ballet. Whatever they were researching here, they left in a hurry.",
+    has scenery pluralname;
+
+Object lab_lights "fluorescent lights" future_lab
+    with name 'light' 'lights' 'fluorescent',
+         description "The fluorescent lights still flicker underwater, powered by some backup system that has outlasted all rational expectation. They cast an eerie, greenish glow through the murk, making the submerged laboratory look like a very expensive fish tank.",
+    has scenery pluralname;
 
 Object flood_water "floodwater"
     with name 'water' 'flood' 'thames' 'floodwater' 'murky',
@@ -2524,7 +2569,7 @@ Object blitz_dest "Blitz London"
     has proper;
 
 Object hawking_dest "Cambridge"
-    with name 'cambridge' 'hawking' '2009' 'party',
+    with name 'cambridge' 'hawking' '2009',
     has proper;
 
 Object future_dest "Future London"
