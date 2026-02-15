@@ -171,7 +171,7 @@ Global machine_raised = false;
         print "~Help? You're the apprentice! Your job is to help ME. But I suppose reading the journal would be a start. And do have a look around -- everything in this workshop has a story. Most of them end with a small explosion, but that's science for you.~^";
         rtrue;
     }
-    print "Dr. Thyme adjusts his spectacles. ~Hmm? Oh, I'm not sure I can help you with that. Try the journal -- it's got everything in there. Somewhere. The indexing system is... aspirational.~^";
+    print "Dr. Thyme peers at you over an imaginary pair of spectacles. ~Hmm? Oh, I'm not sure I can help you with that. Try the journal -- it's got everything in there. Somewhere. The indexing system is... aspirational.~^";
 ];
 
 [ NPC_Talk_Marcus;
@@ -2546,7 +2546,7 @@ Object solarium_dest "Workshop"
     if (score >= MAX_SCORE) {
         print "^^=== PERFECT ENDING ===^^";
         print "Every component recovered. Every inscription carved, every capsule buried, every church saved, every drawing inspired. You have not merely repaired the time machine -- you have woven yourself into the fabric of history.^^";
-        print "Dr. Thyme returns from tea to find his machine in better condition than when he left. Copernicus sits atop it, naturally. ~I see you've had a productive afternoon,~ he says, peering at you over his spectacles. ~Tea?~^^";
+        print "Dr. Thyme returns from tea to find his machine in better condition than when he left. Copernicus sits atop it, naturally. ~I see you've had a productive afternoon,~ he says, peering at you over an imaginary pair of spectacles. ~Tea?~^^";
         print "You accept. The scones are excellent.^";
     } else if (score >= 135) {
         print "^^=== GOOD ENDING ===^^";
