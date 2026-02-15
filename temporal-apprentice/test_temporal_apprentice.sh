@@ -55,11 +55,20 @@ echo ""
 
 echo "=== Running tests ==="
 
+# Knock three times to open door and enter workshop
+ENTER_WORKSHOP="knock
+knock
+knock
+east"
+
 # Common trigger: the multi-step cat accident sequence
-# 1) talk to dr thyme (gives rags, Thyme leaves)
-# 2) clean (cat steals rag, climbs onto machine)
-# 3) take cat (cat kicks lever, accident fires -> Roman Forum)
-CAT_ACCIDENT="talk to dr thyme
+# 1) give spanner to dr thyme (introduces you)
+# 2) talk to dr thyme (gives rags + key, Thyme leaves)
+# 3) clean (cat steals rag, climbs onto machine)
+# 4) take cat (cat kicks lever, accident fires -> Roman Forum)
+CAT_ACCIDENT="take spanner
+give spanner to dr thyme
+talk to dr thyme
 clean
 take cat"
 
@@ -67,121 +76,179 @@ take cat"
 echo "[Compilation]"
 run_test "Game compiles and runs" "look" "Praed Street"
 
+# --- Knock Mechanic ---
+echo "[Knock Mechanic]"
+run_test "First knock" "knock" "No response"
+run_test "Second knock" "knock
+knock" "something move inside"
+run_test "Third knock opens door" "knock
+knock
+knock" "swings open"
+run_test "East blocked before knock" "east" "should knock"
+run_test "East open after knock" "$ENTER_WORKSHOP" "cathedral"
+
+# --- Spanner Puzzle ---
+echo "[Spanner Puzzle]"
+run_test "Spanner on shelf" "$ENTER_WORKSHOP
+look" "spanner"
+run_test "Take spanner" "$ENTER_WORKSHOP
+take spanner" "Taken"
+run_test "Give spanner to Thyme" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme" "new apprentice"
+run_test "Thyme won't talk without spanner" "$ENTER_WORKSHOP
+talk to dr thyme" "spanner"
+run_test "Thyme departure gives key" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme" "front door key"
+
+# --- Pocket Watch ---
+echo "[Pocket Watch]"
+run_test "Watch in inventory at start" "inventory" "pocket watch"
+run_test_absent "No watch on ground" "look" "You can.*see.*pocket watch"
+
 # --- Workshop Hub ---
 echo "[Workshop Hub]"
 run_test "Start location" "look" "Praed Street"
-run_test "Go to workshop" "east" "cathedral of improbable engineering"
-run_test "Take journal" "east
+run_test "Go to workshop" "$ENTER_WORKSHOP" "cathedral of improbable engineering"
+run_test "Take journal" "$ENTER_WORKSHOP
 take journal" "Taken"
-run_test "Store room accessible" "east
+run_test "Store room accessible" "$ENTER_WORKSHOP
 north" "Store Room"
-run_test "Take toolkit" "east
+run_test "Take toolkit" "$ENTER_WORKSHOP
 north
 take toolkit" "Taken"
-run_test "Dr. Thyme present" "east" "Dr. Thyme"
-run_test "Cat shown as ginger tabby" "east" "ginger tabby cat"
-run_test_absent "Cat not named Copernicus initially" "east
+run_test "Dr. Thyme present" "$ENTER_WORKSHOP" "Dr. Thyme"
+run_test "Cat shown as ginger tabby" "$ENTER_WORKSHOP" "ginger tabby cat"
+run_test_absent "Cat not named Copernicus initially" "$ENTER_WORKSHOP
 look" "You can also see.*Copernicus"
-run_test "Workshop description no time machine label" "east" "humming with barely contained energy"
-run_test_absent "No 'This would be the time machine' text" "east" "This would be the time machine"
+run_test "Workshop description no time machine label" "$ENTER_WORKSHOP" "humming with barely contained energy"
+run_test_absent "No 'This would be the time machine' text" "$ENTER_WORKSHOP" "This would be the time machine"
 
 # --- Cat naming ---
 echo "[Cat Naming]"
-run_test "Examine name tag reveals name" "east
+run_test "Examine name tag reveals name" "$ENTER_WORKSHOP
 examine tag
 look" "Copernicus"
-run_test "Name tag has solar system" "east
+run_test "Name tag has solar system" "$ENTER_WORKSHOP
 examine tag" "solar system"
-run_test "Ask Thyme about cat reveals name" "east
+run_test "Ask Thyme about cat reveals name" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
 ask dr thyme about cat
 look" "Copernicus"
 
 # --- Dr. Thyme expanded dialog ---
 echo "[Dr. Thyme Dialog]"
-run_test "Ask about machine" "east
+run_test "Ask about machine" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
 ask dr thyme about machine" "Temporal Displacement Engine"
-run_test "Ask about marmalade" "east
+run_test "Ask about marmalade" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
 ask dr thyme about marmalade" "Seville orange"
-run_test "Ask about Mrs Pemberton" "east
+run_test "Ask about Mrs Pemberton" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
 ask dr thyme about pemberton" "scone"
-run_test "Ask about research" "east
+run_test "Ask about research" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
 ask dr thyme about research" "twenty-seven years"
-run_test "Ask about journal" "east
+run_test "Ask about journal" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
 ask dr thyme about journal" "temporal feedback loop"
 
 # --- Multi-step accident sequence ---
 echo "[Cat Accident]"
-run_test "Talk to Thyme gives rags" "east
-talk to dr thyme" "cleaning rags"
-run_test "Thyme warns about machine" "east
-talk to dr thyme" "do NOT touch the machine"
-run_test "Thyme departs" "east
-talk to dr thyme" "bustles out"
-run_test "Clean triggers cat steal" "east
-talk to dr thyme
-clean" "snatches the rag"
-run_test "Cat on machine with rag" "east
+run_test "Talk to Thyme gives rags" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme" "tidy up"
+run_test "Thyme warns about solarium" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme" "do NOT go into the solarium"
+run_test "Thyme departs" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme" "front door slams"
+run_test "Cat on machine with rag" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
 talk to dr thyme
 clean
 look" "cleaning rag dangling"
-run_test "Take cat triggers accident" "east
+run_test "Cat steals rag" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+clean" "snatches the rag"
+run_test "Take cat triggers accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "ABSOLUTELY DO NOT TOUCH"
-run_test "Sent to Roman forum" "east
+run_test "Sent to Roman forum" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "Roman Londinium"
-run_test "Score for accident" "east
+run_test "Score for accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-score" "5 out of"
+score" "10 out of"
 
 # --- Clean guard ---
 echo "[Clean Guard]"
-run_test_absent "No cleaning before talking to Thyme" "east
+run_test_absent "No cleaning before spanner" "$ENTER_WORKSHOP
 clean" "Tools are returned"
-run_test "Cleaning refused before talking to Thyme" "east
-clean" "doesn.t need cleaning yet"
-run_test "Cannot clean while rag on machine" "east
+run_test "Cleaning refused before spanner" "$ENTER_WORKSHOP
+clean" "spanner"
+run_test "Cleaning refused before talking to Thyme" "$ENTER_WORKSHOP
+give spanner to dr thyme
+clean" "talk to Dr. Thyme"
+run_test "Cannot clean while rag on machine" "$ENTER_WORKSHOP
+give spanner to dr thyme
 talk to dr thyme
 clean
 clean" "cat has stolen"
 
 # --- Examine machine before accident ---
 echo "[Machine Examine Pre-Accident]"
-run_test "Examine machine before accident no trigger" "east
+run_test "Examine machine before accident no trigger" "$ENTER_WORKSHOP
 examine machine" "barely contained energy"
-run_test_absent "Examine machine does not trigger accident" "east
+run_test_absent "Examine machine does not trigger accident" "$ENTER_WORKSHOP
 examine machine" "ABSOLUTELY DO NOT TOUCH"
 
 # --- Roman Londinium ---
 echo "[Roman Londinium]"
-run_test "Forum description" "east
+run_test "Forum description" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 look" "Forum"
-run_test "Marcus blocks north" "east
+run_test "Marcus blocks north" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 north" "Roman citizens and military"
-run_test "Livia blocks temple" "east
+run_test "Livia blocks temple" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 east" "Only the initiated"
-run_test "Bathhouse accessible" "east
+run_test "Bathhouse accessible" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "Steam billows"
-run_test "Gold aureus in bath" "east
+run_test "Gold aureus in bath" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "gold aureus"
-run_test "Take aureus" "east
+run_test "Take aureus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 take aureus" "Taken"
-run_test "Merchant quarter" "east
+run_test "Merchant quarter" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south" "Merchant"
-run_test "Trade for lodestone" "east
+run_test "Trade for lodestone" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 take aureus
 east
 south
 give aureus to felix" "lodestone"
-run_test "Show lodestone to Marcus" "east
+run_test "Show lodestone to Marcus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 take aureus
@@ -190,7 +257,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus" "commands iron"
-run_test "Temple accessible after Marcus" "east
+run_test "Temple accessible after Marcus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 take aureus
@@ -201,8 +268,7 @@ north
 show lodestone to marcus
 talk to livia
 east" "Temple of Mithras"
-run_test "Carve inscription" "take watch
-east
+run_test "Carve inscription" "$ENTER_WORKSHOP
 take journal
 north
 take toolkit
@@ -218,30 +284,29 @@ show lodestone to marcus
 talk to livia
 east
 carve" "TEMPUS FUGIT"
-run_test "Bury time capsule" "take watch
-east
+run_test "Bury time capsule" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south
 south
 bury" "two thousand years"
-run_test "Temporal rift return" "east
+run_test "Temporal rift return" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 enter rift" "back in the workshop"
 
 # --- Time Travel ---
 echo "[Time Travel]"
-run_test "Travel to Blitz" "east
+run_test "Travel to Blitz" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 enter rift
 travel to blitz" "1941"
-run_test "Eras must be sequential" "east
+run_test "Eras must be sequential" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 enter rift
 travel to cambridge" "hasn.t stabilised"
 
 # --- WWII London ---
 echo "[WWII London]"
-BLITZ_SETUP="east
+BLITZ_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
 enter rift
 travel to blitz"
@@ -263,7 +328,9 @@ _valve_output=$(echo "$BLITZ_SETUP
 west
 take valve
 look" | "$DFROTZ" -h 999 -w 200 "$Z5" 2>&1)
-_after_taken=$(echo "$_valve_output" | sed -n '/^Taken/,$p')
+# Extract text after the LAST "Taken" line (multiple items are taken during setup)
+_last_taken=$(echo "$_valve_output" | grep -n "^Taken" | tail -1 | cut -d: -f1)
+_after_taken=$(echo "$_valve_output" | tail -n +"$_last_taken")
 if echo "$_after_taken" | grep -qi "A radio valve lies in the accessible rubble"; then
     FAIL=$((FAIL + 1))
     echo "  FAIL: Valve not in rubble desc after taking (should NOT contain: A radio valve lies in the accessible rubble)"
@@ -314,8 +381,7 @@ west
 dig
 open box
 take tube" "temporal resonance"
-run_test "Church inscription visible" "take watch
-east
+run_test "Church inscription visible" "$ENTER_WORKSHOP
 take journal
 north
 take toolkit
@@ -379,7 +445,7 @@ enter rift" "back in the workshop"
 
 # --- Cambridge ---
 echo "[Cambridge 2009]"
-CAMBRIDGE_SETUP="east
+CAMBRIDGE_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
 enter rift
 travel to blitz
@@ -406,7 +472,7 @@ west
 give invitation to porter
 north" "Hawking"
 
-HAWKING_SETUP="east
+HAWKING_SETUP="$ENTER_WORKSHOP
 take journal
 north
 take toolkit
@@ -427,7 +493,7 @@ tell hawking about time" "claim to be a time traveller"
 run_test "Show journal to Hawking" "$HAWKING_SETUP
 tell hawking about time
 show journal to hawking" "Victorian"
-CONVINCE_SETUP="east
+CONVINCE_SETUP="$ENTER_WORKSHOP
 take journal
 north
 take toolkit
@@ -459,7 +525,7 @@ take napkin" "calibration formula"
 
 # --- Future London ---
 echo "[Future London 2045]"
-FUTURE_SETUP="east
+FUTURE_SETUP="$ENTER_WORKSHOP
 north
 take toolkit
 south
@@ -534,7 +600,7 @@ open cabinet" "temporal harmonic sequence"
 # --- Endgame ---
 echo "[Endgame]"
 # Minimal run: just get the 4 required components
-ENDGAME_CMD="east
+ENDGAME_CMD="$ENTER_WORKSHOP
 take journal
 north
 take toolkit
@@ -597,13 +663,13 @@ run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 165"
 
 # --- Copernicus ---
 echo "[Copernicus]"
-run_test "Cat follows player" "east
+run_test "Cat follows player" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south
 look" "Copernicus"
-run_test "Cat examine" "east
+run_test "Cat examine" "$ENTER_WORKSHOP
 examine cat" "magnificently smug ginger tabby"
-run_test "Can't take cat before accident" "east
+run_test "Can't take cat before accident" "$ENTER_WORKSHOP
 take cat" "boneless"
 
 # --- Help ---
@@ -612,7 +678,7 @@ run_test "Help command" "help" "TEMPORAL APPRENTICE"
 
 # --- Kill Hitler Easter Egg ---
 echo "[Easter Eggs]"
-run_test "Kill Hitler response" "east
+run_test "Kill Hitler response" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 enter rift
 travel to blitz
@@ -620,7 +686,7 @@ kill hitler" "family-friendly"
 
 # --- Travel-to scope outside workshop ---
 echo "[Travel-to Scope]"
-run_test "Travel to dest outside workshop shows error" "east
+run_test "Travel to dest outside workshop shows error" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 travel to blitz" "temporal rift to return to the workshop"
 run_test "Travel to dest before cat accident not in scope" "travel to roman" "can.t see any such thing"
@@ -629,17 +695,17 @@ run_test "Travel to dest before cat accident not in scope" "travel to roman" "ca
 echo "[Scenery Objects]"
 run_test "Examine door in Workshop Entrance" "examine door" "heavy oak door"
 run_test "Examine brass plate in Workshop Entrance" "examine brass plate" "TEMPORAL ENGINEERING"
-run_test "Examine shelves in Main Workshop" "east
+run_test "Examine shelves in Main Workshop" "$ENTER_WORKSHOP
 examine shelves" "Floor-to-ceiling shelves"
-run_test "Examine marmalade in Main Workshop" "east
+run_test "Examine marmalade in Main Workshop" "$ENTER_WORKSHOP
 examine marmalade" "Seville orange"
-run_test "Examine column in Roman Forum" "east
+run_test "Examine column in Roman Forum" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 examine column" "Corinthian column"
-run_test "Examine citizens in Roman Forum" "east
+run_test "Examine citizens in Roman Forum" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 examine citizens" "Toga-clad citizens"
-run_test "Examine pools in Roman Bathhouse" "east
+run_test "Examine pools in Roman Bathhouse" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 examine pools" "tepidarium"
@@ -659,11 +725,11 @@ examine pub" "Crown and Anchor"
 run_test "Examine sign in Rubble Site" "$BLITZ_SETUP
 west
 examine sign" "FI CH"
-run_test "Examine stalls in Merchant Quarter" "east
+run_test "Examine stalls in Merchant Quarter" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south
 examine stalls" "Ramshackle wooden stalls"
-run_test "Examine boats at Roman Docks" "east
+run_test "Examine boats at Roman Docks" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south
 south

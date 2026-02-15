@@ -91,6 +91,10 @@ Global thyme_departed = false;
 Global rag_stolen = false;
 Global rag_on_machine = false;
 
+Global knock_count = 0;
+Global door_open = false;
+Global spanner_given = false;
+
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
 ! ===================================================================
@@ -108,22 +112,27 @@ Global rag_on_machine = false;
         print "Dr. Thyme has already left for tea. You can still hear him humming Rule Britannia as he disappears down the alley.^";
         rtrue;
     }
-    print "Dr. Thyme beams at you over his spectacles. ~Ah, there you are! Welcome, welcome to the workshop. Marvellous place, isn't it? Try not to touch anything that's glowing. Or humming. Especially if it's doing both.~^^";
-    print "He rummages under the workbench and produces a bundle of cleaning rags, pressing them into your hands. ~First things first -- the workshop needs a good tidy. Mrs. Pemberton's scones wait for no man, so I'm popping out for tea. The journal on the workbench will bring you up to speed.~^^";
-    print "He leans in conspiratorially. ~One absolute rule: do NOT touch the machine. Not a lever, not a dial, not so much as a cog. She's temperamental.~^^";
-    if (copernicus_named)
-        print "He glances at Copernicus. ~And keep an eye on the cat. He has... ideas.~^^";
-    else
-        print "He glances at the ginger tabby cat. ~And keep an eye on the cat. He has... ideas.~^^";
-    print "With that, Dr. Thyme grabs his enormous overcoat and bustles out through the entrance.^";
+    if (spanner_given == false) {
+        "~The number four spanner,~ he repeats, without turning around. ~On the shelf. Behind you. Brass. Not steel. Tuesdays.~";
+    }
+    print "Dr. Thyme suddenly freezes, stares at the clock on the wall, and leaps to his feet.^^";
+    print "~Mrs. Pemberton's! The scones! She only holds them until half three and it's --~ He checks three separate watches, each showing a different time. ~-- it's NEARLY that. Or possibly past. Time is --~ He waves his hand vaguely. ~-- a matter of perspective.~^^";
+    print "He grabs his enormous overcoat from the hooks by the door and shoves a brass key into your hand.^^";
+    print "~Front door key. Lock up when I'm back. Or before. Temporal engineering.~ He's already halfway out. ~DO tidy up while I'm out. Place is a state. And do NOT go into the solarium. The door at the end of the corridor. Under ANY circumstances.~^^";
+    print "The front door slams. You are alone. Well -- alone except for the cat, who watches you from atop a shelf with an expression of absolute calculation.^";
     thyme_departed = true;
     move cleaning_rags to player;
+    move front_door_key to player;
     remove dr_thyme;
 ];
 
 [ NPC_Ask_Thyme topic;
     if (thyme_departed || cat_accident) {
         print "Dr. Thyme isn't here to ask.^";
+        rtrue;
+    }
+    if (spanner_given == false) {
+        print "Dr. Thyme doesn't turn around. ~Spanner first. Shelf. Behind you. Brass.~^";
         rtrue;
     }
     if (topic == 'machine' or 'time' or 'device' or 'invention' or 'engine' or 'temporal') {
@@ -564,6 +573,15 @@ Global rag_on_machine = false;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
+    if (w == 'knock' or 'rap') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'k';
+        i->2 = 'n';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
     if (w == 'open' && location == future_rooftop) {
         i = WordAddress(1);
         len = WordLength(1);
@@ -583,15 +601,26 @@ Global rag_on_machine = false;
 Object workshop_entrance "Workshop Entrance"
     with description [;
             print "A narrow alley off Praed Street, thick with London fog and the eternal smell of coal smoke. Gas lamps throw jaundiced circles on the cobblestones. A brass plate beside a heavy oak door reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- NO SALESMEN.~^^";
-            print "The workshop lies to the east. The alley continues west to the street, but you've only just arrived and you'd hate to make a bad impression on your first day.^";
+            if (door_open)
+                print "The oak door stands open, revealing the workshop beyond to the east.^";
+            else
+                print "The heavy oak door is closed. You should probably knock.^";
+            print "The alley continues west to the street, but you've only just arrived and you'd hate to make a bad impression on your first day.^";
         ],
-         e_to main_workshop,
+         e_to [;
+            if (door_open) return main_workshop;
+            "The heavy oak door is firmly closed. Perhaps you should knock.";
+         ],
          w_to "You've literally just started this job. Let's at least see what's inside before fleeing into the London fog.",
     has light;
 
 Object coat_hook "coat hook" workshop_entrance
     with name 'hook' 'coat' 'hooks' 'rack' 'peg',
-         description "A row of brass hooks by the door. Dr. Thyme's enormous overcoat hangs from one. Yours would fit inside it roughly three times.",
+         description [;
+            if (thyme_departed)
+                "A row of brass hooks by the door. Dr. Thyme's enormous overcoat is gone -- he grabbed it on his way out.";
+            "A row of brass hooks by the door. Dr. Thyme's enormous overcoat hangs from one. Yours would fit inside it roughly three times.";
+         ],
     has scenery;
 
 Object entrance_brass_plate "brass plate" workshop_entrance
@@ -601,7 +630,11 @@ Object entrance_brass_plate "brass plate" workshop_entrance
 
 Object entrance_door "oak door" workshop_entrance
     with name 'door' 'oak' 'heavy',
-         description "A heavy oak door, scarred by decades of London weather and possibly one or two small explosions. The brass hinges are magnificent. The dent at cat-height is suspicious.",
+         description [;
+            if (door_open)
+                "The heavy oak door stands open. The hinges are magnificent brass affairs. A suspicious dent at cat-height suggests this is not the first time something has made a dramatic entrance.";
+            "A heavy oak door, firmly closed. Scarred by decades of London weather and possibly one or two small explosions. The brass hinges are magnificent. The dent at cat-height is suspicious.";
+         ],
     has scenery;
 
 Object entrance_gas_lamps "gas lamps" workshop_entrance
@@ -624,7 +657,7 @@ Object entrance_alley "alley" workshop_entrance
          description "A narrow alley off Praed Street, barely wide enough for two people to pass without exchanging pleasantries or diseases. The walls are damp brick, the ground is damp cobblestone, and the air is damp everything.",
     has scenery;
 
-Object pocket_watch "pocket watch" workshop_entrance
+Object pocket_watch "pocket watch"
     with name 'watch' 'pocket' 'timepi' 'fob',
          description "Your grandfather's pocket watch. A handsome brass piece, slightly dented, perpetually three minutes fast. The irony of carrying a faulty timepiece to a job in temporal engineering has not escaped you.",
          before [;
@@ -637,15 +670,20 @@ Object main_workshop "Main Workshop"
             print "The workshop is a cathedral of improbable engineering. Brass gears the size of dinner plates mesh with copper pipes that disappear into the walls. Glass jars of luminous liquids line shelves alongside what appear to be several jars of marmalade. The ceiling is lost in a tangle of tubes and wires.^^";
             print "The centrepiece is unmistakable: a magnificent contraption of brass, crystal, and what might be a repurposed church organ occupies the middle of the room, humming with barely contained energy.^^";
             if (cat_accident == false) {
+                if (spanner_given == false && thyme_departed == false)
+                    print "A man is hunched over the workbench with his back to you. ~The number four spanner,~ he says, without turning around. ~On the shelf behind you. The brass one. Not the steel one. The steel one is for Tuesdays.~^^";
                 if (rag_on_machine) {
                     if (copernicus_named)
                         print "Copernicus is perched atop the contraption, your cleaning rag dangling from his mouth like a trophy.^^";
                     else
                         print "The ginger tabby cat is perched atop the contraption, your cleaning rag dangling from his mouth like a trophy.^^";
                 }
-                if (thyme_departed == false)
-                    print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
-                else
+                if (thyme_departed == false) {
+                    if (spanner_given)
+                        print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
+                    else
+                        print "The workbench is cluttered with tools and a leather-bound journal. A brass spanner glints on the shelf behind you. The store room is to the north, and the entrance is back to the west.^";
+                } else
                     print "The workbench is cluttered with tools and a leather-bound journal. The store room is to the north, and the entrance is back to the west.^";
             }
             else
@@ -695,10 +733,19 @@ Object workshop_wires "wires" main_workshop
          description "A cat's cradle of copper wiring connects everything to everything else. The insulation is mostly intact. Mostly.",
     has scenery pluralname;
 
+Object brass_spanner "brass spanner" main_workshop
+    with name 'spanner' 'brass' 'number' 'four' 'wrench',
+         description "A well-worn brass spanner, number four. It has the comfortable weight of a tool that has been used ten thousand times for purposes its manufacturer never imagined.",
+         initial "A brass spanner sits on the shelf behind you.";
+
 Object workshop_marmalade "marmalade jars" main_workshop
     with name 'marmalade' 'jam' 'preserv',
          description "Several jars of Seville orange marmalade, interspersed among the scientific apparatus with no apparent logic. Each one bears a handwritten label: ~JT -- BATCH 7,~ ~JT -- BATCH 12 (EXPERIMENTAL),~ and most worryingly, ~JT -- BATCH 3 (DO NOT EAT -- TEMPORAL).~",
     has scenery pluralname;
+
+Object front_door_key "front door key"
+    with name 'key' 'front' 'door' 'brass',
+         description "A heavy brass key, warm from Dr. Thyme's waistcoat pocket. It opens the front door of 14 Praed Street. Presumably.";
 
 Object time_machine "time machine" main_workshop
     with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal',
@@ -782,12 +829,13 @@ Object store_supplies "supplies" store_room
 ! ===================================================================
 
 Object dr_thyme "Dr. Thyme" main_workshop
-    with name 'thyme' 'justin' 'hartley' 'doctor' 'dr' 'aldric',
+    with name 'thyme' 'justin' 'doctor' 'dr' 'man',
          description [;
-            if (cat_accident || thyme_departed) {
-                "Dr. Thyme is out getting tea. His timing, as always, was impeccable.";
-            }
-            "A tall, thin man with wild silver hair and spectacles perpetually about to fall off his nose. He radiates the sort of cheerful disorganisation that either produces geniuses or explosions. Often both.";
+            if (cat_accident || thyme_departed)
+                "Dr. Thyme is out getting tea and scones. His timing, as always, was impeccable.";
+            if (spanner_given == false)
+                "A man is hunched over the workbench, his back to you. Dark hair, slightly unkempt, shot through with a single streak of grey at the temple. He wears a waistcoat over rolled shirtsleeves, both dusted with copper filings. He hasn't acknowledged your existence yet.";
+            "Dr. Thyme peers at you over an imaginary pair of spectacles -- he doesn't actually wear them, but his face seems designed for it. Dark eyes set deep beneath heavy brows, skin the warm brown of old tea, and an expression that suggests he has just remembered you exist and is moderately pleased about it.";
          ],
          life [;
             Ask:
@@ -796,6 +844,15 @@ Object dr_thyme "Dr. Thyme" main_workshop
             Tell:
                 "Dr. Thyme nods enthusiastically while clearly thinking about something else entirely.";
             Give:
+                if (noun == brass_spanner && spanner_given == false) {
+                    spanner_given = true;
+                    score = score + 5;
+                    remove brass_spanner;
+                    print "He takes the spanner without looking, makes a minute adjustment to whatever he's working on, and finally turns. You get your first proper look at Dr. Thyme.^^";
+                    print "He has the face of a man who has spent twenty years thinking about something that nobody else can see -- dark eyes set deep beneath heavy brows, skin the warm brown of old tea, and an expression that suggests he has just remembered you exist and is moderately pleased about it.^^";
+                    print "~Ah. The new apprentice. Yes. Good.~ He peers at you as if reading very small print. ~I'm Dr. Thyme. You'll call me Doctor, or sir, or 'that madman with the spanner,' whichever comes most naturally.~^";
+                    rtrue;
+                }
                 "~How kind! But I really must dash. Mrs. Pemberton waits for no man.~";
          ],
     has animate proper male;
@@ -2169,10 +2226,13 @@ Object future_dest "Future London"
     @split_window 1;
     location = workshop_entrance;
     score = 0;
+    move pocket_watch to player;
 
     print "London, 1895.^^";
-    print "It's your first day as apprentice to Dr. Justin Thyme, inventor, eccentric, and -- according to the advert in The Times -- ~pioneer of temporal engineering, seeking assistant with good penmanship and an open mind regarding the fundamental nature of causality.~^^";
-    print "You answered the advert because you needed the money. Also because ~temporal engineering~ sounded considerably more interesting than your previous position at the accounting firm of Greybaum, Tedium and Sons.^^";
+    print "You are standing outside 14 Praed Street, clutching a copy of yesterday's Times and trying to look like someone with an open mind regarding the fundamental nature of causality.^^";
+    print "The advert reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Competitive wages. No salesmen.~^^";
+    print "You answered because you needed the money. Also because ~temporal engineering~ sounded considerably more interesting than your previous position at the accounting firm of Greybaum, Tedium and Sons.^^";
+    print "You fish your grandfather's pocket watch from your waistcoat pocket. Three minutes fast, as always. But even by its optimistic reckoning, you're right on time.^^";
     print "Type HELP for a list of commands.^^";
 ];
 
@@ -2221,6 +2281,25 @@ Object future_dest "Future London"
 ! ===================================================================
 ! ACTION ROUTINES
 ! ===================================================================
+
+[ KnockSub;
+    if (location == workshop_entrance && door_open == false) {
+        knock_count++;
+        if (knock_count == 1) {
+            "You rap on the heavy oak door. The sound echoes in the alley. No response.";
+        }
+        if (knock_count == 2) {
+            "You knock again, louder. Still nothing. But you could swear you heard something move inside.";
+        }
+        if (knock_count >= 3) {
+            door_open = true;
+            "You raise your fist to knock a third time -- and the door swings open of its own accord. No one behind it. The hinges creak in the silence.";
+        }
+    }
+    if (location == workshop_entrance && door_open)
+        "The door is already open.";
+    "Knocking on that seems unlikely to accomplish anything.";
+];
 
 [ TalkToSub;
     if (noun == dr_thyme)         { NPC_Talk_Thyme(); rtrue; }
@@ -2429,8 +2508,10 @@ Object future_dest "Future London"
 [ CleanSub;
     if (location == main_workshop) {
         if (cat_accident == false) {
+            if (spanner_given == false)
+                "You haven't even introduced yourself yet. Find the spanner Dr. Thyme wants first.";
             if (thyme_departed == false)
-                "The workshop doesn't need cleaning yet. You've only just arrived. Perhaps talk to Dr. Thyme first.";
+                "The workshop doesn't need cleaning yet. Perhaps talk to Dr. Thyme first.";
             if (cleaning_rags notin player && rag_stolen == false)
                 "You don't have any cleaning rags. Dr. Thyme gave you some -- where did they go?";
             if (rag_on_machine)
@@ -2580,6 +2661,10 @@ Verb 'zpt'
 
 Verb 'zop'
     * noun                                  -> OpenPanel;
+
+Verb 'zkn'
+    *                                       -> Knock
+    * noun                                  -> Knock;
 
 Verb 'zcl'
     *                                       -> Clean
