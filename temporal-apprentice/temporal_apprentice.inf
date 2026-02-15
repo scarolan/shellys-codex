@@ -1854,6 +1854,10 @@ Object porter_npc "college porter" cambridge_porter
 Object cambridge_garden "College Garden"
     with description [;
             print "A perfectly manicured garden that looks like it was designed by God on a particularly good day and has been maintained by anxious gardeners ever since. Ancient trees shade immaculate lawns. A bench overlooks a carp pond.^^";
+            if (church_saved)
+                print "Above the college rooftops, the spire of St. Margaret's Church rises against the sky -- beautifully restored, its medieval stonework scrubbed clean of centuries of soot. A plaque near the garden wall notes: ~St. Margaret's survived the Blitz thanks to the bravery of local fire watchers.~ You feel a quiet glow of pride.^^";
+            else
+                print "Above the college rooftops, you notice a conspicuous gap in the skyline where a church spire ought to be. A small plaque near the garden wall reads: ~Site of St. Margaret's Church, destroyed by incendiary bomb, 1941.~ A car park occupies the space now. Progress.^^";
             if (invitation in cambridge_garden)
                 print "Half-hidden under the bench, something catches your eye -- a piece of card that's been dropped or blown here.^^";
             print "The Porter's Lodge is back to the west.^";
@@ -1870,6 +1874,16 @@ Object garden_trees "trees" cambridge_garden
     with name 'tree' 'trees' 'lawn' 'grass' 'garden',
          description "Ancient trees shade immaculate lawns maintained with the obsessive precision that only centuries of academic tradition can produce. A small sign reads ~KEEP OFF THE GRASS~ in a font that suggests this is not a suggestion but a fundamental law of the university.",
     has scenery pluralname;
+
+Object garden_church_view "church" cambridge_garden
+    with name 'church' 'spire' 'margaret' 'plaque',
+         description [;
+            if (church_saved) {
+                "St. Margaret's Church stands proud above the rooftops, its spire catching the afternoon light. The medieval stonework has been beautifully restored. A plaque near the garden wall reads: ~St. Margaret's survived the Blitz thanks to the bravery of local fire watchers, 1941.~ You saved that church. You were there.";
+            }
+            "A plaque near the garden wall marks the site of St. Margaret's Church, destroyed by an incendiary bomb in 1941. The gap in the skyline has been filled by a car park. History, paved over.";
+         ],
+    has scenery;
 
 Object garden_bench "bench" cambridge_garden
     with name 'bench' 'seat',
@@ -2051,6 +2065,10 @@ Object future_museum "Thames Barrier Museum"
                 print "A special exhibit catches your eye: ~ROMAN TIME CAPSULE -- DISCOVERED AT THAMES DOCKSIDE EXCAVATION.~ Inside the case, unmistakably, is your grandfather's pocket watch. The label reads: ~Circa 60 AD. Remarkably well-preserved. Origin unknown.~^^";
             if (eleanor_gift)
                 print "Another display: ~WARTIME ART COLLECTION.~ Among the children's drawings is one labelled ~Eleanor Morrison, aged 8, 1941.~ It shows a ginger cat. You recognise the style immediately.^^";
+            if (church_saved)
+                print "A scale model of St. Margaret's Church dominates one corner: ~SAVED FROM THE BLITZ -- St. Margaret's Church survived the incendiary raids of 1941, thanks to a fire watcher who smothered the flames with sandbags.~ The church still stands, even above the floodwaters.^^";
+            else
+                print "A photograph shows a gap-toothed London skyline. The caption reads: ~Site of St. Margaret's Church, destroyed by incendiary bomb, 1941. One of many irreplaceable buildings lost to the Blitz.~^^";
             print "A DeLorean sits in the corner with a sign reading ~TIME TRAVEL IN POPULAR CULTURE.~^^";
             print "The flooded street is south. Stairs lead up to the rooftop.^";
         ],
@@ -2078,6 +2096,16 @@ Object eleanor_display "wartime art display" future_museum
          description [;
             if (eleanor_gift) {
                 "The display includes several children's drawings from the Blitz. One is unmistakably Eleanor's work -- the same ginger cat, the same careful lines. The label reads: ~Eleanor Morrison, aged 8, 1941. Morrison went on to become a celebrated artist.~ You smile.";
+            }
+            "You don't see any such display.";
+         ],
+    has scenery;
+
+Object church_display "church model" future_museum
+    with name 'church' 'model' 'margaret',
+         description [;
+            if (church_saved) {
+                "A beautifully detailed scale model of St. Margaret's Church, complete with tiny sandbags on the roof. The plaque reads: ~St. Margaret's Church -- survived the Blitz of 1941 when a fire watcher smothered an incendiary with sandbags. The church still stands above the floodwaters, one of the few medieval buildings to survive both war and water.~ You feel a fierce, irrational pride.";
             }
             "You don't see any such display.";
          ],
@@ -2312,6 +2340,14 @@ Object curator "Museum Curator" future_museum
                         print " and, she said, hope.~^";
                     } else {
                         print "~We have some wartime art in the collection. Children's drawings, mostly. Poignant stuff.~^";
+                    }
+                    rtrue;
+                }
+                if (second == 'church' or 'margaret' or 'spire') {
+                    if (church_saved) {
+                        print "~St. Margaret's? Still standing, even with all the flooding. One of the few medieval buildings to keep its head above water, literally. They say a fire watcher saved it during the Blitz -- smothered an incendiary with sandbags on the roof. Remarkable bravery.~ They gaze out the window. ~Sometimes one person really does make the difference.~^";
+                    } else {
+                        print "~St. Margaret's Church? Lost in the Blitz, I'm afraid. Incendiary bomb, 1941. Nobody got to it in time. We have a photograph in the collection. One of many irreplaceable things this city has lost.~^";
                     }
                     rtrue;
                 }
