@@ -2363,7 +2363,7 @@ Object copernicus "ginger tabby cat" main_workshop
          ],
          before [;
             Take:
-                if (rag_on_machine) {
+                if (rag_on_machine && location == solarium) {
                     cat_accident = true;
                     visited_roman = true;
                     current_era = 1;
@@ -2460,10 +2460,10 @@ Object cleaning_rags "cleaning rags"
                     rtrue;
                 }
             Drop:
-                if (location == main_workshop && thyme_departed && rag_stolen == false) {
+                if (location == solarium && thyme_departed && rag_stolen == false) {
                     rag_stolen = true;
                     rag_on_machine = true;
-                    move self to main_workshop;
+                    move self to solarium;
                     print "You set down the cleaning rags on the workbench.^^";
                     if (copernicus_named)
                         print "In a flash of ginger fur, Copernicus snatches a rag and bolts. Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
