@@ -815,7 +815,7 @@ west
 clean"
 run_test "Install all components" "$ENDGAME_CMD" "Temporal Displacement Engine is repaired"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
-run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 175"
+run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 180"
 
 # --- Copernicus ---
 echo "[Copernicus]"
