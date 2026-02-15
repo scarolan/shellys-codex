@@ -378,7 +378,7 @@ Global machine_raised = false;
         rtrue;
     }
     if (topic == 'party' or 'invitation') {
-        print "~I sent the invitations after the party. Only time travellers could attend. It's either a brilliant experiment or I'm about to eat a lot of canapes alone.~^";
+        print "~I sent the invitations after the party. Only time travellers could attend. A temporal beacon, if you will -- a lighthouse for anyone lost in the stream of time.~ The synthesiser pauses. ~It's either a brilliant experiment or I'm about to eat a lot of canapes alone.~^";
         rtrue;
     }
     if (topic == 'cat' or 'copernicus') {
@@ -1012,15 +1012,15 @@ Object time_machine "time machine" solarium
 Object hartley_journal "leather-bound journal" main_workshop
     with name 'journal' 'book' 'leather' 'diary' 'notes',
          description [;
-            print "Dr. Thyme's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Key excerpts:^^";
-            print "~The Romans knew the power of lodestones -- magnetic iron, gifts from Jupiter, they called them. A stone of sufficient purity could serve as the temporal compass core. The merchants of Londinium would have traded in such things.~^^";
-            print "~The oscillation circuit requires a vacuum tube of military grade. Civilian manufacturing lacks the precision. One would need wartime production -- the kind of engineering that only emerges under existential threat.~^^";
-            print "~The temporal harmonics remain my greatest challenge. Perhaps Hawking's theoretical framework could provide the calibration formula I need. A pity he won't be born for another sixty-odd years.~^^";
-            print "~Current technology cannot produce a quantum processor. Future technology, however... if one could reach the mid-twenty-first century, the computational power would be trivial. Getting there is the hard part.~^^";
+            print "Dr. Thyme's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Certain entries are dated with alarming notation such as ~TUESDAY (THE FIRST ONE)~ and ~SOME TIME AFTER WEDNESDAY BUT POSSIBLY BEFORE.~ Key excerpts:^^";
+            print "~The Romans knew the power of lodestones -- magnetic iron, gifts from Jupiter, they called them. A stone of sufficient purity could serve as the temporal compass core. I have tested fourteen specimens. Thirteen were inadequate. The fourteenth pulled every nail out of the floorboards. I need one like that. The merchants of Londinium would have traded in such things.~^^";
+            print "~The oscillation circuit relies on a Crookes tube of my own manufacture. Hand-blown, one of a kind, exquisitely fragile. I have broken three. Mass production of such tubes may be achievable in future decades? Note to self -- visit future for replacement parts. SECOND NOTE TO SELF -- remember to come back AFTER you left. Hiding in the pantry for six hours was undignified.~^^";
+            print "~The navigation problem persists. I can move through time but I cannot AIM. Ended up in next Thursday when I wanted last March. The mathematics of temporal harmonics are beyond me -- I need a framework for describing the geometry of time itself. Caught a glimpse during Tuesday's hop (the SECOND Tuesday, not the one I lost) of a lecture hall, equations on a blackboard, a fellow in a remarkable chair. Cambridge? The machine seemed drawn to the place, as if someone had left a light on. If I could only read my own notes.~^^";
+            print "~The field generator requires calculations beyond any Babbage engine. I have done them by hand and it takes MONTHS. Glimpsed, during a particularly fuzzy hop, machines that think -- crystalline, luminous, operating in more dimensions than is decent. The future will build what Mr. Babbage only dreamed. Getting there remains the problem.~^^";
             if (copernicus_named)
-                print "The margins are full of cat doodles and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
+                print "The margins are full of cat doodles and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY.~^";
             else
-                print "The margins are full of cat doodles and the note: ~KEEP THE CAT AWAY FROM THE CONTROLS.~ This is underlined seventeen times.^";
+                print "The margins are full of cat doodles and the note: ~KEEP THE CAT AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY.~^";
         ],
          initial "A leather-bound journal sits prominently on the workbench.";
 
@@ -1405,7 +1405,7 @@ Object felix "Felix the Merchant" roman_merchants
 
 Object lodestone "lodestone"
     with name 'lodestone' 'stone' 'magnet' 'thunder',
-         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs gently at any iron nearby, as if the universe itself is nudging you. Dr. Thyme's journal mentioned this: the magnetic core for the temporal compass.";
+         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs at any iron nearby with startling force -- the kind of lodestone that, according to the journal, pulled every nail out of Dr. Thyme's floorboards. The magnetic core for the temporal compass.";
 
 Object roman_bathers "bathers" roman_bath
     with name 'bathers' 'romans' 'bather' 'people',
@@ -1733,7 +1733,7 @@ Object metal_box "metal box" blitz_rubble
                 if (blitz_rubble hasnt general) "You can't reach the box yet. It's buried under tonnes of rubble.";
                 if (self has open) "It's already open.";
                 give self open;
-                "You wrench the box open. Inside, packed in straw, are rows of vacuum tubes. One stands out -- slightly larger, with markings that match the specifications in Dr. Thyme's journal.";
+                "You wrench the box open. Inside, packed in straw, are rows of vacuum tubes -- the military-grade descendants of the Crookes tubes Dr. Thyme blew by hand. One stands out -- slightly larger, with oscillation markings that look eerily similar to the ones in the journal.";
             Take:
                 if (blitz_rubble hasnt general) "You can't reach the box yet. It's buried under tonnes of rubble.";
                 "The box is too heavy to carry, but you could open it and take what's inside.";
@@ -1742,7 +1742,7 @@ Object metal_box "metal box" blitz_rubble
 
 Object vacuum_tube "vacuum tube" metal_box
     with name 'vacuum' 'tube' 'special' 'military',
-         description "A military-grade vacuum tube with unusual oscillation markings. It matches the specifications in Dr. Thyme's journal precisely. This is the component needed for the temporal oscillation circuit.",
+         description "A military-grade vacuum tube, mass-produced with a precision no Victorian glassblower could match. The oscillation markings are different from Dr. Thyme's hand-blown Crookes tube, but the principle is the same -- fifty years of engineering have perfected what Thyme built by intuition and candlelight. This is the component needed for the temporal oscillation circuit.",
          before [;
             Take:
                 if (blitz_rubble hasnt general) "It's buried under rubble. You need help digging it out first.";
@@ -1858,7 +1858,7 @@ Object cambridge_gates "College Gates"
 
 Object cambridge_notice "notice" cambridge_gates
     with name 'notice' 'sign' 'poster',
-         description "A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009. Champagne and canapes will be served. Dress: casual (any century).~ It appears to have been posted after the event, which rather limits the guest list.",
+         description "A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009. Champagne and canapes will be served. Dress: casual (any century).~ It was posted after the event -- invitations sent backward through time, so only genuine time travellers could attend. A temporal lighthouse. No wonder the machine locked onto this date.",
     has scenery;
 
 Object cambridge_gate "gate" cambridge_gates
@@ -1978,7 +1978,7 @@ Object garden_bench "bench" cambridge_garden
 
 Object invitation "party invitation" cambridge_garden
     with name 'invitation' 'card' 'invite' 'party',
-         description "An elegant card reads: ~Professor Stephen Hawking requests the pleasure of your company at a party for time travellers. Gonville and Caius College, June 28, 2009.~ Below, in smaller print: ~Invitations sent after the party. If you can read this, you're either a time traveller or very good at finding things under benches.~",
+         description "An elegant card reads: ~Professor Stephen Hawking requests the pleasure of your company at a party for time travellers. Gonville and Caius College, June 28, 2009.~ Below, in smaller print: ~Invitations sent after the party. If you can read this, you're either a time traveller or very good at finding things under benches.~ So THIS is what pulled the machine here. Hawking sent invitations backward through time -- a beacon for anyone with the means to follow it.",
          initial "A cream-coloured invitation card peeks out from under the bench.";
 
 Object cambridge_hall "Gonville Hall"
@@ -2039,7 +2039,7 @@ Object study_models "models" cambridge_study
 
 Object napkin_formula "napkin with formula" cambridge_study
     with name 'napkin' 'formula' 'equatio',
-         description "A cocktail napkin covered in Professor Hawking's handwriting. The equations describe temporal field calibration harmonics. You understand perhaps one word in five, but Dr. Thyme's journal mentioned exactly these calculations.",
+         description "A cocktail napkin covered in Professor Hawking's handwriting. The equations describe temporal field calibration harmonics -- the mathematics of aiming through time. You understand perhaps one word in five, but these are the navigational equations Dr. Thyme couldn't derive, the ones he scrawled ~IF I COULD ONLY READ MY OWN NOTES~ next to in the journal.",
          initial "A napkin with equations lies on the desk.",
          before [;
             Take:
@@ -2381,7 +2381,7 @@ Object quantum_cabinet "sealed cabinet" future_lab
 
 Object quantum_processor "quantum processor" quantum_cabinet
     with name 'processor' 'quantum' 'chip' 'cpu',
-         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent. The quantum processing unit needed for the temporal field generator -- the fourth and final component.",
+         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent -- beyond anything Babbage could have dreamed. This is what Dr. Thyme glimpsed during his fuzzy hops: machines that think. The computational power needed for the temporal field generator -- the fourth and final component.",
          before [;
             Take:
                 if (lab_unlocked == false) "It's locked in the cabinet. You need to open it first.";
@@ -2861,7 +2861,7 @@ Object solarium_dest "Workshop"
         current_era = 3;
         move time_machine to cambridge_gates;
         move copernicus to cambridge_gates;
-        print "You set the dial to ~2009~ and activate the machine. The transition is smoother this time -- perhaps the machine is healing. You materialise beside a bicycle rack.^";
+        print "You set the dial to ~2009~ and activate the machine. The transition is smoother this time -- perhaps the machine is healing. As you travel, you feel the machine lock onto something, pulled toward a specific date like a compass needle swinging north. Someone in 2009 has left a light on for time travellers. You materialise beside a bicycle rack.^";
         PlayerTo(cambridge_gates);
         rtrue;
     }
@@ -3012,8 +3012,8 @@ Object solarium_dest "Workshop"
     components_installed = true;
     score = score + 5;
     print "You set to work with your toolkit, and the next hour is the most intense of your apprenticeship.^^";
-    print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube slides into the oscillation circuit, and the machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
-    print "You transcribe Hawking's formula from the napkin into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. Finally, the quantum processor drops into the field generator, and the entire machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
+    print "The lodestone slots into the temporal compass housing with a satisfying click, immediately orienting the machine's navigational field. The vacuum tube slides into the oscillation circuit where Thyme's hand-blown Crookes tube once sat -- mass-produced precision replacing Victorian intuition -- and the machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
+    print "You transcribe Hawking's formula from the napkin into the calibration matrix, adjusting the temporal harmonics until the readouts stabilise. For the first time, the machine can AIM. Finally, the quantum processor drops into the field generator -- the calculations that took Thyme months by hand now running in crystalline silence -- and the entire machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself.^^";
     print "The Temporal Displacement Engine is repaired. Better than repaired -- it's magnificent.^^";
     if (workshop_cleaned == false)
         print "The workshop is still a mess, though. Dr. Thyme would probably appreciate it if you tidied up before he returned from tea. Just a thought.^";
