@@ -903,19 +903,18 @@ Object time_machine "time machine" solarium
                     print "The machine is mostly underwater. You'd need diving gear to reach the controls.^^";
                 else if (location == future_street && machine_raised == false)
                     print "With your diving gear, you could haul the machine up from the water.^^";
-                print "The destination dial ";
-                if (location == cambridge_gates && has_formula == false)
-                    print "is jammed";
-                else if (location == future_street && has_diving_gear == false)
-                    print "is underwater";
-                else
-                    print "still works";
-                print ". You could travel to:^";
-                if (visited_roman) print "  Roman Londinium (60 AD)^";
-                if (visited_blitz || visited_roman) print "  Blitz London (1941)^";
-                if (visited_hawking || visited_blitz) print "  Cambridge (2009)^";
-                if (visited_future || visited_hawking) print "  Future London (2045)^";
-                print "  Workshop (1895)^";
+                if (location == cambridge_gates && has_formula == false) {
+                    ! dial jammed — already described above, skip destination list
+                } else if (location == future_street && has_diving_gear == false) {
+                    ! dial underwater — already described above, skip destination list
+                } else {
+                    print "The destination dial still works. You could travel to:^";
+                    if (visited_roman) print "  Roman Londinium (60 AD)^";
+                    if (visited_blitz || visited_roman) print "  Blitz London (1941)^";
+                    if (visited_hawking || visited_blitz) print "  Cambridge (2009)^";
+                    if (visited_future || visited_hawking) print "  Future London (2045)^";
+                    print "  Workshop (1895)^";
+                }
             }
          ],
          add_to_scope roman_dest blitz_dest hawking_dest future_dest solarium_dest,
