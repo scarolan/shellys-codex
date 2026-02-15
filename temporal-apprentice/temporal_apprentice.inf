@@ -1854,7 +1854,8 @@ Object porter_npc "college porter" cambridge_porter
 Object cambridge_garden "College Garden"
     with description [;
             print "A perfectly manicured garden that looks like it was designed by God on a particularly good day and has been maintained by anxious gardeners ever since. Ancient trees shade immaculate lawns. A bench overlooks a carp pond.^^";
-            print "Half-hidden under the bench, something catches your eye -- a piece of card that's been dropped or blown here.^^";
+            if (invitation in cambridge_garden)
+                print "Half-hidden under the bench, something catches your eye -- a piece of card that's been dropped or blown here.^^";
             print "The Porter's Lodge is back to the west.^";
         ],
          w_to cambridge_porter,
@@ -1909,7 +1910,8 @@ Object hall_wheelchair "wheelchair" cambridge_hall
 Object cambridge_study "Hawking's Study"
     with description [;
             print "The study of the most famous physicist alive is surprisingly cosy. Books line every wall, a computer with a speech synthesiser sits on the desk, and models of black holes and the cosmos hang from the ceiling like a nerd's mobile.^^";
-            print "A napkin on the desk has equations scrawled on it in careful handwriting.^^";
+            if (napkin_formula in cambridge_study)
+                print "A napkin on the desk has equations scrawled on it in careful handwriting.^^";
             print "The hall is back to the west.^";
         ],
          w_to cambridge_hall,
