@@ -627,7 +627,7 @@ Object workshop_entrance "Workshop Entrance"
     has light;
 
 Object coat_hook "coat hook" workshop_entrance
-    with name 'hook' 'coat' 'hooks' 'rack' 'peg',
+    with name 'hook' 'coat' 'hooks' 'rack' 'peg' 'overcoat',
          description [;
             if (thyme_departed)
                 "A row of brass hooks by the door. Dr. Thyme's enormous overcoat is gone -- he grabbed it on his way out.";
@@ -668,6 +668,11 @@ Object entrance_cobblestones "cobblestones" workshop_entrance
 Object entrance_fog "fog" workshop_entrance
     with name 'fog' 'smog' 'mist' 'smoke',
          description "London fog -- equal parts moisture, coal smoke, and municipal indifference. It clings to everything like a damp, grey cat. Visibility is roughly twelve feet, which in this neighbourhood is probably a mercy.",
+    has scenery;
+
+Object entrance_newspaper "newspaper" workshop_entrance
+    with name 'newspaper' 'times' 'paper' 'advert' 'advertisement' 'copy',
+         description "Yesterday's Times, already slightly damp from the fog. The advert you circled reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Competitive wages. No salesmen.~",
     has scenery;
 
 Object entrance_alley "alley" workshop_entrance
@@ -755,6 +760,11 @@ Object workshop_wires "wires" main_workshop
     with name 'wires' 'wire' 'wiring',
          description "A cat's cradle of copper wiring connects everything to everything else. The insulation is mostly intact. Mostly.",
     has scenery pluralname;
+
+Object workshop_clock "clock" main_workshop
+    with name 'clock' 'wall' 'clock',
+         description "A large brass clock mounted on the wall, its face crowded with more hands than any reasonable timepiece should possess. At least three of them appear to be moving backwards. A small plaque beneath reads: ~Adjusted for Temporal Drift -- J.T.~",
+    has scenery;
 
 Object brass_spanner "brass spanner" main_workshop
     with name 'spanner' 'brass' 'number' 'four' 'wrench',
@@ -873,7 +883,7 @@ Object solarium "The Solarium"
     has light;
 
 Object solarium_ferns "potted ferns" solarium
-    with name 'fern' 'ferns' 'potted' 'plants' 'plant',
+    with name 'fern' 'ferns' 'potted' 'plants' 'plant' 'aspidistra' 'aspidistras' 'maidenhair',
          description "A collection of aspidistras and maidenhair ferns in brass pots, thriving in the humid glass-roofed space. They sway occasionally in drafts that have no obvious source.",
     has scenery pluralname;
 
@@ -893,7 +903,7 @@ Object solarium_controls "controls" solarium
     has scenery pluralname;
 
 Object time_machine "time machine" solarium
-    with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal',
+    with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal' 'crystal' 'crystals' 'resonator' 'resonators',
          description [;
             if (cat_accident == false) {
                 print "A magnificent contraption of brass, crystal, and what might be a repurposed church organ. Brass housings encase crystal resonators connected by a bewildering maze of copper tubing. A set of controls features several levers, a compass-like dial, and what appears to be a bicycle bell. The whole thing hums with barely contained energy.^^";

@@ -1470,6 +1470,23 @@ north
 up
 examine antenna" "panel"
 
+# --- Issue #45: Missing scenery ---
+echo "[Issue #45: Missing Scenery]"
+run_test "Examine newspaper in Workshop Entrance" "examine newspaper" "yesterday's Times"
+run_test "Examine times in Workshop Entrance" "examine times" "yesterday's Times"
+run_test "Examine advert in Workshop Entrance" "examine advert" "TEMPORAL ENGINEERING"
+run_test "Examine clock in Main Workshop" "$ENTER_WORKSHOP
+examine clock" "brass clock"
+run_test "Examine overcoat in Workshop Entrance" "examine overcoat" "overcoat"
+run_test "Examine aspidistra in Solarium" "$ENTER_SOLARIUM
+examine aspidistra" "aspidistras and maidenhair"
+run_test "Examine maidenhair in Solarium" "$ENTER_SOLARIUM
+examine maidenhair" "aspidistras and maidenhair"
+run_test "Examine crystal in Solarium" "$ENTER_SOLARIUM
+examine crystal" "crystal resonators"
+run_test "Examine crystals in Solarium" "$ENTER_SOLARIUM
+examine crystals" "crystal resonators"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"
