@@ -979,7 +979,7 @@ Object time_machine "time machine" solarium
             } else if (components_installed) {
                 print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
             } else {
-                print "The time machine looks decidedly worse for wear since Copernicus's intervention. Several components are missing or damaged. The compass housing is empty, the Crookes tube shattered, the calibration dial seized, and the field generator's crystalline component -- the one Dr. Thyme always said he didn't build -- is cracked clean through. You'll need to find replacements across time itself.^^";
+                print "The time machine looks decidedly worse for wear since Copernicus's intervention. Several components are missing or damaged. The compass housing is empty, the Crookes tube shattered, the calibration dial seized, and the field generator's crystalline component -- the one that arrived in the mysterious parcel -- is cracked clean through. You'll need to find replacements across time itself.^^";
                 if (location == roman_forum && marcus_impressed == false)
                     print "Roman soldiers have formed a nervous perimeter around the machine. Their centurion eyes it with deep suspicion.^^";
                 if (location == blitz_street && machine_dug_out == false)
@@ -1016,7 +1016,7 @@ Object hartley_journal "leather-bound journal" main_workshop
             print "~TEMPORAL COMPASS -- The compass core requires a lodestone of exceptional purity. Naturally magnetic iron ore, the stronger the better. I have tested fourteen specimens from various suppliers; thirteen were inadequate and the fourteenth pulled every nail out of the floorboards. Lodestones of sufficient quality are exceedingly rare. The finest magnetite deposits are quarried in the Mediterranean basin. My current stone has weakened noticeably after 847 test activations and will need replacing.~^^";
             print "~OSCILLATION CIRCUIT -- The circuit employs a modified Crookes tube: an evacuated glass envelope through which cathode rays pass at controlled intervals, generating the temporal oscillation field. I have hand-blown seven; four shattered during calibration, two proved insufficiently evacuated, and the seventh serves adequately though its tolerances are marginal. The precision required exceeds what any single craftsman can reliably achieve. A manufacturing process capable of producing tubes to exact specification would solve this, but no such process exists.~^^";
             print "~NAVIGATION -- REMAINS THE CENTRAL PROBLEM. The machine moves through time but landings are imprecise. I set coordinates for March and arrive in November, aim for London and materialise in Croydon (arguably worse). Precise navigation requires a mathematical framework for describing the geometry of time itself. The temporal harmonics governing exact positioning are beyond anything I can derive. The mathematics simply do not exist yet.~^^";
-            print "~FIELD GENERATOR -- Requires continuous recalculation of seventeen simultaneous differential equations, each dependent on the others. I have attempted these by hand. It takes eleven weeks per set of coordinates and the error margin remains unacceptable. Mr. Babbage's engine falls short by several orders of magnitude. THE FOLLOWING TROUBLES ME: upon disassembling the field generator housing I found a crystalline component I did not install. No maker's mark. No correspondence to any material I recognise. It appears to have been performing the bulk of the field calculations. I do not know who put it there, or when. I am choosing not to think about this too carefully.~^^";
+            print "~FIELD GENERATOR -- Requires continuous recalculation of seventeen simultaneous differential equations, each dependent on the others. I have attempted these by hand. It takes eleven weeks per set of coordinates and the error margin remains unacceptable. Mr. Babbage's engine falls short by several orders of magnitude. ADDENDUM: A parcel arrived this morning. No return address. Postmark illegible. Inside, packed in straw, a crystalline component and a note reading: FOR THE FIELD GENERATOR. YOU WILL UNDERSTAND IN TIME. I have tested it. IT WORKS. Seventeen equations, resolved instantaneously. I have written to the General Post Office requesting sender information. They have not replied.~^^";
             if (copernicus_named)
                 print "The margins are full of cat doodles, tea stains, and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY. NOTE TO SELF -- when hiding from yourself in the pantry, bring a sandwich.~^";
             else
@@ -2381,7 +2381,7 @@ Object quantum_cabinet "sealed cabinet" future_lab
 
 Object quantum_processor "quantum processor" quantum_cabinet
     with name 'processor' 'quantum' 'chip' 'cpu',
-         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent. You feel a lurch of recognition -- this is the same material as the cracked component in the time machine's field generator. The one Dr. Thyme said he didn't install. The one with no maker's mark. You're looking at its replacement. Or its original. The distinction may not matter.",
+         description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent. You feel a lurch of recognition -- this is the same material as the cracked component in the time machine's field generator. The one that arrived in a parcel with no return address. ~YOU WILL UNDERSTAND IN TIME.~ You're beginning to.",
          before [;
             Take:
                 if (lab_unlocked == false) "It's locked in the cabinet. You need to open it first.";
@@ -2389,7 +2389,7 @@ Object quantum_processor "quantum processor" quantum_cabinet
                     has_processor = true;
                     score = score + 8;
                     move self to player;
-                    "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. You're not finding a new component. You're completing a loop. Four of four. Time to go home.";
+                    "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. Somewhere, somewhen, someone is going to pack one of these in straw, write a cryptic note, and post it to 14 Praed Street. Four of four. Time to go home.";
                 }
          ];
 
