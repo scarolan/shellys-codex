@@ -2750,6 +2750,9 @@ Object solarium_dest "Workshop"
         rtrue;
     }
     if (noun == roman_dest) {
+        if (location == roman_forum) {
+            "You're already in Roman Londinium.";
+        }
         if (visited_roman == false) visited_roman = true;
         current_era = 1;
         move time_machine to roman_forum;
@@ -2759,6 +2762,9 @@ Object solarium_dest "Workshop"
         rtrue;
     }
     if (noun == blitz_dest) {
+        if (location == blitz_street) {
+            "You're already in wartime London.";
+        }
         if (visited_roman == false) {
             "The dial won't turn that far yet. Perhaps you should visit the eras in order -- the machine seems to need warming up.";
         }
@@ -2771,6 +2777,9 @@ Object solarium_dest "Workshop"
         rtrue;
     }
     if (noun == hawking_dest) {
+        if (location == cambridge_gates) {
+            "You're already in Cambridge.";
+        }
         if (visited_blitz == false) {
             "The machine's temporal range hasn't stabilised enough for 2009 yet. Try an earlier era first.";
         }
@@ -2783,6 +2792,9 @@ Object solarium_dest "Workshop"
         rtrue;
     }
     if (noun == future_dest) {
+        if (location == future_street) {
+            "You're already in future London.";
+        }
         if (visited_hawking == false) {
             "The machine can't reach 2045 yet. The temporal range needs to build progressively.";
         }
