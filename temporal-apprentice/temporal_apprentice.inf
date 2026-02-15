@@ -1260,7 +1260,7 @@ Object docks_cargo "cargo" roman_docks
 ! --- Roman NPCs ---
 
 Object marcus "Centurion Marcus" roman_forum
-    with name 'marcus' 'centurion' 'soldier' 'soldiers' 'guard' 'roman',
+    with name 'marcus' 'centurion' 'soldier' 'soldiers' 'guard',
          description [;
             if (marcus_impressed) {
                 "Marcus stands at attention, though his expression has softened from ~bureaucratic hostility~ to ~grudging respect.~ He still thinks you dress like a lunatic, but a lunatic who commands thunder stones deserves some courtesy.";
