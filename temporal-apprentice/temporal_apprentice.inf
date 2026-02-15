@@ -1399,7 +1399,7 @@ Object street_darkness "darkness" blitz_street
     has scenery;
 
 Object street_searchlights "searchlights" blitz_street
-    with name 'searchli' 'lights' 'beams',
+    with name 'searchlig' 'lights' 'beams',
          description "Searchlight beams sweep the sky like enormous white fingers, probing for bombers. The effect is simultaneously terrifying and oddly beautiful, like a very aggressive light show.",
     has scenery pluralname;
 
@@ -1488,7 +1488,7 @@ Object church_stained_glass "stained glass" blitz_church
     has scenery;
 
 Object church_candlelight "candlelight" blitz_church
-    with name 'candle' 'candleli' 'candles' 'flame' 'flames',
+    with name 'candle' 'candlelig' 'candles' 'flame' 'flames',
          description "Stubby candles flicker in the nave, casting wavering shadows across the bomb-damaged walls. Someone has been maintaining them through the raids -- an act of either faith or stubbornness, and quite possibly both.",
     has scenery;
 
@@ -1532,7 +1532,7 @@ Object pub_regulars "pub regulars" blitz_pub
     has scenery animate pluralname;
 
 Object police_box "poster of police box" blitz_pub
-    with name 'poster' 'police' 'box' 'telephon',
+    with name 'poster' 'police' 'box' 'telephone',
          description "Just an ordinary poster of an ordinary police telephone box. Nothing special about it at all. Absolutely not. It's blue, it's rectangular, and it is emphatically just a telephone box. Anyone who suggests otherwise has been watching too many documentaries.",
     has scenery;
 
@@ -1595,7 +1595,7 @@ Object rooftop_parapet "parapet" blitz_rooftop
     has scenery;
 
 Object rooftop_searchlights "searchlights" blitz_rooftop
-    with name 'searchli' 'lights' 'beams',
+    with name 'searchlig' 'lights' 'beams',
          description "From up here, the searchlights paint the sky in sweeping arcs of brilliant white, hunting for bombers among the clouds. It's war turned into a light show -- terrible and oddly beautiful.",
     has scenery pluralname;
 
@@ -1610,7 +1610,7 @@ Object rooftop_london "London skyline" blitz_rooftop
     has scenery;
 
 Object rooftop_fire "fire" blitz_rooftop
-    with name 'fire' 'flames' 'blaze' 'incendia',
+    with name 'fire' 'flames' 'blaze' 'incendiar',
          description [;
             if (church_saved)
                 "The fire has been extinguished, thanks to your sandbag intervention. Scorch marks on the timbers below are the only evidence of the incendiary's brief, bright career.";
@@ -1650,7 +1650,7 @@ Object rubble_sign "shop sign" blitz_rubble
     has scenery;
 
 Object rubble_ordnance "unexploded ordnance" blitz_rubble
-    with name 'ordnance' 'bomb' 'uxb' 'unexplod',
+    with name 'ordnance' 'bomb' 'uxb' 'unexplode',
          description "Somewhere in this rubble, there may or may not be unexploded ordnance. The uncertainty is, in many ways, worse than the certainty. Warden Peggy's warnings echo in your mind. Best to tread carefully and dig only where you must.",
     has scenery;
 
@@ -1940,7 +1940,7 @@ Object cambridge_hall "Gonville Hall"
     has light;
 
 Object party_table "banquet table" cambridge_hall
-    with name 'table' 'banquet' 'food' 'champag' 'canapes' 'cake' 'balloon' 'balloons',
+    with name 'table' 'banquet' 'food' 'champagne' 'canapes' 'cake' 'balloon' 'balloons',
          description "The table is a feast for one. Well, for several, but only one has shown up. The champagne is excellent (Dom Perignon, 2001), the canapes are artful, and the cake has a marzipan TARDIS on it. Professor Hawking has a sense of humour.",
     has scenery supporter;
 
