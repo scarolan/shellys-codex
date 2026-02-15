@@ -270,7 +270,7 @@ Global machine_raised = false;
         print "~Shelter's right below us. Tube station, repurposed. Tommy's down there with his wireless set, and little Eleanor. Poor mite won't stop drawing pictures.~^";
         rtrue;
     }
-    if (topic == 'church' or 'bomb' or 'fire') {
+    if (topic == 'church' or 'bomb' or 'bombs' or 'fire') {
         if (church_saved) {
             print "~Thanks to you, St. Margaret's still stands. My grandmother was married there. Not that I'm sentimental.~ She dabs her eye briskly. ~Dust. Terrible dust.~^";
         } else {
@@ -1401,7 +1401,7 @@ Object street_doorway "doorway" blitz_street
     has scenery;
 
 Object street_shelter "shelter entrance" blitz_street
-    with name 'shelter' 'underground',
+    with name 'shelter' 'underground' 'steps',
          description "The entrance to the underground shelter -- a tube station pressed into service as a refuge from the bombing. Steps lead down into the warm, crowded darkness below.",
     has scenery;
 
@@ -1460,7 +1460,7 @@ Object church_roof "roof" blitz_church
     has scenery;
 
 Object church_rubble "church rubble" blitz_church
-    with name 'rubble' 'debris' 'pews' 'glass' 'masonry',
+    with name 'rubble' 'debris' 'pews' 'masonry',
          description "Broken pews, shattered glass, chunks of masonry. War has no respect for architecture. Among the debris, you can see bits of medieval stonework that have survived since... well, since about 60 AD, actually.",
     has scenery;
 
@@ -1664,6 +1664,7 @@ Object metal_box "metal box" blitz_rubble
                 give self open;
                 "You wrench the box open. Inside, packed in straw, are rows of vacuum tubes. One stands out -- slightly larger, with markings that match the specifications in Dr. Thyme's journal.";
             Take:
+                if (blitz_rubble hasnt general) "You can't reach the box yet. It's buried under tonnes of rubble.";
                 "The box is too heavy to carry, but you could open it and take what's inside.";
          ],
     has scenery container;
