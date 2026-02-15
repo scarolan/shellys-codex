@@ -402,6 +402,14 @@ run_test "Take aureus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 take aureus" "Taken"
+run_test "Swim in bathhouse" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+swim" "strigil"
+run_test "Enter pool in bathhouse" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+enter pool" "caldarium"
 run_test "Merchant quarter" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south" "Merchant"

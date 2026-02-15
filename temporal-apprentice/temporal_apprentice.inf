@@ -1453,11 +1453,19 @@ Object roman_bathers "bathers" roman_bath
 Object bath_pools "heated pools" roman_bath
     with name 'pool' 'pools' 'bath' 'baths',
          description "The pools range from tepidarium (pleasantly warm) to caldarium (volcanic). Romans recline in them like well-marinated olives, turning progressively pinker. The engineering required to heat this much water in first-century Britain is genuinely impressive.",
+         before [;
+            Enter:
+                "You eye the caldarium longingly, but the Romans are already giving you suspicious looks for being overdressed. Stripping off and joining a philosophical debate about Stoicism while your time machine rusts seems inadvisable.";
+         ],
     has scenery pluralname;
 
 Object bath_water "bath water" roman_bath
     with name 'water',
          description "The water is surprisingly clear for a communal bath, heated by an ingenious hypocaust system beneath the floor. It smells faintly of olive oil and heated arguments.",
+         react_before [;
+            Swim:
+                "The heated pools are tempting, but you're here to fix a time machine, not to adopt Roman bathing customs. Besides, you didn't bring a strigil.";
+         ],
     has scenery;
 
 Object bath_steam "steam" roman_bath
