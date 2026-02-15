@@ -2484,6 +2484,9 @@ Object solarium_dest "Workshop"
         print "You strap on the diving gear and haul the time machine up from the murky water. It surfaces with a reluctant gurgle, shedding Thames water and what appears to be a very confused eel.^^";
     }
     if (noun == solarium_dest) {
+        if (location == solarium) {
+            "You're already home. The machine hums contentedly in the corner, as if to say it agrees.";
+        }
         current_era = 0;
         move copernicus to solarium;
         move time_machine to solarium;

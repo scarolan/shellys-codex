@@ -340,6 +340,43 @@ north
 show lodestone to marcus
 travel to workshop
 look" "worse for wear"
+run_test "Already home guard" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to workshop
+travel to workshop" "already home"
+TOTAL=$((TOTAL + 1))
+_home_output=$(echo "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to workshop
+travel to workshop" | "$DFROTZ" -h 999 -w 200 "$Z5" 2>&1)
+_after_home=$(echo "$_home_output" | grep -n "already home" | tail -1 | cut -d: -f1)
+if [ -n "$_after_home" ]; then
+    _tail=$(echo "$_home_output" | tail -n +"$_after_home")
+    if echo "$_tail" | grep -qi "reality folds"; then
+        FAIL=$((FAIL + 1))
+        echo "  FAIL: Already home no animation (should NOT contain: reality folds after already home)"
+    else
+        PASS=$((PASS + 1))
+        echo "  PASS: Already home no animation"
+    fi
+else
+    FAIL=$((FAIL + 1))
+    echo "  FAIL: Already home no animation (could not find already home marker)"
+fi
 
 # --- Time Travel ---
 echo "[Time Travel]"
