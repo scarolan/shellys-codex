@@ -78,12 +78,13 @@ run_test "Game compiles and runs" "look" "Praed Street"
 
 # --- Knock Mechanic ---
 echo "[Knock Mechanic]"
+run_test "Open door before knock" "open door" "locked from the inside"
 run_test "First knock" "knock" "No response"
 run_test "Second knock" "knock
 knock" "something move inside"
 run_test "Third knock opens door" "knock
 knock
-knock" "swings open"
+knock" "beginning to rain"
 run_test "East blocked before knock" "east" "should knock"
 run_test "East open after knock" "$ENTER_WORKSHOP" "cathedral"
 
@@ -123,7 +124,11 @@ run_test "Dr. Thyme present" "$ENTER_WORKSHOP" "Dr. Thyme"
 run_test "Cat shown as ginger tabby" "$ENTER_WORKSHOP" "ginger tabby cat"
 run_test_absent "Cat not named Copernicus initially" "$ENTER_WORKSHOP
 look" "You can also see.*Copernicus"
-run_test "Workshop description no time machine label" "$ENTER_WORKSHOP" "humming with barely contained energy"
+run_test "Machine hidden under tarp" "$ENTER_WORKSHOP
+look" "tarpaulin"
+run_test_absent "No contraption before tarp" "$ENTER_WORKSHOP
+look" "magnificent contraption"
+run_test "Workshop description no time machine label" "$ENTER_WORKSHOP" "tarpaulin"
 run_test_absent "No 'This would be the time machine' text" "$ENTER_WORKSHOP" "This would be the time machine"
 
 # --- Cat naming ---
@@ -213,7 +218,7 @@ clean" "cat has stolen"
 # --- Examine machine before accident ---
 echo "[Machine Examine Pre-Accident]"
 run_test "Examine machine before accident no trigger" "$ENTER_WORKSHOP
-examine machine" "barely contained energy"
+examine machine" "under a heavy tarpaulin"
 run_test_absent "Examine machine does not trigger accident" "$ENTER_WORKSHOP
 examine machine" "ABSOLUTELY DO NOT TOUCH"
 

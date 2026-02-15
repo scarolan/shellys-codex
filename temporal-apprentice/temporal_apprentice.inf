@@ -94,6 +94,7 @@ Global rag_on_machine = false;
 Global knock_count = 0;
 Global door_open = false;
 Global spanner_given = false;
+Global tarp_removed = false;
 
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
@@ -635,6 +636,12 @@ Object entrance_door "oak door" workshop_entrance
                 "The heavy oak door stands open. The hinges are magnificent brass affairs. A suspicious dent at cat-height suggests this is not the first time something has made a dramatic entrance.";
             "A heavy oak door, firmly closed. Scarred by decades of London weather and possibly one or two small explosions. The brass hinges are magnificent. The dent at cat-height is suspicious.";
          ],
+         before [;
+            Open, Close, Push, Pull:
+                if (door_open)
+                    "The door is already open.";
+                "The door seems to be locked from the inside.";
+         ],
     has scenery;
 
 Object entrance_gas_lamps "gas lamps" workshop_entrance
@@ -668,7 +675,10 @@ Object pocket_watch "pocket watch"
 Object main_workshop "Main Workshop"
     with description [;
             print "The workshop is a cathedral of improbable engineering. Brass gears the size of dinner plates mesh with copper pipes that disappear into the walls. Glass jars of luminous liquids line shelves alongside what appear to be several jars of marmalade. The ceiling is lost in a tangle of tubes and wires.^^";
-            print "The centrepiece is unmistakable: a magnificent contraption of brass, crystal, and what might be a repurposed church organ occupies the middle of the room, humming with barely contained energy.^^";
+            if (tarp_removed == false)
+                print "The centrepiece of the room is hidden beneath an enormous canvas tarpaulin, its shape a mystery of lumps and protrusions. Whatever is under there is humming.^^";
+            else
+                print "The centrepiece is unmistakable: a magnificent contraption of brass, crystal, and what might be a repurposed church organ occupies the middle of the room, humming with barely contained energy.^^";
             if (cat_accident == false) {
                 if (spanner_given == false && thyme_departed == false)
                     print "A man is hunched over the workbench with his back to you. ~The number four spanner,~ he says, without turning around. ~On the shelf behind you. The brass one. Not the steel one. The steel one is for Tuesdays.~^^";
@@ -750,6 +760,8 @@ Object front_door_key "front door key"
 Object time_machine "time machine" main_workshop
     with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal',
          description [;
+            if (cat_accident == false && tarp_removed == false)
+                "Whatever it is, it's under a heavy tarpaulin. You can hear it humming beneath the canvas.";
             if (cat_accident == false) {
                 print "A magnificent contraption of brass, crystal, and what might be a repurposed church organ. Brass housings encase crystal resonators connected by a bewildering maze of copper tubing. A set of controls features several levers, a compass-like dial, and what appears to be a bicycle bell. The whole thing hums with barely contained energy.^^";
                 if (rag_on_machine) {
@@ -775,6 +787,19 @@ Object time_machine "time machine" main_workshop
             }
          ],
          add_to_scope roman_dest blitz_dest hawking_dest future_dest,
+    has scenery;
+
+Object workshop_tarpaulin "tarpaulin" main_workshop
+    with name 'tarpaulin' 'tarp' 'canvas' 'cover' 'sheet',
+         description [;
+            if (tarp_removed == false)
+                "A heavy canvas tarpaulin draped over something large in the centre of the room. Whatever is underneath is humming.";
+            "The tarpaulin lies folded in the corner.";
+         ],
+         before [;
+            Take, Pull, Push:
+                "Better not disturb it yet.";
+         ],
     has scenery;
 
 Object hartley_journal "leather-bound journal" main_workshop
@@ -2293,7 +2318,7 @@ Object future_dest "Future London"
         }
         if (knock_count >= 3) {
             door_open = true;
-            "You raise your fist to knock a third time -- and the door swings open of its own accord. No one behind it. The hinges creak in the silence.";
+            "You knock a third time. Still no answer. It's beginning to rain, and you're seriously considering leaving when the door creaks open by itself. There's nobody standing in the doorway. Some sort of automated door, perhaps?";
         }
     }
     if (location == workshop_entrance && door_open)
@@ -2520,6 +2545,8 @@ Object future_dest "Future London"
                 rag_stolen = true;
                 rag_on_machine = true;
                 move cleaning_rags to main_workshop;
+                tarp_removed = true;
+                print "You start by pulling the tarpaulin off the large... whatever-it-is in the centre of the room. Underneath is a magnificent contraption of brass, crystal, and what might be a repurposed church organ, humming with barely contained energy. Right. Best not touch that.^^";
                 print "You unfurl a cleaning rag and are about to start wiping down the workbench when --^^";
                 if (copernicus_named)
                     print "In a flash of ginger fur, Copernicus snatches the rag right out of your hand! Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
