@@ -926,6 +926,327 @@ south
 south
 examine boats" "flat-bottomed cargo"
 
+# --- New scenery: Main Workshop ---
+echo "[Scenery: Main Workshop]"
+run_test "Examine jars in Main Workshop" "$ENTER_WORKSHOP
+examine jars" "not found in any paint catalogue"
+run_test "Examine liquids in Main Workshop" "$ENTER_WORKSHOP
+examine liquids" "not found in any paint catalogue"
+run_test "Examine diagrams in Main Workshop" "$ENTER_WORKSHOP
+examine diagrams" "inner workings"
+run_test "Examine instruments in Main Workshop" "$ENTER_WORKSHOP
+examine instruments" "emotional state of copper"
+run_test "Examine scorch mark in Main Workshop" "$ENTER_WORKSHOP
+examine scorch" "TUESDAY"
+
+# --- New scenery: Solarium ---
+echo "[Scenery: Solarium]"
+run_test "Examine controls in Solarium" "$ENTER_SOLARIUM
+examine controls" "bicycle bell"
+run_test "Examine levers in Solarium" "$ENTER_SOLARIUM
+examine levers" "bicycle bell"
+run_test "Examine bell in Solarium" "$ENTER_SOLARIUM
+examine bell" "bicycle bell"
+run_test "Examine compass in Solarium" "$ENTER_SOLARIUM
+examine compass" "bicycle bell"
+run_test "Corridor door from Solarium" "$ENTER_SOLARIUM
+examine door" "corridor"
+
+# --- New scenery: Store Room ---
+echo "[Scenery: Store Room]"
+run_test "Examine crates in Store Room" "$ENTER_WORKSHOP
+north
+examine crates" "TEMPORAL BITS"
+run_test "Examine labels in Store Room" "$ENTER_WORKSHOP
+north
+examine labels" "TEMPORAL BITS"
+
+# --- New scenery: Roman Forum ---
+echo "[Scenery: Roman Forum]"
+run_test "Examine forum in Roman Forum" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine forum" "civic heart"
+run_test "Examine soldiers at Marcus" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine soldiers" "centurion"
+
+# --- New scenery: Via Principalis ---
+echo "[Scenery: Via Principalis]"
+run_test "Examine soldiers on Via" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+examine soldiers" "mechanical precision"
+run_test "Examine barracks on Via" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+examine barracks" "paved with meticulous"
+run_test "Examine road on Via" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+examine road" "paved with meticulous"
+run_test "Examine horizon on Via" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+examine horizon" "columns of smoke"
+
+# --- New scenery: Temple of Mithras ---
+echo "[Scenery: Temple of Mithras]"
+run_test "Examine torches in Temple" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+examine torches" "iron brackets"
+run_test "Examine altar in Temple" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+examine altar" "clay figurines"
+run_test "Examine carvings in Temple" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+examine carvings" "cosmic bull"
+
+# --- New scenery: Merchant's Quarter ---
+echo "[Scenery: Merchant's Quarter]"
+run_test "Examine merchants in Quarter" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+south
+examine merchants" "elevated commerce"
+run_test "Examine amulets in Quarter" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+south
+examine amulets" "ward off everything"
+
+# --- New scenery: Blacked-Out Street ---
+echo "[Scenery: Blacked-Out Street]"
+run_test "Examine rubble on street" "$BLITZ_SETUP
+examine rubble" "scattered across the street"
+run_test "Examine darkness on street" "$BLITZ_SETUP
+examine darkness" "blackout is absolute"
+run_test "Examine blackout on street" "$BLITZ_SETUP
+examine blackout" "blackout is absolute"
+run_test "Examine sky on street" "$BLITZ_SETUP
+examine sky" "blackout is absolute"
+
+# --- New scenery: Underground Shelter ---
+echo "[Scenery: Underground Shelter]"
+run_test "Examine blankets in shelter" "$BLITZ_SETUP
+down
+examine blankets" "Blitz spirit"
+run_test "Examine thermoses in shelter" "$BLITZ_SETUP
+down
+examine thermoses" "Blitz spirit"
+run_test "Examine platform in shelter" "$BLITZ_SETUP
+down
+examine platform" "tube station platform"
+run_test "Examine drawings in shelter" "$BLITZ_SETUP
+down
+examine drawings" "salvaged paper"
+
+# --- New scenery: Bombed Church ---
+echo "[Scenery: Bombed Church]"
+run_test "Examine roof in church" "$BLITZ_SETUP
+north
+examine roof" "Half the roof is gone"
+run_test "Examine inscription on church walls" "$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+carve
+west
+south
+travel to blitz
+north
+examine inscription" "TEMPUS FUGIT"
+
+# --- New scenery: Fire Watch Rooftop ---
+echo "[Scenery: Rooftop]"
+run_test "Examine London from rooftop" "$BLITZ_SETUP
+north
+up
+examine london" "blacked-out London"
+run_test "Examine skyline from rooftop" "$BLITZ_SETUP
+north
+up
+examine skyline" "blacked-out London"
+run_test "Examine view from rooftop" "$BLITZ_SETUP
+north
+up
+examine view" "blacked-out London"
+
+# --- New scenery: Rubble Site ---
+echo "[Scenery: Rubble Site]"
+run_test "Examine rubble in rubble site" "$BLITZ_SETUP
+west
+examine rubble" "Finch"
+run_test "Examine debris in rubble site" "$BLITZ_SETUP
+west
+examine debris" "Finch"
+
+# --- New scenery: Crown & Anchor ---
+echo "[Scenery: Crown & Anchor]"
+run_test "Examine beer in pub" "$BLITZ_SETUP
+east
+examine beer" "well-stocked"
+run_test "Examine pint in pub" "$BLITZ_SETUP
+east
+examine pint" "well-stocked"
+run_test "Examine curtains in pub" "$BLITZ_SETUP
+east
+examine curtains" "blackout curtains"
+run_test "Examine fireplace in pub" "$BLITZ_SETUP
+east
+examine fireplace" "coal fire"
+run_test "Examine fire in pub" "$BLITZ_SETUP
+east
+examine fire" "coal fire"
+
+# --- New scenery: College Gates ---
+echo "[Scenery: College Gates]"
+run_test "Examine notice at gates" "$CAMBRIDGE_SETUP
+examine notice" "PROFESSOR HAWKING"
+run_test "Examine gate at gates" "$CAMBRIDGE_SETUP
+examine gate" "ancient stone gateway"
+
+# --- New scenery: College Garden ---
+echo "[Scenery: College Garden]"
+run_test "Examine pond in garden" "$CAMBRIDGE_SETUP
+north
+east
+examine pond" "ancient carp"
+run_test "Examine carp in garden" "$CAMBRIDGE_SETUP
+north
+east
+examine carp" "ancient carp"
+run_test "Examine trees in garden" "$CAMBRIDGE_SETUP
+north
+east
+examine trees" "immaculate lawns"
+run_test "Examine lawn in garden" "$CAMBRIDGE_SETUP
+north
+east
+examine lawn" "immaculate lawns"
+
+# --- New scenery: Gonville Hall ---
+echo "[Scenery: Gonville Hall]"
+run_test "Examine balloons in hall" "$CAMBRIDGE_SETUP
+north
+east
+take invitation
+west
+give invitation to porter
+north
+examine balloons" "feast for one"
+run_test "Examine wheelchair in hall" "$CAMBRIDGE_SETUP
+north
+east
+take invitation
+west
+give invitation to porter
+north
+examine wheelchair" "speech synthesiser"
+
+# --- New scenery: Hawking's Study ---
+echo "[Scenery: Hawking's Study]"
+run_test "Examine desk in study" "$CONVINCE_SETUP
+east
+examine desk" "speech synthesiser"
+run_test "Examine computer in study" "$CONVINCE_SETUP
+east
+examine computer" "speech synthesiser"
+run_test "Examine books in study" "$CONVINCE_SETUP
+east
+examine books" "cosmology"
+run_test "Examine models in study" "$CONVINCE_SETUP
+east
+examine models" "black holes"
+
+# --- New scenery: Flooded Street ---
+echo "[Scenery: Flooded Street]"
+run_test "Examine catwalks in future" "$FUTURE_SETUP
+examine catwalks" "rope bridges"
+run_test "Examine bridges in future" "$FUTURE_SETUP
+examine bridges" "rope bridges"
+run_test "Examine water in future" "$FUTURE_SETUP
+examine water" "Murky brown water"
+
+# --- New scenery: Elevated Walkway ---
+echo "[Scenery: Elevated Walkway]"
+run_test "Examine railing on walkway" "$FUTURE_SETUP
+east
+examine railing" "salvaged metal"
+run_test "Examine scaffolding on walkway" "$FUTURE_SETUP
+east
+examine scaffolding" "reclaimed scaffolding"
+
+# --- New scenery: Museum ---
+echo "[Scenery: Museum]"
+run_test "Examine antenna on rooftop" "$FUTURE_SETUP
+north
+up
+examine antenna" "panel"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"

@@ -770,8 +770,29 @@ Object workshop_marmalade "marmalade jars" main_workshop
          description "Several jars of Seville orange marmalade, interspersed among the scientific apparatus with no apparent logic. Each one bears a handwritten label: ~JT -- BATCH 7,~ ~JT -- BATCH 12 (EXPERIMENTAL),~ and most worryingly, ~JT -- BATCH 3 (DO NOT EAT -- TEMPORAL).~",
     has scenery pluralname;
 
-Object corridor_door "corridor door" main_workshop
+Object workshop_liquids "luminous liquids" main_workshop
+    with name 'liquid' 'liquids' 'luminous' 'jars' 'jar',
+         description "Glass jars filled with liquids that glow in colours not found in any paint catalogue. They pulse gently, casting faint rainbows on the wall. Dr. Thyme has labelled them all, but the labels say things like ~ESSENCE OF NEXT THURSDAY~ and ~LIQUID NOSTALGIA (STALE).~",
+    has scenery pluralname;
+
+Object workshop_diagrams "diagrams" main_workshop
+    with name 'diagram' 'diagrams' 'plans' 'blueprint' 'blueprints',
+         description "Technical diagrams covered in Dr. Thyme's increasingly desperate handwriting. They appear to show the inner workings of the time machine, annotated with helpful notes such as ~DO NOT REVERSE POLARITY~ and ~THIS BIT EXPLODES (SOMETIMES).~",
+    has scenery pluralname;
+
+Object workshop_instruments "instruments" main_workshop
+    with name 'instrument' 'instruments',
+         description "An assortment of brass instruments whose purposes range from the vaguely scientific to the entirely imaginary. One appears to measure the emotional state of copper. Another has a dial labelled ~YESTERDAY -- TODAY -- TOMORROW -- HELP.~",
+    has scenery pluralname;
+
+Object workshop_scorch "scorch mark" main_workshop
+    with name 'scorch' 'mark' 'marks' 'burn' 'stain',
+         description "A suspicious scorch mark on the ceiling, roughly the shape of a small explosion. Dr. Thyme has written next to it in chalk: ~TUESDAY'S INCIDENT. DO NOT DISCUSS.~",
+    has scenery;
+
+Object corridor_door "corridor door"
     with name 'corridor' 'door',
+         found_in main_workshop solarium,
          description [;
             if (solarium_unlocked)
                 "The door at the end of the narrow corridor stands open. Beyond it, grey light spills from the solarium.";
@@ -871,6 +892,11 @@ Object solarium_instruments "brass instruments" solarium
          description "An assortment of brass measuring instruments crowd the perimeter -- barometers, hygrometers, and several devices whose purpose you couldn't begin to guess. One of them appears to be measuring something that doesn't exist yet.",
     has scenery pluralname;
 
+Object solarium_controls "controls" solarium
+    with name 'controls' 'control' 'levers' 'lever' 'bell' 'bicycle' 'compass' 'dial' 'panel',
+         description "The time machine's controls are a bewildering array of levers, dials, and one very incongruous bicycle bell. A compass-like dial dominates the centre, its needle trembling between destinations. The whole arrangement suggests Dr. Thyme designed it while simultaneously reading three instruction manuals and a cookbook.",
+    has scenery pluralname;
+
 Object time_machine "time machine" solarium
     with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal',
          description [;
@@ -960,6 +986,11 @@ Object store_copper_wire "copper wire" store_room
          description "Coils of copper wire in various gauges, neatly wound and labelled in Dr. Thyme's increasingly erratic handwriting. One label simply reads ~WIRE (IMPORTANT).~",
     has scenery;
 
+Object store_crates "crates" store_room
+    with name 'crate' 'crates' 'label' 'labels',
+         description "Wooden crates stacked haphazardly, each bearing handwritten labels in Dr. Thyme's erratic script. The labels include ~TEMPORAL BITS (MISC.)~, ~SPRINGS (PROBABLY)~, and the slightly alarming ~CONTENTS UNKNOWN -- DO NOT OPEN ON WEDNESDAYS.~",
+    has scenery pluralname;
+
 Object store_supplies "supplies" store_room
     with name 'supplies' 'boxes' 'items' 'curiosit',
          description "Boxes of gears, springs, lenses, and components whose purpose you can only guess at. If Dr. Thyme ever needs to build a second time machine, he's got the parts. And probably a third.",
@@ -1046,6 +1077,11 @@ Object forum_buildings "colonnaded buildings" roman_forum
          description "Grand colonnaded buildings line the Forum, housing everything from the law courts to the tax office. The Romans brought many gifts to Britain: roads, aqueducts, and bureaucracy. Especially bureaucracy.",
     has scenery pluralname;
 
+Object forum_place "forum" roman_forum
+    with name 'forum' 'square' 'piazza',
+         description "The Forum of Londinium -- the civic heart of Roman Britain. An open square surrounded by grand buildings, it serves as marketplace, law court, and social hub. The Romans brought bureaucracy to Britain, and this is where they filed it.",
+    has scenery;
+
 Object forum_toga "togas" roman_forum
     with name 'toga' 'togas' 'robe' 'robes' 'clothes' 'clothing',
          description "The togas are uniformly white, which in a city without washing machines is either impressive or deeply suspicious. Several citizens wear the purple-bordered toga praetexta, marking them as persons of importance, or at least persons with access to expensive dye.",
@@ -1059,6 +1095,21 @@ Object roman_via "Via Principalis"
         ],
          s_to roman_forum,
     has light;
+
+Object via_soldiers "Roman soldiers" roman_via
+    with name 'soldiers' 'soldier' 'troops' 'legionary' 'legionaries',
+         description "Roman soldiers drill with the mechanical precision of men who have been told exactly where to stand and are deeply committed to standing there. Their armour gleams, their formations are flawless, and their morale is... well, they've heard the rumours about Boudica.",
+    has scenery animate pluralname;
+
+Object via_barracks "military barracks" roman_via
+    with name 'barracks' 'road' 'armour' 'armor' 'paving' 'pavement' 'street',
+         description "The Via Principalis is paved with meticulous Roman stonework, each block fitted with engineering precision. The military barracks line the road, squat timber buildings radiating discipline and the faint smell of legionary cooking, which is to say, porridge.",
+    has scenery pluralname;
+
+Object via_horizon "horizon" roman_via
+    with name 'horizon' 'distance' 'north',
+         description "On the northern horizon, columns of smoke rise ominously. Distant figures move in ways that suggest organised anger. History knows what's coming. The Romans, characteristically, are pretending everything is fine.",
+    has scenery;
 
 Object boudica_npc "distant army" roman_via
     with name 'army' 'boudica' 'boudicca' 'iceni' 'warrior' 'figures' 'smoke',
@@ -1089,8 +1140,18 @@ Object temple_wall "stone wall" roman_temple
          ],
     has scenery;
 
+Object temple_torches "torches" roman_temple
+    with name 'torch' 'torches' 'torchlig' 'flame' 'flames' 'light',
+         description "Flickering torches mounted in iron brackets cast dancing shadows across the carved walls. The torchlight gives everything a suitably mysterious atmosphere, which is rather the point in a mystery cult.",
+    has scenery pluralname;
+
+Object temple_altar "altar" roman_temple
+    with name 'altar',
+         description "A stone altar at the far end of the sanctuary, blackened with centuries of offerings. Small clay figurines and coins are arranged before it with the careful precision of people who take their gods very seriously indeed.",
+    has scenery;
+
 Object mithras_relief "carved relief" roman_temple
-    with name 'relief' 'mithras' 'bull' 'carving' 'sculpture',
+    with name 'relief' 'mithras' 'bull' 'carving' 'carvings' 'sculpture',
          description "Mithras is depicted in the heroic act of slaying the cosmic bull. The bull's expression suggests it was having a perfectly nice day up until that point.",
     has scenery;
 
@@ -1140,6 +1201,16 @@ Object merchant_stalls "market stalls" roman_merchants
 Object merchant_stones "unusual stones" roman_merchants
     with name 'stones' 'crystal' 'crystals' 'mineral' 'minerals',
          description "Felix's stall is piled with stones, crystals, and minerals of dubious cosmic significance. Each one comes with a certificate of authenticity written in suspiciously fresh-looking Latin. The lodestone stands out among the lesser rocks like a senator among plebeians.",
+    has scenery pluralname;
+
+Object merchant_people "merchants" roman_merchants
+    with name 'merchants' 'merchant' 'hawkers' 'sellers' 'traders',
+         description "The merchants of Londinium hawk their wares with the aggressive enthusiasm of people who have elevated commerce to an art form. Every one of them is absolutely certain that what they're selling will change your life, cure your ailments, or at minimum separate you from your money.",
+    has scenery animate pluralname;
+
+Object merchant_amulets "amulets" roman_merchants
+    with name 'amulet' 'amulets' 'charm' 'charms' 'talisman',
+         description "Dubious amulets guaranteed to ward off everything from bad luck to Gauls. They come in a range of materials from bronze to bone, each one claiming powers that its manufacturer would be hard-pressed to demonstrate in a controlled setting.",
     has scenery pluralname;
 
 Object merchant_amphorae "amphorae" roman_merchants
@@ -1194,7 +1265,7 @@ Object docks_cargo "cargo" roman_docks
 ! --- Roman NPCs ---
 
 Object marcus "Centurion Marcus" roman_forum
-    with name 'marcus' 'centurion' 'soldier' 'guard' 'roman',
+    with name 'marcus' 'centurion' 'soldier' 'soldiers' 'guard' 'roman',
          description [;
             if (marcus_impressed) {
                 "Marcus stands at attention, though his expression has softened from ~bureaucratic hostility~ to ~grudging respect.~ He still thinks you dress like a lunatic, but a lunatic who commands thunder stones deserves some courtesy.";
@@ -1309,6 +1380,16 @@ Object blitz_street "Blacked-Out Street"
          w_to blitz_rubble,
     has light;
 
+Object street_rubble "rubble" blitz_street
+    with name 'rubble' 'debris' 'brick' 'bricks',
+         description "Chunks of brick and masonry scattered across the street from the last raid. London is slowly being rearranged by the Luftwaffe, and not in a way that any town planner would approve of.",
+    has scenery;
+
+Object street_darkness "darkness" blitz_street
+    with name 'darkness' 'blackout' 'sky' 'dark' 'shadow' 'shadows',
+         description "The blackout is absolute. Every window shuttered, every streetlamp extinguished. London has made itself invisible, crouching in the dark like an enormous city-shaped animal hoping the bombers won't notice. They notice anyway.",
+    has scenery;
+
 Object street_searchlights "searchlights" blitz_street
     with name 'searchli' 'lights' 'beams',
          description "Searchlight beams sweep the sky like enormous white fingers, probing for bombers. The effect is simultaneously terrifying and oddly beautiful, like a very aggressive light show.",
@@ -1338,6 +1419,21 @@ Object blitz_shelter "Underground Shelter"
          u_to blitz_street,
     has light;
 
+Object shelter_blankets "blankets" blitz_shelter
+    with name 'blanket' 'blankets' 'thermos' 'thermoses' 'families' 'family',
+         description "Huddled families clutch thermoses and thin blankets against the chill of the underground platform. The Blitz spirit, it turns out, is mostly tea, wool, and stubbornness.",
+    has scenery pluralname;
+
+Object shelter_platform "platform" blitz_shelter
+    with name 'platform' 'platforms' 'tube' 'shelter' 'station' 'tunnel',
+         description "The tube station platform has been repurposed as sleeping quarters. Chalk lines mark out family spaces with the territorial precision of a very polite war. The trains stopped running weeks ago, but the infrastructure carries on, housing Londoners instead of transporting them.",
+    has scenery;
+
+Object shelter_drawings "drawings" blitz_shelter
+    with name 'drawing' 'drawings' 'paper' 'papers' 'pictures',
+         description "Sheets of salvaged paper covered in Eleanor's drawings -- cats, mostly. Dozens of cats in every pose and expression, rendered with the intense focus of a child who has found the one thing that makes sense when everything else doesn't.",
+    has scenery pluralname;
+
 Object tommy_radio "wireless set" blitz_shelter
     with name 'wireless' 'radio' 'set',
          description [;
@@ -1362,6 +1458,11 @@ Object blitz_church "Bombed Church"
          s_to blitz_street,
          u_to blitz_rooftop,
     has light;
+
+Object church_roof "roof" blitz_church
+    with name 'roof' 'ceiling',
+         description "Half the roof is gone, open to the sky. The remaining timbers jut out like broken ribs, silhouetted against the searchlight-swept clouds. It's dramatic in a way that no architect intended.",
+    has scenery;
 
 Object church_rubble "church rubble" blitz_church
     with name 'rubble' 'debris' 'pews' 'glass' 'masonry',
@@ -1389,7 +1490,7 @@ Object church_nave "nave" blitz_church
     has scenery;
 
 Object church_walls "church walls" blitz_church
-    with name 'wall' 'walls',
+    with name 'wall' 'walls' 'inscription',
          description [;
             if (inscription_carved) {
                 "The ancient walls bear the scars of both war and time. Through a gap in the bomb damage, a carved inscription is visible: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, 60 AD.~ Nearly two thousand years old. You feel a chill that has nothing to do with the weather.";
@@ -1425,6 +1526,21 @@ Object pub_regulars "pub regulars" blitz_pub
 Object police_box "poster of police box" blitz_pub
     with name 'poster' 'police' 'box' 'telephon',
          description "Just an ordinary poster of an ordinary police telephone box. Nothing special about it at all. Absolutely not. It's blue, it's rectangular, and it is emphatically just a telephone box. Anyone who suggests otherwise has been watching too many documentaries.",
+    has scenery;
+
+Object pub_drinks "drinks" blitz_pub
+    with name 'beer' 'drink' 'drinks' 'spirits' 'pint' 'ale' 'bottle' 'bottles',
+         description "The bar is well-stocked with bottles of spirits, ales, and the occasional dubious homebrew. Rationing hasn't touched the drink yet, and the regulars intend to make the most of this oversight.",
+    has scenery pluralname;
+
+Object pub_curtains "blackout curtains" blitz_pub
+    with name 'curtain' 'curtains' 'blackout',
+         description "Heavy blackout curtains are drawn tight across every window, sealing in the warm lamplight and keeping out the war. The penalty for showing a light is severe, though Warden Peggy's disapproval is considered the worse punishment.",
+    has scenery pluralname;
+
+Object pub_fireplace "fireplace" blitz_pub
+    with name 'fireplace' 'fire' 'hearth' 'mantle',
+         description "A modest coal fire crackles in the grate, throwing warm shadows across the pub. Above the mantle, a framed photograph of the King keeps watch. Someone has hung a sign beneath it: ~KEEP CALM AND HAVE ANOTHER PINT.~",
     has scenery;
 
 Object pub_building "pub" blitz_pub
@@ -1480,6 +1596,11 @@ Object rooftop_sky "night sky" blitz_rooftop
          description "The sky above London is a theatre of war -- searchlight beams, the red glow of distant fires, and the silhouettes of barrage balloons drifting like enormous sleeping whales. On a clear night you might see stars, but tonight the only lights are man-made and hostile.",
     has scenery;
 
+Object rooftop_london "London skyline" blitz_rooftop
+    with name 'london' 'skyline' 'view' 'city' 'panorama',
+         description "Blacked-out London stretches below in every direction, a city made invisible by its own determination to survive. The skyline is punctuated by searchlight beams, distant fires, and the stubborn silhouettes of buildings that refuse to fall.",
+    has scenery;
+
 Object rooftop_fire "fire" blitz_rooftop
     with name 'fire' 'flames' 'blaze' 'incendia',
          description [;
@@ -1511,7 +1632,7 @@ Object blitz_rubble "Rubble Site"
     has light;
 
 Object rubble_site "rubble site" blitz_rubble
-    with name 'site' 'crater' 'ruin' 'ruins',
+    with name 'site' 'crater' 'ruin' 'ruins' 'rubble' 'debris',
          description "What remains of Finch's Electronics Emporium -- a crater of shattered brick, twisted metal, and the occasional recognisable fragment of what was once a thriving business. The Luftwaffe's approach to urban renewal leaves much to be desired.",
     has scenery;
 
@@ -1668,6 +1789,16 @@ Object cambridge_gates "College Gates"
          n_to cambridge_porter,
     has light;
 
+Object cambridge_notice "notice" cambridge_gates
+    with name 'notice' 'sign' 'poster',
+         description "A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009. Champagne and canapes will be served. Dress: casual (any century).~ It appears to have been posted after the event, which rather limits the guest list.",
+    has scenery;
+
+Object cambridge_gate "gate" cambridge_gates
+    with name 'gate' 'gates' 'entrance' 'arch',
+         description "The ancient stone gateway to Gonville and Caius College, worn smooth by eight centuries of scholars, students, and the occasional bewildered tourist. The ironwork is original and magnificent, designed to keep out everyone who doesn't have a very good reason to be here.",
+    has scenery;
+
 Object cambridge_bikes "bicycle rack" cambridge_gates
     with name 'bicycle' 'bike' 'bikes' 'rack',
          description "A tangle of bicycles in various states of repair, chained to a rack, to each other, and to at least one lamppost. This is Cambridge. Bicycles are a way of life, a mode of transport, and occasionally a philosophical statement.",
@@ -1738,6 +1869,16 @@ Object cambridge_garden "College Garden"
          w_to cambridge_porter,
     has light;
 
+Object garden_pond "carp pond" cambridge_garden
+    with name 'pond' 'carp' 'fish' 'koi',
+         description "A placid pond where ancient carp drift with the unhurried calm of creatures that have tenure. They've been here longer than most of the faculty and are considerably less stressed about their publication record.",
+    has scenery;
+
+Object garden_trees "trees" cambridge_garden
+    with name 'tree' 'trees' 'lawn' 'grass' 'garden',
+         description "Ancient trees shade immaculate lawns maintained with the obsessive precision that only centuries of academic tradition can produce. A small sign reads ~KEEP OFF THE GRASS~ in a font that suggests this is not a suggestion but a fundamental law of the university.",
+    has scenery pluralname;
+
 Object garden_bench "bench" cambridge_garden
     with name 'bench' 'seat',
          description "A wooden bench with a brass plaque: ~IN MEMORY OF DOUGLAS ADAMS, WHO KNEW WHERE HIS TOWEL WAS.~ Someone has left a card underneath it.",
@@ -1765,9 +1906,14 @@ Object cambridge_hall "Gonville Hall"
     has light;
 
 Object party_table "banquet table" cambridge_hall
-    with name 'table' 'banquet' 'food' 'champag' 'canapes' 'cake' 'balloon',
+    with name 'table' 'banquet' 'food' 'champag' 'canapes' 'cake' 'balloon' 'balloons',
          description "The table is a feast for one. Well, for several, but only one has shown up. The champagne is excellent (Dom Perignon, 2001), the canapes are artful, and the cake has a marzipan TARDIS on it. Professor Hawking has a sense of humour.",
     has scenery supporter;
+
+Object hall_wheelchair "wheelchair" cambridge_hall
+    with name 'wheelchair' 'chair' 'wheels',
+         description "Professor Hawking's wheelchair is a marvel of technology, bristling with controls and the speech synthesiser that gives his words their distinctive robotic authority. It is, in its own way, as much a scientific instrument as anything in the laboratory.",
+    has scenery;
 
 Object cambridge_study "Hawking's Study"
     with description [;
@@ -1777,6 +1923,21 @@ Object cambridge_study "Hawking's Study"
         ],
          w_to cambridge_hall,
     has light;
+
+Object study_desk "desk" cambridge_study
+    with name 'desk' 'computer' 'synthesiser' 'synthesizer' 'screen',
+         description "A desk dominated by Hawking's computer and speech synthesiser, the equipment through which one of the finest minds in history communicates with the world. The screen shows equations that would make lesser physicists weep.",
+    has scenery supporter;
+
+Object study_books "books" cambridge_study
+    with name 'book' 'books' 'shelves' 'shelf',
+         description "Books line every wall -- cosmology, quantum mechanics, popular science, and what appears to be a well-thumbed copy of The Hitchhiker's Guide to the Galaxy. Professor Hawking's reading habits are catholic in the best sense.",
+    has scenery pluralname;
+
+Object study_models "models" cambridge_study
+    with name 'model' 'models' 'cosmos' 'mobile' 'black' 'hole' 'holes',
+         description "Models of black holes and the cosmos hang from the ceiling like a physicist's mobile. They spin gently in the draft, miniature universes rotating with the casual grace of things that don't need to worry about grant applications.",
+    has scenery pluralname;
 
 Object napkin_formula "napkin with formula" cambridge_study
     with name 'napkin' 'formula' 'equatio',
@@ -1885,6 +2046,11 @@ Object future_street "Flooded Street"
          ],
     has light;
 
+Object future_catwalks "catwalks" future_street
+    with name 'catwalk' 'catwalks' 'rope' 'bridge' 'bridges' 'walkways',
+         description "A precarious network of catwalks and rope bridges connects the upper floors of flooded buildings. They sway in the wind with a confidence-undermining enthusiasm. The engineering is creative, the safety standards are aspirational, and the views are spectacular if you can stop looking down.",
+    has scenery pluralname;
+
 Object future_museum "Thames Barrier Museum"
     with description [;
             print "The museum occupies the upper floors of what was once the Thames Barrier control centre. Display cases hold artefacts salvaged from flooded London -- underground signs, a red telephone box, soggy copies of the Evening Standard dated 2038.^^";
@@ -1986,6 +2152,16 @@ Object future_walkway "Elevated Walkway"
         ],
          w_to future_street,
     has light;
+
+Object walkway_railing "railing" future_walkway
+    with name 'railing' 'rail' 'railings' 'handrail',
+         description "A railing of salvaged metal pipe, bolted together with more optimism than engineering expertise. It's sturdy enough to lean on, probably, but you wouldn't want to test that theory at this height.",
+    has scenery;
+
+Object walkway_scaffolding "scaffolding" future_walkway
+    with name 'scaffolding' 'scaffold' 'catwalk' 'metal',
+         description "The walkway is built from reclaimed scaffolding and salvaged metal, lashed together with cable ties and determination. It sways gently underfoot, which is either the wind or the structure expressing its opinion about your weight.",
+    has scenery;
 
 Object future_refuge "Climate Refuge"
     with description [;
