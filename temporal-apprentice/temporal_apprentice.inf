@@ -2563,7 +2563,7 @@ Object cleaning_rags "cleaning rags"
                     rag_stolen = true;
                     rag_on_machine = true;
                     move self to solarium;
-                    print "You set down the cleaning rags on the workbench.^^";
+                    print "You set down the cleaning rags beside the machine.^^";
                     if (copernicus_named)
                         print "In a flash of ginger fur, Copernicus snatches a rag and bolts. Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
                     else
