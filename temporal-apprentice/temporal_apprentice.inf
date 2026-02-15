@@ -1176,6 +1176,9 @@ Object bath_drain "drain grate" roman_bath
 Object gold_aureus "gold aureus" roman_bath
     with name 'gold' 'aureus' 'coin' 'money',
          description "A gold aureus bearing the profile of Emperor Nero. He looks smug, which, to be fair, was his default expression. The coin is in excellent condition, possibly because it's only about two years old.",
+         after [;
+             Take: give bath_drain general;
+         ],
          initial "A gold aureus gleams on the wet floor, freshly batted out from under the drain by an enterprising cat.";
 
 Object roman_merchants "Merchant's Quarter"
