@@ -778,9 +778,9 @@ examine standard" "THAMES BARRIER FAILS"
 run_test "Museum Evening Standard (copies)" "$FUTURE_SETUP
 north
 examine copies" "THAMES BARRIER FAILS"
-run_test "Museum Evening Standard (newspaper)" "$FUTURE_SETUP
+run_test "Museum Evening Standard (evening)" "$FUTURE_SETUP
 north
-examine newspaper" "THAMES BARRIER FAILS"
+examine evening" "THAMES BARRIER FAILS"
 run_test "Cabinet needs formula" "$FUTURE_SETUP
 north
 up
@@ -1472,9 +1472,9 @@ examine antenna" "panel"
 
 # --- Issue #45: Missing scenery ---
 echo "[Issue #45: Missing Scenery]"
-run_test "Examine newspaper in Workshop Entrance" "examine newspaper" "yesterday's Times"
-run_test "Examine times in Workshop Entrance" "examine times" "yesterday's Times"
-run_test "Examine advert in Workshop Entrance" "examine advert" "TEMPORAL ENGINEERING"
+run_test "Newspaper in inventory at start" "inventory" "newspaper"
+run_test "Examine newspaper pre-accident" "examine newspaper" "tea stain"
+run_test "Examine advert in newspaper" "examine advert" "TEMPORAL ENGINEERING"
 run_test "Examine clock in Main Workshop" "$ENTER_WORKSHOP
 examine clock" "brass clock"
 run_test "Examine overcoat in Workshop Entrance" "examine overcoat" "overcoat"
@@ -1486,6 +1486,116 @@ run_test "Examine crystal in Solarium" "$ENTER_SOLARIUM
 examine crystal" "crystal resonators"
 run_test "Examine crystals in Solarium" "$ENTER_SOLARIUM
 examine crystals" "crystal resonators"
+
+# --- Newspaper Mechanics ---
+echo "[Newspaper Mechanics]"
+run_test "Cannot drop newspaper" "drop newspaper" "fold"
+run_test "Post-accident headline defaults: Nothing of Interest" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine newspaper" "Nothing of Interest"
+run_test "Post-accident headline defaults: Car Park" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine newspaper" "Car Park"
+run_test "Post-accident ink not committed" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine newspaper" "not quite committed"
+
+# Headline shift: inscription_carved
+run_test "Headline shifts after inscription_carved" "$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+carve
+examine newspaper" "MYSTERIOUS INSCRIPTION"
+
+# Headline shift: capsule_buried
+run_test "Headline shifts after capsule_buried" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+south
+south
+bury
+examine newspaper" "POCKET WATCH IN ROMAN STRATUM"
+
+# Headline shift: eleanor_gift
+run_test "Headline shifts after eleanor_gift" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to blitz
+east
+take soldier
+west
+down
+give soldier to eleanor
+up
+examine newspaper" "ELEANOR MORRISON RETROSPECTIVE"
+
+# Headline shift: church_saved
+run_test "Headline shifts after church_saved" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+travel to blitz
+north
+up
+extinguish
+down
+south
+examine newspaper" "600TH ANNIVERSARY"
+
+# Newspaper lost during Future transit
+run_test "Newspaper torn away message" "$FUTURE_SETUP" "ripped from your hands"
+TOTAL=$((TOTAL + 1))
+_future_inv_output=$(echo "$FUTURE_SETUP
+inventory" | "$DFROTZ" -h 999 -w 200 "$Z5" 2>&1)
+# Extract text after the last "inventory" prompt (the actual inventory listing)
+_inv_line=$(echo "$_future_inv_output" | grep -n "carrying" | tail -1 | cut -d: -f1)
+if [ -n "$_inv_line" ]; then
+    _inv_tail=$(echo "$_future_inv_output" | tail -n +"$_inv_line")
+    if echo "$_inv_tail" | grep -qi "newspaper"; then
+        FAIL=$((FAIL + 1))
+        echo "  FAIL: Newspaper gone from inventory after Future transit (should NOT contain: newspaper in inventory)"
+    else
+        PASS=$((PASS + 1))
+        echo "  PASS: Newspaper gone from inventory after Future transit"
+    fi
+else
+    FAIL=$((FAIL + 1))
+    echo "  FAIL: Newspaper gone from inventory after Future transit (could not find inventory listing)"
+fi
+
+# Museum newspaper display
+run_test "Museum newspaper display: tea stain" "$FUTURE_SETUP
+north" "tea stain"
+run_test "Museum newspaper display: ROMAN-ERA THAMES SEDIMENT" "$FUTURE_SETUP
+north" "ROMAN-ERA THAMES SEDIMENT"
+run_test "Museum newspaper examine: display case sealed" "$FUTURE_SETUP
+north
+take newspaper" "display case is sealed"
+run_test "Museum newspaper examine: tea stain through glass" "$FUTURE_SETUP
+north
+examine newspaper" "tea stain"
 
 echo ""
 echo "=== Results ==="

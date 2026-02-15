@@ -670,10 +670,68 @@ Object entrance_fog "fog" workshop_entrance
          description "London fog -- equal parts moisture, coal smoke, and municipal indifference. It clings to everything like a damp, grey cat. Visibility is roughly twelve feet, which in this neighbourhood is probably a mercy.",
     has scenery;
 
-Object entrance_newspaper "newspaper" workshop_entrance
-    with name 'newspaper' 'times' 'paper' 'advert' 'advertisement' 'copy',
-         description "Yesterday's Times, already slightly damp from the fog. The advert you circled reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Competitive wages. No salesmen.~",
-    has scenery;
+Object newspaper "newspaper"
+    with name 'newspaper' 'times' 'paper' 'advert' 'advertisement' 'copy' 'headline' 'headlines',
+         description [;
+            ! Phase 1: Pre-accident — normal Victorian newspaper
+            if (cat_accident == false) {
+                "Yesterday's Times, already slightly damp from the fog. There's a tea stain in one corner from your last cup at the offices of Greybaum, Tedium and Sons. The advert you circled reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Competitive wages. No salesmen.~ The rest of the front page is the usual: municipal drainage projects, colonial dispatches, and a long letter about the declining quality of hansom cabs.";
+            }
+            ! Phase 3: Museum display (scenery = in museum case)
+            if (self has scenery) {
+                print "Through the climate-controlled glass, you can make out a single yellowed page of the Times. Your stomach lurches with recognition. There -- the tea stain from your last cup at Greybaum, Tedium and Sons. There -- the circled advert for TEMPORAL ENGINEERING. There -- the fold where you always tucked it under your arm.^^";
+                print "A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM ROMAN-ERA THAMES SEDIMENT. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
+                if (capsule_buried)
+                    print "A smaller note adds: ~Found alongside brass pocket watch. See Roman Time Capsule exhibit.~^^";
+                ! Show headlines through the glass
+                print "The headlines are still legible through the glass:^";
+                if (inscription_carved)
+                    print "  ~MYSTERIOUS INSCRIPTION IN CITY CHURCH~ -- the ink looks freshly printed, though the paper around it is yellowed with age.^";
+                else
+                    print "  ~RESTORATION WORKS AT CITY CHURCHES -- Stonemasons Report Nothing of Interest.~^";
+                if (capsule_buried)
+                    print "  ~VICTORIAN POCKET WATCH IN ROMAN STRATUM~ -- the letters shimmer and rearrange as you watch.^";
+                else
+                    print "  ~THAMES EXCAVATION YIELDS POTTERY FRAGMENTS -- Scholars Describe Find as Adequate.~^";
+                if (eleanor_gift)
+                    print "  ~ELEANOR MORRISON RETROSPECTIVE AT GALLERY~ -- the photograph fades in and out of focus.^";
+                else
+                    print "  ~NATIONAL GALLERY WINTER EXHIBITION -- Landscapes and Still Lifes, Nothing Remarkable.~^";
+                if (church_saved)
+                    print "  ~ST. MARGARET'S CELEBRATES 600TH ANNIVERSARY~ -- the ink is so fresh it almost smudges under your thumb. Except, of course, the glass is in the way.^";
+                else
+                    print "  ~CAR PARK ON FORMER CHURCH SITE APPROVED -- Council Votes 7-3.~^";
+                rtrue;
+            }
+            ! Phase 2: Carried post-accident — shifting headlines
+            print "Yesterday's Times. Although ~yesterday~ is becoming a somewhat philosophical concept. The paper feels subtly wrong in your hands -- the ink not quite committed to its current arrangement, as if the words are waiting for permission to change.^^";
+            print "The tea stain is still there, from your last cup at Greybaum, Tedium and Sons. The circled advert for TEMPORAL ENGINEERING remains stubbornly stable, anchored by the fact that it definitely happened.^^";
+            print "The headlines, however...^^";
+            if (inscription_carved)
+                print "  ~MYSTERIOUS INSCRIPTION IN CITY CHURCH -- Latin Graffiti Predates Foundation by Centuries.~ The ink looks freshly printed, though the paper around it has yellowed.^";
+            else
+                print "  ~RESTORATION WORKS AT CITY CHURCHES -- Stonemasons Report Nothing of Interest.~^";
+            if (capsule_buried)
+                print "  ~VICTORIAN POCKET WATCH IN ROMAN STRATUM -- Thames Excavation Yields Impossible Anachronism.~ The letters shimmer and rearrange as you watch.^";
+            else
+                print "  ~THAMES EXCAVATION YIELDS POTTERY FRAGMENTS -- Scholars Describe Find as Adequate.~^";
+            if (eleanor_gift)
+                print "  ~ELEANOR MORRISON RETROSPECTIVE AT GALLERY -- Wartime Artist Credits Kindness of Stranger.~ The photograph fades in and out of focus.^";
+            else
+                print "  ~NATIONAL GALLERY WINTER EXHIBITION -- Landscapes and Still Lifes, Nothing Remarkable.~^";
+            if (church_saved)
+                print "  ~ST. MARGARET'S CELEBRATES 600TH ANNIVERSARY -- Medieval Gem Survived Blitz.~ The ink is so fresh it almost smudges under your thumb.^";
+            else
+                print "  ~CAR PARK ON FORMER CHURCH SITE APPROVED -- Council Votes 7-3.~^";
+            rtrue;
+         ],
+         before [;
+            Drop:
+                "You fold the newspaper and tuck it back under your arm. A time traveller should keep up with current events.";
+            Take:
+                if (self has scenery)
+                    "The display case is sealed. Besides, you have a strange feeling it's exactly where it needs to be.";
+         ];
 
 Object entrance_alley "alley" workshop_entrance
     with name 'alley' 'alleyway' 'lane' 'narrow',
@@ -2107,6 +2165,8 @@ Object future_museum "Thames Barrier Museum"
                 print "A scale model of St. Margaret's Church dominates one corner: ~SAVED FROM THE BLITZ -- St. Margaret's Church survived the incendiary raids of 1941, thanks to a fire watcher who smothered the flames with sandbags.~ The church still stands, even above the floodwaters.^^";
             else
                 print "A photograph shows a gap-toothed London skyline. The caption reads: ~Site of St. Margaret's Church, destroyed by incendiary bomb, 1941. One of many irreplaceable buildings lost to the Blitz.~^^";
+            if (newspaper in self)
+                print "Near the entrance, a climate-controlled case holds a single yellowed page of the Times. You feel a jolt of recognition -- the tea stain, the circled advert, the fold where you always tuck it under your arm. A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM ROMAN-ERA THAMES SEDIMENT. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
             print "A DeLorean sits in the corner with a sign reading ~TIME TRAVEL IN POPULAR CULTURE.~^^";
             print "The flooded street is south. Stairs lead up to the rooftop.^";
         ],
@@ -2165,7 +2225,7 @@ Object museum_signs "underground signs" future_museum
     has scenery pluralname;
 
 Object museum_standard "Evening Standard copies" future_museum
-    with name 'standard' 'evening' 'newspaper' 'newspapers' 'paper' 'papers' 'copy' 'copies' 'soggy',
+    with name 'standard' 'evening' 'newspapers' 'papers' 'copies' 'soggy',
          description "Soggy copies of the Evening Standard, dated 7th March 2038. The headline reads: ~THAMES BARRIER FAILS -- CENTRAL LONDON FLOODS.~ Below the fold: ~PROPERTY PRICES EXPECTED TO STABILISE.~ Some things never change, even when everything does.",
     has scenery pluralname;
 
@@ -2607,6 +2667,7 @@ Object solarium_dest "Workshop"
     location = workshop_entrance;
     score = 0;
     move pocket_watch to player;
+    move newspaper to player;
 
     print "London, 1895.^^";
     print "You are standing outside 14 Praed Street, clutching a copy of yesterday's Times and trying to look like someone with an open mind regarding the fundamental nature of causality.^^";
@@ -2816,6 +2877,11 @@ Object solarium_dest "Workshop"
         move time_machine to future_street;
         move copernicus to future_street;
         print "You set the dial to ~2045~ and pull the lever. The machine shudders, groans, and deposits you somewhere very, very wet.^";
+        if (newspaper in player) {
+            print "^The transit is rougher than any before -- the machine screams in frequencies you can feel in your teeth. The newspaper is ripped from your hands by the temporal wind. The pages tumble into the vortex, scattering through centuries like leaves in a storm, and vanish.^";
+            move newspaper to future_museum;
+            give newspaper scenery;
+        }
         PlayerTo(future_street);
         rtrue;
     }
