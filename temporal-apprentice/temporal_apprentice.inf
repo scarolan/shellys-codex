@@ -546,7 +546,7 @@ Global machine_raised = false;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
-    if (w == 'repair' or 'fix' or 'mend' or 'install' or 'attach') {
+    if (w == 'repair' or 'fix' or 'mend' or 'install' or 'attach' or 'transcribe') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
@@ -559,7 +559,7 @@ Global machine_raised = false;
         wn = 2;
         while (wn <= parse->1) {
             w2 = NextWord();   ! reads word at wn, advances wn
-            if (w2 == 'in' or 'with' or 'on' or 'into' or 'onto' or 'to' or 'using') {
+            if (w2 == 'in' or 'with' or 'on' or 'into' or 'onto' or 'to' or 'using' or 'formula' or 'navigation') {
                 ! Blank from preposition to end of input
                 i = WordAddress(wn - 1);
                 len = (buffer + 2 + buffer->1) - i;

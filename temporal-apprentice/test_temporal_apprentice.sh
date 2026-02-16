@@ -958,6 +958,24 @@ south
 south
 repair machine" "machine can AIM"
 
+# Cambridge: transcribe formula synonym works
+run_test "Cambridge: transcribe formula synonym" "$CAMBRIDGE_SETUP
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show toolkit to hawking
+east
+take printout
+west
+south
+south
+transcribe formula" "machine can AIM"
+
 # Cambridge: can't travel to Future without formula transcribed
 run_test "Cambridge: blocked without formula" "$CAMBRIDGE_SETUP
 north
