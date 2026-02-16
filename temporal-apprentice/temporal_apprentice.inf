@@ -1051,6 +1051,20 @@ Object time_machine "time machine" solarium
                 }
             }
          ],
+         before [;
+            Receive:
+                if (noun == lodestone && lodestone_installed)
+                    "The lodestone is already installed in the compass housing. It glows with a steady, purposeful light.";
+                if (noun == vacuum_tube && tube_installed)
+                    "The vacuum tube is already fitted into the oscillation circuit, humming away contentedly.";
+                if (noun == formula_printout && formula_transcribed)
+                    "Hawking's formula is already transcribed into the calibration matrix.";
+                if (noun == quantum_processor && processor_installed)
+                    "The crystalline processor is already seated in its brass harness.";
+                "The time machine's innards are far too delicate for casual insertion. Try REPAIR MACHINE or FIX MACHINE to install components properly.";
+            Enter, Go:
+                "The time machine isn't a carriage you climb into -- it takes everything nearby along for the ride. To travel through time, try TRAVEL TO followed by a destination.";
+         ],
          add_to_scope roman_dest blitz_dest hawking_dest future_dest solarium_dest,
     has scenery;
 
@@ -3324,6 +3338,9 @@ Verb 'zkn'
 Verb 'zcl'
     *                                       -> Clean
     * noun                                  -> Clean;
+
+Verb 'board'
+    * noun                                  -> Enter;
 
 Extend 'kill' first
     * 'hitler'                              -> KillHitler;

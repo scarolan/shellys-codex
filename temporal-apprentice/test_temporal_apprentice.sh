@@ -1913,6 +1913,31 @@ run_test "Museum newspaper examine: tea stain through glass" "$FUTURE_SETUP
 north
 examine newspaper" "tea stain"
 
+# --- Issue #75: insert/enter/board machine ---
+echo "[Issue #75: Machine Insert/Enter/Board]"
+# Setup: get to Roman forum with lodestone in inventory, machine present
+MACHINE_CMD_SETUP="$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus"
+run_test "Insert lodestone in machine hints repair" "$MACHINE_CMD_SETUP
+insert lodestone in machine" "REPAIR MACHINE"
+run_test_absent "Insert lodestone no generic refusal" "$MACHINE_CMD_SETUP
+insert lodestone in machine" "can.t contain things"
+run_test "Enter machine hints travel" "$MACHINE_CMD_SETUP
+enter machine" "TRAVEL TO"
+run_test_absent "Enter machine no generic refusal" "$MACHINE_CMD_SETUP
+enter machine" "not something you can enter"
+run_test "Board machine hints travel" "$MACHINE_CMD_SETUP
+board machine" "TRAVEL TO"
+run_test_absent "Board machine no unrecognised verb" "$MACHINE_CMD_SETUP
+board machine" "not a verb I recognise"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"
