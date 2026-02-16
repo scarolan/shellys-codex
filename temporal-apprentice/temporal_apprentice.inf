@@ -2125,18 +2125,24 @@ Object hawking "Professor Hawking" cambridge_hall
                 }
                 "The synthesiser clicks. ~Interesting, but not convincing. I need evidence, not anecdotes.~";
             Give, Show:
-                if (noun == lodestone && hawking_phase >= 2 && hawking_convinced == false) {
+                if ((noun == lodestone || (noun == toolkit && lodestone_installed)) && hawking_phase >= 2 && hawking_convinced == false) {
                     hawking_convinced = true;
                     score = score + 8;
-                    print "Hawking watches as the lodestone pulls at every piece of metal in the room. His instruments go haywire. The synthesiser is silent for a long moment.^^";
-                    print "~The magnetic signature is impossible. This stone has been exposed to temporal radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
+                    if (lodestone_installed)
+                        print "Hawking examines your toolkit. His instruments spike immediately. ~This metal has been exposed to temporal radiation,~ the synthesiser announces. ~The molecular signature is unmistakable -- these tools have passed through a temporal field multiple times.~ His instruments go haywire. The synthesiser is silent for a long moment.^^";
+                    else
+                        print "Hawking watches as the lodestone pulls at every piece of metal in the room. His instruments go haywire. The synthesiser is silent for a long moment.^^";
+                    if (lodestone_installed)
+                        print "~The temporal signature is impossible. These instruments have been exposed to radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
+                    else
+                        print "~The magnetic signature is impossible. This stone has been exposed to temporal radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
                     print "The silence that follows is not empty. You can almost hear the future rearranging itself.^^";
                     print "~I have spent thirty years developing a theoretical framework for temporal harmonics. I was going to destroy my notes if no one came tonight. What would be the point?~ The synthesiser pauses. ~But you came. Which means the theory works. Which means I should publish.~^^";
                     print "He gives a command to his computer. In the study to the east, a dot-matrix printer whirs to life -- the unmistakable sound of perforated paper being fed through an ancient mechanism.^^";
                     print "~The formula is printing now. Dr. Chen will let you through. Take it. Use it. And when the future builds on my work...~ Another pause. ~Well. You'll understand in time.~^";
                     rtrue;
                 }
-                if (noun == lodestone or vacuum_tube or hartley_journal or toolkit) {
+                if (noun == lodestone or vacuum_tube or hartley_journal or toolkit or time_machine) {
                     if (hawking_phase >= 1 && hawking_convinced == false) {
                         hawking_phase = 2;
                         print "Hawking examines the object with intense curiosity. ~Unusual. The craftsmanship is clearly Victorian, but the materials...~ He trails off, calculating. ~This is not from 2009. But I need the final proof. Something that demonstrates temporal mechanics directly.~^";

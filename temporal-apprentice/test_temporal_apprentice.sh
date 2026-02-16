@@ -866,7 +866,7 @@ give invitation to porter
 north
 tell hawking about time
 show journal to hawking
-show lodestone to hawking"
+show toolkit to hawking"
 run_test "Convince Hawking" "$CONVINCE_SETUP" "you really are a time traveller"
 run_test "Get formula printout" "$CONVINCE_SETUP
 east
@@ -884,7 +884,7 @@ give invitation to porter
 north
 tell hawking about time
 show journal to hawking
-show lodestone to hawking
+show toolkit to hawking
 east
 take printout
 west
@@ -902,7 +902,7 @@ give invitation to porter
 north
 tell hawking about time
 show journal to hawking
-show lodestone to hawking
+show toolkit to hawking
 east
 take printout
 west
@@ -951,7 +951,7 @@ give invitation to porter
 north
 tell hawking about time
 show journal to hawking
-show lodestone to hawking
+show toolkit to hawking
 east
 take printout
 west
@@ -1096,7 +1096,7 @@ give invitation to porter
 north
 tell hawking about time
 show journal to hawking
-show lodestone to hawking
+show toolkit to hawking
 east
 take printout
 west
@@ -1171,7 +1171,7 @@ give invitation to porter
 north
 tell hawking about time
 show journal to hawking
-show lodestone to hawking
+show toolkit to hawking
 east
 take printout
 west
@@ -1248,7 +1248,7 @@ give invitation to porter
 north
 tell hawking about time
 show journal to hawking
-show lodestone to hawking
+show toolkit to hawking
 east
 take printout
 west
@@ -1330,7 +1330,7 @@ give invitation to porter
 north
 tell hawking about time
 show journal to hawking
-show lodestone to hawking
+show toolkit to hawking
 east
 take printout
 west
