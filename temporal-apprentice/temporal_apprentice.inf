@@ -2941,7 +2941,7 @@ Object solarium_dest "Workshop"
         "Dr. Chen smiles politely. ~I'm Professor Hawking's assistant. If you have questions about the party or the experiment, he's the one to ask.~";
     }
     if (noun == curator) {
-        "The curator perks up. ~A visitor! Wonderful. Feel free to ask about any of the exhibits. We don't get many visitors since... well, since the water.~";
+        "The curator perks up. ~A visitor! Wonderful. Feel free to ask me about any of the exhibits. We don't get many visitors since... well, since the water.~";
     }
     if (noun has animate) {
         if (noun has pluralname)
