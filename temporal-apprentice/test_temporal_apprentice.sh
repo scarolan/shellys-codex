@@ -979,6 +979,58 @@ run_test "Get formula printout" "$CONVINCE_SETUP
 east
 take printout" "seed of everything"
 
+echo "[Hawking Item Dismissals]"
+# Newspaper, watch, and key are in inventory at this point
+run_test "Hawking dismisses newspaper" "$HAWKING_SETUP
+give newspaper to hawking" "obtain one of these myself"
+run_test "Hawking dismisses pocket watch" "$HAWKING_SETUP
+give watch to hawking" "mechanical approximations"
+run_test "Hawking dismisses front door key" "$HAWKING_SETUP
+give key to hawking" "rather less mundane"
+# Tin soldier: pick it up in Blitz pub (east from street) and keep it
+HAWKING_WITH_SOLDIER="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+repair machine
+travel to blitz
+east
+take soldier
+west
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+repair machine
+travel to cambridge
+north
+east
+take invitation
+west
+give invitation to porter
+north"
+run_test "Hawking dismisses tin soldier" "$HAWKING_WITH_SOLDIER
+give soldier to hawking" "nostalgia is not proof"
+
 # --- Cambridge Install-As-You-Go ---
 echo "[Cambridge Install-As-You-Go]"
 # Cambridge: repair machine transcribes formula
