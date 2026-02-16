@@ -1098,6 +1098,96 @@ run_test_absent "Throw sandbag at fire no hint text" "$BLITZ_SETUP
 north
 up
 throw sandbag at fire" "Try: extinguish"
+
+# --- Fire Timer ---
+echo "[Blitz Fire Timer]"
+run_test "Fire starts on arrival" "$BLITZ_SETUP" "incendiaries come"
+run_test "Peggy shouts on arrival" "$BLITZ_SETUP" "Shelter! NOW"
+run_test "Church fire visible from street" "$BLITZ_SETUP
+look" "Smoke and flame"
+run_test "Fire active in church" "$BLITZ_SETUP
+north" "Heat radiates from above"
+run_test "Fire urgent on rooftop" "$BLITZ_SETUP
+north
+up" "this is what they.re for"
+run_test "Save church in time" "$BLITZ_SETUP
+north
+up
+extinguish" "sputters and dies"
+run_test "Save church: rooftop after" "$BLITZ_SETUP
+north
+up
+extinguish
+look" "St. Margaret.s still stands"
+run_test "Peggy approves after saving" "$BLITZ_SETUP
+north
+up
+extinguish
+down
+south
+talk to peggy" "Saved that church"
+run_test "Church burns if you wait" "$BLITZ_SETUP
+z
+z
+z
+z
+z
+z
+z" "roof of St. Margaret.s collapses"
+run_test "Church burned: street description" "$BLITZ_SETUP
+z
+z
+z
+z
+z
+z
+z
+look" "gutted shell"
+run_test "Church burned: rooftop blocked" "$BLITZ_SETUP
+z
+z
+z
+z
+z
+z
+z
+north
+up" "choked with fallen timbers"
+run_test "Peggy mourns burned church" "$BLITZ_SETUP
+z
+z
+z
+z
+z
+z
+z
+talk to peggy" "grandmother was married"
+run_test "Fire escalation warning" "$BLITZ_SETUP
+z
+z" "Smoke pours from the church"
+run_test "Fire countdown in shelter" "$BLITZ_SETUP
+down
+z
+z
+z" "Dust trickles from the ceiling"
+run_test "Church collapse heard in shelter" "$BLITZ_SETUP
+down
+z
+z
+z
+z
+z
+z
+z" "That was St. Margaret"
+run_test "Church collapse heard in pub" "$BLITZ_SETUP
+east
+z
+z
+z
+z
+z
+z" "That was the church"
+
 run_test "Examine regulars by plural name" "$BLITZ_SETUP
 east
 examine regulars" "friendly suspicion"
@@ -1981,17 +2071,17 @@ north
 north
 repair machine
 travel to blitz
+north
+up
+extinguish
+down
+south
 east
 take soldier
 west
 down
 give soldier to eleanor
 up
-north
-up
-extinguish
-down
-south
 west
 take valve
 east
@@ -2381,9 +2471,9 @@ examine drawings" "salvaged paper"
 
 # --- New scenery: Bombed Church ---
 echo "[Scenery: Bombed Church]"
-run_test "Examine roof in church" "$BLITZ_SETUP
+run_test "Examine roof in church (fire active)" "$BLITZ_SETUP
 north
-examine roof" "Half the roof is gone"
+examine roof" "timbers are ablaze"
 run_test "Examine inscription on church walls" "$ENTER_WORKSHOP
 take journal
 north

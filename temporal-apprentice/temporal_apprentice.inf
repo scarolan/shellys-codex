@@ -89,6 +89,7 @@ Global cat_accident = false;
 Global current_era = 0;
 Global cat_turn_count = 0;
 Global fire_event = false;
+Global fire_turns_remaining = 0;
 Global hawking_phase = 0;
 
 Global copernicus_named = false;
@@ -289,6 +290,14 @@ Global machine_raised = false;
         print "Peggy gives you a curt nod of approval. ~Right. You'll do. Saved that church like a proper Londoner. Now get back to the shelter before Jerry has another go.~^";
         rtrue;
     }
+    if (fire_turns_remaining > 0 && church_saved == false) {
+        print "~The church is BURNING, you fool! St. Margaret's! Get up there and use the sandbags before we lose her! Up the stairs, through the church, onto the roof -- MOVE!~^";
+        rtrue;
+    }
+    if (fire_event && church_saved == false && fire_turns_remaining <= 0) {
+        print "Peggy stares at the smoking ruin of St. Margaret's. ~My grandmother was married in that church,~ she says, very quietly. Then she straightens her tin hat. ~Well. Nothing to be done now. Get to the shelter.~^";
+        rtrue;
+    }
     print "Warden Peggy materialises from the darkness like a tweed-clad spectre. ~Put that light OUT!~ she barks, despite the fact that you don't have a light. ~We're in a blackout, in case you hadn't noticed. Jerry's up there dropping his calling cards and here you are gawping about like a tourist.~^^";
     print "She points firmly towards the ground. ~Shelter's down below. The Crown and Anchor's east if you need liquid courage. And stay away from the rubble site west -- unexploded ordnance.~^";
 ];
@@ -301,6 +310,10 @@ Global machine_raised = false;
     if (topic == 'church' or 'bomb' or 'bombs' or 'fire') {
         if (church_saved) {
             print "~Thanks to you, St. Margaret's still stands. My grandmother was married there. Not that I'm sentimental.~ She dabs her eye briskly. ~Dust. Terrible dust.~^";
+        } else if (fire_turns_remaining > 0) {
+            print "~It's BURNING! The incendiary hit the roof! Get up there -- through the church, up the stairs to the rooftop -- and use the sandbags before it's too late! My grandmother was married in that church!~^";
+        } else if (fire_event && fire_turns_remaining <= 0) {
+            print "Peggy's jaw tightens. ~Gone. St. Margaret's is gone. My grandmother was married there.~ A long pause. ~Nothing to be done now.~^";
         } else {
             print "~St. Margaret's took a hit last week. Still standing, mostly. The inscription on the wall survived, oddly enough. Very old, that.~^";
         }
@@ -2317,7 +2330,25 @@ Object blitz_street "Blacked-Out Street"
                 print "The time machine is half-buried under rubble from the last raid, brass fittings poking through the debris like the bones of some mechanical beast.^^";
             else if (time_machine in self)
                 print "The time machine stands in the street, dusted with plaster and looking thoroughly out of place in wartime London.^^";
-            print "An underground shelter entrance leads down. A bombed church looms to the north. The Crown and Anchor pub is east, and a rubble-strewn site lies to the west.^";
+            if (fire_event == false) {
+                fire_event = true;
+                fire_turns_remaining = 7;
+                StartDaemon(rooftop_fire);
+                print "A siren shrieks. Then another. The drone of bombers swells until it fills the sky.^^";
+                print "Then the incendiaries come -- a cascade of bright points arcing overhead like malevolent fireflies. A cluster strikes the church roof to the north. For a heartbeat, the magnesium flare turns night into day. Then flames take hold, racing along ancient timbers.^^";
+                print "Warden Peggy materialises from the darkness. ~YOU! Shelter! NOW!~ She grabs your arm and points down the stairs. ~Get underground before Jerry kills us all!~^^";
+                print "She releases you and herds a family down the shelter steps, tin hat bobbing in the darkness.^^";
+                print "The church is burning to the north. The shelter waits below.^";
+            } else if (fire_turns_remaining > 0 && church_saved == false) {
+                print "Smoke and flame pour from the church to the north. The incendiary is still burning.^^";
+                print "An underground shelter entrance leads down. The burning church is to the north. The Crown and Anchor pub is east, and a rubble-strewn site lies to the west.^";
+            } else if (church_saved == false) {
+                print "The gutted shell of St. Margaret's smoulders to the north. The roof has collapsed entirely.^^";
+                print "An underground shelter entrance leads down. The ruined church is to the north. The Crown and Anchor pub is east, and a rubble-strewn site lies to the west.^";
+            } else {
+                print "The church to the north stands scorched but intact -- thanks to you.^^";
+                print "An underground shelter entrance leads down. The church is to the north. The Crown and Anchor pub is east, and a rubble-strewn site lies to the west.^";
+            }
         ],
          d_to blitz_shelter,
          n_to blitz_church,
@@ -2391,22 +2422,43 @@ Object tommy_radio "wireless set" blitz_shelter
 
 Object blitz_church "Bombed Church"
     with description [;
-            print "St. Margaret's Church has taken a beating but refuses to fall. The roof is half gone, pews are scattered like matchsticks, and stained glass crunches underfoot. But the walls still stand, and through a gap in the masonry, candlelight flickers from what remains of the nave.^^";
+            if (fire_turns_remaining > 0 && church_saved == false) {
+                print "Heat radiates from above. Through the gaps in what remains of the roof, you can see flames spreading along the timbers, fed by the incendiary's magnesium. Burning fragments drift down like hellish snow. The pews are scattered like matchsticks and stained glass crunches underfoot.^^";
+            } else if (fire_event && church_saved == false && fire_turns_remaining <= 0) {
+                print "St. Margaret's is a gutted shell. The roof has collapsed entirely, open to the sky. Charred timbers and rubble fill the nave, still smoking. Only the outer walls remain, blackened and cracked.^^";
+            } else if (church_saved) {
+                print "St. Margaret's Church bears scorch marks from the incendiary, but the main structure is intact. The roof timbers are blackened where the fire caught, but your sandbag intervention saved the building. Pews are scattered like matchsticks and stained glass crunches underfoot.^^";
+            } else {
+                print "St. Margaret's Church has taken a beating but refuses to fall. The roof is half gone, pews are scattered like matchsticks, and stained glass crunches underfoot. But the walls still stand, and through a gap in the masonry, candlelight flickers from what remains of the nave.^^";
+            }
             if (inscription_carved) {
                 print "On one ancient wall, visible through the bomb damage, you can make out a carved inscription: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, 60 AD.~ Nearly two thousand years old and still legible. You feel an odd chill.^^";
             }
-            if (fire_event && church_saved == false) {
-                print "Scorch marks show where the incendiary landed. The fire has not been contained.^^";
-            }
-            print "The street is back to the south. Stairs lead up to the fire watch rooftop.^";
+            if (fire_event && church_saved == false && fire_turns_remaining <= 0)
+                print "The street is back to the south. The stairs to the rooftop are blocked by fallen timbers.^";
+            else
+                print "The street is back to the south. Stairs lead up to the fire watch rooftop.^";
         ],
          s_to blitz_street,
-         u_to blitz_rooftop,
+         u_to [;
+            if (fire_event && church_saved == false && fire_turns_remaining <= 0) {
+                "The stairway to the rooftop is choked with fallen timbers and rubble from the collapsed roof. There's no getting up there now.";
+            }
+            return blitz_rooftop;
+         ],
     has light;
 
 Object church_roof "roof" blitz_church
     with name 'roof' 'ceiling',
-         description "Half the roof is gone, open to the sky. The remaining timbers jut out like broken ribs, silhouetted against the searchlight-swept clouds. It's dramatic in a way that no architect intended.",
+         description [;
+            if (fire_turns_remaining > 0 && church_saved == false)
+                "The remaining roof timbers are ablaze, fire racing along ancient wood like it's been waiting centuries for this moment. The heat is intense.";
+            if (fire_event && church_saved == false && fire_turns_remaining <= 0)
+                "The roof is gone entirely -- collapsed inward, a heap of charred timbers and rubble open to the sky.";
+            if (church_saved)
+                "The roof timbers are scorched and blackened from the incendiary, but they held. Your sandbag intervention saved them.";
+            "Half the roof is gone, open to the sky. The remaining timbers jut out like broken ribs, silhouetted against the searchlight-swept clouds. It's dramatic in a way that no architect intended.";
+         ],
     has scenery;
 
 Object church_rubble "church rubble" blitz_church
@@ -2495,16 +2547,12 @@ Object pub_building "pub" blitz_pub
 
 Object blitz_rooftop "Fire Watch Rooftop"
     with description [;
-            print "The church tower provides a commanding view of blacked-out London. Searchlights crisscross the sky, and the distant crump of explosions punctuates the night. Sandbags are stacked along the parapet -- fire watch supplies for dealing with incendiary bombs.^^";
-            if (fire_event == false) {
-                fire_event = true;
-                print "As if on cue, a cluster of incendiary bombs arcs across the sky like malevolent fireflies. One strikes the church roof below with a bright magnesium flash. Flames begin to spread along the timbers!^^";
-                print "The sandbags are right here. You could try to extinguish the fire, or flee back down the stairs.^^";
+            if (fire_turns_remaining > 0 && church_saved == false) {
+                print "The church tower shakes with each explosion. Below, flames race along the roof timbers, fed by the incendiary's magnesium. The heat rising from below is fierce. Sandbags are stacked along the parapet -- this is what they're for.^^";
+            } else if (church_saved) {
+                print "The church tower provides a commanding view of blacked-out London. Searchlights crisscross the sky, and the distant crump of explosions punctuates the night. The sandbags you used to smother the fire are scattered along the parapet. St. Margaret's still stands.^^";
             } else {
-                if (church_saved)
-                    print "The sandbags you used to smother the fire are scattered along the parapet. St. Margaret's still stands.^^";
-                else
-                    print "Flames still lick at the timbers below. The sandbags are right here -- it's not too late to act!^^";
+                print "The church tower provides a commanding view of blacked-out London. Searchlights crisscross the sky. Below, the charred remains of the roof timbers still smoke faintly. The sandbags sit along the parapet, unused. Too late now.^^";
             }
             print "Stairs lead back down to the church.^";
         ],
@@ -2520,6 +2568,7 @@ Object sandbags "sandbags" blitz_rooftop
                     <<Extinguish rooftop_fire>>;
                 if (church_saved) "The fire's already out. No need for more sandbags.";
                 if (fire_event == false) "No fire to fight at the moment. Enjoy the view.";
+                if (fire_turns_remaining <= 0) "Too late. The roof has already collapsed.";
                 "You grab a sandbag. It's heavy. You could throw it at the fire below.";
             ThrowAt:
                 <<Extinguish rooftop_fire>>;
@@ -2551,9 +2600,95 @@ Object rooftop_fire "fire" blitz_rooftop
          description [;
             if (church_saved)
                 "The fire has been extinguished, thanks to your sandbag intervention. Scorch marks on the timbers below are the only evidence of the incendiary's brief, bright career.";
-            if (fire_event)
+            if (fire_turns_remaining > 0)
                 "Flames leap along the church timbers below, fed by the incendiary bomb's magnesium. The fire is spreading quickly -- you need to smother it with sandbags before St. Margaret's joins the list of London's losses.";
+            if (fire_event && fire_turns_remaining <= 0)
+                "The fire has done its work. The roof timbers are a charred ruin, still smoking. St. Margaret's has lost its roof -- and with it, six centuries of history.";
             "There's no fire at the moment. The church below looks peaceful, or at least as peaceful as a bomb-damaged church can.";
+         ],
+         daemon [;
+            if (current_era ~= 2) rtrue;
+            if (church_saved) { StopDaemon(self); rtrue; }
+            if (fire_turns_remaining <= 0) { StopDaemon(self); rtrue; }
+            fire_turns_remaining--;
+            if (fire_turns_remaining <= 0) {
+                ! Church is lost
+                switch (location) {
+                    blitz_street:
+                        print "^With a groaning, splintering crash, the roof of St. Margaret's collapses inward. A pillar of sparks erupts into the night sky, bright as a second sunrise. The church that survived nearly two thousand years has just fought its last battle.^";
+                    blitz_church:
+                        print "^The heat becomes unbearable. With a deafening crack, the main beam gives way above you. You throw yourself toward the stairs as the roof caves in, burning debris raining down where you stood a moment ago.^";
+                        PlayerTo(blitz_street, 1);
+                    blitz_rooftop:
+                        print "^The timbers beneath your feet give a sickening lurch. The roof is collapsing! You scramble down the stairs two at a time as St. Margaret's caves in behind you, a cascade of fire and ancient masonry.^";
+                        PlayerTo(blitz_street, 1);
+                    blitz_shelter:
+                        print "^From above, a deep, resonant crash shakes dust from the ceiling. The singing stops. Everyone looks up. Peggy closes her eyes briefly. ~That was St. Margaret's,~ she says quietly.^";
+                    blitz_pub:
+                        print "^The pub windows rattle violently. A deep crash echoes through the night. The regulars go silent. Through the blackout curtains, an orange glow pulses, then fades. ~That was the church,~ someone says into their pint.^";
+                    blitz_rubble:
+                        print "^A thunderous crash from the east sends fresh dust cascading from the wreckage. The glow of a large fire briefly illuminates the rubble site. St. Margaret's has fallen.^";
+                }
+                StopDaemon(self);
+                rtrue;
+            }
+            ! Escalating warnings while fire burns
+            switch (fire_turns_remaining) {
+                5: switch (location) {
+                    blitz_street:
+                        print "^Smoke pours from the church to the north. The flames are spreading along the roof timbers.^";
+                    blitz_church:
+                        print "^Embers drift down from above. The fire overhead is getting worse.^";
+                    blitz_rooftop:
+                        print "^The flames below are spreading fast. The sandbags are right here!^";
+                }
+                4: switch (location) {
+                    blitz_street:
+                        print "^The church fire is roaring now. Sparks shower into the sky like terrible fireworks.^";
+                    blitz_shelter:
+                        print "^Dust trickles from the ceiling. Something up there is burning.^";
+                    blitz_pub:
+                        print "^An orange glow leaks through the blackout curtains. The fire is getting worse.^";
+                    blitz_church:
+                        print "^Burning fragments fall from the rafters. The heat is intensifying.^";
+                    blitz_rooftop:
+                        print "^The fire is roaring below you. ACT NOW -- use the sandbags!^";
+                }
+                3: switch (location) {
+                    blitz_street:
+                        print "^The church roof is fully ablaze. Timbers crack like gunshots. It won't last much longer.^";
+                    blitz_shelter:
+                        print "^More dust falls. Peggy glances at the ceiling. ~The church,~ she murmurs.^";
+                    blitz_pub:
+                        print "^The glow through the curtains is brighter. The regulars shift uneasily.^";
+                    blitz_church:
+                        print "^The heat is nearly unbearable. Chunks of burning timber crash to the floor around you.^";
+                    blitz_rooftop:
+                        print "^The timbers are buckling under the heat. The sandbags -- NOW!^";
+                    blitz_rubble:
+                        print "^The sky to the east is lit with an angry orange glow.^";
+                }
+                2: switch (location) {
+                    blitz_street:
+                        print "^St. Margaret's is an inferno. The roof could go any moment.^";
+                    blitz_church:
+                        print "^A section of roof beam crashes to the floor in a shower of sparks. The whole structure is groaning.^";
+                    blitz_rooftop:
+                        print "^The roof is sagging! This is your LAST CHANCE -- extinguish the fire!^";
+                    default:
+                        print "^The night sky glows orange. The church fire is out of control.^";
+                }
+                1: switch (location) {
+                    blitz_street:
+                        print "^A deep groan echoes from the church. The timbers are giving way. Seconds now.^";
+                    blitz_church:
+                        print "^The main beam cracks with a sound like a cannon shot. The roof is about to go!^";
+                    blitz_rooftop:
+                        print "^The timbers are BUCKLING -- it's now or never!^";
+                    default:
+                        print "^A deep structural groan carries through the night. Something is about to give way.^";
+                }
+            }
          ],
     has scenery;
 
@@ -4063,8 +4198,12 @@ Object solarium_dest "Workshop"
         if (fire_event == false) {
             "There's no fire to extinguish at the moment.";
         }
+        if (fire_turns_remaining <= 0) {
+            "It's too late. The roof has already collapsed. St. Margaret's is gone.";
+        }
         church_saved = true;
         score = score + 30;
+        StopDaemon(rooftop_fire);
         print "You heave sandbag after sandbag over the parapet onto the burning timbers below. Sand cascades onto the incendiary, smothering the magnesium flames. It's exhausting, terrifying, and deeply satisfying work.^^";
         print "The fire sputters and dies. St. Margaret's Church will survive another night -- and, as it turns out, another few centuries. From somewhere below, you hear Warden Peggy's voice: ~About bloody time! Well done!~^";
         rtrue;
