@@ -313,7 +313,7 @@ Global machine_raised = false;
 ];
 
 [ NPC_Ask_Tommy topic;
-    if (topic == 'radio' or 'wireless' or 'valve') {
+    if (topic == 'radio' or 'wireless' or 'valve' or 'bbc') {
         if (radio_fixed) {
             print "~Working like a charm! Though I keep picking up a signal that's just someone reading the cricket scores. In 1941. We have priorities, apparently.~^";
         } else {
