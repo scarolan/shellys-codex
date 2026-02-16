@@ -695,21 +695,38 @@ Object entrance_brass_plate "brass plate" workshop_entrance
          description "A tarnished brass plate beside the door, engraved with impeccable Victorian confidence: ~DR. J. THYME -- TEMPORAL ENGINEERING -- NO SALESMEN.~ The 'no salesmen' has been underlined twice.",
     has scenery;
 
-Object entrance_door "oak door" workshop_entrance
-    with name 'door' 'oak' 'heavy',
+Object entrance_door "oak door"
+    with name 'door' 'oak' 'heavy' 'front',
+         found_in workshop_entrance main_workshop,
          description [;
+            if (location == main_workshop) {
+                if (door_open)
+                    "From inside, the oak door stands open to the west, letting in wisps of London fog and the smell of coal smoke. The brass hinges gleam with recent oiling. That suspicious dent at cat-height is even more pronounced from this side.";
+                "The heavy oak door to the west is firmly shut against the London fog. From inside, you can see the substantial brass lock and the magnificent hinges. The dent at cat-height looks rather like something hit it at speed.";
+            }
             if (door_open)
                 "The heavy oak door stands open. The hinges are magnificent brass affairs. A suspicious dent at cat-height suggests this is not the first time something has made a dramatic entrance.";
             "A heavy oak door, firmly closed. Scarred by decades of London weather and possibly one or two small explosions. The brass hinges are magnificent. The dent at cat-height is suspicious.";
          ],
          before [;
             Open, Close, Push, Pull:
+                if (location == main_workshop) {
+                    if (endgame_knocks_heard) {
+                        BootstrapSequence();
+                        rtrue;
+                    }
+                    if (door_open)
+                        "The door is already open.";
+                    "The door doesn't budge. It seems to be stuck -- or perhaps it only opens from outside.";
+                }
                 if (door_open)
                     "The door is already open.";
                 "The door seems to be locked from the inside.";
             Lock, Unlock:
                 if (door_open)
                     "The door is wide open. Locking it now would be like closing the barn door after the horse has invented time travel.";
+                if (location == main_workshop)
+                    "The lock mechanism on this side is purely decorative -- or possibly broken. Either way, it's not cooperating.";
                 "The lock is on the inside. You'd need to be in the workshop to manage it, and if you were in the workshop, you wouldn't need to.";
          ],
     has scenery;

@@ -1242,7 +1242,7 @@ repair machine
 travel to workshop
 west
 clean
-open door"
+open front door"
 run_test "Install all components" "$ENDGAME_CMD" "fully repaired"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
 run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 183"
@@ -1391,7 +1391,7 @@ repair machine
 travel to workshop
 west
 clean
-open door"
+open front door"
 run_test "Rough ending (critical path + Eleanor gift)" "$ROUGH_ENDGAME" "ROUGH ENDING"
 
 # Good ending: critical path + Eleanor (+25) + inscription (+20) + capsule (+20) = 150
@@ -1470,7 +1470,7 @@ repair machine
 travel to workshop
 west
 clean
-open door"
+open front door"
 run_test "Good ending (critical path + 3 side quests)" "$GOOD_ENDGAME" "GOOD ENDING"
 
 # Perfect ending: all events (score = 180)
@@ -1554,7 +1554,7 @@ repair machine
 travel to workshop
 west
 clean
-open door"
+open front door"
 run_test "Perfect ending (all side quests)" "$PERFECT_ENDGAME" "PERFECT ENDING"
 
 # --- Copernicus ---
