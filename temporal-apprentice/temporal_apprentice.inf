@@ -1025,7 +1025,7 @@ Object entrance_alley "alley" workshop_entrance
 ! ===================================================================
 
 Object praed_street "Praed Street"
-    with description "Praed Street stretches east to west through a curtain of London fog so thick you could hang wallpaper on it. Gas lamps march along the pavement like jaundiced sentries, each one illuminating roughly three square feet of cobblestone and several cubic yards of soot. Hansom cabs clatter past at irregular intervals, their drivers hunched against the damp like mushrooms in top hats.^^The alley to Dr. Thyme's workshop is east. A hanging sign to the south reads ~THE BRASS TAP~ in letters that have given up all pretence of being gold. Paddington Station looms to the west.",
+    with description "Praed Street stretches east to west through a curtain of London fog so thick you could hang wallpaper on it. Gas lamps march along the pavement like jaundiced sentries, each one illuminating roughly three square feet of cobblestone and several cubic yards of soot. Hansom cabs clatter past at irregular intervals, their drivers hunched against the damp like mushrooms in top hats.^^A narrow alley leads east. A hanging sign to the south reads ~THE BRASS TAP~ in letters that have given up all pretence of being gold. Paddington Station looms to the west.",
          e_to workshop_entrance,
          s_to brass_tap,
          in_to brass_tap,
