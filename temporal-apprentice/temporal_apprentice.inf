@@ -609,13 +609,21 @@ Global machine_raised = false;
         }
         Tokenise__(buffer, parse);
     }
-    if (w == 'knock' or 'rap') {
+    if (w == 'knock' or 'rap' or 'bang' or 'pound') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
         i->1 = 'k';
         i->2 = 'n';
         while (len > 3) { len--; i->len = ' '; }
+        ! Blank adverbs so "knock harder" becomes "zkn"
+        wn = 2;
+        w2 = NextWord();
+        if (w2 == 'harder' or 'louder' or 'again') {
+            i = WordAddress(wn - 1);
+            len = WordLength(wn - 1);
+            while (len > 0) { len--; i->len = ' '; }
+        }
         Tokenise__(buffer, parse);
     }
     if (w == 'yell') {
