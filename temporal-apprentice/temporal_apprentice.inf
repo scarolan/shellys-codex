@@ -2236,6 +2236,13 @@ Object tommy "Corporal Tommy" blitz_shelter
                 }
                 "~Cheers, but what I really need is a valve for the wireless.~";
          ],
+         orders [;
+            Dig, DigRubble, Push, Pull:
+                NPC_Ask_Tommy('rubble');
+                rtrue;
+            default:
+                "Tommy shakes his head. ~That's not really my line, mate. Radios and rubble -- that's what I know.~";
+         ],
     has animate proper male;
 
 Object eleanor "Young Eleanor" blitz_shelter
@@ -3180,6 +3187,8 @@ Object solarium_dest "Workshop"
         PlaceInScope(future_dest);
         PlaceInScope(solarium_dest);
     }
+    if (actor == tommy)
+        PlaceInScope(rubble_site);
     rfalse;
 ];
 
@@ -3839,6 +3848,9 @@ Verb 'zmw'
 
 Verb 'board'
     * noun                                  -> Enter;
+
+Extend 'dig' first
+    *                                       -> Dig;
 
 Extend 'kill' first
     * 'hitler'                              -> KillHitler;
