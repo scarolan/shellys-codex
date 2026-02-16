@@ -741,6 +741,18 @@ Object entrance_door "oak door"
          ],
     has scenery;
 
+Object door_hinges "brass hinges"
+    with name 'hinges' 'hinge' 'brass',
+         found_in workshop_entrance main_workshop,
+         description "The hinges are gloriously over-engineered -- each one a miniature cathedral of brass, with buttresses and flourishes that serve no structural purpose whatsoever. They are polished to a mirror shine, suggesting someone oils them with the devotion normally reserved for religious artefacts.",
+    has scenery pluralname;
+
+Object door_dent "dent"
+    with name 'dent' 'mark' 'scratch',
+         found_in workshop_entrance main_workshop,
+         description "A suspiciously cat-shaped dent at precisely cat-height. The impact pattern suggests something hit the door at considerable velocity, possibly while pursuing a moth. Copernicus, of course, would deny all involvement, and his expression of wounded innocence would be entirely convincing if not for the tuft of ginger fur still embedded in the wood grain.",
+    has scenery;
+
 Object entrance_gas_lamps "gas lamps" workshop_entrance
     with name 'gas' 'lamp' 'lamps' 'light' 'lights',
          description "The gas lamps throw circles of jaundiced light onto the cobblestones, each one a small island of visibility in the London murk. They hiss and flicker with the quiet persistence of Victorian infrastructure.",
