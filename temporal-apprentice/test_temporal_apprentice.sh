@@ -2532,9 +2532,11 @@ examine antenna" "panel"
 
 # --- Issue #45: Missing scenery ---
 echo "[Issue #45: Missing Scenery]"
-run_test "Newspaper in inventory at start" "inventory" "newspaper"
-run_test "Examine newspaper pre-accident" "examine newspaper" "tea stain"
-run_test "Examine advert in newspaper" "examine advert" "TEMPORAL ENGINEERING"
+run_test_absent "Newspaper not in inventory at start" "inventory" "carrying.*newspaper"
+run_test "Examine newspaper pre-accident" "buy newspaper
+examine newspaper" "fresh off the press"
+run_test "Examine advert in newspaper" "buy newspaper
+examine advert" "TEMPORAL ENGINEERING"
 run_test "Examine clock in Main Workshop" "$ENTER_WORKSHOP
 examine clock" "brass clock"
 run_test "Examine overcoat in Workshop Entrance" "east
