@@ -725,6 +725,23 @@ Global machine_raised = false;
         while (len > 4) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
+    if (w == 'meow' or 'mew' or 'miaow') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'm';
+        i->2 = 'w';
+        while (len > 3) { len--; i->len = ' '; }
+        ! Blank 'at' so "meow at cat" becomes "zmw cat"
+        wn = 2;
+        w2 = NextWord();
+        if (w2 == 'at') {
+            i = WordAddress(wn - 1);
+            len = WordLength(wn - 1);
+            while (len > 0) { len--; i->len = ' '; }
+        }
+        Tokenise__(buffer, parse);
+    }
     rfalse;
 ];
 
@@ -3681,6 +3698,19 @@ Object solarium_dest "Workshop"
     "You decide against kicking that. Your boots have suffered enough indignity today.";
 ];
 
+[ MeowSub;
+    if (noun == copernicus || (noun == nothing && location == parent(copernicus))) {
+        if (copernicus_named)
+            "You let out your best meow. Copernicus tilts his head, ears swivelling like satellite dishes, then responds with a slow, deliberate chirrup. You have no idea what you just agreed to, but it probably involves tuna.";
+        "You let out your best meow. The cat tilts his head, ears swivelling like satellite dishes, then responds with a slow, deliberate chirrup. You have no idea what you just agreed to, but it probably involves tuna.";
+    }
+    if (noun has animate)
+        "You meow at them. They stare at you with visible concern for your wellbeing.";
+    if (noun == nothing)
+        "You meow into the empty room. The acoustics are surprisingly good, but the audience is nonexistent.";
+    "You meow at that. It does not meow back. Unsurprising, really.";
+];
+
 [ HelpSub;
     print "^=== THE TEMPORAL APPRENTICE -- FIELD GUIDE ===^";
     print "   (hastily scrawled in Dr. Thyme's handwriting)^^";
@@ -3707,7 +3737,8 @@ Object solarium_dest "Workshop"
     print "  repair X ........ check/repair the time machine^";
     print "  extinguish ...... fight a fire^";
     print "  clean ........... tidy the workshop^";
-    print "  pet X ........... stroke the cat (at your own risk)^^";
+    print "  pet X ........... stroke the cat (at your own risk)^";
+    print "  meow ............ attempt feline communication^^";
     print "[TIPS]^";
     print "  - Read Dr. Thyme's journal for clues^";
     print "  - Talk to everyone, examine everything^";
@@ -3782,6 +3813,10 @@ Verb 'zkk'
     *                                       -> Kick
     * creature                              -> Kick
     * noun                                  -> Kick;
+
+Verb 'zmw'
+    *                                       -> Meow
+    * creature                              -> Meow;
 
 Verb 'board'
     * noun                                  -> Enter;

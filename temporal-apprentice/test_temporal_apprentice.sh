@@ -2314,6 +2314,25 @@ run_test "Bare kick" "$ENTER_WORKSHOP
 kick" "air"
 
 echo ""
+echo "--- Meow verb ---"
+run_test "Meow at cat" "$ENTER_WORKSHOP
+meow at cat" "chirrup"
+run_test "Meow alone near cat" "$ENTER_WORKSHOP
+meow" "chirrup"
+run_test "Mew at cat synonym" "$ENTER_WORKSHOP
+mew at cat" "chirrup"
+run_test "Miaow at cat synonym" "$ENTER_WORKSHOP
+miaow at cat" "chirrup"
+run_test "Meow at NPC" "$ENTER_WORKSHOP
+meow at dr thyme" "visible concern"
+run_test "Meow alone no cat" "meow" "empty room"
+run_test "Meow at named Copernicus" "$ENTER_WORKSHOP
+examine tag
+meow at cat" "Copernicus"
+run_test_absent "Meow not unrecognised verb" "$ENTER_WORKSHOP
+meow at cat" "not a verb I recognise"
+
+echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"
 if [ "$FAIL" -gt 0 ]; then
