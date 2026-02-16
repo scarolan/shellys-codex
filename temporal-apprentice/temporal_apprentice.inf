@@ -99,6 +99,7 @@ Global cat_bribed = false;
 
 Global knock_count = 0;
 Global door_open = false;
+Global arrival_time = 0;
 Global spanner_given = false;
 Global spanner_turn = 0;
 Global endgame_knocks_heard = false;
@@ -3622,7 +3623,7 @@ Object solarium_dest "Workshop"
     endgame_phase = 1;
     endgame_turns = 0;
     StopDaemon(copernicus);
-    print "You ease the door open a crack and peer through. There you are -- younger by an afternoon, damp from the fog, clutching a copy of yesterday's Times. As you watch, your past self glances down the alley, shifts weight, and starts to turn away.^^";
+    print "You ease the door open a crack and peer through. There you are -- younger by an afternoon, damp from the fog, clutching a copy of the Times. You watch your past self fish out a pocket watch, check the time, snap the case shut. As you watch, your past self glances down the alley, shifts weight, and starts to turn away.^^";
     print "No.^^";
     print "You yank the door wide and press yourself flat against the wall behind it, heart slamming. Footsteps stop. A pause. Then your past self turns back, stares at the open doorway -- at the empty doorway -- and steps cautiously inside.^^";
     print "You hold your breath behind the door as your past self looks around the entrance, then walks east into the workshop. You hear Dr. Thyme's voice: ~The number four spanner. On the shelf behind you. The brass one.~^^";
@@ -3716,7 +3717,11 @@ Object solarium_dest "Workshop"
         }
         if (knock_count >= 3) {
             door_open = true;
-            "You knock a third time. Still no answer. It's beginning to rain, and you're seriously considering leaving when the door creaks open by itself. There's nobody standing in the doorway. Some sort of automated door, perhaps?";
+            arrival_time = the_time;
+            print "You knock a third time. Still no answer. You fish out your grandfather's pocket watch -- ";
+            PrintTime12(the_time);
+            print ". You snap the case shut. It's beginning to rain, and you're seriously considering leaving when the door creaks open by itself. There's nobody standing in the doorway. Some sort of automated door, perhaps?";
+            rtrue;
         }
     }
     if (location == workshop_entrance && door_open)
@@ -3802,7 +3807,12 @@ Object solarium_dest "Workshop"
         move copernicus to solarium;
         move time_machine to solarium;
         if (components_installed) {
-            print "You set the dial to ~1895~ and pull the lever. For the first time, the machine moves through time like silk through water -- no screaming, no bucking, no ominous sounds from the engineering. Just a smooth, confident hum and the gentle sensation of reality rearranging itself politely. You're back in the solarium. Home.^";
+            the_time = arrival_time - 12;
+            print "You set the dial to ~1895~ and pull the lever. For the first time, the machine moves through time like silk through water -- no screaming, no bucking, no ominous sounds from the engineering. Just a smooth, confident hum and the gentle sensation of reality rearranging itself politely.^^";
+            print "You glance at your pocket watch. ";
+            PrintTime12(the_time);
+            print ". Twelve minutes before you knocked on that door for the first time. Twelve minutes to close the loop.^^";
+            print "You're back in the solarium. Home.^";
         } else {
             print "You set the dial to ~1895~ and pull the lever. The machine hums, reality folds neatly like a well-pressed handkerchief, and you're back in the solarium. Home.^";
         }
@@ -4144,11 +4154,15 @@ Object solarium_dest "Workshop"
         if (components_installed) {
             endgame_knocks_heard = true;
             endgame_turns = 0;
+            the_time = arrival_time;
             print "As you hang up the dustpan, you hear it.^^";
             print "Three knocks on the front door.^^";
             print "Knock. Knock. Knock.^^";
-            print "You stand very still. The sound is unmistakeable -- the same hesitant rap, the same rhythm, the same heavy oak resonance. You heard those exact knocks from the other side, standing in the alley on your first day. Your knocks.^^";
-            print "The door creaks on its hinges but doesn't open. Whoever is out there is waiting. You could open the door...^";
+            print "Your hand goes to your pocket watch. ";
+            PrintTime12(the_time);
+            print ". The exact time you arrived. You remember standing in that alley, rain starting, checking this very watch before the door swung open by itself.^^";
+            print "It didn't open by itself.^^";
+            print "The door creaks on its hinges but doesn't open. Whoever is out there -- whoever YOU are -- is waiting. You could open the door...^";
         } else {
             "The workshop gleams. Dr. Thyme will be pleased. Now, about that time machine...";
         }

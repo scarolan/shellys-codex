@@ -1634,7 +1634,7 @@ run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 189"
 # --- Bootstrap Paradox Endgame ---
 echo "[Bootstrap Paradox]"
 run_test "Three knocks after tidying" "$ENDGAME_CMD" "Knock. Knock. Knock"
-run_test "Player recognises own knocks" "$ENDGAME_CMD" "Your knocks"
+run_test "Player recognises own knocks" "$ENDGAME_CMD" "The exact time you arrived"
 run_test "Bootstrap loop closes" "$ENDGAME_CMD" "loop is closed"
 run_test "Dr Thyme returns after bootstrap" "$ENDGAME_CMD" "Dr. Thyme has returned from tea"
 
@@ -3041,6 +3041,17 @@ look
 look
 south
 look" "front door key"
+
+# --- Clock and time loop ---
+echo "[Clock and Time Loop]"
+run_test "Watch check at third knock" "east
+knock
+knock
+knock" "pocket watch"
+run_test "Endgame rewind: twelve minutes before" "$ENDGAME_CMD" "Twelve minutes"
+run_test "Endgame knocks match arrival time" "$ENDGAME_CMD" "exact time you arrived"
+run_test "Bootstrap: past self checks watch" "$ENDGAME_CMD" "watch your past self fish out a pocket watch"
+run_test "Door didn't open by itself" "$ENDGAME_CMD" "didn.t open by itself"
 
 echo ""
 echo "=== Results ==="
