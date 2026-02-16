@@ -117,6 +117,15 @@ take spanner" "Taken"
 run_test "Give spanner to Thyme" "$ENTER_WORKSHOP
 take spanner
 give spanner to dr thyme" "new apprentice"
+run_test "Give wrench to Thyme" "$ENTER_WORKSHOP
+take spanner
+give wrench to dr thyme" "new apprentice"
+run_test "Hand spanner to Thyme" "$ENTER_WORKSHOP
+take spanner
+hand spanner to dr thyme" "new apprentice"
+run_test "Hand wrench to Thyme" "$ENTER_WORKSHOP
+take spanner
+hand wrench to dr thyme" "new apprentice"
 run_test "Thyme won't talk without spanner" "$ENTER_WORKSHOP
 talk to dr thyme" "spanner"
 run_test "Thyme departure gives key" "$ENTER_WORKSHOP
