@@ -1391,6 +1391,16 @@ echo "[Easter Eggs]"
 run_test "Kill Hitler response" "$BLITZ_SETUP
 kill hitler" "family-friendly"
 
+# --- Buffer overflow on long input ---
+echo "[Buffer Overflow]"
+run_test_absent "No programming error on long input" "knock on door
+knock on door
+knock on door
+enter
+the quick brown fox jumps over the lazy dog and then does it again because why not keep going with this absurdly long sentence that serves no purpose whatsoever
+quit
+y" "Programming error"
+
 # --- Travel-to scope outside workshop ---
 echo "[Travel-to Scope]"
 run_test "Travel to dest where machine is not" "$ENTER_WORKSHOP

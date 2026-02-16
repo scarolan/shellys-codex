@@ -506,6 +506,8 @@ Global machine_raised = false;
 ! ===================================================================
 
 [ BeforeParsing i len w w2;
+    ! Clamp input length to prevent buffer overflow on long input
+    if (buffer->1 > 120) buffer->1 = 120;
     ! Strip period from "dr." to prevent parser confusion
     for (i = 4: i < 2 + buffer->1: i++) {
         if (buffer->i == '.' && buffer->(i-1) == 'r' && buffer->(i-2) == 'd') {
