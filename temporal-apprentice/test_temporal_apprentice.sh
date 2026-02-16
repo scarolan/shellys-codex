@@ -55,28 +55,39 @@ echo ""
 
 echo "=== Running tests ==="
 
-# Knock three times to open door and enter workshop
-ENTER_WORKSHOP="knock
+# Buy paper, circle ad, go to workshop entrance, knock, enter workshop
+ENTER_WORKSHOP="buy newspaper
+circle ad
+east
 knock
-knock
-east"
-
-# Enter workshop, do Thyme sequence, auto-unlock and enter solarium
-ENTER_SOLARIUM="knock
 knock
 knock
 east
+show newspaper to dr thyme"
+
+# Enter workshop, do Thyme sequence, auto-unlock and enter solarium
+ENTER_SOLARIUM="buy newspaper
+circle ad
+east
+knock
+knock
+knock
+east
+show newspaper to dr thyme
 take spanner
 give spanner to dr thyme
 talk to dr thyme
 east"
 
 # Common trigger: the multi-step cat accident sequence
-# 1) give spanner to dr thyme (introduces you)
-# 2) talk to dr thyme (gives rags + key, Thyme leaves)
-# 3) east (auto-unlocks and enters solarium)
-# 4) clean (cat steals rag, climbs onto machine in solarium)
-# 5) take cat (cat kicks lever, accident fires -> Roman Forum)
+# Primary path: clean in workshop -> cat bolts to solarium -> chase -> take cat
+# This variant enters solarium first, then cleans there (solarium fallback path):
+# 1) show newspaper to dr thyme (gets hired)
+# 2) take spanner, give spanner to dr thyme (introduces you)
+# 3) talk to dr thyme (gives rag + key, Thyme leaves)
+# 4) east (auto-unlocks and enters solarium, cat follows)
+# 5) clean (cat steals rag on the spot in solarium)
+# 6) take cat (cat kicks lever, accident fires -> Roman Forum)
 CAT_ACCIDENT="take spanner
 give spanner to dr thyme
 talk to dr thyme
@@ -90,20 +101,27 @@ run_test "Game compiles and runs" "look" "Praed Street"
 
 # --- Knock Mechanic ---
 echo "[Knock Mechanic]"
-run_test "Open door before knock" "open door" "locked from the inside"
-run_test "First knock" "knock" "No response"
-run_test "Second knock" "knock
+run_test "Open door before knock" "east
+open door" "locked from the inside"
+run_test "First knock" "east
+knock" "No response"
+run_test "Second knock" "east
+knock
 knock" "something move inside"
-run_test "Third knock opens door" "knock
+run_test "Third knock opens door" "east
+knock
 knock
 knock" "beginning to rain"
-run_test "East blocked before knock" "east" "should knock"
+run_test "East blocked before knock" "east
+east" "should knock"
 run_test "East open after knock" "$ENTER_WORKSHOP" "cathedral"
-run_test "Enter works after knock" "knock
+run_test "Enter works after knock" "east
+knock
 knock
 knock
 enter" "cathedral"
-run_test "Close door from outside" "knock
+run_test "Close door from outside" "east
+knock
 knock
 knock
 close door" "No point closing it now"
@@ -116,16 +134,16 @@ run_test "Take spanner" "$ENTER_WORKSHOP
 take spanner" "Taken"
 run_test "Give spanner to Thyme" "$ENTER_WORKSHOP
 take spanner
-give spanner to dr thyme" "new apprentice"
+give spanner to dr thyme" "follow instructions"
 run_test "Give wrench to Thyme" "$ENTER_WORKSHOP
 take spanner
-give wrench to dr thyme" "new apprentice"
+give wrench to dr thyme" "follow instructions"
 run_test "Hand spanner to Thyme" "$ENTER_WORKSHOP
 take spanner
-hand spanner to dr thyme" "new apprentice"
+hand spanner to dr thyme" "follow instructions"
 run_test "Hand wrench to Thyme" "$ENTER_WORKSHOP
 take spanner
-hand wrench to dr thyme" "new apprentice"
+hand wrench to dr thyme" "follow instructions"
 run_test "Thyme won't talk without spanner" "$ENTER_WORKSHOP
 talk to dr thyme" "spanner"
 run_test "Thyme departure gives key" "$ENTER_WORKSHOP
@@ -146,14 +164,17 @@ run_test "Take journal" "$ENTER_WORKSHOP
 take journal" "Taken"
 run_test "Store room accessible" "$ENTER_WORKSHOP
 north" "Store Room"
+run_test "Store room hint on first visit" "$ENTER_WORKSHOP
+north" "hasn.t quite finished being occupied"
 run_test "Take toolkit" "$ENTER_WORKSHOP
 north
 take toolkit" "Taken"
 run_test "Dr. Thyme present" "$ENTER_WORKSHOP" "Dr. Thyme"
-run_test "Cat shown as ginger tabby" "$ENTER_WORKSHOP" "ginger tabby cat"
+run_test "Cat shown as silver-grey" "$ENTER_WORKSHOP" "silver-grey cat"
 run_test_absent "Cat not named Copernicus initially" "$ENTER_WORKSHOP
 look" "You can also see.*Copernicus"
-run_test "Workshop mentions corridor" "$ENTER_WORKSHOP" "corridor runs east"
+run_test "Workshop mentions corridor" "$ENTER_WORKSHOP
+look" "corridor runs east"
 run_test_absent "No time machine in workshop" "$ENTER_WORKSHOP" "magnificent contraption"
 run_test_absent "No 'This would be the time machine' text" "$ENTER_WORKSHOP" "This would be the time machine"
 
@@ -162,11 +183,27 @@ echo "[Solarium]"
 run_test "Corridor blocked before Thyme departs" "$ENTER_WORKSHOP
 east" "Dr. Thyme seems to need your attention"
 run_test "Solarium auto-unlock with key" "$ENTER_SOLARIUM" "master key"
-run_test "First entry glimpse" "$ENTER_SOLARIUM" "flicker of movement"
+run_test "First entry glimpse" "$ENTER_SOLARIUM" "Something extraordinary"
 run_test "Machine in solarium" "$ENTER_SOLARIUM
 look" "contraption"
 run_test "Ferns in solarium" "$ENTER_SOLARIUM" "ferns"
 run_test "Cat appears in solarium" "$ENTER_SOLARIUM" "already here"
+run_test "Basket on machine" "$ENTER_SOLARIUM
+examine machine" "wicker basket"
+run_test "Examine basket" "$ENTER_SOLARIUM
+examine basket" "silver fur"
+run_test "Basket tag reveals test subject" "$ENTER_SOLARIUM
+examine luggage tag" "14 successful"
+run_test "Basket bolted down" "$ENTER_SOLARIUM
+take basket" "bolted firmly"
+run_test "On-board accumulator in machine description" "$ENTER_SOLARIUM
+examine machine" "lead-acid accumulator"
+run_test "Examine accumulator" "$ENTER_SOLARIUM
+examine accumulator" "ELECTROBAT TYPE"
+run_test "Charging station in solarium" "$ENTER_SOLARIUM
+examine charging station" "ST. PANCRAS"
+run_test "Charging station has invoice" "$ENTER_SOLARIUM
+examine charging station" "EXCESSIVE"
 
 # --- Cat naming ---
 echo "[Cat Naming]"
@@ -231,7 +268,7 @@ run_test "Lodestone depleted in cat accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "lodestone"
 run_test "Score for accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-score" "9 out of"
+score" "15 out of"
 run_test "Dropped key survives cat accident" "$ENTER_WORKSHOP
 take spanner
 give spanner to dr thyme
@@ -266,6 +303,29 @@ clean" "marginally less chaotic"
 run_test "Cannot clean while rag on machine" "$ENTER_SOLARIUM
 clean
 clean" "cat has stolen"
+
+# Cat bolt mechanic: cleaning in workshop triggers cat stealing rag and bolting to solarium
+THYME_DEPARTED="buy newspaper
+circle ad
+east
+knock
+knock
+knock
+east
+show newspaper to dr thyme
+take spanner
+give spanner to dr thyme
+talk to dr thyme"
+run_test "Cat steals rag and bolts to solarium" "$THYME_DEPARTED
+clean" "bolted east down the corridor"
+run_test "Cat bolt mentions locked door" "$THYME_DEPARTED
+clean" "cat flap in the solarium window"
+run_test_absent "Cat bolt not superficial clean" "$THYME_DEPARTED
+clean" "marginally less chaotic"
+run_test "Cat on machine after bolt" "$THYME_DEPARTED
+clean
+east
+look" "cleaning rag"
 
 # --- Cleaning synonyms (issue #70) ---
 echo "[Cleaning Synonyms]"
@@ -325,6 +385,8 @@ examine machine" "Crookes tube is webbed"
 run_test "Blitz transit: Crookes tube shattered" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -343,6 +405,8 @@ echo "[Install-As-You-Go]"
 run_test "Roman: repair installs lodestone" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -356,6 +420,8 @@ repair machine" "lodestone into the compass housing"
 run_test "Roman: use installs lodestone (issue #86)" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -368,6 +434,8 @@ use lodestone" "lodestone into the compass housing"
 run_test "Roman: replace installs lodestone (issue #86)" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -381,6 +449,8 @@ replace lodestone" "lodestone into the compass housing"
 run_test "Roman: blocked without lodestone installed" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -397,6 +467,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -425,6 +497,8 @@ repair machine" "oscillation circuit is restored"
 run_test "Blitz: tube needs toolkit" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -456,6 +530,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -496,16 +572,36 @@ east" "Only the initiated"
 run_test "Bathhouse accessible" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "Steam billows"
+run_test "Fish visible in bathhouse" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west" "small silvery fish"
+run_test "Take fish from pool" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish" "undignified chase"
+run_test "Cat ignores grate without bribe" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+ask copernicus about grate" "loses interest"
+run_test "Give fish to cat retrieves aureus via grate" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus" "gold coin rolls"
 run_test_absent "Gold aureus not visible before retrieval" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "gold aureus"
-run_test "Ask Copernicus about grate retrieves aureus" "$ENTER_WORKSHOP
+run_test "Ask about grate after retrieval says done" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
-ask copernicus about grate" "gold coin skitters"
+take fish
+give fish to copernicus
+ask copernicus about grate" "already done his bit"
 run_test "Take aureus after retrieval" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus" "Taken"
 run_test "Swim in bathhouse" "$ENTER_WORKSHOP
@@ -522,14 +618,51 @@ south" "Merchant"
 run_test "Trade for lodestone" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
 south
 give aureus to felix" "lodestone"
+run_test "Lodestone pulls at iron hooks on purchase" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix" "iron hooks"
+run_test "Lodestone reacts entering Forum" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north" "straining toward the soldiers"
+run_test "Lodestone reacts entering bathhouse" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+west" "iron grate"
 run_test "Show lodestone to Marcus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -540,6 +673,8 @@ show lodestone to marcus" "commands iron"
 run_test "Temple accessible after Marcus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -556,6 +691,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -576,6 +713,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -593,6 +732,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -610,6 +751,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -627,6 +770,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -644,6 +789,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -669,6 +816,8 @@ travel to blitz" "impress their centurion"
 run_test "Machine gate: soldiers block repair" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -679,6 +828,8 @@ fix machine" "impress their centurion"
 run_test "Travel to workshop from Roman" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -690,6 +841,8 @@ travel to workshop" "back in the solarium"
 run_test "Solarium has machine after travel home" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -702,6 +855,8 @@ look" "worse for wear"
 run_test "Already home guard" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -715,6 +870,8 @@ TOTAL=$((TOTAL + 1))
 _home_output=$(echo "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -744,6 +901,8 @@ echo "[Time Travel]"
 run_test "Travel to Blitz" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -756,6 +915,8 @@ travel to blitz" "1941"
 run_test "Crookes tube shatters in Blitz transit" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -768,6 +929,8 @@ travel to blitz" "champagne flute"
 run_test "Eras must be sequential" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -784,6 +947,8 @@ echo "[WWII London]"
 BLITZ_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -886,6 +1051,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -974,6 +1141,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1028,6 +1197,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1070,6 +1241,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1124,6 +1297,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1226,6 +1401,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1383,6 +1560,86 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+repair machine
+travel to blitz
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+repair machine
+travel to cambridge
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show toolkit to hawking
+east
+take printout
+west
+south
+south
+repair machine
+travel to future
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take processor
+up
+repair machine
+travel to workshop
+west
+clean
+open front door
+east
+north"
+run_test "Install all components" "$ENDGAME_CMD" "fully repaired"
+run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
+run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 189"
+
+# --- Bootstrap Paradox Endgame ---
+echo "[Bootstrap Paradox]"
+run_test "Three knocks after tidying" "$ENDGAME_CMD" "Knock. Knock. Knock"
+run_test "Player recognises own knocks" "$ENDGAME_CMD" "Your knocks"
+run_test "Bootstrap loop closes" "$ENDGAME_CMD" "loop is closed"
+run_test "Dr Thyme returns after bootstrap" "$ENDGAME_CMD" "Dr. Thyme has returned from tea"
+
+# Interactive endgame: door opens, player navigates to store room
+# ENDGAME_DOOR ends after opening the front door (phase 1)
+ENDGAME_DOOR="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1437,16 +1694,17 @@ travel to workshop
 west
 clean
 open front door"
-run_test "Install all components" "$ENDGAME_CMD" "fully repaired"
-run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
-run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 183"
-
-# --- Bootstrap Paradox Endgame ---
-echo "[Bootstrap Paradox]"
-run_test "Three knocks after tidying" "$ENDGAME_CMD" "Knock. Knock. Knock"
-run_test "Player recognises own knocks" "$ENDGAME_CMD" "Your knocks"
-run_test "Bootstrap loop closes" "$ENDGAME_CMD" "loop is closed"
-run_test "Dr Thyme returns after bootstrap" "$ENDGAME_CMD" "Dr. Thyme has returned from tea"
+run_test "Phase 1: behind the door" "$ENDGAME_DOOR" "alone behind the front door"
+run_test "Phase 1: east hint" "$ENDGAME_DOOR" "workshop is east"
+run_test "Phase 1: can't leave" "$ENDGAME_DOOR
+west" "loop breaks"
+run_test "Phase 2: cross workshop" "$ENDGAME_DOOR
+east" "four quick steps"
+run_test "Phase 2: north hint" "$ENDGAME_DOOR
+east" "store room"
+run_test "Phase 2: wrong way east" "$ENDGAME_DOOR
+east
+east" "not the solarium"
 
 # Auto-trigger bootstrap after 2 turns
 ENDGAME_AUTO="$ENTER_WORKSHOP
@@ -1456,6 +1714,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1510,6 +1770,10 @@ travel to workshop
 west
 clean
 look
+look
+look
+look
+look
 look"
 run_test "Bootstrap auto-triggers after delay" "$ENDGAME_AUTO" "loop is closed"
 
@@ -1526,6 +1790,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1585,7 +1851,9 @@ repair machine
 travel to workshop
 west
 clean
-open front door"
+open front door
+east
+north"
 run_test "Rough ending (critical path + Eleanor gift)" "$ROUGH_ENDGAME" "ROUGH ENDING"
 
 # Good ending: critical path + Eleanor (+25) + inscription (+20) + capsule (+20) = 150
@@ -1596,6 +1864,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1664,7 +1934,9 @@ repair machine
 travel to workshop
 west
 clean
-open front door"
+open front door
+east
+north"
 run_test "Good ending (critical path + 3 side quests)" "$GOOD_ENDGAME" "GOOD ENDING"
 
 # Perfect ending: all events (score = 180)
@@ -1675,6 +1947,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1748,7 +2022,9 @@ repair machine
 travel to workshop
 west
 clean
-open front door"
+open front door
+east
+north"
 run_test "Perfect ending (all side quests)" "$PERFECT_ENDGAME" "PERFECT ENDING"
 
 # --- Copernicus ---
@@ -1758,7 +2034,7 @@ $CAT_ACCIDENT
 south
 look" "Copernicus"
 run_test "Cat examine" "$ENTER_WORKSHOP
-examine cat" "magnificently smug ginger tabby"
+examine cat" "British Shorthair"
 run_test "Can't take cat before accident" "$ENTER_WORKSHOP
 take cat" "boneless"
 
@@ -1773,7 +2049,8 @@ kill hitler" "family-friendly"
 
 # --- Buffer overflow on long input ---
 echo "[Buffer Overflow]"
-run_test_absent "No programming error on long input" "knock on door
+run_test_absent "No programming error on long input" "east
+knock on door
 knock on door
 knock on door
 enter
@@ -1791,8 +2068,10 @@ run_test "Travel to dest before cat accident not in scope" "travel to roman" "ca
 
 # --- Scenery objects ---
 echo "[Scenery Objects]"
-run_test "Examine door in Workshop Entrance" "examine door" "heavy oak door"
-run_test "Examine brass plate in Workshop Entrance" "examine brass plate" "TEMPORAL ENGINEERING"
+run_test "Examine door in Workshop Entrance" "east
+examine door" "heavy oak door"
+run_test "Examine brass plate in Workshop Entrance" "east
+examine brass plate" "TEMPORAL ENGINEERING"
 run_test "Examine shelves in Main Workshop" "$ENTER_WORKSHOP
 examine shelves" "Floor-to-ceiling shelves"
 run_test "Examine marmalade in Main Workshop" "$ENTER_WORKSHOP
@@ -1878,6 +2157,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1944,6 +2225,8 @@ echo "[Scenery: Via Principalis]"
 run_test "Examine soldiers on Via" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1956,6 +2239,8 @@ examine soldiers" "mechanical precision"
 run_test "Examine barracks on Via" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1968,6 +2253,8 @@ examine barracks" "paved with meticulous"
 run_test "Examine road on Via" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1980,6 +2267,8 @@ examine road" "paved with meticulous"
 run_test "Examine horizon on Via" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -1995,6 +2284,8 @@ echo "[Scenery: Temple of Mithras]"
 run_test "Examine torches in Temple" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -2008,6 +2299,8 @@ examine torches" "iron brackets"
 run_test "Examine altar in Temple" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -2021,6 +2314,8 @@ examine altar" "clay figurines"
 run_test "Examine carvings in Temple" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -2081,6 +2376,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -2240,7 +2537,8 @@ run_test "Examine newspaper pre-accident" "examine newspaper" "tea stain"
 run_test "Examine advert in newspaper" "examine advert" "TEMPORAL ENGINEERING"
 run_test "Examine clock in Main Workshop" "$ENTER_WORKSHOP
 examine clock" "brass clock"
-run_test "Examine overcoat in Workshop Entrance" "examine overcoat" "overcoat"
+run_test "Examine overcoat in Workshop Entrance" "east
+examine overcoat" "overcoat"
 run_test "Examine aspidistra in Solarium" "$ENTER_SOLARIUM
 examine aspidistra" "aspidistras and maidenhair"
 run_test "Examine maidenhair in Solarium" "$ENTER_SOLARIUM
@@ -2271,6 +2569,8 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -2295,6 +2595,8 @@ examine newspaper" "POCKET WATCH IN ROMAN STRATUM"
 run_test "Headline shifts after eleanor_gift" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -2316,6 +2618,8 @@ examine newspaper" "ELEANOR MORRISON RETROSPECTIVE"
 run_test "Headline shifts after church_saved" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -2371,6 +2675,8 @@ echo "[Issue #75: Machine Insert/Enter/Board]"
 MACHINE_CMD_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+take fish
+give fish to copernicus
 ask copernicus about grate
 take aureus
 east
@@ -2403,39 +2709,22 @@ get on machine" "TRAVEL TO"
 # --- Issue #77: Praed Street & Brass Tap ---
 echo "[Issue #77: Praed Street & Brass Tap]"
 
-# Sequence to reach Praed Street (after Thyme departs)
-REACH_PRAED="knock
-knock
-knock
-east
-take spanner
-give spanner to dr thyme
-talk to dr thyme
-west
-west"
+# Praed Street is the start location; REACH_PRAED just stays there
+REACH_PRAED="look"
 
-# West blocked before Thyme departs (from workshop entrance, before entering workshop)
-run_test "West blocked before Thyme departs" "knock
-knock
-knock
-west" "literally just started this job"
+# Workshop entrance west always returns to Praed Street
+run_test "West from workshop entrance returns to Praed Street" "east
+west" "Praed Street stretches"
 
-# West accessible after Thyme departs
-run_test "Praed Street accessible post-departure" "$REACH_PRAED" "Praed Street"
+# Praed Street is the starting room
+run_test "Praed Street accessible from start" "look" "Praed Street"
 
 # Praed Street room description
 run_test "Praed Street description: fog" "$REACH_PRAED" "curtain of London fog"
 run_test "Praed Street description: Brass Tap sign" "$REACH_PRAED" "BRASS TAP"
 
-# Workshop entrance description updates after Thyme departs
-run_test "Workshop entrance mentions street post-departure" "knock
-knock
-knock
-east
-take spanner
-give spanner to dr thyme
-talk to dr thyme
-west
+# Workshop entrance always mentions Praed Street west
+run_test "Workshop entrance mentions Praed Street" "east
 look" "Praed Street"
 
 # Praed Street scenery
@@ -2453,8 +2742,8 @@ examine cobblestones" "horse-related matter"
 # Praed Street directional blocks
 run_test "Praed Street north blocked" "$REACH_PRAED
 north" "hansom cab"
-run_test "Praed Street west blocked" "$REACH_PRAED
-west" "fog thickens"
+run_test "Praed Street west leads to Paddington" "$REACH_PRAED
+west" "Paddington Station"
 
 # Return east to workshop entrance
 run_test "Return to workshop from Praed Street" "$REACH_PRAED
@@ -2473,7 +2762,7 @@ south" "coal fire"
 # Brass Tap scenery
 run_test "Examine mahogany bar" "$REACH_PRAED
 south
-examine bar" "dinner plates"
+examine bar" "dark as sin"
 
 # Brass Tap: use 'in' from Praed Street
 run_test "Enter Brass Tap with 'in'" "$REACH_PRAED
@@ -2570,6 +2859,81 @@ examine tag
 meow at cat" "Copernicus"
 run_test_absent "Meow not unrecognised verb" "$ENTER_WORKSHOP
 meow at cat" "not a verb I recognise"
+
+# --- Expanded Opening ---
+echo ""
+echo "[Expanded Opening]"
+run_test "Starting location is Praed Street" "look" "Praed Street"
+run_test "Newsboy visible on Praed Street" "look" "newsboy"
+run_test "Buy newspaper from newsboy" "buy newspaper" "Tuppence"
+run_test "Coins removed after purchase" "buy newspaper
+inventory" "pencil"
+run_test_absent "Coins gone after purchase" "buy newspaper
+inventory" "carrying.*coins"
+run_test "Can't buy twice" "buy newspaper
+buy newspaper" "already got a newspaper"
+run_test "Examine newspaper shows ad" "buy newspaper
+examine newspaper" "TEMPORAL ENGINEERING"
+run_test "Circle ad with pencil" "buy newspaper
+circle ad" "circle the advert"
+run_test "Pencil in inventory at start" "inventory" "pencil"
+run_test "Coins in inventory at start" "inventory" "coins"
+run_test "Newsboy description" "examine newsboy" "sharp-faced lad"
+run_test "Give coins to newsboy works as buy" "give coins to newsboy" "Tuppence"
+
+# --- Paddington Station ---
+echo ""
+echo "[Paddington Station]"
+run_test "Paddington Station accessible west" "west" "iron-and-glass canopy"
+run_test "Paddington Station description" "west" "Paddington Station"
+run_test "East from Paddington returns to Praed" "west
+east" "Praed Street"
+run_test "Examine station canopy" "west
+examine canopy" "Brunel"
+run_test "Examine station locomotives" "west
+examine locomotives" "Brunswick green"
+run_test "Examine station clock" "west
+examine clock" "four-faced"
+run_test "Examine station porters" "west
+examine porters" "luggage management"
+
+# --- Thyme hiring gate ---
+echo ""
+echo "[Thyme Hiring Gate]"
+run_test "Thyme rejects without newspaper" "east
+knock
+knock
+knock
+east
+talk to dr thyme" "No salesmen"
+run_test "Show uncircled newspaper to Thyme" "buy newspaper
+east
+knock
+knock
+knock
+east
+show newspaper to dr thyme" "forty-seven adverts"
+run_test "Show circled newspaper to Thyme" "$ENTER_WORKSHOP
+look" "cathedral"
+run_test "Can't give spanner before hired" "east
+knock
+knock
+knock
+east
+take spanner
+give spanner to dr thyme" "No salesmen"
+run_test "Full opening flow" "buy newspaper
+circle ad
+east
+knock
+knock
+knock
+east
+show newspaper to dr thyme
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+east" "Something extraordinary"
 
 echo ""
 echo "=== Results ==="
