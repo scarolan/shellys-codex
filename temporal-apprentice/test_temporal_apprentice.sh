@@ -728,6 +728,9 @@ east
 down
 give valve to tommy
 ask tommy about rubble" "willing to help"
+run_test "Ask tommy for help (issue #87)" "$BLITZ_SETUP
+down
+ask tommy for help" "Fix my radio"
 run_test "Dig rubble" "$BLITZ_SETUP
 west
 take valve
