@@ -1749,6 +1749,148 @@ take processor
 up
 travel to workshop" "crystal is cracked"
 
+# --- Future High Tide ---
+echo "[Future High Tide]"
+# Tide warning on arrival
+run_test "Tide warning on arrival" "$FUTURE_SETUP" "RISING FAST TODAY"
+
+# Tide water rising warning (turn 10: after 3 player actions)
+run_test "Tide rising warning" "$FUTURE_SETUP
+z
+z
+z" "cat that wants feeding"
+
+# Kai tide marker warning (turn 7: go east, then wait)
+run_test "Kai tide marker warning" "$FUTURE_SETUP
+z
+z
+east
+z
+z
+z" "water.s not waiting"
+
+# Torres tide warning (turn 7: go west, then wait)
+run_test "Torres tide warning" "$FUTURE_SETUP
+z
+z
+west
+z
+z
+z" "wouldn.t dawdle"
+
+# Tide surging warning (turn 4: 9 waits)
+run_test "Tide surging warning" "$FUTURE_SETUP
+z
+z
+z
+z
+z
+z
+z
+z
+z" "current is vicious"
+
+# Tide last chance warning (turn 2: 11 waits)
+run_test "Tide last chance warning" "$FUTURE_SETUP
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "last chance"
+
+# Tide desperate warning (turn 1: 12 waits)
+run_test "Tide desperate warning" "$FUTURE_SETUP
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "One more surge"
+
+# Tide death: game over without processor (13 waits)
+run_test "Tide death without processor" "$FUTURE_SETUP
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "stranded in 2045"
+
+# Swept from lab when tide hits
+run_test "Swept from lab by tide" "$FUTURE_SETUP
+north
+up
+open panel
+down
+south
+z
+z
+z
+z
+z
+z
+z
+down" "sweeps you upward"
+
+# Processor stops tide timer (get processor, then wait many turns — game continues)
+run_test "Processor stops tide timer" "$FUTURE_SETUP
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take processor
+z
+z
+z
+z
+z
+z
+z
+z
+inventory" "quantum processor"
+
+# Tide-aware street description (rising)
+run_test "Street shows rising tide" "$FUTURE_SETUP
+z
+z
+z
+z
+z
+z
+look" "water has risen since you arrived"
+
+# Ask Kai about tide
+run_test "Ask Kai about tide" "$FUTURE_SETUP
+east
+ask kai about tide" "off-limits"
+
+# Ask Torres about tide
+run_test "Ask Torres about tide" "$FUTURE_SETUP
+west
+ask torres about tide" "tide turns twice a day"
+
 # --- Endgame ---
 echo "[Endgame]"
 # Full endgame: repair at each era, collect components, travel home, clean

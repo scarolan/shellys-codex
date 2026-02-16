@@ -93,6 +93,8 @@ Global fire_turns_remaining = 0;
 Global hawking_phase = 0;
 Global party_turns_remaining = 0;
 Global party_over = false;
+Global tide_turns_remaining = 0;
+Global tide_high = false;
 
 Global copernicus_named = false;
 Global thyme_departed = false;
@@ -445,6 +447,17 @@ Global machine_raised = false;
 ];
 
 [ NPC_Ask_Torres topic;
+    if (topic == 'tide' or 'tides' or 'high') {
+        if (tide_high)
+            print "~High tide. Nothing to be done but wait. The lower levels are sealed until it turns.~ She looks tired. ~If it turns.~^";
+        else if (tide_turns_remaining > 0 && tide_turns_remaining <= 4)
+            print "~The tide is coming in fast. If you need anything from below the waterline, go NOW. I'm not sending a rescue team.~^";
+        else if (tide_turns_remaining > 0)
+            print "~The tide turns twice a day. When it comes in, the submerged levels are sealed -- current's too strong. Check the markers and plan accordingly.~^";
+        else
+            print "~The tide schedule is on my desk. It's the one thing in this city that still runs on time.~^";
+        rtrue;
+    }
     if (topic == 'flood' or 'water' or 'thames' or 'climate' or 'sea') {
         print "~The Thames Barrier failed in 2038. Seven years later, we're still adapting.~ She gestures at the window, where water laps at the second floor. ~London has always been a city built on a river. Now it's a city built IN a river. The difference is significant.~^";
         rtrue;
@@ -478,6 +491,17 @@ Global machine_raised = false;
 ];
 
 [ NPC_Ask_Kai topic;
+    if (topic == 'tide' or 'tides' or 'high') {
+        if (tide_high)
+            print "Kai shakes her head. ~Nothing gets through when the tide's up. I've tried. Even my gear can't handle that current.~^";
+        else if (tide_turns_remaining > 0 && tide_turns_remaining <= 4)
+            print "~The tide's coming in FAST. If you need the lab, go now. I mean it -- NOW.~^";
+        else if (tide_turns_remaining > 0)
+            print "~Tide comes in twice a day. When it does, the submerged level is off-limits. The current would smash you against a wall. Trust me on that.~^";
+        else
+            print "~The tides here are brutal. When it comes in, forget going below. Plan ahead.~^";
+        rtrue;
+    }
     if (topic == 'dive' or 'diving' or 'gear' or 'swim' or 'rebreather') {
         if (has_diving_gear) {
             print "~You've got the gear. Just head down from the flooded street. Try not to touch anything that glows. Learned that one the hard way.~^";
@@ -3274,7 +3298,20 @@ Object chen "Dr. Sarah Chen" cambridge_hall
 
 Object future_street "Flooded Street"
     with description [;
-            print "London, 2045. The Thames won. Water laps at what used to be the second floor of Victorian terraces. Buildings rise from the flood like stone islands, connected by catwalks and rope bridges. It's Venice, if Venice had been designed by civil engineers during a nervous breakdown.^^";
+            if (tide_turns_remaining == 0 && tide_high == false && visited_future) {
+                tide_turns_remaining = 14;
+                StartDaemon(flood_water);
+                print "London, 2045. The Thames won. Water laps at what used to be the second floor of Victorian terraces. Buildings rise from the flood like stone islands, connected by catwalks and rope bridges. It's Venice, if Venice had been designed by civil engineers during a nervous breakdown.^^";
+                print "The water is low right now, but brown tide marks climb the brickwork to alarming heights. A faded sign on a nearby wall reads: ~HIGH TIDE SCHEDULE -- CONSULT BEFORE DESCENT.~ Someone has scrawled beneath it: ~RISING FAST TODAY.~^^";
+            } else {
+                print "London, 2045. The Thames won. Water laps at what used to be the second floor of Victorian terraces. Buildings rise from the flood like stone islands, connected by catwalks and rope bridges. It's Venice, if Venice had been designed by civil engineers during a nervous breakdown.^^";
+                if (tide_high)
+                    print "The water has risen dramatically since you arrived. The stairway to the submerged level is completely flooded -- no diving gear could fight that current.^^";
+                else if (tide_turns_remaining > 0 && tide_turns_remaining <= 4)
+                    print "The water is rising fast. Tide marks that were above your head are now at eye level. The entrance to the submerged level won't be accessible much longer.^^";
+                else if (tide_turns_remaining > 0)
+                    print "The water has risen since you arrived. The tide marks on the brickwork are climbing steadily.^^";
+            }
             if (time_machine in self && has_diving_gear == false)
                 print "The time machine sank on arrival. You can just see its brass fittings glinting below the waterline, taunting you.^^";
             else if (time_machine in self && machine_raised == false)
@@ -3282,7 +3319,9 @@ Object future_street "Flooded Street"
             else if (time_machine in self)
                 print "The time machine stands on a makeshift platform, dripping Thames water and looking thoroughly sorry for itself.^^";
             print "The Thames Barrier Museum is north. An elevated walkway stretches east. The Climate Refuge is to the west. Below, murky water conceals whatever lies on the submerged street level";
-            if (has_diving_gear)
+            if (tide_high)
+                print " -- but the tide has swallowed the entrance";
+            else if (has_diving_gear)
                 print " -- your diving gear could get you down there";
             print ".^";
         ],
@@ -3290,6 +3329,10 @@ Object future_street "Flooded Street"
          e_to future_walkway,
          w_to future_refuge,
          d_to [;
+            if (tide_high) {
+                print "The water has risen too high. The entrance to the submerged level is completely flooded -- a churning torrent of brown water where the stairway used to be. Even with diving gear, you couldn't fight that current.^";
+                rfalse;
+            }
             if (has_diving_gear) return future_lab;
             print "The water below is dark and deep. You'd need diving gear to explore the submerged level without drowning, which is generally considered a prerequisite for time travel.^";
             rfalse;
@@ -3473,6 +3516,8 @@ Object refuge_desk "desk" future_refuge
 Object future_lab "Submerged Laboratory"
     with description [;
             print "You descend through murky water into what was once a cutting-edge research laboratory. A plaque on the wall reads: ~HAWKING TEMPORAL RESEARCH CENTRE -- FOUNDED 2031.~ So he published. The diving gear keeps you breathing, but the experience is deeply eerie -- fluorescent lights still flicker underwater, illuminating desks where coffee cups float at ceiling height.^^";
+            if (tide_turns_remaining > 0 && tide_turns_remaining <= 4 && has_processor == false)
+                print "The current is strengthening. The tide is coming in and the water presses against you with growing urgency.^^";
             if (lab_unlocked == false) {
                 print "A sealed cabinet marked ~CRYSTALLINE PROCESSING UNIT -- AUTHORISED PERSONNEL ONLY~ stands against the far wall. It has an electronic keypad lock.^^";
                 if (has_formula)
@@ -3523,6 +3568,118 @@ Object flood_water "floodwater"
          react_before [;
             Swim:
                 "The water is murky, freezing, and full of debris. Swimming in it would be less ~exercise~ and more ~unusual method of suicide.~";
+         ],
+         daemon [;
+            if (current_era ~= 4) rtrue;
+            if (has_processor) { StopDaemon(self); rtrue; }
+            if (tide_high) { StopDaemon(self); rtrue; }
+            if (tide_turns_remaining <= 0) { StopDaemon(self); rtrue; }
+            tide_turns_remaining--;
+            if (tide_turns_remaining <= 0) {
+                tide_high = true;
+                switch (location) {
+                    future_street:
+                        print "^With a deep, gurgling roar, the Thames surges. The water rises a full metre in seconds, swallowing the stairway to the submerged level in a churning brown torrent. Debris whirls past -- a park bench, a traffic cone, someone's washing. The entrance to below is gone.^";
+                    future_lab:
+                        print "^The water around you surges violently. The current slams you against the ceiling, tears the rebreather from your face, and sweeps you upward through the stairwell like a cork from a bottle. You surface on the flooded street, gasping and spluttering, as the tide roars in below.^";
+                        PlayerTo(future_street, 1);
+                    future_museum:
+                        print "^From below, a deep, churning roar -- the sound of the Thames asserting its dominance. Water surges up the stairwell to the south, brown and relentless. The curator grips a display case for support. ~High tide,~ they say quietly. ~It comes faster every year.~^";
+                    future_rooftop:
+                        print "^From the rooftop you watch the water surge. The level rises a full metre in seconds, swallowing doorways and stairwells. The entrance to the submerged level vanishes beneath brown, churning water. The Thames is taking back what it considers its.^";
+                    future_walkway:
+                        print "^The walkway groans and sways as the water surges beneath it. You grab the railing as the Thames rises -- a full metre, two metres, swallowing stairwells and doorways below. Kai looks down grimly. ~High tide. It's early.~^";
+                    future_refuge:
+                        print "^Torres's instruments spike. ~High tide -- and it's a big one.~ Through the window, you watch the water surge upward, swallowing another floor of the buildings across the street. The entrance to the submerged level disappears beneath brown, churning water.^";
+                }
+                StopDaemon(self);
+                if (has_processor == false) {
+                    print "^The submerged laboratory is sealed beneath the tide. The quantum processor -- the last component you need -- is down there, locked in a cabinet, as unreachable as if it were on the moon. Without it, the time machine's field generator will never work. You are stranded in 2045.^";
+                    deadflag = 6;
+                }
+                rtrue;
+            }
+            ! Escalating warnings as tide rises
+            if (tide_turns_remaining == 10) {
+                switch (location) {
+                    future_street:
+                        print "^The water has risen since you arrived. The lapping against the brickwork is louder now, more insistent, like a cat that wants feeding.^";
+                    future_lab:
+                        print "^The water in the laboratory seems to press more heavily around you. Air bubbles stream upward from vents that were dry moments ago.^";
+                    future_museum:
+                        print "^Through the museum windows, you notice the water level has crept up. The curator adjusts a display case nervously.^";
+                    future_rooftop:
+                        print "^From up here you can see it -- the waterline on the buildings has crept upward. The Thames is stirring.^";
+                    future_walkway:
+                        print "^Kai glances down at the water. ~Tide's coming in. Happens every day, but it's never fun.~^";
+                    future_refuge:
+                        print "^Torres checks a gauge on the wall and frowns slightly. ~Tide's turning.~^";
+                }
+            }
+            if (tide_turns_remaining == 7) {
+                switch (location) {
+                    future_street:
+                        print "^The water is definitely higher now. Tide marks that were above your head are at shoulder height. The entrance to the submerged level has narrowed.^";
+                    future_lab:
+                        print "^The current in the laboratory has strengthened. Equipment drifts past more urgently. A desk scrapes along the floor with a grinding sound.^";
+                    future_museum:
+                        print "^Water laps at the museum threshold from the south. The curator begins moving artefacts to higher shelves.^";
+                    future_rooftop:
+                        print "^The water below has risen visibly. Brown tide marks are climbing the buildings like slow-motion vines.^";
+                    future_walkway:
+                        print "^Kai checks a notch scratched into the railing -- a tide marker. She looks at you with something between concern and urgency. ~You doing whatever you came here to do? Because the water's not waiting.~^";
+                    future_refuge:
+                        print "^Torres studies her tide charts. ~It's rising faster than the schedule says. If you need to get below the waterline, I wouldn't dawdle.~^";
+                }
+            }
+            if (tide_turns_remaining == 4) {
+                switch (location) {
+                    future_street:
+                        print "^The water surges higher with each wave now. The stairway to the submerged level is half-flooded -- still passable, but the current is vicious.^";
+                    future_lab:
+                        print "^The laboratory groans under the pressure. Ceiling tiles crack and water jets through. Whatever you need down here, get it quickly.^";
+                    future_museum:
+                        print "^Brown water seeps across the museum floor from the south stairwell. The curator lifts a telephone box display with surprising strength. ~The tide waits for no one, dear.~^";
+                    future_rooftop:
+                        print "^The water below is rising alarmingly fast now. You can see the stairway entrance to the submerged level narrowing as the tide pushes in.^";
+                    future_walkway:
+                        print "^The walkway sways as the water surges beneath it. Kai grabs the railing. ~It's coming in fast! If you need the lab, GO!~^";
+                    future_refuge:
+                        print "^Torres slams her fist on the desk. ~High tide in minutes. Anyone below the waterline needs to get out NOW.~^";
+                }
+            }
+            if (tide_turns_remaining == 2) {
+                switch (location) {
+                    future_street:
+                        print "^The water is nearly at the lip of the stairway. In minutes it will be impassable. If you need anything from below, this is your last chance.^";
+                    future_lab:
+                        print "^The current is ferocious now. You're barely keeping your footing. The rebreather strains against the churning water. Get out or get what you came for -- there's no time for both hesitation and survival.^";
+                    future_museum:
+                        print "^Water pours across the museum floor. The curator wades through it, rescuing artefacts. ~The submerged level will be sealed in moments!~^";
+                    future_rooftop:
+                        print "^From the rooftop, you watch the stairway entrance to the submerged level shrink to a narrow gap. Seconds, not minutes.^";
+                    future_walkway:
+                        print "^Kai's face is white. ~The lab entrance is almost gone. If you haven't got what you need--~ She doesn't finish the sentence.^";
+                    future_refuge:
+                        print "^Torres is on the radio: ~All personnel, high tide imminent. Seal lower levels.~^";
+                }
+            }
+            if (tide_turns_remaining == 1) {
+                switch (location) {
+                    future_street:
+                        print "^The water laps at the very edge of the stairway. One more surge and it's over. Whatever is down there will be unreachable until the tide turns -- if it turns.^";
+                    future_lab:
+                        print "^The laboratory shudders. Water blasts through every seam. The rebreather's warning light blinks red. You have seconds.^";
+                    future_museum:
+                        print "^The roar of water from below fills the museum. The curator looks at you with quiet urgency. ~If you need the laboratory, this is the moment. Not the next moment. This one.~^";
+                    future_rooftop:
+                        print "^The last glimpse of the stairway vanishes beneath surging brown water. One moment remains.^";
+                    future_walkway:
+                        print "^Kai turns away, unable to watch. The water below churns like a living thing.^";
+                    future_refuge:
+                        print "^Torres's voice is flat: ~Lower levels sealed. God help anyone still down there.~^";
+                }
+            }
          ],
     has scenery;
 
@@ -3940,6 +4097,10 @@ Object solarium_dest "Workshop"
     }
     if (deadflag == 5) {
         print "missed the party";
+        rtrue;
+    }
+    if (deadflag == 6) {
+        print "stranded by the tide";
         rtrue;
     }
 ];
