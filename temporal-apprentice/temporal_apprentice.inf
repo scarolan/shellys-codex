@@ -99,6 +99,8 @@ Global rag_on_machine = false;
 Global knock_count = 0;
 Global door_open = false;
 Global spanner_given = false;
+Global endgame_knocks_heard = false;
+Global endgame_turns = 0;
 Global solarium_unlocked = false;
 Global solarium_entered = false;
 
@@ -795,7 +797,13 @@ Object main_workshop "Main Workshop"
             else
                 print "The workbench holds tools and the remains of Dr. Thyme's tea (cold, abandoned). The store room is north, the entrance west, and the corridor east.^";
         ],
-         w_to workshop_entrance,
+         w_to [;
+            if (endgame_knocks_heard) {
+                BootstrapSequence();
+                rtrue;
+            }
+            return workshop_entrance;
+         ],
          n_to store_room,
          e_to [;
             if (thyme_departed == false)
@@ -808,6 +816,17 @@ Object main_workshop "Main Workshop"
                     "You walk down the narrow corridor. The door at the end is locked.";
             }
             return solarium;
+         ],
+         each_turn [;
+            if (endgame_knocks_heard) {
+                endgame_turns++;
+                if (endgame_turns == 1)
+                    print "^The knocking has stopped. Whoever is outside -- whoever YOU were -- is waiting. You should open the door before your past self leaves.^";
+                if (endgame_turns >= 2) {
+                    print "^You can't wait any longer. If your past self walks away, the loop breaks -- and you with it.^^";
+                    BootstrapSequence();
+                }
+            }
          ],
     has light;
 
@@ -899,14 +918,23 @@ Object corridor_door "corridor door"
             "A heavy door at the end of a narrow corridor running east from the workshop. Dr. Thyme was quite emphatic that you shouldn't go through it.";
          ],
          before [;
-            Open:
-                if (solarium_unlocked)
-                    "The door is already open.";
-                if (front_door_key in player) {
-                    solarium_unlocked = true;
-                    "You try the front door key in the lock. It shouldn't work -- it's for the front door -- but it turns with a smooth click. A master key, perhaps. Or Dr. Thyme simply doesn't believe in having more than one key. The door swings open, revealing a glass-roofed room beyond.";
+            Open, Push, Pull:
+                if (endgame_knocks_heard && location == main_workshop) {
+                    BootstrapSequence();
+                    rtrue;
                 }
-                "The door is locked. You'd need a key.";
+                if (action == ##Open) {
+                    if (solarium_unlocked)
+                        "The door is already open.";
+                    if (front_door_key in player) {
+                        solarium_unlocked = true;
+                        "You try the front door key in the lock. It shouldn't work -- it's for the front door -- but it turns with a smooth click. A master key, perhaps. Or Dr. Thyme simply doesn't believe in having more than one key. The door swings open, revealing a glass-roofed room beyond.";
+                    }
+                    "The door is locked. You'd need a key.";
+                }
+                if (solarium_unlocked)
+                    "The door is already open. The solarium is to the east.";
+                "The door doesn't budge. It's locked.";
             Unlock:
                 if (solarium_unlocked)
                     "The door is already unlocked.";
@@ -917,10 +945,6 @@ Object corridor_door "corridor door"
                 "You don't have a key that fits this lock.";
             Lock, Close:
                 "You've come this far. No point locking it now.";
-            Push, Pull:
-                if (solarium_unlocked)
-                    "The door is already open. The solarium is to the east.";
-                "The door doesn't budge. It's locked.";
          ],
     has scenery;
 
@@ -2845,6 +2869,23 @@ Object solarium_dest "Workshop"
     }
 ];
 
+[ BootstrapSequence;
+    endgame_knocks_heard = false;
+    StopDaemon(copernicus);
+    print "You pull the heavy oak door open. For an instant you see yourself -- younger by an afternoon, damp from the fog, clutching a copy of yesterday's Times. Your past self squints into the workshop gloom but doesn't see you, because you are already moving.^^";
+    print "You duck through the north doorway into the store room, pressing yourself between a crate marked ~CONTENTS UNKNOWN -- DO NOT OPEN ON WEDNESDAYS~ and a shelf of specimen jars. Through the gap you can see the workshop.^^";
+    print "Your past self steps inside. Looks around. Sees the workbench, the gears, the magnificent improbability of Dr. Thyme's workshop. ~The number four spanner,~ says Dr. Thyme, without turning around. ~On the shelf behind you. The brass one.~^^";
+    print "You watch yourself fumble with the spanner. Watch Thyme hand over the cleaning rag and the key. Watch yourself find the journal, read the warning about the cat -- underlined seventeen times -- and ignore it completely.^^";
+    print "From the solarium comes a crash, a mechanical scream, and the unmistakeable smell of marmalade.^^";
+    print "Silence.^^";
+    print "You step out of the store room. The workshop is empty. The solarium is empty. The time machine is gone, along with your past self and one extremely smug cat.^^";
+    print "The loop is closed.^^";
+    print "You stand in the quiet workshop for a moment, listening to the ticking of the clock and the distant sounds of London. Then the front door opens.^^";
+    print "Dr. Thyme has returned from tea.^";
+    PrintEnding();
+    deadflag = 2;
+];
+
 ! ===================================================================
 ! ACTION ROUTINES
 ! ===================================================================
@@ -3261,9 +3302,13 @@ Object solarium_dest "Workshop"
         score = score + 5;
         print "You spend a surprisingly therapeutic twenty minutes tidying the workshop. Tools are returned to their racks. Marmalade jars are alphabetised (Dr. Thyme has opinions about marmalade). Copper shavings are swept. The workbench is cleared.^^";
         if (components_installed) {
-            print "As you hang up the dustpan, you hear the front door. Dr. Thyme has returned from tea.^";
-            PrintEnding();
-            deadflag = 2;
+            endgame_knocks_heard = true;
+            endgame_turns = 0;
+            print "As you hang up the dustpan, you hear it.^^";
+            print "Three knocks on the front door.^^";
+            print "Knock. Knock. Knock.^^";
+            print "You stand very still. The sound is unmistakeable -- the same hesitant rap, the same rhythm, the same heavy oak resonance. You heard those exact knocks from the other side, standing in the alley on your first day. Your knocks.^^";
+            print "The door creaks on its hinges but doesn't open. Whoever is out there is waiting. You could open the door...^";
         } else {
             "The workshop gleams. Dr. Thyme will be pleased. Now, about that time machine...";
         }

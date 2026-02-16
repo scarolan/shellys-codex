@@ -1182,10 +1182,82 @@ up
 repair machine
 travel to workshop
 west
-clean"
+clean
+open door"
 run_test "Install all components" "$ENDGAME_CMD" "fully repaired"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
 run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 183"
+
+# --- Bootstrap Paradox Endgame ---
+echo "[Bootstrap Paradox]"
+run_test "Three knocks after tidying" "$ENDGAME_CMD" "Knock. Knock. Knock"
+run_test "Player recognises own knocks" "$ENDGAME_CMD" "Your knocks"
+run_test "Bootstrap loop closes" "$ENDGAME_CMD" "loop is closed"
+run_test "Dr Thyme returns after bootstrap" "$ENDGAME_CMD" "Dr. Thyme has returned from tea"
+
+# Auto-trigger bootstrap after 2 turns
+ENDGAME_AUTO="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+repair machine
+travel to blitz
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+repair machine
+travel to cambridge
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show toolkit to hawking
+east
+take printout
+west
+south
+south
+repair machine
+travel to future
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take processor
+up
+repair machine
+travel to workshop
+west
+clean
+look
+look"
+run_test "Bootstrap auto-triggers after delay" "$ENDGAME_AUTO" "loop is closed"
 
 # --- Ending Tiers ---
 echo "[Ending Tiers]"
@@ -1257,7 +1329,8 @@ up
 repair machine
 travel to workshop
 west
-clean"
+clean
+open door"
 run_test "Rough ending (critical path + Eleanor gift)" "$ROUGH_ENDGAME" "ROUGH ENDING"
 
 # Good ending: critical path + Eleanor (+25) + inscription (+20) + capsule (+20) = 150
@@ -1334,7 +1407,8 @@ up
 repair machine
 travel to workshop
 west
-clean"
+clean
+open door"
 run_test "Good ending (critical path + 3 side quests)" "$GOOD_ENDGAME" "GOOD ENDING"
 
 # Perfect ending: all events (score = 180)
@@ -1416,7 +1490,8 @@ up
 repair machine
 travel to workshop
 west
-clean"
+clean
+open door"
 run_test "Perfect ending (all side quests)" "$PERFECT_ENDGAME" "PERFECT ENDING"
 
 # --- Copernicus ---
