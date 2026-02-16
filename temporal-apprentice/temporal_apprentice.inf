@@ -2592,7 +2592,7 @@ Object copernicus "ginger tabby cat" main_workshop
          orders [;
             "The cat ignores your instruction with the magnificent disdain that only a cat can achieve. He is not your employee. He is not anyone's employee. He is a cat.";
          ],
-         before [;
+         before [ x;
             Take:
                 if (rag_on_machine && location == solarium) {
                     cat_accident = true;
@@ -2609,6 +2609,9 @@ Object copernicus "ginger tabby cat" main_workshop
                     print "Something inside the machine gives a grinding lurch -- the compass housing flares white-hot, dims, flares again, and settles to a feeble glow. The lodestone. Eight hundred and forty-seven careful test activations, and one uncontrolled transit has nearly finished it off.^^";
                     print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
                     StartDaemon(copernicus);
+                    objectloop (x in solarium)
+                        if (x hasnt scenery && x ~= time_machine && x ~= copernicus)
+                            move x to player;
                     move time_machine to roman_forum;
                     PlayerTo(roman_forum);
                     rtrue;

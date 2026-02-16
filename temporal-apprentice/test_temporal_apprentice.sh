@@ -219,6 +219,24 @@ $CAT_ACCIDENT" "lodestone"
 run_test "Score for accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 score" "9 out of"
+run_test "Dropped key survives cat accident" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+east
+drop key
+clean
+take cat
+inventory" "front door key"
+run_test "Dropped watch survives cat accident" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+east
+drop watch
+clean
+take cat
+inventory" "pocket watch"
 
 # --- Clean guard ---
 echo "[Clean Guard]"
