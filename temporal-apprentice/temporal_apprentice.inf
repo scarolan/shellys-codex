@@ -91,6 +91,8 @@ Global cat_turn_count = 0;
 Global fire_event = false;
 Global fire_turns_remaining = 0;
 Global hawking_phase = 0;
+Global party_turns_remaining = 0;
+Global party_over = false;
 
 Global copernicus_named = false;
 Global thyme_departed = false;
@@ -2872,7 +2874,18 @@ Object cambridge_gates "College Gates"
             print "Gonville and Caius College rises before you in all its medieval grandeur, looking exactly like the sort of place where people have been overthinking things for eight hundred years. Students in gowns hurry past, clutching books and existential crises in equal measure.^^";
             if (time_machine in self)
                 print "The time machine sits beside the bicycle rack, humming quietly. Several bikes have been chained to it.^^";
-            print "The Porter's Lodge is to the north. A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009.~^";
+            if (party_over) {
+                print "The notice on the gate has been taken down. A janitor sweeps up champagne corks.^^";
+                print "The Porter's Lodge is to the north.^";
+            } else if (party_turns_remaining == 0 && visited_hawking) {
+                party_turns_remaining = 14;
+                StartDaemon(hawking);
+                print "From somewhere inside the college, you hear the faint clink of champagne glasses and a burst of laughter. The party is underway -- but from the sound of it, they're not expecting anyone.^^";
+                print "A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009.~ Somehow it feels like an hourglass.^^";
+                print "The Porter's Lodge is to the north.^";
+            } else {
+                print "The Porter's Lodge is to the north. A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009.~^";
+            }
         ],
          n_to cambridge_porter,
     has light;
@@ -3005,15 +3018,21 @@ Object invitation "party invitation" cambridge_garden
 
 Object cambridge_hall "Gonville Hall"
     with description [;
-            print "The Great Hall is decked out for a party that nobody was expected to attend -- and very nearly nobody has. A banquet table groans under champagne, canapes, and a cake decorated with a clock. Balloons printed with ~WELCOME TIME TRAVELLERS~ drift against the vaulted ceiling.^^";
-            print "Professor Hawking sits at the head of the table in his wheelchair, very much at ease with the possibility that the entire event might be a magnificent failure.^^";
-            if (hawking_convinced == false)
-                print "Dr. Sarah Chen, Hawking's research assistant, hovers nearby, looking both excited and sceptical.^^";
-            print "The Porter's Lodge is back to the south. A corridor leads east to Hawking's study.^";
+            if (party_over) {
+                print "The Great Hall is empty. Half-drunk champagne flutes sit abandoned on the banquet table. The cake, decorated with a clock, is untouched. Balloons printed with ~WELCOME TIME TRAVELLERS~ still drift against the ceiling, but the party is over. Nobody came.^^";
+                print "The Porter's Lodge is back to the south. A corridor leads east to Hawking's study.^";
+            } else {
+                print "The Great Hall is decked out for a party that nobody was expected to attend -- and very nearly nobody has. A banquet table groans under champagne, canapes, and a cake decorated with a clock. Balloons printed with ~WELCOME TIME TRAVELLERS~ drift against the vaulted ceiling.^^";
+                print "Professor Hawking sits at the head of the table in his wheelchair, very much at ease with the possibility that the entire event might be a magnificent failure.^^";
+                if (hawking_convinced == false)
+                    print "Dr. Sarah Chen, Hawking's research assistant, hovers nearby, looking both excited and sceptical.^^";
+                print "The Porter's Lodge is back to the south. A corridor leads east to Hawking's study.^";
+            }
         ],
          s_to cambridge_porter,
          e_to [;
             if (hawking_convinced) return cambridge_study;
+            if (party_over) return cambridge_study;
             print "Dr. Chen blocks the corridor. ~Professor Hawking's study is private. Unless, of course, he invites you in himself.~^";
             rfalse;
          ],
@@ -3131,6 +3150,98 @@ Object hawking "Professor Hawking" cambridge_hall
                     "Hawking's eyes linger on the soldier for a moment. The synthesiser clicks. ~A curious relic. But nostalgia is not proof. I need something that defies the physics of its own era.~";
                 "The synthesiser clicks. ~Interesting. But not enough.~";
          ],
+         daemon [;
+            if (current_era ~= 3) rtrue;
+            if (hawking_convinced) { StopDaemon(self); rtrue; }
+            if (party_over) { StopDaemon(self); rtrue; }
+            party_turns_remaining--;
+            if (party_turns_remaining <= 0) {
+                ! Party is over — Hawking destroys notes and leaves
+                party_over = true;
+                switch (location) {
+                    cambridge_hall:
+                        print "^Professor Hawking's synthesiser clicks one final time. ~It seems no one is coming after all. The experiment has failed.~ A long silence. ~Or perhaps it succeeded, and the answer is simply that time travel is impossible.~^^";
+                        print "He gives a quiet command. Dr. Chen moves to the computer in the study. You hear the whir of a paper shredder.^^";
+                        print "~Thirty years of theoretical work,~ the synthesiser says. ~Destroyed. What would be the point of a temporal framework with no travellers to use it?~^^";
+                        print "Dr. Chen wheels Hawking toward the door. The champagne sits untouched. The balloons drift against the ceiling. The party for time travellers is over, and no one came.^^";
+                        print "You had the machine. You had the means. You just didn't have the time.^";
+                    cambridge_porter:
+                        print "^From the Great Hall to the north, you hear the whir of a paper shredder and the quiet click of a wheelchair motor. Moments later, Dr. Chen wheels Professor Hawking through the lodge. He doesn't look at you.^^";
+                        print "~We're closing up,~ says the porter, not unkindly. ~Party's over. Nobody came.~^^";
+                        print "But someone did come. You just didn't get there in time.^";
+                    cambridge_gates:
+                        print "^The college gates open and Dr. Chen wheels Professor Hawking out into the evening air. His synthesiser clicks: ~A party for time travellers, and no one came. I should have expected this.~ They disappear into a waiting car.^^";
+                        print "Through the lodge window, you can see a janitor sweeping up champagne corks. The party is over.^^";
+                        print "You had the machine. You were right here. You just ran out of time.^";
+                    cambridge_garden:
+                        print "^From inside the college, you hear the whir of a paper shredder. Then the quiet motor of a wheelchair. Voices -- ~Goodnight, Jenkins~ -- and the click of a car door. The party is over.^^";
+                        print "You sit in the garden as the evening light fades, listening to the silence where a party used to be.^";
+                    cambridge_study:
+                        print "^A paper shredder beside the desk whirs to life by itself -- a timed command. Before your eyes, sheets of equations are pulled through the mechanism, thirty years of temporal harmonics reduced to confetti.^^";
+                        print "From the hall: ~It seems no one is coming after all.~ The click of a wheelchair motor. The scrape of a chair. Footsteps. A door closing.^^";
+                        print "The study is empty. The shredder finishes its work and falls silent. The formula is gone.^";
+                }
+                StopDaemon(self);
+                remove hawking;
+                remove chen;
+                if (has_formula == false) {
+                    print "^Without Hawking's formula, the time machine can never be properly calibrated. You are stranded in 2009 with a machine that can't aim and a physicist who has just destroyed the only work that could help you.^";
+                    deadflag = 5;
+                }
+                rtrue;
+            }
+            ! Escalating warnings while party continues
+            switch (party_turns_remaining) {
+                10: switch (location) {
+                    cambridge_gates:
+                        print "^From inside the college, you hear the faint clink of champagne glasses. The party sounds... quiet.^";
+                    cambridge_hall:
+                        print "^Dr. Chen glances at the clock on the wall. The champagne is going flat.^";
+                }
+                8: switch (location) {
+                    cambridge_gates:
+                        print "^A student passes, glancing at the party notice. ~That was tonight? I thought nobody went.~^";
+                    cambridge_porter:
+                        print "^The porter checks his watch. ~These things usually wrap up by nine,~ he murmurs.^";
+                    cambridge_hall:
+                        print "^Hawking's synthesiser clicks idly. ~The champagne is going flat. Even for an experiment, this is a very quiet party.~^";
+                    cambridge_garden:
+                        print "^The sounds from the Great Hall are thinning. Someone is clearing plates.^";
+                }
+                6: switch (location) {
+                    cambridge_hall:
+                        print "^Dr. Chen is checking her watch more frequently now. ~Professor, perhaps we should...~ Hawking's eyes silence her. But even he looks less certain.^";
+                    cambridge_porter:
+                        print "^From the hall, you hear the clink of champagne bottles being gathered up. The party is winding down.^";
+                    cambridge_gates:
+                        print "^The sounds from inside the college have gone quiet. The party seems to be ending.^";
+                    cambridge_garden:
+                        print "^The music from the Great Hall has stopped. You hear chairs being stacked.^";
+                }
+                4: switch (location) {
+                    cambridge_hall:
+                        print "^The synthesiser clicks. ~I gave them every chance. Invitations sent backward through time. A temporal lighthouse. And yet...~ Hawking gazes at the empty chairs. ~Perhaps it is time to accept the obvious.~^";
+                    cambridge_porter:
+                        print "^The porter begins tidying the lodge. ~Nearly done in there,~ he says, jerking his thumb toward the hall.^";
+                    default:
+                        print "^The college has gone very quiet. Whatever was happening in the Great Hall seems to be ending.^";
+                }
+                2: switch (location) {
+                    cambridge_hall:
+                        print "^Hawking stares at the study door. The synthesiser clicks. ~The temporal harmonics framework. Thirty years of work. If no one comes to prove it works...~ He pauses. ~Then perhaps it doesn't. And I should destroy it before it misleads the next generation.~^";
+                    default:
+                        print "^Through the college walls, you hear the low hum of a speech synthesiser. Something final in its tone.^";
+                }
+                1: switch (location) {
+                    cambridge_hall:
+                        print "^~Dr. Chen,~ the synthesiser says quietly. ~Prepare the shredder.~^^";
+                        print "Chen hesitates. ~Professor, are you sure? Thirty years...~^^";
+                        print "~If time travel were possible, someone would have come tonight. No one came.~ A pause. ~Destroy it.~^";
+                    default:
+                        print "^From inside the college, you hear a voice -- mechanical, measured, final: ~Destroy it.~^";
+                }
+            }
+         ],
     has animate proper male;
 
 Object chen "Dr. Sarah Chen" cambridge_hall
@@ -3208,6 +3319,8 @@ Object future_museum "Thames Barrier Museum"
                 print "A photograph shows a gap-toothed London skyline. The caption reads: ~Site of St. Margaret's Church, destroyed by incendiary bomb, 1941. One of many irreplaceable buildings lost to the Blitz.~^^";
             if (newspaper in self)
                 print "Near the entrance, a climate-controlled case holds a single yellowed page of the Times. You feel a jolt of recognition -- the ale stain from the Brass Tap, the pencil circle around the advert, the fold where you always tuck it under your arm. A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
+            if (visited_hawking)
+                print "A small framed card hangs near the DeLorean: ~INVITATION TO PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS, JUNE 28, 2009. Sent after the event. Only one guest is known to have attended.~ You remember the champagne, the balloons, the quiet click of the synthesiser.^^";
             print "A DeLorean sits in the corner with a sign reading ~TIME TRAVEL IN POPULAR CULTURE.~^^";
             print "The flooded street is south. Stairs lead up to the rooftop.^";
         ],
@@ -3245,6 +3358,16 @@ Object church_display "church model" future_museum
          description [;
             if (church_saved) {
                 "A beautifully detailed scale model of St. Margaret's Church, complete with tiny sandbags on the roof. The plaque reads: ~St. Margaret's Church -- survived the Blitz of 1941 when a fire watcher smothered an incendiary with sandbags. The church still stands above the floodwaters, one of the few medieval buildings to survive both war and water.~ You feel a fierce, irrational pride.";
+            }
+            "You don't see any such display.";
+         ],
+    has scenery;
+
+Object hawking_invitation_display "party invitation display" future_museum
+    with name 'invitation' 'hawking' 'party' 'card' 'framed',
+         description [;
+            if (visited_hawking) {
+                "A cream-coloured invitation card in a slim frame: ~Professor Stephen Hawking requests the pleasure of your company at a party for time travellers. Gonville and Caius College, June 28, 2009.~ The museum label reads: ~Sent after the event. Only one guest is known to have attended. Identity unknown.~ You smile. They have no idea.";
             }
             "You don't see any such display.";
          ],
@@ -3502,6 +3625,10 @@ Object curator "Museum Curator" future_museum
                 }
                 if (second == 'delorean' or 'car') {
                     print "~The DeLorean? A replica from the famous documentary series. Lovely films. Completely inaccurate, of course -- everyone knows real time travel requires brass.~ They pause. ~That was a joke.~^";
+                    rtrue;
+                }
+                if (second == 'hawking' or 'party' or 'invitation') {
+                    print "~Hawking's party? Ah yes -- June 28, 2009. He sent invitations after the event, so only genuine time travellers could attend. The university records show that exactly one person turned up.~ They lower their voice. ~Between you and me, I think whoever it was deserves a medal. The man was going to destroy thirty years of temporal harmonics research if nobody showed.~^";
                     rtrue;
                 }
                 if (second == 'eleanor' or 'drawing' or 'art') {
@@ -3809,6 +3936,10 @@ Object solarium_dest "Workshop"
     }
     if (deadflag == 4) {
         print "missed your appointment";
+        rtrue;
+    }
+    if (deadflag == 5) {
+        print "missed the party";
         rtrue;
     }
 ];

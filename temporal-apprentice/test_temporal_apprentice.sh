@@ -1434,6 +1434,95 @@ north"
 run_test "Hawking dismisses tin soldier" "$HAWKING_WITH_SOLDIER
 give soldier to hawking" "nostalgia is not proof"
 
+# --- Cambridge Party Timer ---
+echo "[Cambridge Party Timer]"
+run_test "Party sound on arrival" "$CAMBRIDGE_SETUP" "champagne glasses"
+run_test "Party hourglass hint" "$CAMBRIDGE_SETUP" "hourglass"
+run_test "Party wind-down warning" "$CAMBRIDGE_SETUP
+z
+z
+z
+z
+z
+z" "student passes"
+run_test "Convince Hawking stops timer" "$CONVINCE_SETUP
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "temporal harmonics"
+run_test "Party ends if too slow" "$CAMBRIDGE_SETUP
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "Destroy it"
+run_test "Party over: game ends" "$CAMBRIDGE_SETUP
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "stranded in 2009"
+run_test "Party over: hall empty" "$CAMBRIDGE_SETUP
+north
+give invitation to porter
+north
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+look" "Nobody came"
+run_test "Destroy it warning from gates" "$CAMBRIDGE_SETUP
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "Destroy it"
+
 # --- Cambridge Install-As-You-Go ---
 echo "[Cambridge Install-As-You-Go]"
 # Cambridge: repair machine transcribes formula
@@ -1542,6 +1631,17 @@ south
 south
 repair machine
 travel to future"
+# --- Museum Invitation Display ---
+echo "[Museum Invitation Display]"
+run_test "Hawking invitation in museum" "$FUTURE_SETUP
+north" "one guest is known to have attended"
+run_test "Examine invitation display" "$FUTURE_SETUP
+north
+examine invitation" "Identity unknown"
+run_test "Curator knows about Hawking party" "$FUTURE_SETUP
+north
+ask curator about hawking" "one person turned up"
+
 run_test "Future transit: crystal cracked" "$FUTURE_SETUP" "fracture line"
 run_test "Future machine: all three damaged" "$FUTURE_SETUP
 examine machine" "crack runs clean through"
