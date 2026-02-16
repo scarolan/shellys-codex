@@ -1193,7 +1193,7 @@ Object pocket_watch "pocket watch"
          ];
 
 Object coins "handful of coins"
-    with name 'coins' 'coin' 'money' 'pennies' 'shilling' 'wages' 'handful',
+    with name 'coins' 'coin' 'money' 'pennies' 'shilling' 'wages' 'handful' 'tuppence' 'pence' 'two',
          description "Your final wages from Greybaum, Tedium and Sons. A handful of coins that wouldn't impress a church mouse. Still, enough for a newspaper, if nothing else.",
          before [;
             Drop:
