@@ -618,6 +618,42 @@ Global machine_raised = false;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
+    if (w == 'yell') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'y';
+        i->2 = 'l';
+        while (len > 3) { len--; i->len = ' '; }
+        ! Blank 'at' so "yell at cat" becomes "zyl cat"
+        wn = 2;
+        w2 = NextWord();
+        if (w2 == 'at') {
+            i = WordAddress(wn - 1);
+            len = WordLength(wn - 1);
+            while (len > 0) { len--; i->len = ' '; }
+        }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'shoo') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 's';
+        i->2 = 'h';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'grab') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 't';
+        i->1 = 'a';
+        i->2 = 'k';
+        i->3 = 'e';
+        while (len > 4) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
     rfalse;
 ];
 
@@ -2733,6 +2769,10 @@ Object copernicus "ginger tabby cat" main_workshop
                 "The cat allows exactly 2.4 seconds of chin-scratching before biting your finger. Not hard enough to draw blood. Just hard enough to establish boundaries.";
             Listen:
                 "Purrrrrrrrr. It's the sound of a small, self-satisfied engine.";
+            Push, Pull:
+                if (copernicus_named)
+                    "Copernicus gives you a flat look that says ~I am exactly where I intend to be.~ He somehow becomes heavier.";
+                "The cat gives you a flat look that says ~I am exactly where I intend to be.~ He somehow becomes heavier.";
          ],
          daemon [;
             if (parent(self) ~= location && cat_accident)
@@ -3367,6 +3407,38 @@ Object solarium_dest "Workshop"
 ];
 
 
+[ YellSub;
+    if (noun == copernicus || (noun == nothing && location == parent(copernicus))) {
+        if (rag_on_machine && location == solarium) {
+            if (copernicus_named)
+                "You raise your voice at Copernicus. He flattens his ears, narrows his amber eyes, and somehow manages to look even more comfortable on the machine. Yelling at a cat is like reasoning with weather -- technically possible, practically useless.";
+            "You raise your voice at the cat. He flattens his ears, narrows his amber eyes, and somehow manages to look even more comfortable on the machine. Yelling at a cat is like reasoning with weather -- technically possible, practically useless.";
+        }
+        if (copernicus_named)
+            "You shout at Copernicus. He blinks once, slowly, which is cat for ~Are you quite finished?~";
+        "You shout at the cat. He blinks once, slowly, which is cat for ~Are you quite finished?~";
+    }
+    if (noun has animate)
+        "Shouting at people is rarely productive, and never polite.";
+    "You yell into the void. The void does not respond.";
+];
+
+[ ShooSub;
+    if (noun == copernicus || (noun == nothing && location == parent(copernicus))) {
+        if (rag_on_machine && location == solarium) {
+            if (copernicus_named)
+                "You wave your hands and hiss ~Shoo!~ at Copernicus. He regards your performance with the critical eye of a theatre reviewer and finds it wanting. He does not move. Not even slightly.";
+            "You wave your hands and hiss ~Shoo!~ at the cat. He regards your performance with the critical eye of a theatre reviewer and finds it wanting. He does not move. Not even slightly.";
+        }
+        if (copernicus_named)
+            "You try to shoo Copernicus away. He yawns magnificently and stays put. Cats do not recognise the concept of ~shoo.~";
+        "You try to shoo the cat away. He yawns magnificently and stays put. Cats do not recognise the concept of ~shoo.~";
+    }
+    if (noun has animate)
+        "Shooing people is generally considered rude.";
+    "You flap your hands at nothing in particular. You look ridiculous.";
+];
+
 [ HelpSub;
     print "^=== THE TEMPORAL APPRENTICE -- FIELD GUIDE ===^";
     print "   (hastily scrawled in Dr. Thyme's handwriting)^^";
@@ -3455,6 +3527,14 @@ Verb 'zkn'
 Verb 'zcl'
     *                                       -> Clean
     * noun                                  -> Clean;
+
+Verb 'zyl'
+    *                                       -> Yell
+    * creature                              -> Yell;
+
+Verb 'zsh'
+    *                                       -> Shoo
+    * creature                              -> Shoo;
 
 Verb 'board'
     * noun                                  -> Enter;
