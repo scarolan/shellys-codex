@@ -1746,6 +1746,64 @@ examine compass" "bicycle bell"
 run_test "Corridor door from Solarium" "$ENTER_SOLARIUM
 examine door" "corridor"
 
+# --- Crookes tube scenery (issue #90) ---
+echo "[Scenery: Crookes Tube]"
+# Before accident: intact tube
+run_test "Examine crookes tube pre-accident" "$ENTER_SOLARIUM
+examine crookes tube" "hand-blown glass envelope"
+# After Blitz transit but before replacement: fractured
+run_test "Examine crookes tube post-blitz" "$BLITZ_SETUP
+examine crookes tube" "webbed with fractures"
+# After vacuum tube installation: replaced
+TUBE_INSTALLED_SETUP="$ENTER_WORKSHOP
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+repair machine
+travel to blitz
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+repair machine"
+run_test "Examine crookes tube after replacement" "$TUBE_INSTALLED_SETUP
+examine crookes tube" "military-grade vacuum tube"
+# Ensure 'examine vacuum tube' still works for the portable object
+run_test "Examine vacuum tube still works" "$BLITZ_SETUP
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+examine vacuum tube" "military-grade vacuum tube"
+# Ensure 'examine machine' output is unchanged
+run_test "Examine machine unchanged post-blitz" "$BLITZ_SETUP
+examine machine" "Crookes tube is webbed"
+
 # --- New scenery: Store Room ---
 echo "[Scenery: Store Room]"
 run_test "Examine crates in Store Room" "$ENTER_WORKSHOP
