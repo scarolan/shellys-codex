@@ -100,6 +100,7 @@ Global cat_bribed = false;
 Global knock_count = 0;
 Global door_open = false;
 Global spanner_given = false;
+Global spanner_turn = 0;
 Global endgame_knocks_heard = false;
 Global endgame_turns = 0;
 Global endgame_phase = 0;
@@ -117,6 +118,19 @@ Global machine_raised = false;
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
 ! ===================================================================
+
+[ ThymeDeparts;
+    print "^Dr. Thyme suddenly freezes, stares at the clock on the wall, and leaps to his feet.^^";
+    print "~Mrs. Pemberton's! The scones! She only holds them until half three and it's --~ He checks three separate watches, each showing a different time. ~-- it's NEARLY that. Or possibly past. Time is --~ He waves his hand vaguely. ~-- a matter of perspective.~^^";
+    print "He grabs his enormous overcoat from the hooks by the door and shoves a brass key into your hand.^^";
+    print "~Front door key. Lock up when I'm back. Or before. Temporal engineering.~ He's already halfway out. ~DO tidy up while I'm out. Place is a state. And do NOT go into the solarium. The door at the end of the corridor. Under ANY circumstances.~^^";
+    print "The front door slams shut behind him. You are alone. Well -- alone except for the cat, who watches you from atop a shelf with an expression of absolute calculation.^";
+    thyme_departed = true;
+    door_open = false;
+    move cleaning_rag to player;
+    move front_door_key to player;
+    remove dr_thyme;
+];
 
 [ NPC_Talk_Thyme;
     if (components_installed) {
@@ -138,15 +152,7 @@ Global machine_raised = false;
     if (spanner_given == false) {
         "~The number four spanner,~ he repeats, without turning around. ~On the shelf. Behind you. Brass. Not steel. Tuesdays.~";
     }
-    print "Dr. Thyme suddenly freezes, stares at the clock on the wall, and leaps to his feet.^^";
-    print "~Mrs. Pemberton's! The scones! She only holds them until half three and it's --~ He checks three separate watches, each showing a different time. ~-- it's NEARLY that. Or possibly past. Time is --~ He waves his hand vaguely. ~-- a matter of perspective.~^^";
-    print "He grabs his enormous overcoat from the hooks by the door and shoves a brass key into your hand.^^";
-    print "~Front door key. Lock up when I'm back. Or before. Temporal engineering.~ He's already halfway out. ~DO tidy up while I'm out. Place is a state. And do NOT go into the solarium. The door at the end of the corridor. Under ANY circumstances.~^^";
-    print "The front door slams. You are alone. Well -- alone except for the cat, who watches you from atop a shelf with an expression of absolute calculation.^";
-    thyme_departed = true;
-    move cleaning_rag to player;
-    move front_door_key to player;
-    remove dr_thyme;
+    ThymeDeparts();
 ];
 
 [ NPC_Ask_Thyme topic;
@@ -799,7 +805,7 @@ Global machine_raised = false;
         }
         Tokenise__(buffer, parse);
     }
-    if (w == 'buy' or 'purchase') {
+    if (w == 'buy' or 'purchase' or 'order') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
@@ -1084,6 +1090,11 @@ Object newsboy "newsboy" praed_street
 Object street_sign "hanging sign" praed_street
     with name 'sign' 'hanging' 'brass' 'tap',
          description "A wrought-iron bracket supports a sign depicting a brass tap from which golden liquid flows. The gilding has mostly flaked away, leaving the sign looking like a tap dispensing rust. Below, in smaller letters: ~EST. 1847 -- ALES, SPIRITS, PIES -- WARMTH AND QUESTIONABLE COMPANY.~",
+         before [;
+            Enter:
+                PlayerTo(brass_tap);
+                rtrue;
+         ],
     has scenery;
 
 ! ===================================================================
@@ -1153,7 +1164,7 @@ Object tap_fire "coal fire" brass_tap
     has scenery;
 
 Object tap_bottles "bottles" brass_tap
-    with name 'bottle' 'bottles' 'spirits' 'whisky' 'gin' 'brandy' 'drink' 'drinks' 'ale' 'ales',
+    with name 'bottle' 'bottles' 'spirits' 'whisky' 'gin' 'brandy',
          description "A regiment of bottles stands at attention behind the bar: amber whisky, clear gin, mahogany brandy, and several unlabelled vessels of genuinely alarming colour. One bottle in the back appears to glow faintly, but that might be the firelight. Or it might not. Best not to ask.",
          before [;
             Take:
@@ -1168,6 +1179,17 @@ Object tap_dartboard "dartboard" brass_tap
          description "A cork dartboard hangs on the east wall, its surface so perforated it resembles a map of the lunar surface. Someone has written ~LANDLORD'S RULES: NO THROWING DURING EARTHQUAKES, SÉANCES, OR ARGUMENTS ABOUT THE BOER WAR~ on a card pinned beside it.",
     has scenery;
 
+Object pint_of_ale "pint of ale"
+    with name 'pint' 'ale' 'beer' 'bitter' 'drink' 'glass',
+         description "A pint of dark ale in a heavy glass tankard. It has a head like a thundercloud and smells of hops and mild regret.",
+         before [;
+            Drink:
+                remove self;
+                "You take a long, slow pull. The ale is excellent -- dark, malty, with a finish that suggests the barkeep's grandmother knew what she was doing. The glass empties with a satisfied sigh.";
+            Drop:
+                "You set the glass on the bar. The barkeep gives you a look that suggests unfinished drinks are a personal affront.";
+         ];
+
 Object barkeep "barkeep" brass_tap
     with name 'barkeep' 'woman' 'publican' 'landlady' 'barmaid' 'bartend',
          description "A woman built along the generous lines of a Victorian dreadnought, with arms that suggest a past career in either blacksmithing or bare-knuckle boxing. Her hair is pinned up in a gravity-defying arrangement that could conceal several hat pins and possibly a small weapon. She surveys her pub with the eternal vigilance of someone who has seen everything, forgotten nothing, and forgiven very little.",
@@ -1178,10 +1200,12 @@ Object barkeep "barkeep" brass_tap
             Tell:
                 "The barkeep listens with one eyebrow raised to a height that suggests polite scepticism. When you finish, she says, ~Right then,~ in a tone that conveys neither agreement nor disagreement but an infinite capacity for judgement.";
             Give:
+                if (noun == coins) { <<ZBuy pint_of_ale>>; }
                 "The barkeep eyes your offering with deep suspicion. ~I don't take nothing I can't identify, and precious little I can. This is a pub, not a curiosity shop.~";
             Attack:
                 "You reconsider. The barkeep has the build of someone who could throw you through the front window without spilling a single pint. Discretion is the better part of continued existence.";
          ],
+         add_to_scope [; PlaceInScope(pint_of_ale); ],
     has animate female;
 
 Object pocket_watch "pocket watch"
@@ -1194,16 +1218,21 @@ Object pocket_watch "pocket watch"
 
 Object coins "handful of coins"
     with name 'coins' 'coin' 'money' 'pennies' 'shilling' 'wages' 'handful' 'tuppence' 'pence' 'two',
-         description "Your final wages from Greybaum, Tedium and Sons. A handful of coins that wouldn't impress a church mouse. Still, enough for a newspaper, if nothing else.",
+         description [;
+            if (newspaper in player)
+                "What remains of your wages after the newsboy's tuppence. Enough for a pint, perhaps, but not much else.";
+            "Your final wages from Greybaum, Tedium and Sons. A handful of coins that wouldn't impress a church mouse. Enough for a newspaper and a pint, if you're careful.";
+         ],
          before [;
             Drop:
                 "You're not so flush that you can afford to scatter money in the street. Greybaum, Tedium and Sons were not known for generous severance packages.";
          ],
     has pluralname;
 
-Object pencil "pencil"
+Object pencil "pencil" brass_tap
     with name 'pencil' 'pen' 'graphite',
-         description "A slightly chewed pencil you pocketed from the desk drawer at Greybaum, Tedium and Sons. Consider it severance pay. The lead is soft enough for marking newsprint.";
+         description "A slightly chewed pencil, abandoned by some previous patron. The lead is soft enough for marking newsprint.",
+         initial "A slightly chewed pencil has been left on the bar.";
 
 Object main_workshop "Main Workshop"
     with description [;
@@ -1732,6 +1761,22 @@ Object dr_thyme "Dr. Thyme" main_workshop
                 "A man is hunched over the workbench, his back to you. Dark hair, slightly unkempt, shot through with a single streak of grey at the temple. He wears a waistcoat over rolled shirtsleeves, both dusted with copper filings. He hasn't acknowledged your existence yet.";
             "Dr. Thyme peers at you over an imaginary pair of spectacles -- he doesn't actually wear them, but his face seems designed for it. Dark eyes set deep beneath heavy brows, skin the warm brown of old tea, and an expression that suggests he has just remembered you exist and is moderately pleased about it.";
          ],
+         daemon [;
+            if (thyme_departed) { StopDaemon(self); rtrue; }
+            if (turns >= spanner_turn + 5) {
+                if (location == main_workshop)
+                    ThymeDeparts();
+                else {
+                    print "^From the workshop, you hear a sudden commotion -- coat hooks rattling, a yelp about scones, and the front door slamming shut with Victorian finality.^";
+                    thyme_departed = true;
+                    door_open = false;
+                    move cleaning_rag to main_workshop;
+                    move front_door_key to main_workshop;
+                    move thyme_note to main_workshop;
+                    remove dr_thyme;
+                }
+            }
+         ],
          life [;
             Ask:
                 if (hired == false) {
@@ -1763,6 +1808,8 @@ Object dr_thyme "Dr. Thyme" main_workshop
                         "The man doesn't look up. ~No salesmen. Can't you read the plate?~";
                     }
                     spanner_given = true;
+                    spanner_turn = turns;
+                    StartDaemon(dr_thyme);
                     score = score + 3;
                     remove brass_spanner;
                     print "He takes the spanner without looking, makes a minute adjustment to whatever he's working on, and finally turns.^^";
@@ -2353,7 +2400,7 @@ Object police_box "poster of police box" blitz_pub
     has scenery;
 
 Object pub_drinks "drinks" blitz_pub
-    with name 'beer' 'drink' 'drinks' 'spirits' 'pint' 'ale' 'bottle' 'bottles',
+    with name 'beer' 'drink' 'drinks' 'spirits' 'bottle' 'bottles',
          description "The bar is well-stocked with bottles of spirits, ales, and the occasional dubious homebrew. Rationing hasn't touched the drink yet, and the regulars intend to make the most of this oversight.",
     has scenery pluralname;
 
@@ -2951,7 +2998,7 @@ Object future_museum "Thames Barrier Museum"
             else
                 print "A photograph shows a gap-toothed London skyline. The caption reads: ~Site of St. Margaret's Church, destroyed by incendiary bomb, 1941. One of many irreplaceable buildings lost to the Blitz.~^^";
             if (newspaper in self)
-                print "Near the entrance, a climate-controlled case holds a single yellowed page of the Times. You feel a jolt of recognition -- the tea stain, the circled advert, the fold where you always tuck it under your arm. A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
+                print "Near the entrance, a climate-controlled case holds a single yellowed page of the Times. You feel a jolt of recognition -- the ale stain from the Brass Tap, the pencil circle around the advert, the fold where you always tuck it under your arm. A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
             print "A DeLorean sits in the corner with a sign reading ~TIME TRAVEL IN POPULAR CULTURE.~^^";
             print "The flooded street is south. Stairs lead up to the rooftop.^";
         ],
@@ -3475,6 +3522,11 @@ Object cleaning_rag "cleaning rag"
                 }
          ];
 
+Object thyme_note "hastily scrawled note"
+    with name 'note' 'scrawl' 'scrawled' 'hasty' 'hastily' 'paper',
+         description "In handwriting that suggests the pen was moving at roughly the speed of sound: ~GONE TO MRS. PEMBERTON'S FOR SCONES. BACK SOONISH. DO TIDY UP. DO NOT ENTER SOLARIUM. I MEAN IT. -- J.T.~ Below this, in even hastier script: ~P.S. FRONT DOOR KEY IS ON THE WORKBENCH. OR THE FLOOR. SOMEWHERE IN THAT GENERAL VICINITY.~",
+         initial "A hastily scrawled note has been left on the workbench.";
+
 ! ===================================================================
 ! TIME TRAVEL DESTINATIONS (parentless scope objects)
 ! ===================================================================
@@ -3509,13 +3561,12 @@ Object solarium_dest "Workshop"
     score = 0;
     move pocket_watch to player;
     move coins to player;
-    move pencil to player;
     move newspaper to newsboy;
     SetTime(14*60+48, 1);   ! 2:48 PM (3 min fast), +1 min/turn
 
     print "London, 1895.^^";
     print "The door of Greybaum, Tedium and Sons closes behind you with a finality usually reserved for coffin lids. Sacked. After four years of impeccable ledger-keeping, one small fire in the filing room, and an honest difference of opinion about whether the senior partner's toupee counted as a business expense.^^";
-    print "You step onto Praed Street with nothing but your grandfather's pocket watch, a handful of coins -- your final wages -- and a pencil you may have accidentally pocketed from the desk drawer. The London fog wraps around you like a damp, disapproving relative.^^";
+    print "You step onto Praed Street with nothing but your grandfather's pocket watch and a handful of coins -- your final wages. The London fog wraps around you like a damp, disapproving relative.^^";
     print "You'll need to find work. Perhaps a newspaper would have something in the classifieds.^^";
     print "Type HELP for a list of commands.^^";
 ];
@@ -3621,9 +3672,20 @@ Object solarium_dest "Workshop"
         if (coins notin player)
             "You pat your pockets. No coins. You've already spent your last wages.";
         move newspaper to player;
-        remove coins;
         score = score + 2;
-        "~Tuppence, guv!~ The newsboy snatches your coins with the speed of a striking cobra and thrusts a folded copy of the Times into your hands. ~Pleasure doing business!~ He bites one of the coins experimentally, nods with satisfaction, and pockets the lot.";
+        "~Tuppence, guv!~ The newsboy plucks two coins from your palm with the speed of a striking cobra and thrusts a folded copy of the Times into your hands. ~Pleasure doing business!~ He bites one of the coins experimentally, nods with satisfaction, and pockets both.";
+    }
+    if (noun == pint_of_ale) {
+        if (location ~= brass_tap)
+            "There's nowhere to buy a drink here.";
+        if (pint_of_ale in player)
+            "You've already got a pint. Best finish it before ordering another.";
+        if (coins notin player)
+            "You pat your pockets. Empty. The newsboy got your last tuppence.";
+        remove coins;
+        move pint_of_ale to player;
+        print "You put your remaining coins on the bar. The barkeep eyes them, sweeps them up, and pulls a pint of dark ale with the practiced efficiency of someone who has been doing this since before you were born.^^";
+        "~There you go, love. Don't drink it too fast -- I'm not mopping up after you.~";
     }
     "That's not something you can buy here.";
 ];

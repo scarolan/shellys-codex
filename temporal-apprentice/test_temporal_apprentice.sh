@@ -55,9 +55,12 @@ echo ""
 
 echo "=== Running tests ==="
 
-# Buy paper, circle ad, go to workshop entrance, knock, enter workshop
+# Buy paper, visit pub for pencil, circle ad, go to workshop, show ad
 ENTER_WORKSHOP="buy newspaper
+south
+take pencil
 circle ad
+north
 east
 knock
 knock
@@ -67,7 +70,10 @@ show newspaper to dr thyme"
 
 # Enter workshop, do Thyme sequence, auto-unlock and enter solarium
 ENTER_SOLARIUM="buy newspaper
+south
+take pencil
 circle ad
+north
 east
 knock
 knock
@@ -306,7 +312,10 @@ clean" "cat has stolen"
 
 # Cat bolt mechanic: cleaning in workshop triggers cat stealing rag and bolting to solarium
 THYME_DEPARTED="buy newspaper
+south
+take pencil
 circle ad
+north
 east
 knock
 knock
@@ -2660,16 +2669,16 @@ else
 fi
 
 # Museum newspaper display
-run_test "Museum newspaper display: tea stain" "$FUTURE_SETUP
-north" "tea stain"
+run_test "Museum newspaper display: ale stain" "$FUTURE_SETUP
+north" "ale stain"
 run_test "Museum newspaper display: SEALED AMPHORA" "$FUTURE_SETUP
 north" "SEALED AMPHORA"
 run_test "Museum newspaper examine: display case sealed" "$FUTURE_SETUP
 north
 take newspaper" "display case is sealed"
-run_test "Museum newspaper examine: tea stain through glass" "$FUTURE_SETUP
+run_test "Museum newspaper examine: pencil circle through glass" "$FUTURE_SETUP
 north
-examine newspaper" "tea stain"
+examine newspaper" "pencil circle"
 
 # --- Issue #75: insert/enter/board machine ---
 echo "[Issue #75: Machine Insert/Enter/Board]"
@@ -2868,20 +2877,39 @@ echo "[Expanded Opening]"
 run_test "Starting location is Praed Street" "look" "Praed Street"
 run_test "Newsboy visible on Praed Street" "look" "newsboy"
 run_test "Buy newspaper from newsboy" "buy newspaper" "Tuppence"
-run_test "Coins removed after purchase" "buy newspaper
-inventory" "pencil"
-run_test_absent "Coins gone after purchase" "buy newspaper
-inventory" "carrying.*coins"
+run_test "Coins survive newspaper purchase" "buy newspaper
+inventory" "coins"
 run_test "Can't buy twice" "buy newspaper
 buy newspaper" "already got a newspaper"
 run_test "Examine newspaper shows ad" "buy newspaper
 examine newspaper" "TEMPORAL ENGINEERING"
 run_test "Circle ad with pencil" "buy newspaper
+south
+take pencil
 circle ad" "circle the advert"
-run_test "Pencil in inventory at start" "inventory" "pencil"
+run_test "Circle ad needs pencil" "buy newspaper
+circle ad" "something to write with"
+run_test "Pencil found in pub" "south
+look" "pencil"
+run_test "Take pencil from pub" "south
+take pencil
+inventory" "pencil"
 run_test "Coins in inventory at start" "inventory" "coins"
 run_test "Newsboy description" "examine newsboy" "sharp-faced lad"
 run_test "Give coins to newsboy works as buy" "give coins to newsboy" "Tuppence"
+run_test "Buy pint in pub" "south
+buy pint" "pint of dark ale"
+run_test "Order pint synonym" "south
+order ale" "pint of dark ale"
+run_test "Give coins to barkeep buys pint" "south
+give coins to barkeep" "pint of dark ale"
+run_test "Coins gone after pint" "south
+buy pint
+inventory" "pocket watch"
+run_test_absent "Coins removed by pint" "south
+buy pint
+inventory" "carrying.*coins"
+run_test "Enter brass tap works" "enter brass tap" "mahogany bar"
 
 # --- Paddington Station ---
 echo ""
@@ -2925,7 +2953,10 @@ east
 take spanner
 give spanner to dr thyme" "No salesmen"
 run_test "Full opening flow" "buy newspaper
+south
+take pencil
 circle ad
+north
 east
 knock
 knock
@@ -2936,6 +2967,80 @@ take spanner
 give spanner to dr thyme
 talk to dr thyme
 east" "Something extraordinary"
+
+# --- Thyme auto-departure timer ---
+echo "[Thyme Auto-Departure]"
+SPANNER_GIVEN="buy newspaper
+south
+take pencil
+circle ad
+north
+east
+knock
+knock
+knock
+east
+show newspaper to dr thyme
+take spanner
+give spanner to dr thyme"
+run_test "Thyme still present 4 turns after spanner" "$SPANNER_GIVEN
+look
+look
+look
+look" "Dr. Thyme"
+run_test "Thyme auto-departs after 5 turns" "$SPANNER_GIVEN
+look
+look
+look
+look
+look" "Mrs. Pemberton"
+run_test "Rag received after auto-departure" "$SPANNER_GIVEN
+look
+look
+look
+look
+look
+inventory" "cleaning rag"
+run_test "Immediate departure via talk still works" "$SPANNER_GIVEN
+talk to dr thyme" "Mrs. Pemberton"
+run_test "Off-screen departure from store room" "$SPANNER_GIVEN
+north
+look
+look
+look
+look
+look" "commotion"
+run_test "Note left after off-screen departure" "$SPANNER_GIVEN
+north
+look
+look
+look
+look
+look
+south
+look" "hastily scrawled note"
+run_test "Read Thyme's note" "$SPANNER_GIVEN
+north
+look
+look
+look
+look
+look
+south
+read note" "SCONES"
+run_test "Door closed after Thyme departs" "$SPANNER_GIVEN
+talk to dr thyme
+west
+look" "door is closed"
+run_test "Key and rag left in workshop after off-screen departure" "$SPANNER_GIVEN
+north
+look
+look
+look
+look
+look
+south
+look" "front door key"
 
 echo ""
 echo "=== Results ==="
