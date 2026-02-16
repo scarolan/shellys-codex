@@ -923,6 +923,16 @@ Object brass_spanner "brass spanner" main_workshop
 Object workshop_marmalade "marmalade jars" main_workshop
     with name 'marmalade' 'jam' 'preserv',
          description "Several jars of Seville orange marmalade, interspersed among the scientific apparatus with no apparent logic. Each one bears a handwritten label: ~JT -- BATCH 7,~ ~JT -- BATCH 12 (EXPERIMENTAL),~ and most worryingly, ~JT -- BATCH 3 (DO NOT EAT -- TEMPORAL).~",
+         before [;
+            Eat, Taste:
+                "You eye the jar labelled ~BATCH 3 (DO NOT EAT -- TEMPORAL)~ and decide that Dr. Thyme's warnings are probably worth heeding. The last person who ignored one of his labels reportedly aged thirty years in an afternoon.";
+            Open:
+                "The lids are sealed tight with what appears to be a combination of wax and optimism. A note stuck to Batch 3 reads: ~IF THIS JAR OPENS ITSELF, LEAVE THE BUILDING.~";
+            Take:
+                "Best to leave Dr. Thyme's marmalade where it is. The jars are part of the workshop's delicate ecosystem -- or possibly its temporal shielding. Either way, moving them seems unwise.";
+            Smell:
+                "You lean in cautiously. Batches 7 and 12 smell of perfectly ordinary Seville oranges. Batch 3, however, smells faintly of next Wednesday.";
+         ],
     has scenery pluralname;
 
 Object workshop_liquids "luminous liquids" main_workshop
