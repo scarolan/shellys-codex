@@ -669,6 +669,10 @@ Object entrance_door "oak door" workshop_entrance
                 if (door_open)
                     "The door is already open.";
                 "The door seems to be locked from the inside.";
+            Lock, Unlock:
+                if (door_open)
+                    "The door is wide open. Locking it now would be like closing the barn door after the horse has invented time travel.";
+                "The lock is on the inside. You'd need to be in the workshop to manage it, and if you were in the workshop, you wouldn't need to.";
          ],
     has scenery;
 
