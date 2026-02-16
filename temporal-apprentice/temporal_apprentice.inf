@@ -1134,7 +1134,12 @@ Object hartley_journal "leather-bound journal" workbench
          initial "A leather-bound journal sits prominently on the workbench.";
 
 Object store_room "Store Room"
-    with description "A narrow room lined floor to ceiling with shelves of curiosities. Specimen jars containing things best not examined too closely jostle for space with boxes of gears, coils of copper wire, and several items that defy description in any known language. A toolkit sits on the nearest shelf.^^The workshop is back to the south.",
+    with description [;
+            print "A narrow room lined floor to ceiling with shelves of curiosities. Specimen jars containing things best not examined too closely jostle for space with boxes of gears, coils of copper wire, and several items that defy description in any known language.";
+            if (toolkit in store_room)
+                print " A toolkit sits on the nearest shelf.";
+            print "^^The workshop is back to the south.";
+        ],
          s_to main_workshop,
     has light;
 
