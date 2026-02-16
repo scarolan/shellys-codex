@@ -2531,7 +2531,7 @@ Object quantum_cabinet "sealed cabinet" future_lab
     has scenery container;
 
 Object quantum_processor "quantum processor" quantum_cabinet
-    with name 'processor' 'quantum' 'chip' 'cpu',
+    with name 'processor' 'quantum' 'chip' 'cpu' 'crystal' 'crystalline' 'component',
          description "A crystalline processor that seems to shimmer between states of existence. It's warm to the touch and appears to be slightly transparent. You feel a lurch of recognition -- this is the same material as the cracked component in the time machine's field generator. Built in a lab founded on Hawking's temporal harmonics framework. The framework he almost destroyed. The framework he only published because you showed up at his party. ~YOU WILL UNDERSTAND IN TIME.~ You do now.",
          before [;
             Take:

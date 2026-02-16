@@ -1108,6 +1108,17 @@ take processor
 up
 repair machine" "temporal field generator is restored"
 
+# Future: 'take crystal' synonym works (issue #96)
+run_test "Take crystal synonym for processor" "$FUTURE_SETUP
+north
+up
+open panel
+down
+south
+down
+open cabinet
+take crystal" "crystalline processor"
+
 # Future: can't travel to Workshop without processor installed
 run_test "Future: blocked without processor" "$FUTURE_SETUP
 north
