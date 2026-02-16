@@ -750,6 +750,18 @@ west
 dig
 open box
 take tube" "temporal resonance"
+run_test "Open crate synonym (issue #91)" "$BLITZ_SETUP
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open crate
+take tube" "temporal resonance"
 run_test "Church inscription visible" "$ENTER_WORKSHOP
 take journal
 north

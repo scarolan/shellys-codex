@@ -2143,7 +2143,7 @@ Object radio_valve "radio valve" blitz_rubble
          initial "A radio valve lies among the accessible surface rubble, glinting in the dim light.";
 
 Object metal_box "metal box" blitz_rubble
-    with name 'metal' 'box' 'case',
+    with name 'metal' 'box' 'case' 'crate' 'supply',
          description [;
             if (blitz_rubble hasnt general) {
                 "A sturdy metal box is visible under several hundredweight of brick and timber. You'd need help to shift this lot.";
