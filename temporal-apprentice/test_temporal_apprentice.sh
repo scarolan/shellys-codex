@@ -1950,6 +1950,15 @@ board machine" "TRAVEL TO"
 run_test_absent "Board machine no unrecognised verb" "$MACHINE_CMD_SETUP
 board machine" "not a verb I recognise"
 
+# --- Issue #72: climb onto machine ---
+echo "[Issue #72: Climb Machine]"
+run_test "Climb machine hints travel" "$MACHINE_CMD_SETUP
+climb machine" "TRAVEL TO"
+run_test_absent "Climb machine no generic refusal" "$MACHINE_CMD_SETUP
+climb machine" "can.t see any such thing"
+run_test "Get on machine hints travel" "$ENTER_SOLARIUM
+get on machine" "TRAVEL TO"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"
