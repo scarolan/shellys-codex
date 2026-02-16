@@ -3809,9 +3809,6 @@ Object solarium_dest "Workshop"
         if (components_installed) {
             the_time = arrival_time - 12;
             print "You set the dial to ~1895~ and pull the lever. For the first time, the machine moves through time like silk through water -- no screaming, no bucking, no ominous sounds from the engineering. Just a smooth, confident hum and the gentle sensation of reality rearranging itself politely.^^";
-            print "You glance at your pocket watch. ";
-            PrintTime12(the_time);
-            print ". Twelve minutes before you knocked on that door for the first time. Twelve minutes to close the loop.^^";
             print "You're back in the solarium. Home.^";
         } else {
             print "You set the dial to ~1895~ and pull the lever. The machine hums, reality folds neatly like a well-pressed handkerchief, and you're back in the solarium. Home.^";

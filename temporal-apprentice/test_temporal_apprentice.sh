@@ -3048,7 +3048,7 @@ run_test "Watch check at third knock" "east
 knock
 knock
 knock" "pocket watch"
-run_test "Endgame rewind: twelve minutes before" "$ENDGAME_CMD" "Twelve minutes"
+run_test "Endgame return: smooth transit home" "$ENDGAME_CMD" "silk through water"
 run_test "Endgame knocks match arrival time" "$ENDGAME_CMD" "exact time you arrived"
 run_test "Bootstrap: past self checks watch" "$ENDGAME_CMD" "watch your past self fish out a pocket watch"
 run_test "Door didn't open by itself" "$ENDGAME_CMD" "didn.t open by itself"
