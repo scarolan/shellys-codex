@@ -570,6 +570,12 @@ Global machine_raised = false;
         i->1 = 'c';
         i->2 = 'r';
         while (len > 3) { len--; i->len = ' '; }
+        ! Blank all trailing words so "carve stone with toolkit" becomes "zcr"
+        if (parse->1 > 1) {
+            i = WordAddress(2);
+            len = (buffer + 2 + buffer->1) - i;
+            while (len > 0) { len--; i->len = ' '; }
+        }
         Tokenise__(buffer, parse);
     }
     if (w == 'bury') {

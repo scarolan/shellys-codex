@@ -566,6 +566,95 @@ show lodestone to marcus
 talk to livia
 east
 carve" "TEMPUS FUGIT"
+
+# --- Carve synonyms (issue #85) ---
+echo "[Carve Synonyms]"
+run_test "carve stone with toolkit" "$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+carve stone with toolkit" "TEMPUS FUGIT"
+run_test "carve stone with chisel" "$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+carve stone with chisel" "TEMPUS FUGIT"
+run_test "engrave stone with toolkit" "$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+engrave stone with toolkit" "TEMPUS FUGIT"
+run_test "inscribe stone with toolkit" "$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+inscribe stone with toolkit" "TEMPUS FUGIT"
+run_test "bare carve still works" "$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+carve" "TEMPUS FUGIT"
+
 run_test "Bury time capsule" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south
