@@ -770,12 +770,23 @@ Object main_workshop "Main Workshop"
                 if (spanner_given == false && thyme_departed == false)
                     print "A man is hunched over the workbench with his back to you. ~The number four spanner,~ he says, without turning around. ~On the shelf behind you. The brass one. Not the steel one. The steel one is for Tuesdays.~^^";
                 if (thyme_departed == false) {
-                    if (spanner_given)
-                        print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
+                    if (spanner_given) {
+                        if (hartley_journal in workbench)
+                            print "Dr. Thyme's workbench is cluttered with tools and a leather-bound journal. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
+                        else
+                            print "Dr. Thyme's workbench is cluttered with tools and biscuit crumbs. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
+                    } else {
+                        if (hartley_journal in workbench)
+                            print "The workbench is cluttered with tools and a leather-bound journal. A brass spanner glints on the shelf behind you. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
+                        else
+                            print "The workbench is cluttered with tools and biscuit crumbs. A brass spanner glints on the shelf behind you. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
+                    }
+                } else {
+                    if (hartley_journal in workbench)
+                        print "The workbench is cluttered with tools and a leather-bound journal. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
                     else
-                        print "The workbench is cluttered with tools and a leather-bound journal. A brass spanner glints on the shelf behind you. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
-                } else
-                    print "The workbench is cluttered with tools and a leather-bound journal. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
+                        print "The workbench is cluttered with tools and biscuit crumbs. The store room is to the north, the entrance is back to the west, and a narrow corridor runs east.^";
+                }
             }
             else
                 print "The workbench holds tools and the remains of Dr. Thyme's tea (cold, abandoned). The store room is north, the entrance west, and the corridor east.^";
@@ -798,7 +809,12 @@ Object main_workshop "Main Workshop"
 
 Object workbench "workbench" main_workshop
     with name 'workbench' 'bench' 'table' 'desk',
-         description "A sturdy oak workbench buried under an archaeological layer of tools, diagrams, and biscuit crumbs. Dr. Thyme's leather-bound journal sits prominently in the centre, as if placed there for someone -- you, presumably -- to find.",
+         description [;
+            if (hartley_journal in self)
+                "A sturdy oak workbench buried under an archaeological layer of tools, diagrams, and biscuit crumbs. Dr. Thyme's leather-bound journal sits prominently in the centre, as if placed there for someone -- you, presumably -- to find.";
+            else
+                "A sturdy oak workbench buried under an archaeological layer of tools, diagrams, and biscuit crumbs. The centre is clear save for a ring of tea stains where the journal used to sit.";
+        ],
     has scenery supporter;
 
 Object workshop_shelves "shelves" main_workshop
