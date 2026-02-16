@@ -1189,9 +1189,10 @@ Object forum_column "marble column" roman_forum
          description "A fine Corinthian column of imported Italian marble, fluted and gleaming in the improbable London sunshine. It supports nothing in particular but does so with tremendous authority.",
     has scenery;
 
-Object forum_citizens "citizens" roman_forum
+Object forum_citizens "citizens"
     with name 'citizen' 'citizens' 'people' 'crowd',
          description "Toga-clad citizens bustle about their daily business -- haggling, gossiping, and occasionally stabbing each other, as was the Roman custom. They eye your strange clothing with the polite bewilderment of people who have seen stranger things come up the Thames.",
+         found_in roman_forum roman_via roman_temple roman_bath roman_merchants roman_docks,
     has scenery animate pluralname;
 
 Object forum_buildings "colonnaded buildings" roman_forum
@@ -1944,9 +1945,10 @@ Object cambridge_bikes "bicycle rack" cambridge_gates
          description "A tangle of bicycles in various states of repair, chained to a rack, to each other, and to at least one lamppost. This is Cambridge. Bicycles are a way of life, a mode of transport, and occasionally a philosophical statement.",
     has scenery pluralname;
 
-Object cambridge_students "students" cambridge_gates
+Object cambridge_students "students"
     with name 'student' 'students' 'gown' 'gowns' 'book' 'books',
          description "Students in billowing black gowns hurry past in every direction, clutching books, folders, and the unmistakable air of people who have read too much and slept too little. They move with the purposeful speed of the academically terrified.",
+         found_in cambridge_gates cambridge_porter cambridge_garden cambridge_hall cambridge_study,
     has scenery pluralname animate;
 
 Object cambridge_porter "Porter's Lodge"

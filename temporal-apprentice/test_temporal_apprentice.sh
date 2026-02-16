@@ -1432,6 +1432,10 @@ examine column" "Corinthian column"
 run_test "Examine citizens in Roman Forum" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 examine citizens" "Toga-clad citizens"
+run_test "Examine citizen in Roman Bathhouse" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+examine citizen" "Toga-clad citizens"
 run_test "Examine pools in Roman Bathhouse" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -1701,6 +1705,14 @@ examine fire" "coal fire"
 
 # --- New scenery: College Gates ---
 echo "[Scenery: College Gates]"
+run_test "Examine student in Gonville Hall" "$CAMBRIDGE_SETUP
+north
+east
+take invitation
+west
+give invitation to porter
+north
+examine student" "academically terrified"
 run_test "Examine notice at gates" "$CAMBRIDGE_SETUP
 examine notice" "PROFESSOR HAWKING"
 run_test "Examine gate at gates" "$CAMBRIDGE_SETUP
