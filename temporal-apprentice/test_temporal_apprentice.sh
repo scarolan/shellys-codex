@@ -286,6 +286,12 @@ tidy" "marginally less chaotic"
 run_test "bare sweep still works" "$ENTER_SOLARIUM
 west
 sweep" "marginally less chaotic"
+run_test "clean workshop with rag (#67)" "$ENTER_SOLARIUM
+west
+clean workshop with rag" "marginally less chaotic"
+run_test "wipe workshop with rag (#67)" "$ENTER_SOLARIUM
+west
+wipe workshop with rag" "marginally less chaotic"
 
 # --- Examine machine before accident ---
 echo "[Machine Examine Pre-Accident]"
