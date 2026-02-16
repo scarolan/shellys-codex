@@ -2176,7 +2176,11 @@ Object vacuum_tube "vacuum tube" metal_box
                     has_vacuum_tube = true;
                     score = score + 8;
                     move self to player;
-                    "You carefully extract the vacuum tube from its packing straw. It's warm to the touch and hums faintly -- temporal resonance. Component two of four.";
+                    print "You carefully extract the vacuum tube from its packing straw. It's warm to the touch and hums faintly -- temporal resonance.";
+                    if (has_lodestone && has_vacuum_tube && has_formula && has_processor)
+                        print " That's all four components. Time to go home.";
+                    print "^";
+                    rtrue;
                 }
          ];
 
@@ -2836,7 +2840,11 @@ Object quantum_processor "quantum processor" quantum_cabinet
                     has_processor = true;
                     score = score + 8;
                     move self to player;
-                    "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. Built on Hawking's theory. Which exists because you went to his party. Which you could only attend because of a machine powered by this crystal. Somewhere, somewhen, someone is going to pack one of these into a brass harness, write a cryptic note, and post it to 14 Praed Street. Four of four. Time to go home.";
+                    print "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. Built on Hawking's theory. Which exists because you went to his party. Which you could only attend because of a machine powered by this crystal. Somewhere, somewhen, someone is going to pack one of these into a brass harness, write a cryptic note, and post it to 14 Praed Street.";
+                    if (has_lodestone && has_vacuum_tube && has_formula && has_processor)
+                        print " That's all four components. Time to go home.";
+                    print "^";
+                    rtrue;
                 }
          ];
 
