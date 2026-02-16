@@ -590,7 +590,7 @@ Global machine_raised = false;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
-    if (w == 'repair' or 'fix' or 'mend' or 'install' or 'attach' or 'transcribe') {
+    if (w == 'repair' or 'fix' or 'mend' or 'install' or 'attach' or 'transcribe' or 'use' or 'replace') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
@@ -3514,6 +3514,9 @@ Object solarium_dest "Workshop"
 [ RepairSub;
     ! Handle bare "repair" or "install" with no noun when machine is present
     if (noun == 0 && time_machine in location)
+        noun = time_machine;
+    ! Redirect component nouns (e.g. "use lodestone") to the machine
+    if (noun == lodestone or vacuum_tube or quantum_processor or formula_printout && time_machine in location)
         noun = time_machine;
     if (location == roman_forum && marcus_impressed == false) {
         "Roman soldiers have surrounded the machine, treating it as a curiosity -- or possibly a siege weapon. You'll need to impress their centurion before they'll let you near it.";

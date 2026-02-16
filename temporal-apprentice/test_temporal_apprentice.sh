@@ -352,6 +352,31 @@ north
 show lodestone to marcus
 repair machine" "lodestone into the compass housing"
 
+# Issue #86: 'use' and 'replace' as repair synonyms
+run_test "Roman: use installs lodestone (issue #86)" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+use lodestone" "lodestone into the compass housing"
+
+run_test "Roman: replace installs lodestone (issue #86)" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+replace lodestone" "lodestone into the compass housing"
+
 # Roman: can't travel to Blitz without lodestone installed
 run_test "Roman: blocked without lodestone installed" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
