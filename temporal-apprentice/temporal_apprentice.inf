@@ -1444,6 +1444,7 @@ Object livia "Priestess Livia" roman_forum
 Object felix "Felix the Merchant" roman_merchants
     with name 'felix' 'merchant' 'trader' 'seller' 'vendor',
          description "A rotund man with the shrewd eyes of someone who can calculate profit margins in three currencies simultaneously. His stall is piled with stones and minerals, each one, he assures you, imbued with cosmic power.",
+         add_to_scope [; if (has_lodestone == false) PlaceInScope(lodestone); ],
          life [;
             Ask:
                 if (second == 'lodestone' or 'stone' or 'magnet' or 'thunder') {
@@ -1475,7 +1476,12 @@ Object felix "Felix the Merchant" roman_merchants
 
 Object lodestone "lodestone"
     with name 'lodestone' 'stone' 'magnet' 'thunder',
-         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs at any iron nearby with startling force -- the kind of lodestone that would pull every nail out of a floorboard. Mediterranean magnetite of exceptional purity. The magnetic core for the temporal compass.";
+         description "A chunk of naturally magnetic iron ore, dense and dark. It tugs at any iron nearby with startling force -- the kind of lodestone that would pull every nail out of a floorboard. Mediterranean magnetite of exceptional purity. The magnetic core for the temporal compass.",
+         before [;
+            Take, Remove:
+                if (self notin player)
+                    "Felix slaps your hand away. ~One gold aureus, friend. That's the price.~";
+         ];
 
 Object roman_bathers "bathers" roman_bath
     with name 'bathers' 'romans' 'bather' 'people',
