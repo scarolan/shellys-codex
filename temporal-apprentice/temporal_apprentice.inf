@@ -696,6 +696,15 @@ Global machine_raised = false;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
+    if (w == 'kick') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'k';
+        i->2 = 'k';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
     if (w == 'grab') {
         i = WordAddress(1);
         len = WordLength(1);
@@ -3659,6 +3668,19 @@ Object solarium_dest "Workshop"
     "You flap your hands at nothing in particular. You look ridiculous.";
 ];
 
+[ KickSub;
+    if (noun == copernicus) {
+        if (copernicus_named)
+            "You raise a foot toward Copernicus and he fixes you with a stare of such withering contempt that your leg lowers itself out of sheer moral failure. Copernicus has done nothing to deserve violence. You, on the other hand, have done something unforgivable: you considered it.";
+        "You raise a foot toward the cat and he fixes you with a stare of such withering contempt that your leg lowers itself out of sheer moral failure. This cat has done nothing to deserve violence. You, on the other hand, have done something unforgivable: you considered it.";
+    }
+    if (noun == nothing)
+        "You kick the air. The air is unimpressed.";
+    if (noun has animate)
+        "Violence is the refuge of the incompetent. You are better than this. Probably.";
+    "You decide against kicking that. Your boots have suffered enough indignity today.";
+];
+
 [ HelpSub;
     print "^=== THE TEMPORAL APPRENTICE -- FIELD GUIDE ===^";
     print "   (hastily scrawled in Dr. Thyme's handwriting)^^";
@@ -3755,6 +3777,11 @@ Verb 'zyl'
 Verb 'zsh'
     *                                       -> Shoo
     * creature                              -> Shoo;
+
+Verb 'zkk'
+    *                                       -> Kick
+    * creature                              -> Kick
+    * noun                                  -> Kick;
 
 Verb 'board'
     * noun                                  -> Enter;

@@ -2305,6 +2305,15 @@ south
 ask barkeep about quantum" "bitter"
 
 echo ""
+echo "--- Kick verb ---"
+run_test "Kick cat shaming response" "$ENTER_WORKSHOP
+kick cat" "withering contempt"
+run_test "Kick non-cat generic refusal" "$ENTER_WORKSHOP
+kick workbench" "decide against kicking"
+run_test "Bare kick" "$ENTER_WORKSHOP
+kick" "air"
+
+echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"
 if [ "$FAIL" -gt 0 ]; then
