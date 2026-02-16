@@ -2627,7 +2627,7 @@ Object copernicus "ginger tabby cat" main_workshop
                     copernicus_named = true;
                     give self proper;
                     remove cleaning_rag;
-                    print "You reach for the cleaning rag draped over the cat. This is a mistake.^^";
+                    print "You reach toward the cat, but your hand brushes the cleaning rag draped over him. This is a mistake.^^";
                     print "The cat, with the unerring instinct of cats everywhere for finding the worst possible moment to be difficult, twists away from your grasp. His back legs scrabble for purchase on the control panel, and one powerful hind paw connects squarely with a large brass lever marked ~ABSOLUTELY DO NOT TOUCH.~^^";
                     print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
                     print "Something inside the machine gives a grinding lurch -- the compass housing flares white-hot, dims, flares again, and settles to a feeble glow. The lodestone. Eight hundred and forty-seven careful test activations, and one uncontrolled transit has nearly finished it off.^^";
