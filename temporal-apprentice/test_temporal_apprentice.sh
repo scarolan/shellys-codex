@@ -103,6 +103,10 @@ run_test "Enter works after knock" "knock
 knock
 knock
 enter" "cathedral"
+run_test "Close door from outside" "knock
+knock
+knock
+close door" "No point closing it now"
 
 # --- Spanner Puzzle ---
 echo "[Spanner Puzzle]"

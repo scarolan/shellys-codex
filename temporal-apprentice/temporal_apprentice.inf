@@ -709,7 +709,9 @@ Object entrance_door "oak door"
             "A heavy oak door, firmly closed. Scarred by decades of London weather and possibly one or two small explosions. The brass hinges are magnificent. The dent at cat-height is suspicious.";
          ],
          before [;
-            Open, Close, Push, Pull:
+            Close:
+                "You've come this far. No point closing it now.";
+            Open, Push, Pull:
                 if (location == main_workshop) {
                     if (endgame_knocks_heard) {
                         BootstrapSequence();
