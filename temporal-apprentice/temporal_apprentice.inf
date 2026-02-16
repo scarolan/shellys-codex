@@ -478,6 +478,50 @@ Global machine_raised = false;
     print "Kai shrugs cheerfully. ~Dunno about that. I just dive and salvage. Ask Torres or the curator for the big questions.~^";
 ];
 
+[ NPC_Talk_Barkeep;
+    print "The barkeep regards you with the weary patience of someone who has served ale to every variety of human foolishness. ~What'll it be, then? We've got bitter, mild, porter, and something Old Jem brews in his cellar that I'm legally obliged not to describe as gin.~ She polishes a glass with a cloth that has seen better centuries. ~You look like you could use a sit-down and a pie. We do a very decent kidney pie, Tuesdays and Thursdays. This being neither, you'll have to make do with conversation.~^";
+];
+
+[ NPC_Ask_Barkeep topic;
+    if (topic == 'thyme' or 'doctor' or 'dr' or 'justin') {
+        print "~Dr. Thyme? Oh, I know him. Comes in every other Thursday for a half of mild and talks at the fire for two hours about ~temporal whatsits.~ Harmless enough, if you don't mind your beer vibrating.~ She lowers her voice. ~Between you and me, half the street thinks he's barmy. The other half thinks he's a genius. I think he tips well and that's good enough for me.~^";
+        rtrue;
+    }
+    if (topic == 'pemberton' or 'mrs') {
+        print "~Mrs. Pemberton? Salt of the earth, that woman. Makes scones that'd bring a tear to the Queen's eye. She keeps Dr. Thyme fed and reasonably presentable, which is no small feat. They say she was a governess before she took up housekeeping. Explains the iron will and the ability to make a grown man eat his vegetables.~^";
+        rtrue;
+    }
+    if (topic == 'beer' or 'ale' or 'drink' or 'bitter' or 'mild' or 'porter' or 'gin') {
+        print "~The bitter's from Whitbread's -- reliable as rain. The mild's local, brewed by a man who believes hops are a government conspiracy, so it's more of a theological statement than a beverage. The porter'll put hair on your chest and remove it from your head. And the gin --~ She glances at a bottle that seems to be faintly luminous. ~-- the gin is Old Jem's. I make no warranties, express or implied.~^";
+        rtrue;
+    }
+    if (topic == 'pie' or 'food' or 'kidney') {
+        print "~The kidney pie is Mrs. Gresham's recipe, rest her soul. She left it to me in her will, along with this pub and a grudge against the Methodists. I make it Tuesdays and Thursdays. Other days, there's bread and cheese and whatever's in the pot, which is usually soup but has occasionally been something that defies classification.~^";
+        rtrue;
+    }
+    if (topic == 'praed' or 'street' or 'paddington' or 'london' or 'area' or 'neighbourhood') {
+        print "~Praed Street? It's Paddington, innit. Railway brings all sorts through -- travellers, engineers, ladies of negotiable virtue, and the occasional foreigner who thinks the Great Western Railway is the pinnacle of human achievement. They're not wrong, mind.~ She nods towards the window. ~Used to be quieter before they built the station. Now it's all bustle and pickpockets and people asking directions to places they shouldn't want to go.~^";
+        rtrue;
+    }
+    if (topic == 'pub' or 'tap' or 'brass') {
+        print "~The Brass Tap's been here since 1847. My grandmother opened it, my mother ran it, and I'll run it till they carry me out feet first or the brewery doubles the rent, whichever comes first.~ She gestures at the ceiling. ~That stain up there? That's from the Great Stink of '58. We keep it for historical purposes. Also because nothing shifts it.~^";
+        rtrue;
+    }
+    if (topic == 'time' or 'temporal' or 'machine' or 'engine') {
+        print "~Time travel?~ The barkeep gives you a look that could curdle milk at thirty paces. ~Love, I've been standing behind this bar for twenty-three years. I've heard theories about the afterlife, the gold standard, the proper way to cook a kipper, and whether the moon is made of cheese. Time travel is far from the maddest thing anyone's said to me this week. That honour goes to the man on Tuesday who claimed his parrot could predict the Derby results.~^";
+        rtrue;
+    }
+    if (topic == 'cat' or 'copernicus' or 'tom') {
+        print "~Cats? We had Old Tom -- best mouser this side of the Thames. See the plaque on the mantel. Thirteen years of loyal service and not a rat survived his watch.~ She sighs. ~Since Tom passed, the mice have got ideas above their station. I keep meaning to get another, but it'd feel disloyal.~^";
+        rtrue;
+    }
+    if (topic == 'help') {
+        print "~Help? This is a pub, not the Salvation Army. But if you need directions, advice, or someone to tell you you're making a terrible mistake, you've come to the right place. That's basically what barkeeps are for.~^";
+        rtrue;
+    }
+    print "The barkeep shrugs with the eloquence of a woman who has elevated indifference to an art form. ~Can't help you with that, love. Try the bitter -- it won't answer your questions, but it'll make you care less about them.~^";
+];
+
 ! ===================================================================
 ! CUSTOM STATUS LINE
 ! ===================================================================
@@ -676,7 +720,10 @@ Object workshop_entrance "Workshop Entrance"
                 print "The oak door stands open, revealing the workshop beyond to the east.^";
             else
                 print "The heavy oak door is closed. You should probably knock.^";
-            print "The alley continues west to the street, but you've only just arrived and you'd hate to make a bad impression on your first day.^";
+            if (thyme_departed)
+                print "The alley continues west to Praed Street, now that Dr. Thyme is safely off chasing scones.^";
+            else
+                print "The alley continues west to the street, but you've only just arrived and you'd hate to make a bad impression on your first day.^";
         ],
          e_to [;
             if (door_open) return main_workshop;
@@ -686,7 +733,11 @@ Object workshop_entrance "Workshop Entrance"
             if (door_open) return main_workshop;
             "The heavy oak door is firmly closed. Perhaps you should knock.";
          ],
-         w_to "You've literally just started this job. Let's at least see what's inside before fleeing into the London fog.",
+         w_to [;
+            if (thyme_departed == false)
+                "You've literally just started this job. Let's at least see what's inside before fleeing into the London fog.";
+            return praed_street;
+         ],
     has light;
 
 Object coat_hook "coat hook" workshop_entrance
@@ -835,6 +886,115 @@ Object entrance_alley "alley" workshop_entrance
     with name 'alley' 'alleyway' 'lane' 'narrow',
          description "A narrow alley off Praed Street, barely wide enough for two people to pass without exchanging pleasantries or diseases. The walls are damp brick, the ground is damp cobblestone, and the air is damp everything.",
     has scenery;
+
+! ===================================================================
+! PRAED STREET & THE BRASS TAP (optional 1895 locations)
+! ===================================================================
+
+Object praed_street "Praed Street"
+    with description "Praed Street stretches east to west through a curtain of London fog so thick you could hang wallpaper on it. Gas lamps march along the pavement like jaundiced sentries, each one illuminating roughly three square feet of cobblestone and several cubic yards of soot. Hansom cabs clatter past at irregular intervals, their drivers hunched against the damp like mushrooms in top hats.^^The alley back to Dr. Thyme's workshop is east. A hanging sign to the south reads ~THE BRASS TAP~ in letters that have given up all pretence of being gold.",
+         e_to workshop_entrance,
+         s_to brass_tap,
+         in_to brass_tap,
+         n_to "You step off the kerb and are nearly flattened by a hansom cab. The driver shouts something anatomically creative and vanishes into the fog. Perhaps best to stay on the pavement.",
+         w_to "The fog thickens to the west until it becomes essentially a wall. You have no business that way, and the fog seems to agree.",
+    has light;
+
+Object street_gas_lamps "street gas lamps" praed_street
+    with name 'gas' 'lamp' 'lamps' 'light' 'lights' 'street',
+         description "The gas lamps hiss and spit like disapproving aunts. Each one casts a sickly yellow circle on the pavement, creating small islands of visibility in an ocean of fog. One of them flickers in a pattern that is either a fault in the gas supply or Morse code for ~help.~",
+         before [;
+            Touch:
+                "The lamp post is slick with condensation and approximately a century of accumulated London. You withdraw your hand and wipe it on your trousers.";
+         ],
+    has scenery pluralname;
+
+Object street_cobblestones "cobblestones" praed_street
+    with name 'cobbleston' 'cobble' 'cobbles' 'stones' 'pavement' 'road',
+         description "The cobblestones are worn into shallow bowls by generations of traffic, each one collecting a small puddle of rainwater and horse-related matter that you prefer not to examine too closely.",
+    has scenery pluralname;
+
+Object street_fog "fog" praed_street
+    with name 'fog' 'smog' 'mist' 'smoke' 'pea',
+         description "The famous London particular -- a pea-soup fog of coal smoke, river damp, and industrial ambition. It tastes faintly of pennies and regret. Somewhere in it, a dog is barking at something only dogs can see.",
+    has scenery;
+
+Object street_hansom_cabs "hansom cabs" praed_street
+    with name 'cab' 'cabs' 'hansom' 'carriage' 'carriages' 'driver' 'drivers',
+         description "The hansoms materialise from the fog like ghosts with hooves, clatter past in a blur of varnished wood and bad language, and vanish again into the murk. The drivers appear to navigate entirely by instinct, profanity, and an unshakeable faith in the self-preservation instincts of pedestrians.",
+         before [;
+            Enter:
+                "You wave at a passing hansom, but it dissolves into the fog like a particularly unhelpful mirage. You've nowhere to go that you can't walk, anyway.";
+            Take:
+                "You attempt to hail a cab. Three clatter past without slowing. A fourth slows, the driver peers at you, makes a face suggesting your fare would not be worth his time, and whips his horse back into the murk.";
+         ],
+    has scenery pluralname;
+
+Object street_sign "hanging sign" praed_street
+    with name 'sign' 'hanging' 'brass' 'tap',
+         description "A wrought-iron bracket supports a sign depicting a brass tap from which golden liquid flows. The gilding has mostly flaked away, leaving the sign looking like a tap dispensing rust. Below, in smaller letters: ~EST. 1847 -- ALES, SPIRITS, PIES -- WARMTH AND QUESTIONABLE COMPANY.~",
+    has scenery;
+
+Object brass_tap "The Brass Tap"
+    with description "A snug Victorian pub that has been slowly pickling in its own atmosphere since the reign of Queen Victoria's grandfather. The ceiling is the colour of strong tea from decades of tobacco smoke. A long mahogany bar dominates one wall, its surface polished to a mirror finish by generations of elbows. Behind it, bottles of varying respectability jostle for space. A coal fire crackles in the grate, providing both warmth and a gentle undertone of carbon monoxide.^^The barkeep, a woman of magnificent proportions and deeply suspicious eyebrows, presides over her domain with the quiet authority of someone who has heard every excuse in the English language and believed none of them.^^The door north leads back to Praed Street.",
+         n_to praed_street,
+         out_to praed_street,
+         e_to "That wall is occupied by a dartboard, three hunting prints, and a stain of mysterious provenance. There is no exit.",
+         w_to "The only things west are the coal fire, a brass spittoon, and a cat that may or may not be alive. None of them are exits.",
+         s_to "The back wall is solid brick. The publican's licence and a portrait of the Queen hang there. Neither is a door.",
+    has light;
+
+Object tap_bar "mahogany bar" brass_tap
+    with name 'bar' 'mahogany' 'counter',
+         description "A magnificent slab of mahogany, dark as sin and twice as inviting. Its surface is worn smooth by a thousand forearms and polished to a shine you could check your teeth in. Several brass beer taps protrude from it like small industrial monuments. Ring marks from a century of tankards form overlapping circles that could be mistaken for a mathematical proof, if you squinted.",
+         before [;
+            Rub, Touch:
+                "You run a hand along the bar's surface. It is smoother than silk and faintly sticky -- the two states are not, in pubs, mutually exclusive.";
+         ],
+    has scenery;
+
+Object tap_fire "coal fire" brass_tap
+    with name 'fire' 'coal' 'grate' 'hearth' 'fireplace',
+         description "A generous coal fire that radiates heat and a faint smell of sulphur. The grate is cast iron, decorated with a relief of hops and barley. Above it, a mantelpiece bears a stuffed pheasant under a glass dome, a clock that stopped in 1873, and a small brass plaque reading ~IN MEMORY OF OLD TOM, BEST MOUSER THIS SIDE OF THE THAMES, 1881-1894.~",
+         before [;
+            Touch:
+                "It's a coal fire. It is hot. This should not require empirical verification.";
+            Take:
+                "The fire is doing far more good where it is. Besides, carrying a coal fire through the streets of London would attract comment, even by Paddington standards.";
+         ],
+    has scenery;
+
+Object tap_bottles "bottles" brass_tap
+    with name 'bottle' 'bottles' 'spirits' 'whisky' 'gin' 'brandy' 'drink' 'drinks' 'ale' 'ales',
+         description "A regiment of bottles stands at attention behind the bar: amber whisky, clear gin, mahogany brandy, and several unlabelled vessels of genuinely alarming colour. One bottle in the back appears to glow faintly, but that might be the firelight. Or it might not. Best not to ask.",
+         before [;
+            Take:
+                "The barkeep's eyebrows contract in a manner suggesting that touching her bottles uninvited would result in consequences both swift and medieval.";
+            Drink:
+                "You'd need to order from the barkeep first. And probably bring proof of a strong constitution.";
+         ],
+    has scenery pluralname;
+
+Object tap_dartboard "dartboard" brass_tap
+    with name 'dartboard' 'dart' 'darts' 'board',
+         description "A cork dartboard hangs on the east wall, its surface so perforated it resembles a map of the lunar surface. Someone has written ~LANDLORD'S RULES: NO THROWING DURING EARTHQUAKES, SÉANCES, OR ARGUMENTS ABOUT THE BOER WAR~ on a card pinned beside it.",
+    has scenery;
+
+Object barkeep "barkeep" brass_tap
+    with name 'barkeep' 'woman' 'publican' 'landlady' 'barmaid' 'bartend',
+         description "A woman built along the generous lines of a Victorian dreadnought, with arms that suggest a past career in either blacksmithing or bare-knuckle boxing. Her hair is pinned up in a gravity-defying arrangement that could conceal several hat pins and possibly a small weapon. She surveys her pub with the eternal vigilance of someone who has seen everything, forgotten nothing, and forgiven very little.",
+         life [;
+            Ask:
+                NPC_Ask_Barkeep(second);
+                rtrue;
+            Tell:
+                "The barkeep listens with one eyebrow raised to a height that suggests polite scepticism. When you finish, she says, ~Right then,~ in a tone that conveys neither agreement nor disagreement but an infinite capacity for judgement.";
+            Give:
+                "The barkeep eyes your offering with deep suspicion. ~I don't take nothing I can't identify, and precious little I can. This is a pub, not a curiosity shop.~";
+            Attack:
+                "You reconsider. The barkeep has the build of someone who could throw you through the front window without spilling a single pint. Discretion is the better part of continued existence.";
+         ],
+    has animate female;
 
 Object pocket_watch "pocket watch"
     with name 'watch' 'pocket' 'timepi' 'fob',
@@ -3045,6 +3205,7 @@ Object solarium_dest "Workshop"
     if (noun == hawking)            { NPC_Talk_Hawking(); rtrue; }
     if (noun == torres)             { NPC_Talk_Torres(); rtrue; }
     if (noun == kai)                { NPC_Talk_Kai(); rtrue; }
+    if (noun == barkeep)            { NPC_Talk_Barkeep(); rtrue; }
     if (noun == copernicus) {
         if (copernicus_named)
             "Copernicus says nothing, because he is a cat. He does, however, emit a single, resonant purr that somehow conveys both affection and total superiority. It's a gift.";

@@ -2152,6 +2152,149 @@ climb machine" "can.t see any such thing"
 run_test "Get on machine hints travel" "$ENTER_SOLARIUM
 get on machine" "TRAVEL TO"
 
+# --- Issue #77: Praed Street & Brass Tap ---
+echo "[Issue #77: Praed Street & Brass Tap]"
+
+# Sequence to reach Praed Street (after Thyme departs)
+REACH_PRAED="knock
+knock
+knock
+east
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+west
+west"
+
+# West blocked before Thyme departs (from workshop entrance, before entering workshop)
+run_test "West blocked before Thyme departs" "knock
+knock
+knock
+west" "literally just started this job"
+
+# West accessible after Thyme departs
+run_test "Praed Street accessible post-departure" "$REACH_PRAED" "Praed Street"
+
+# Praed Street room description
+run_test "Praed Street description: fog" "$REACH_PRAED" "curtain of London fog"
+run_test "Praed Street description: Brass Tap sign" "$REACH_PRAED" "BRASS TAP"
+
+# Workshop entrance description updates after Thyme departs
+run_test "Workshop entrance mentions street post-departure" "knock
+knock
+knock
+east
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+west
+look" "Praed Street"
+
+# Praed Street scenery
+run_test "Examine street gas lamps" "$REACH_PRAED
+examine lamps" "disapproving aunts"
+run_test "Examine street fog" "$REACH_PRAED
+examine fog" "pea-soup"
+run_test "Examine hansom cabs" "$REACH_PRAED
+examine cabs" "ghosts with hooves"
+run_test "Examine hanging sign" "$REACH_PRAED
+examine sign" "wrought-iron bracket"
+run_test "Examine street cobblestones" "$REACH_PRAED
+examine cobblestones" "horse-related matter"
+
+# Praed Street directional blocks
+run_test "Praed Street north blocked" "$REACH_PRAED
+north" "hansom cab"
+run_test "Praed Street west blocked" "$REACH_PRAED
+west" "fog thickens"
+
+# Return east to workshop entrance
+run_test "Return to workshop from Praed Street" "$REACH_PRAED
+east" "narrow alley off Praed Street"
+
+# Brass Tap accessible from Praed Street
+run_test "Brass Tap accessible from Praed Street" "$REACH_PRAED
+south" "Brass Tap"
+run_test "Brass Tap description: bar" "$REACH_PRAED
+south" "mahogany bar"
+run_test "Brass Tap description: barkeep" "$REACH_PRAED
+south" "barkeep"
+run_test "Brass Tap description: coal fire" "$REACH_PRAED
+south" "coal fire"
+
+# Brass Tap scenery
+run_test "Examine mahogany bar" "$REACH_PRAED
+south
+examine bar" "dinner plates"
+
+# Brass Tap: use 'in' from Praed Street
+run_test "Enter Brass Tap with 'in'" "$REACH_PRAED
+in" "Brass Tap"
+
+# Brass Tap scenery examination
+run_test "Examine fire in Brass Tap" "$REACH_PRAED
+south
+examine fire" "OLD TOM"
+run_test "Examine bottles in Brass Tap" "$REACH_PRAED
+south
+examine bottles" "amber whisky"
+run_test "Examine dartboard in Brass Tap" "$REACH_PRAED
+south
+examine dartboard" "lunar surface"
+
+# Brass Tap directional blocks
+run_test "Brass Tap east blocked" "$REACH_PRAED
+south
+east" "dartboard"
+run_test "Brass Tap west blocked" "$REACH_PRAED
+south
+west" "coal fire"
+run_test "Brass Tap south blocked" "$REACH_PRAED
+south
+south" "solid brick"
+
+# Return north from Brass Tap
+run_test "Return to Praed Street from Brass Tap" "$REACH_PRAED
+south
+north" "Praed Street"
+
+# Barkeep NPC
+run_test "Examine barkeep" "$REACH_PRAED
+south
+examine barkeep" "Victorian dreadnought"
+run_test "Talk to barkeep" "$REACH_PRAED
+south
+talk to barkeep" "kidney pie"
+
+# Barkeep Ask topics
+run_test "Ask barkeep about Thyme" "$REACH_PRAED
+south
+ask barkeep about thyme" "tips well"
+run_test "Ask barkeep about beer" "$REACH_PRAED
+south
+ask barkeep about beer" "Whitbread"
+run_test "Ask barkeep about pub" "$REACH_PRAED
+south
+ask barkeep about pub" "1847"
+run_test "Ask barkeep about time travel" "$REACH_PRAED
+south
+ask barkeep about time" "parrot"
+run_test "Ask barkeep about Praed Street" "$REACH_PRAED
+south
+ask barkeep about praed" "Paddington"
+run_test "Ask barkeep about pie" "$REACH_PRAED
+south
+ask barkeep about pie" "Mrs. Gresham"
+run_test "Ask barkeep about cat" "$REACH_PRAED
+south
+ask barkeep about cat" "Old Tom"
+run_test "Ask barkeep about Mrs Pemberton" "$REACH_PRAED
+south
+ask barkeep about pemberton" "scones"
+run_test "Ask barkeep unknown topic" "$REACH_PRAED
+south
+ask barkeep about quantum" "bitter"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"
