@@ -505,7 +505,7 @@ Global machine_raised = false;
 ! BEFOREPARSING — rewrite custom verbs
 ! ===================================================================
 
-[ BeforeParsing i len w;
+[ BeforeParsing i len w w2;
     ! Strip period from "dr." to prevent parser confusion
     for (i = 4: i < 2 + buffer->1: i++) {
         if (buffer->i == '.' && buffer->(i-1) == 'r' && buffer->(i-2) == 'd') {
@@ -542,7 +542,7 @@ Global machine_raised = false;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
-    if (w == 'repair' or 'fix' or 'mend') {
+    if (w == 'repair' or 'fix' or 'mend' or 'install' or 'attach') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
@@ -550,15 +550,20 @@ Global machine_raised = false;
         i->2 = 'p';
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
-    }
-    if (w == 'install' or 'attach') {
-        i = WordAddress(1);
-        len = WordLength(1);
-        i->0 = 'z';
-        i->1 = 'r';
-        i->2 = 'p';
-        while (len > 3) { len--; i->len = ' '; }
-        Tokenise__(buffer, parse);
+        ! Strip preposition + trailing words so "zrp X in/with Y"
+        ! becomes "zrp X" and the parser never fails on extra tokens
+        wn = 2;
+        while (wn <= parse->1) {
+            w2 = NextWord();   ! reads word at wn, advances wn
+            if (w2 == 'in' or 'with' or 'on' or 'into' or 'onto' or 'to' or 'using') {
+                ! Blank from preposition to end of input
+                i = WordAddress(wn - 1);
+                len = (buffer + 2 + buffer->1) - i;
+                while (len > 0) { len--; i->len = ' '; }
+                Tokenise__(buffer, parse);
+                break;
+            }
+        }
     }
     if (w == 'extinguish' or 'smother') {
         i = WordAddress(1);
