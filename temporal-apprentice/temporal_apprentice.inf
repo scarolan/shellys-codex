@@ -1353,16 +1353,21 @@ Object bath_drain "drain grate" roman_bath
          before [;
             Open, Pull, Push:
                 "The grate is far too heavy to move by hand. Something smaller and more determined would need to fish around down there.";
+            Receive:
+                "The grate has no interest in your offerings.";
          ],
     has scenery;
 
-Object gold_aureus "gold aureus" roman_bath
+Object gold_aureus "gold aureus"
     with name 'gold' 'aureus' 'coin' 'money',
          description "A gold aureus bearing the profile of Emperor Nero. He looks smug, which, to be fair, was his default expression. The coin is in excellent condition, possibly because it's only about two years old.",
-         after [;
-             Take: give bath_drain general;
-         ],
-         initial "A gold aureus gleams on the wet floor, freshly batted out from under the drain by an enterprising cat.";
+         initial "A gold aureus gleams on the wet tiles where Copernicus batted it.",
+         before [;
+             Take:
+                 if (parent(self) ~= roman_bath) {
+                     "You can't see any such thing.";
+                 }
+         ];
 
 Object roman_merchants "Merchant's Quarter"
     with description [;
@@ -2233,6 +2238,16 @@ Object hawking "Professor Hawking" cambridge_hall
                         rtrue;
                     }
                 }
+                if (noun == newspaper)
+                    "The synthesiser clicks. ~A newspaper from 2009. I could obtain one of these myself, you know. Proving you are from the future requires rather more than today's headlines.~";
+                if (noun == pocket_watch)
+                    "Hawking's instruments briefly scan the watch. The synthesiser clicks. ~A fine timepiece. But I study the nature of time itself, not its mechanical approximations.~";
+                if (noun == front_door_key)
+                    "The synthesiser clicks. ~A key. How metaphorical. Unfortunately, the door to temporal proof requires something rather less mundane.~";
+                if (noun == cleaning_rag)
+                    "Hawking glances at the rag. The synthesiser clicks. ~I have a team of carers for domestic matters. What I need from you is evidence, not housekeeping.~";
+                if (noun == tin_soldier)
+                    "Hawking's eyes linger on the soldier for a moment. The synthesiser clicks. ~A curious relic. But nostalgia is not proof. I need something that defies the physics of its own era.~";
                 "The synthesiser clicks. ~Interesting. But not enough.~";
          ],
     has animate proper male;
@@ -2654,10 +2669,28 @@ Object copernicus "ginger tabby cat" main_workshop
          ],
          life [;
             Ask:
+                if (second == 'drain' or 'grate' or 'grating') {
+                    if (location == roman_bath && bath_drain hasnt general) {
+                        give bath_drain general;
+                        move gold_aureus to roman_bath;
+                        "Copernicus peers at the grate, ears pricked. He squeezes a paw through the bars and bats around furiously. After a moment of scrabbling, a gold coin skitters across the wet tiles.";
+                    }
+                    if (bath_drain has general)
+                        "Copernicus glances at the grate, unimpressed. He's already done his bit.";
+                }
                 if (copernicus_named)
                     "Copernicus regards you with the serene indifference of a creature who has transcended the need for conversation.";
                 "The cat regards you with the serene indifference of a creature who has transcended the need for conversation.";
             Tell:
+                if (second == 'drain' or 'grate' or 'grating') {
+                    if (location == roman_bath && bath_drain hasnt general) {
+                        give bath_drain general;
+                        move gold_aureus to roman_bath;
+                        "Copernicus peers at the grate, ears pricked. He squeezes a paw through the bars and bats around furiously. After a moment of scrabbling, a gold coin skitters across the wet tiles.";
+                    }
+                    if (bath_drain has general)
+                        "Copernicus glances at the grate, unimpressed. He's already done his bit.";
+                }
                 if (copernicus_named)
                     "Copernicus flicks an ear. This is the feline equivalent of ~I hear you but I couldn't possibly care less.~";
                 "The cat flicks an ear. This is the feline equivalent of ~I hear you but I couldn't possibly care less.~";

@@ -312,6 +312,7 @@ examine machine" "Crookes tube is webbed"
 run_test "Blitz transit: Crookes tube shattered" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -329,6 +330,7 @@ echo "[Install-As-You-Go]"
 run_test "Roman: repair installs lodestone" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -341,6 +343,7 @@ repair machine" "lodestone into the compass housing"
 run_test "Roman: blocked without lodestone installed" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -356,6 +359,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -383,6 +387,7 @@ repair machine" "oscillation circuit is restored"
 run_test "Blitz: tube needs toolkit" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -413,6 +418,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -452,12 +458,17 @@ east" "Only the initiated"
 run_test "Bathhouse accessible" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "Steam billows"
-run_test "Gold aureus in bath" "$ENTER_WORKSHOP
+run_test_absent "Gold aureus not visible before retrieval" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "gold aureus"
-run_test "Take aureus" "$ENTER_WORKSHOP
+run_test "Ask Copernicus about grate retrieves aureus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate" "gold coin skitters"
+run_test "Take aureus after retrieval" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+ask copernicus about grate
 take aureus" "Taken"
 run_test "Swim in bathhouse" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
@@ -473,6 +484,7 @@ south" "Merchant"
 run_test "Trade for lodestone" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -480,6 +492,7 @@ give aureus to felix" "lodestone"
 run_test "Show lodestone to Marcus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -489,6 +502,7 @@ show lodestone to marcus" "commands iron"
 run_test "Temple accessible after Marcus" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -504,6 +518,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -527,6 +542,7 @@ travel to blitz" "impress their centurion"
 run_test "Machine gate: soldiers block repair" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -536,6 +552,7 @@ fix machine" "impress their centurion"
 run_test "Travel to workshop from Roman" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -546,6 +563,7 @@ travel to workshop" "back in the solarium"
 run_test "Solarium has machine after travel home" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -557,6 +575,7 @@ look" "worse for wear"
 run_test "Already home guard" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -569,6 +588,7 @@ TOTAL=$((TOTAL + 1))
 _home_output=$(echo "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -597,6 +617,7 @@ echo "[Time Travel]"
 run_test "Travel to Blitz" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -608,6 +629,7 @@ travel to blitz" "1941"
 run_test "Crookes tube shatters in Blitz transit" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -619,6 +641,7 @@ travel to blitz" "champagne flute"
 run_test "Eras must be sequential" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -634,6 +657,7 @@ echo "[WWII London]"
 BLITZ_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -720,6 +744,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -807,6 +832,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -860,6 +886,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -901,6 +928,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1004,6 +1032,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1160,6 +1189,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1232,6 +1262,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1301,6 +1332,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1370,6 +1402,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1448,6 +1481,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1658,6 +1692,7 @@ echo "[Scenery: Via Principalis]"
 run_test "Examine soldiers on Via" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1669,6 +1704,7 @@ examine soldiers" "mechanical precision"
 run_test "Examine barracks on Via" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1680,6 +1716,7 @@ examine barracks" "paved with meticulous"
 run_test "Examine road on Via" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1691,6 +1728,7 @@ examine road" "paved with meticulous"
 run_test "Examine horizon on Via" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1705,6 +1743,7 @@ echo "[Scenery: Temple of Mithras]"
 run_test "Examine torches in Temple" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1717,6 +1756,7 @@ examine torches" "iron brackets"
 run_test "Examine altar in Temple" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1729,6 +1769,7 @@ examine altar" "clay figurines"
 run_test "Examine carvings in Temple" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1788,6 +1829,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -1977,6 +2019,7 @@ take toolkit
 south
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -2000,6 +2043,7 @@ examine newspaper" "POCKET WATCH IN ROMAN STRATUM"
 run_test "Headline shifts after eleanor_gift" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -2020,6 +2064,7 @@ examine newspaper" "ELEANOR MORRISON RETROSPECTIVE"
 run_test "Headline shifts after church_saved" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
@@ -2074,6 +2119,7 @@ echo "[Issue #75: Machine Insert/Enter/Board]"
 MACHINE_CMD_SETUP="$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
+ask copernicus about grate
 take aureus
 east
 south
