@@ -3074,6 +3074,9 @@ Object solarium_dest "Workshop"
     ! Handle bare "repair" or "install" with no noun when machine is present
     if (noun == 0 && time_machine in location)
         noun = time_machine;
+    if (location == roman_forum && marcus_impressed == false) {
+        "Roman soldiers have surrounded the machine, treating it as a curiosity -- or possibly a siege weapon. You'll need to impress their centurion before they'll let you near it.";
+    }
     if (time_machine in location && noun == time_machine) {
         if (components_installed) {
             "The machine is already repaired. It hums contentedly.";

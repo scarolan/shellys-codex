@@ -485,6 +485,15 @@ look" "surrounded by wary Roman soldiers"
 run_test "Machine gate: soldiers block travel" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 travel to blitz" "impress their centurion"
+run_test "Machine gate: soldiers block repair" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take aureus
+east
+south
+give aureus to felix
+north
+fix machine" "impress their centurion"
 run_test "Travel to workshop from Roman" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
