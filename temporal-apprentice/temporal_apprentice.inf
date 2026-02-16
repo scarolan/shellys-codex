@@ -117,6 +117,7 @@ Global lodestone_last_room = 0;
 
 Global ad_circled = false;
 Global hired = false;
+Global frost_turns = 0;
 
 Global machine_dug_out = false;
 Global machine_raised = false;
@@ -194,6 +195,10 @@ Global machine_raised = false;
     }
     if (topic == 'marmalade' or 'jam' or 'preserv') {
         print "~Ah, the marmalade! Seville orange, my own recipe. Batch 7 is the standard. Batch 12 is experimental -- I added a pinch of temporal resonance powder. Remarkable preservative qualities. Batch 3...~ He lowers his voice. ~Do NOT eat Batch 3. It's not exactly marmalade any more. I'm not sure what it is. But it's Tuesday in one jar and Thursday in the next, and the toast between them has ceased to exist entirely.~^";
+        rtrue;
+    }
+    if (topic == 'wells' or 'magazine' or 'review' or 'serial' or 'novel') {
+        print "Dr. Thyme's left eye twitches. ~That man. THAT MAN.~ He snatches up the magazine and waves it. ~Nickel bars! Quartz rods! A lever you push FORWARD to go into the future! As if time were a omnibus!~ He takes a steadying breath. ~And yet... some of his instincts are uncomfortably sound. The bit about the machine staying in the same spatial coordinates while moving through time -- that's correct. I checked. I was furious.~ He puts the magazine down carefully. ~I've written him a letter. Three letters, actually. The first was scientific. The second was intemperate. The third I burned on Mrs. Pemberton's advice.~^";
         rtrue;
     }
     if (topic == 'pemberton' or 'mrs' or 'tea' or 'scone' or 'scones') {
@@ -276,6 +281,14 @@ Global machine_raised = false;
         } else {
             print "~The walls are sacred. I certainly won't let strangers go around scratching on them.~^";
         }
+        rtrue;
+    }
+    if (topic == 'hourglass' or 'sand' or 'timer' or 'clock') {
+        print "~The hourglass measures the mysteries. One turning of the sand, one cycle of death and rebirth.~ Her eyes are distant. ~The sand falls the same speed whether you watch it or not. Time does not care about your attention. Only your actions.~^";
+        rtrue;
+    }
+    if (topic == 'sundial' or 'gnomon') {
+        print "~The sundial in the Forum? A fine instrument. It tells the citizens when to argue and when to eat. Romans are very particular about both.~^";
         rtrue;
     }
     if (topic == 'help') {
@@ -377,6 +390,10 @@ Global machine_raised = false;
         print "~Poor little thing. Barely says a word since her mum... well. She draws pictures all day. Cats, mostly. Says she had one before the bombing. I think it helps.~^";
         rtrue;
     }
+    if (topic == 'watch' or 'wristwatch' or 'wrist' or 'clock') {
+        print "Tommy glances at his wrist. ~Standard issue. Had it since basic training. Dunkirk, the desert, now this.~ He taps the crystal. ~Still keeps perfect time. More than I can say for the rest of the army.~ He pauses. ~My old man had a pocket watch. Lost it at the Somme. Funny how these things survive what we don't.~^";
+        rtrue;
+    }
     if (topic == 'help') {
         print "~Fix my radio and I'll help with whatever you need. That's the deal, mate.~^";
         rtrue;
@@ -430,6 +447,14 @@ Global machine_raised = false;
         print "~Is that a cat? In a Cambridge college?~ The synthesiser pauses. ~The cat is the most sensible guest here. Cats understand time instinctively. They spend most of it asleep.~^";
         rtrue;
     }
+    if (topic == 'clock' or 'chronophage' or 'grasshopper' or 'corpus') {
+        print "The synthesiser hums. ~The Chronophage. Taylor's masterpiece. A clock that eats time.~ A long pause. ~Most clocks pretend time flows smoothly. The Chronophage shows the truth -- that time moves in lurches, pauses, and sudden leaps. It is deliberately wrong most of the time, correct only once every five minutes.~ Another pause. ~I find it profoundly honest. And profoundly unsettling. Which is, I suppose, the point.~^";
+        rtrue;
+    }
+    if (topic == 'mantel' or 'carriage' or 'pendulum' or 'antique') {
+        print "~The carriage clock? A gift. From someone I have not yet met.~ The synthesiser pauses longer than usual. ~The card said: 'You will understand in time.' I have spent eleven years trying to determine whether that is a promise, a threat, or a pun.~^";
+        rtrue;
+    }
     if (topic == 'help') {
         print "~I suggest you talk to me about time travel and try to convince me you're genuine. Show me something impossible. Scientists respond to evidence, not speeches.~^";
         rtrue;
@@ -450,7 +475,7 @@ Global machine_raised = false;
     if (topic == 'tide' or 'tides' or 'high') {
         if (tide_high)
             print "~High tide. Nothing to be done but wait. The lower levels are sealed until it turns.~ She looks tired. ~If it turns.~^";
-        else if (tide_turns_remaining > 0 && tide_turns_remaining <= 4)
+        else if (tide_turns_remaining > 0 && tide_turns_remaining <= 10)
             print "~The tide is coming in fast. If you need anything from below the waterline, go NOW. I'm not sending a rescue team.~^";
         else if (tide_turns_remaining > 0)
             print "~The tide turns twice a day. When it comes in, the submerged levels are sealed -- current's too strong. Check the markers and plan accordingly.~^";
@@ -474,6 +499,10 @@ Global machine_raised = false;
         print "~There's a research laboratory on the submerged level. Locked tight -- the researchers evacuated in a hurry. Kai might know how to get in. She's explored more of the flooded district than anyone.~^";
         rtrue;
     }
+    if (topic == 'clock' or 'dial' or 'nautical') {
+        print "~The tide clock?~ Torres glances over her shoulder at the brass dial. ~Salvaged from a yacht club in Chelsea. The only clock in London that still tells me something useful.~ She taps the glass. ~Digital clocks need power. That thing runs on physics and a spring. When the power fails -- and it always fails -- the tide clock keeps going.~^";
+        rtrue;
+    }
     if (topic == 'help') {
         print "~Talk to Kai on the walkway. She can help you navigate the flooded areas. And visit the museum -- our curator is quite knowledgeable.~^";
         rtrue;
@@ -494,7 +523,7 @@ Global machine_raised = false;
     if (topic == 'tide' or 'tides' or 'high') {
         if (tide_high)
             print "Kai shakes her head. ~Nothing gets through when the tide's up. I've tried. Even my gear can't handle that current.~^";
-        else if (tide_turns_remaining > 0 && tide_turns_remaining <= 4)
+        else if (tide_turns_remaining > 0 && tide_turns_remaining <= 10)
             print "~The tide's coming in FAST. If you need the lab, go now. I mean it -- NOW.~^";
         else if (tide_turns_remaining > 0)
             print "~Tide comes in twice a day. When it does, the submerged level is off-limits. The current would smash you against a wall. Trust me on that.~^";
@@ -878,7 +907,7 @@ Object workshop_entrance "Workshop Entrance"
             if (components_installed && endgame_phase == 0) {
                 "The alley. The fog. The brass plate. You've seen this before -- from the other side. The heavy oak door is closed. Praed Street is west. Freedom is west. You reach for the door handle.";
             }
-            print "A narrow alley off Praed Street, thick with London fog and the eternal smell of coal smoke. Gas lamps throw jaundiced circles on the cobblestones. A brass plate beside a heavy oak door reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- NO SALESMEN.~^^";
+            print "A narrow alley off Praed Street, its walls sheathed in frost and the cobblestones treacherous with ice. The fog here is bitter -- it cuts through your coat like a knife through wet paper. A brass plate beside a heavy oak door reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- NO SALESMEN.~^^";
             if (door_open)
                 print "The oak door stands open, revealing the workshop beyond to the east.^";
             else
@@ -1129,11 +1158,34 @@ Object entrance_alley "alley" workshop_entrance
     has scenery;
 
 ! ===================================================================
+! FROST DAEMON — The Great Frost of 1895
+! ===================================================================
+
+Object frost_tracker "frost"
+    with daemon [;
+        if (cat_accident) { StopDaemon(self); return; }
+        if (location == praed_street or paddington_station or workshop_entrance) {
+            frost_turns++;
+            switch (frost_turns) {
+                4: "^Your teeth are chattering. The Great Frost has London in its fist -- the puddles on the cobblestones are frozen solid and your breath hangs in the air like small ghosts. You need to get inside.";
+                7: "^Your fingers have gone numb. The cold is no longer an inconvenience -- it's an adversary. Frost is forming on your eyebrows. You can feel the warmth leaving your body like a tenant who's received a final notice.";
+                10: "^You can barely feel your hands. Your vision is narrowing. The lamplighter across the street is a smear of yellow in a world going grey. The cold has stopped hurting, which is the worst sign of all.";
+                12:
+                    print "^The Great Frost claims another victim. They find you the next morning, dusted with rime like a shop-window mannequin, your hand still in your pocket reaching for warmth that wasn't there. The newsboy tells the constable you seemed like a nice enough fellow. The barkeep says she never got a good look at you. The Times runs a paragraph on page nine, between the drainage report and the cricket scores.^";
+                    deadflag = 7;
+            }
+        } else {
+            frost_turns = 0;
+        }
+    ],
+  has;
+
+! ===================================================================
 ! PRAED STREET & THE BRASS TAP (optional 1895 locations)
 ! ===================================================================
 
 Object praed_street "Praed Street"
-    with description "Praed Street stretches east to west through a curtain of London fog so thick you could hang wallpaper on it. Gas lamps march along the pavement like jaundiced sentries, each one illuminating roughly three square feet of cobblestone and several cubic yards of soot. Hansom cabs clatter past at irregular intervals, their drivers hunched against the damp like mushrooms in top hats.^^A narrow alley leads east. A hanging sign to the south reads ~THE BRASS TAP~ in letters that have given up all pretence of being gold. Paddington Station looms to the west.",
+    with description "Praed Street stretches east to west through an icy fog that turns every breath into a small ghost. The Great Frost has London by the throat -- puddles are frozen solid, the cobblestones glitter with rime, and the gas lamps wear caps of ice that scatter the light into jaundiced halos. Hansom cabs clatter past at irregular intervals, their horses' breath billowing like locomotive steam, their drivers huddled in greatcoats and misery.^^A narrow alley leads east. A hanging sign to the south reads ~THE BRASS TAP~ in letters that have given up all pretence of being gold -- and from the door, a sliver of warm light and the smell of coal smoke. Paddington Station looms to the west.",
          e_to workshop_entrance,
          s_to brass_tap,
          in_to brass_tap,
@@ -1143,21 +1195,21 @@ Object praed_street "Praed Street"
 
 Object street_gas_lamps "street gas lamps" praed_street
     with name 'gas' 'lamp' 'lamps' 'light' 'lights' 'street',
-         description "The gas lamps hiss and spit like disapproving aunts. Each one casts a sickly yellow circle on the pavement, creating small islands of visibility in an ocean of fog. One of them flickers in a pattern that is either a fault in the gas supply or Morse code for ~help.~",
+         description "The gas lamps hiss and spit like disapproving aunts, each one wearing a small crown of ice. They cast sickly yellow circles on the frozen pavement, creating dim islands of visibility in the freezing fog. One of them flickers in a pattern that is either a fault in the gas supply or Morse code for ~help.~",
          before [;
             Touch:
-                "The lamp post is slick with condensation and approximately a century of accumulated London. You withdraw your hand and wipe it on your trousers.";
+                "The lamp post is sheathed in ice. Your fingers stick to it briefly and you snatch your hand away with a yelp. Do NOT do that again.";
          ],
     has scenery pluralname;
 
 Object street_cobblestones "cobblestones" praed_street
     with name 'cobbleston' 'cobble' 'cobbles' 'stones' 'pavement' 'road',
-         description "The cobblestones are worn into shallow bowls by generations of traffic, each one collecting a small puddle of rainwater and horse-related matter that you prefer not to examine too closely.",
+         description "The cobblestones are glazed with black ice, worn into shallow bowls by generations of traffic. The puddles that usually collect in them have frozen solid, each one a tiny skating rink for rats.",
     has scenery pluralname;
 
 Object street_fog "fog" praed_street
     with name 'fog' 'smog' 'mist' 'smoke' 'pea',
-         description "The famous London particular -- a pea-soup fog of coal smoke, river damp, and industrial ambition. It tastes faintly of pennies and regret. Somewhere in it, a dog is barking at something only dogs can see.",
+         description "The famous London particular, made worse by the Great Frost -- an icy fog of coal smoke and frozen river damp that stings the eyes and lines the lungs with winter. It tastes of pennies and frostbite. Somewhere in it, a dog is barking at something only dogs can see.",
     has scenery;
 
 Object street_hansom_cabs "hansom cabs" praed_street
@@ -1204,7 +1256,7 @@ Object street_sign "hanging sign" praed_street
 ! ===================================================================
 
 Object paddington_station "Paddington Station"
-    with description "The great iron-and-glass canopy of Paddington Station soars overhead like a cathedral built by engineers instead of bishops. Locomotives hiss and chuff at the platforms, wreathed in steam that mingles with the ever-present London fog. Porters weave between mountains of luggage, and a four-faced clock tower presides over the concourse with the stern authority of Greenwich itself.^^Praed Street is back to the east.",
+    with description "The great iron-and-glass canopy of Paddington Station soars overhead like a cathedral built by engineers instead of bishops. The Great Frost has turned it into an ice palace -- icicles hang from the iron girders like stalactites, and the locomotive steam freezes into crystals before it reaches the roof. Porters stamp their feet between mountains of luggage, breath rising in plumes. The four-faced clock tower presides over the concourse, its hands encased in a thin glaze of frost.^^It's marginally warmer than the street, but only because the locomotives radiate heat. Praed Street is back to the east.",
          e_to praed_street,
          out_to praed_street,
          w_to "The platforms stretch westward, but you have no ticket, no destination, and -- after Greybaum, Tedium and Sons -- no particular desire to flee to Bristol.",
@@ -1237,7 +1289,7 @@ Object station_clock "clock tower" paddington_station
     has scenery;
 
 Object brass_tap "The Brass Tap"
-    with description "A snug Victorian pub that has been slowly pickling in its own atmosphere since the reign of Queen Victoria's grandfather. The ceiling is the colour of strong tea from decades of tobacco smoke. A long mahogany bar dominates one wall, its surface polished to a mirror finish by generations of elbows. Behind it, bottles of varying respectability jostle for space. A coal fire crackles in the grate, providing both warmth and a gentle undertone of carbon monoxide.^^The barkeep, a woman of magnificent proportions and deeply suspicious eyebrows, presides over her domain with the quiet authority of someone who has heard every excuse in the English language and believed none of them.^^The door north leads back to Praed Street.",
+    with description "The warmth hits you like a blessing. A snug Victorian pub that has been slowly pickling in its own atmosphere since the reign of Queen Victoria's grandfather, and on a night like this, the most beautiful room in London. The ceiling is the colour of strong tea from decades of tobacco smoke. A long mahogany bar dominates one wall, its surface polished to a mirror finish by generations of elbows. Behind it, bottles of varying respectability jostle for space. A coal fire crackles magnificently in the grate -- the most important fire in Paddington.^^The barkeep, a woman of magnificent proportions and deeply suspicious eyebrows, presides over her domain with the quiet authority of someone who has heard every excuse in the English language and believed none of them.^^The door north leads back to Praed Street and the killing cold.",
          n_to praed_street,
          out_to praed_street,
          e_to "That wall is occupied by a dartboard, three hunting prints, and a stain of mysterious provenance. There is no exit.",
@@ -1279,6 +1331,11 @@ Object tap_bottles "bottles" brass_tap
 Object tap_dartboard "dartboard" brass_tap
     with name 'dartboard' 'dart' 'darts' 'board',
          description "A cork dartboard hangs on the east wall, its surface so perforated it resembles a map of the lunar surface. Someone has written ~LANDLORD'S RULES: NO THROWING DURING EARTHQUAKES, SÉANCES, OR ARGUMENTS ABOUT THE BOER WAR~ on a card pinned beside it.",
+    has scenery;
+
+Object tap_clock "mantel clock" brass_tap
+    with name 'clock' 'mantel' 'mantle' 'timepiece' 'stopped',
+         description "A once-handsome mantel clock in a walnut case, its face yellowed and its hands frozen at twenty-three minutes past four. According to the barkeep -- who volunteers the information to anyone who makes the mistake of asking -- it stopped on the afternoon of the 14th of March, 1873, when a patron called Stumpy McGuire threw a pickled egg at a rat and hit the clock instead. Nobody has seen fit to repair it. ~It's right twice a day,~ the barkeep says. ~Which is more than I can say for most of my regulars.~",
     has scenery;
 
 Object pint_of_ale "pint of ale"
@@ -1502,6 +1559,11 @@ Object workshop_instruments "instruments" main_workshop
 Object workshop_scorch "scorch mark" main_workshop
     with name 'scorch' 'mark' 'marks' 'burn' 'stain',
          description "A suspicious scorch mark on the ceiling, roughly the shape of a small explosion. Dr. Thyme has written next to it in chalk: ~TUESDAY'S INCIDENT. DO NOT DISCUSS.~",
+    has scenery;
+
+Object workshop_magazine "magazine" main_workshop
+    with name 'magazine' 'review' 'new' 'copy' 'wells' 'serial',
+         description "A recent issue of The New Review, open to a serialised story titled ~The Time Machine~ by one H.G. Wells. The margins are dense with Dr. Thyme's annotations in red ink. ~NICKEL BARS?!~ reads one, with three underlines. ~Quartz rods for temporal resonance -- the man is GUESSING~ reads another. A passage about the Time Traveller's dinner party has been circled with the note: ~Showing off. A real time traveller would never.~ Further down: ~The Eloi are nonsense but the Morlocks are genuinely upsetting.~ On the final page, in smaller, more careful handwriting: ~How does he know so much?~",
     has scenery;
 
 Object corridor_door "corridor door"
@@ -1995,6 +2057,11 @@ Object forum_toga "togas" roman_forum
          description "The togas are uniformly white, which in a city without washing machines is either impressive or deeply suspicious. Several citizens wear the purple-bordered toga praetexta, marking them as persons of importance, or at least persons with access to expensive dye.",
     has scenery pluralname;
 
+Object forum_sundial "sundial" roman_forum
+    with name 'sundial' 'dial' 'gnomon' 'shadow',
+         description "A stone sundial stands on a marble plinth at the forum's centre, its bronze gnomon casting a sharp shadow across Roman numerals. The engineering is precise -- this is no decorative garden ornament but a genuine instrument of civic timekeeping. Citizens glance at it as they pass, checking the hora the way Londoners will one day check their pocket watches. The shadow creeps imperceptibly across the stone face, measuring out the hours of an empire that thinks it will last forever.",
+    has scenery;
+
 Object roman_via "Via Principalis"
     with description [;
             print "A wide, meticulously paved road stretches north towards the military barracks. Roman soldiers drill with mechanical precision, their armour catching the sunlight. The discipline is impressive, the smell less so.^^";
@@ -2061,6 +2128,11 @@ Object temple_altar "altar" roman_temple
 Object mithras_relief "carved relief" roman_temple
     with name 'relief' 'reliefs' 'mithras' 'bull' 'carving' 'carvings' 'sculpture',
          description "Mithras is depicted in the heroic act of slaying the cosmic bull. The bull's expression suggests it was having a perfectly nice day up until that point.",
+    has scenery;
+
+Object temple_hourglass "ritual hourglass" roman_temple
+    with name 'hourglass' 'glass' 'sand' 'timer' 'ritual',
+         description "A bronze-framed hourglass sits on the altar, its sand the colour of dried blood. It measures the duration of the mystery rites -- exactly one hour, though the Romans call it a ~hora.~ The glass bulbs are cloudy with age, and the sand falls with hypnotic patience. You watch a few grains tumble through the neck and feel an odd kinship. Time, it seems, has always been measured by people anxious about running out of it.",
     has scenery;
 
 Object roman_bath "Roman Bathhouse"
@@ -2143,6 +2215,11 @@ Object merchant_amphorae "amphorae" roman_merchants
     with name 'amphorae' 'amphora' 'oil' 'olive',
          description "Tall clay amphorae line the stalls, each one stamped with its contents and origin. Olive oil from Hispania, wine from Gaul, fish sauce from... well, you can smell the fish sauce from here. The garum is particularly aggressive today.",
     has scenery pluralname;
+
+Object merchant_astrolabe "brass astrolabe" roman_merchants
+    with name 'astrolabe' 'brass' 'instrument' 'disc',
+         description "A beautiful brass astrolabe hangs from a merchant's awning, spinning lazily in the breeze. The intricate disc is engraved with star maps and graduated scales -- an astronomical calculator from the Greek tradition, traded along routes stretching from Alexandria to the edge of the known world. The merchant is using it to attract customers, but the craftsmanship is extraordinary. Whoever made this understood that the heavens move in circles, and that knowing when is just as valuable as knowing where.",
+    has scenery;
 
 Object roman_docks "Thames Dockside"
     with description [;
@@ -2345,6 +2422,11 @@ Object bath_fish "small fish" roman_bath
                 "You plunge your hand into the warm water and, after an undignified chase that draws amused commentary from several nearby Romans, manage to grab the wriggling fish. It flaps wetly in your hand, looking personally offended.";
          ];
 
+Object bath_hourglass "water clock" roman_bath
+    with name 'water' 'clock' 'clepsydra' 'hourglass' 'glass' 'bowl' 'vessel',
+         description "A bronze clepsydra -- a water clock -- sits on a marble ledge near the attendant's station. Water drips from a small vessel into a graduated bowl below, marking the passage of the horae with the patient indifference of gravity. The Romans measure their bathing time by it, though from the look of the regulars, nobody has checked it since Claudius was emperor. A small bronze plaque reads HOROLOGIUM AQUAE in letters that have gone green with steam.",
+    has scenery;
+
 ! ===================================================================
 ! WWII LONDON — 1941 (The Blitz)
 ! ===================================================================
@@ -2412,6 +2494,11 @@ Object street_shelter "shelter entrance" blitz_street
          description "The entrance to the underground shelter -- a tube station pressed into service as a refuge from the bombing. Steps lead down into the warm, crowded darkness below.",
     has scenery;
 
+Object distant_clock "distant clock tower" blitz_street
+    with name 'clock' 'tower' 'chime' 'chimes' 'bell' 'bells' 'distant',
+         description "Somewhere through the smoke and darkness, a clock tower still chimes the hours -- defiantly, absurdly, as if punctuality mattered more than survival. The bells are muffled by distance and the drone of bombers, but they carry through the blackout with the stubbornness of a city that refuses to stop keeping time just because someone is trying to blow it up.",
+    has scenery;
+
 Object blitz_shelter "Underground Shelter"
     with description [;
             print "The tube station has been pressed into service as an air raid shelter. Families huddle on platforms with blankets, thermoses, and the grim determination that defines the Blitz spirit. Someone is singing ~We'll Meet Again~ slightly off-key.^^";
@@ -2444,6 +2531,11 @@ Object tommy_radio "wireless set" blitz_shelter
             }
             "The wireless set sits silent and dead. A handwritten label reads ~Type 18 Mk.II.~ One of the valves is clearly burnt out -- a dark, dead tube where a warm glow should be.";
          ],
+    has scenery;
+
+Object tommy_wristwatch "Tommy's wristwatch" blitz_shelter
+    with name 'wristwatch' 'watch' 'wrist',
+         description "A military-issue wristwatch strapped to Tommy's left wrist, its luminous dial glowing faintly green in the shelter's dim light. The crystal is scratched from Dunkirk to North Africa and back, but it still keeps perfect time. Tommy glances at it constantly -- checking how long until the all-clear, how long until dawn, how long until this war ends. The seconds hand sweeps round with the mechanical optimism of something that believes there will always be a next minute.",
     has scenery;
 
 Object blitz_church "Bombed Church"
@@ -2902,7 +2994,7 @@ Object cambridge_gates "College Gates"
                 print "The notice on the gate has been taken down. A janitor sweeps up champagne corks.^^";
                 print "The Porter's Lodge is to the north.^";
             } else if (party_turns_remaining == 0 && visited_hawking) {
-                party_turns_remaining = 14;
+                party_turns_remaining = 40;
                 StartDaemon(hawking);
                 print "From somewhere inside the college, you hear the faint clink of champagne glasses and a burst of laughter. The party is underway -- but from the sound of it, they're not expecting anyone.^^";
                 print "A faded notice pinned to the gate reads: ~PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS -- JUNE 28, 2009.~ Somehow it feels like an hourglass.^^";
@@ -2928,6 +3020,11 @@ Object cambridge_bikes "bicycle rack" cambridge_gates
     with name 'bicycle' 'bike' 'bikes' 'rack',
          description "A tangle of bicycles in various states of repair, chained to a rack, to each other, and to at least one lamppost. This is Cambridge. Bicycles are a way of life, a mode of transport, and occasionally a philosophical statement.",
     has scenery pluralname;
+
+Object corpus_clock "Corpus Clock" cambridge_gates
+    with name 'corpus' 'chronophage' 'grasshopper' 'insect' 'clock' 'gold' 'golden',
+         description "Across the street, mounted on the wall of Corpus Christi College, the Chronophage stares down at you. The massive gold-plated disc has no hands and no numerals -- instead, a giant mechanical grasshopper crawls across its face, devouring the seconds. Blue LEDs cascade beneath the surface in patterns that tell the time, if you know how to read them. A plaque explains that the clock is deliberately inaccurate most of the time, only showing the correct time once every five minutes. You appreciate the honesty. Most clocks pretend time moves smoothly. This one admits it lurches.",
+    has scenery;
 
 Object cambridge_students "students"
     with name 'student' 'students' 'gown' 'gowns' 'book' 'books',
@@ -3102,6 +3199,11 @@ Object study_models "models" cambridge_study
          description "Models of black holes and the cosmos hang from the ceiling like a physicist's mobile. They spin gently in the draft, miniature universes rotating with the casual grace of things that don't need to worry about grant applications.",
     has scenery pluralname;
 
+Object study_clock "mantel clock" cambridge_study
+    with name 'clock' 'mantel' 'pendulum' 'antique' 'carriage',
+         description "An exquisite antique carriage clock sits on the mantelpiece, its brass case polished to a mirror shine. The pendulum swings with metronomic precision behind a bevelled glass panel. It is, you notice, exactly three minutes fast. You feel a sharp jolt of recognition. Every clock Dr. Thyme ever owned ran three minutes fast. He said it was a personal philosophy: ~Always be slightly ahead of time.~ This clock has the same maker's mark as your pocket watch. The same faintly eccentric tick. Coincidence would be the comforting explanation.",
+    has scenery;
+
 Object formula_printout "printout" cambridge_study
     with name 'printout' 'formula' 'equatio' 'tractor' 'feed' 'dot' 'matrix' 'printer',
          description "A dot-matrix printout on perforated tractor-feed paper. Thirty years of theoretical physics, printed by a machine older than most of Hawking's students. The equations describe the geometry of time itself -- the mathematical framework that the journal said simply did not exist yet. When Hawking publishes this, others will build on it. Better instruments. Better materials. You wonder what, exactly, the future will build.",
@@ -3209,20 +3311,28 @@ Object hawking "Professor Hawking" cambridge_hall
                 remove hawking;
                 remove chen;
                 if (has_formula == false) {
-                    print "^Without Hawking's formula, the time machine can never be properly calibrated. You are stranded in 2009 with a machine that can't aim and a physicist who has just destroyed the only work that could help you.^";
+                    print "^Without Hawking's formula, the time machine can never be properly calibrated. You are stranded in 2009 with a machine that can't aim and a physicist who has just destroyed the only work that could help you.^^";
+                    print "=== EPILOGUE: A LIFE OUT OF TIME ===^^";
+                    print "You try the machine anyway. The first attempt lands you in Peterborough. The second deposits you six feet above the Cam. You stop trying.^^";
+                    print "Cambridge is not the worst place to be stranded. You talk your way into a job at the Whipple Museum of the History of Science, where your knowledge of Victorian instruments is considered ~remarkably authentic.~ You publish a paper on brass-gear manufacturing that baffles peer reviewers with its practical detail.^^";
+                    print "You learn to use a mobile telephone. It takes two years.^^";
+                    print "Copernicus adapts with the ease of a creature who has never cared what century it is. Students photograph him on the college sundial and post images to ~the internet.~ He has four thousand followers by Christmas. You have twelve, three of which are bots.^^";
+                    print "The machine sits in a garage on Mill Road, under a tarpaulin. Once a year you polish the brass and check the dials. They work. They just don't aim.^^";
+                    print "In 2017, a young physicist mentions ~Hawking's unpublished temporal harmonics~ in a footnote. You raise your hand. She smiles politely and says the work was ~almost certainly apocryphal.~^^";
+                    print "You go home and feed the cat.^";
                     deadflag = 5;
                 }
                 rtrue;
             }
             ! Escalating warnings while party continues
             switch (party_turns_remaining) {
-                10: switch (location) {
+                30: switch (location) {
                     cambridge_gates:
                         print "^From inside the college, you hear the faint clink of champagne glasses. The party sounds... quiet.^";
                     cambridge_hall:
                         print "^Dr. Chen glances at the clock on the wall. The champagne is going flat.^";
                 }
-                8: switch (location) {
+                20: switch (location) {
                     cambridge_gates:
                         print "^A student passes, glancing at the party notice. ~That was tonight? I thought nobody went.~^";
                     cambridge_porter:
@@ -3232,7 +3342,7 @@ Object hawking "Professor Hawking" cambridge_hall
                     cambridge_garden:
                         print "^The sounds from the Great Hall are thinning. Someone is clearing plates.^";
                 }
-                6: switch (location) {
+                12: switch (location) {
                     cambridge_hall:
                         print "^Dr. Chen is checking her watch more frequently now. ~Professor, perhaps we should...~ Hawking's eyes silence her. But even he looks less certain.^";
                     cambridge_porter:
@@ -3242,7 +3352,7 @@ Object hawking "Professor Hawking" cambridge_hall
                     cambridge_garden:
                         print "^The music from the Great Hall has stopped. You hear chairs being stacked.^";
                 }
-                4: switch (location) {
+                6: switch (location) {
                     cambridge_hall:
                         print "^The synthesiser clicks. ~I gave them every chance. Invitations sent backward through time. A temporal lighthouse. And yet...~ Hawking gazes at the empty chairs. ~Perhaps it is time to accept the obvious.~^";
                     cambridge_porter:
@@ -3250,7 +3360,7 @@ Object hawking "Professor Hawking" cambridge_hall
                     default:
                         print "^The college has gone very quiet. Whatever was happening in the Great Hall seems to be ending.^";
                 }
-                2: switch (location) {
+                3: switch (location) {
                     cambridge_hall:
                         print "^Hawking stares at the study door. The synthesiser clicks. ~The temporal harmonics framework. Thirty years of work. If no one comes to prove it works...~ He pauses. ~Then perhaps it doesn't. And I should destroy it before it misleads the next generation.~^";
                     default:
@@ -3299,7 +3409,7 @@ Object chen "Dr. Sarah Chen" cambridge_hall
 Object future_street "Flooded Street"
     with description [;
             if (tide_turns_remaining == 0 && tide_high == false && visited_future) {
-                tide_turns_remaining = 14;
+                tide_turns_remaining = 40;
                 StartDaemon(flood_water);
                 print "London, 2045. The Thames won. Water laps at what used to be the second floor of Victorian terraces. Buildings rise from the flood like stone islands, connected by catwalks and rope bridges. It's Venice, if Venice had been designed by civil engineers during a nervous breakdown.^^";
                 print "The water is low right now, but brown tide marks climb the brickwork to alarming heights. A faded sign on a nearby wall reads: ~HIGH TIDE SCHEDULE -- CONSULT BEFORE DESCENT.~ Someone has scrawled beneath it: ~RISING FAST TODAY.~^^";
@@ -3307,7 +3417,7 @@ Object future_street "Flooded Street"
                 print "London, 2045. The Thames won. Water laps at what used to be the second floor of Victorian terraces. Buildings rise from the flood like stone islands, connected by catwalks and rope bridges. It's Venice, if Venice had been designed by civil engineers during a nervous breakdown.^^";
                 if (tide_high)
                     print "The water has risen dramatically since you arrived. The stairway to the submerged level is completely flooded -- no diving gear could fight that current.^^";
-                else if (tide_turns_remaining > 0 && tide_turns_remaining <= 4)
+                else if (tide_turns_remaining > 0 && tide_turns_remaining <= 10)
                     print "The water is rising fast. Tide marks that were above your head are now at eye level. The entrance to the submerged level won't be accessible much longer.^^";
                 else if (tide_turns_remaining > 0)
                     print "The water has risen since you arrived. The tide marks on the brickwork are climbing steadily.^^";
@@ -3436,6 +3546,11 @@ Object museum_standard "Evening Standard copies" future_museum
          description "Soggy copies of the Evening Standard, dated 7th March 2038. The headline reads: ~THAMES BARRIER FAILS -- CENTRAL LONDON FLOODS.~ Below the fold: ~PROPERTY PRICES EXPECTED TO STABILISE.~ Some things never change, even when everything does.",
     has scenery pluralname;
 
+Object memorial_clock "memorial clock" future_museum
+    with name 'memorial' 'digital' 'led' 'display' 'frozen' 'clock',
+         description "A large LED display is mounted above the museum entrance, its red digits frozen at 03:17 AM -- 7 MARCH 2038. The moment the Thames Barrier failed. A small plaque reads: ~THE CLOCK STOPPED WHEN THE WATER ROSE. WE KEEP IT STOPPED SO WE REMEMBER.~ The digits flicker occasionally, as if the clock is trying to resume, trying to move past that moment. It can't. Some moments refuse to become the past.",
+    has scenery;
+
 Object future_rooftop "Museum Rooftop"
     with description [;
             print "The rooftop provides a staggering view of flooded London. The old skyline pokes through the water like a half-drowned city playing dead. In the distance, new structures rise on stilts -- the future adapting, as it always does.^^";
@@ -3513,10 +3628,24 @@ Object refuge_desk "desk" future_refuge
          description "Torres's desk is a command centre disguised as furniture. Maps of flooded London cover every surface, annotated with supply routes, safe passages, and tide tables. Reports are stacked in colour-coded folders -- red for urgent, yellow for pending, green for resolved. The green stack is noticeably thin.",
     has scenery;
 
+Object tide_clock "tide clock" future_refuge
+    with name 'tide' 'clock' 'dial' 'brass' 'nautical',
+         description [;
+            print "A handsome brass tide clock hangs on the wall behind Torres's desk -- a proper nautical instrument, not a digital approximation. Its single hand sweeps a dial marked ~HIGH~ at the top and ~LOW~ at the bottom, with six hours of rising and falling tides between. Someone has taped a note beneath it: ~WHEN THE HAND POINTS UP, STAY UP.~";
+            if (tide_high)
+                print " The hand points straight up. High tide.";
+            else if (tide_turns_remaining > 0 && tide_turns_remaining <= 10)
+                print " The hand is climbing fast toward the top of the dial.";
+            else if (tide_turns_remaining > 0)
+                print " The hand is creeping upward. The tide is turning.";
+            "";
+         ],
+    has scenery;
+
 Object future_lab "Submerged Laboratory"
     with description [;
             print "You descend through murky water into what was once a cutting-edge research laboratory. A plaque on the wall reads: ~HAWKING TEMPORAL RESEARCH CENTRE -- FOUNDED 2031.~ So he published. The diving gear keeps you breathing, but the experience is deeply eerie -- fluorescent lights still flicker underwater, illuminating desks where coffee cups float at ceiling height.^^";
-            if (tide_turns_remaining > 0 && tide_turns_remaining <= 4 && has_processor == false)
+            if (tide_turns_remaining > 0 && tide_turns_remaining <= 10 && has_processor == false)
                 print "The current is strengthening. The tide is coming in and the water presses against you with growing urgency.^^";
             if (lab_unlocked == false) {
                 print "A sealed cabinet marked ~CRYSTALLINE PROCESSING UNIT -- AUTHORISED PERSONNEL ONLY~ stands against the far wall. It has an electronic keypad lock.^^";
@@ -3600,7 +3729,7 @@ Object flood_water "floodwater"
                 rtrue;
             }
             ! Escalating warnings as tide rises
-            if (tide_turns_remaining == 10) {
+            if (tide_turns_remaining == 30) {
                 switch (location) {
                     future_street:
                         print "^The water has risen since you arrived. The lapping against the brickwork is louder now, more insistent, like a cat that wants feeding.^";
@@ -3616,7 +3745,7 @@ Object flood_water "floodwater"
                         print "^Torres checks a gauge on the wall and frowns slightly. ~Tide's turning.~^";
                 }
             }
-            if (tide_turns_remaining == 7) {
+            if (tide_turns_remaining == 20) {
                 switch (location) {
                     future_street:
                         print "^The water is definitely higher now. Tide marks that were above your head are at shoulder height. The entrance to the submerged level has narrowed.^";
@@ -3632,7 +3761,7 @@ Object flood_water "floodwater"
                         print "^Torres studies her tide charts. ~It's rising faster than the schedule says. If you need to get below the waterline, I wouldn't dawdle.~^";
                 }
             }
-            if (tide_turns_remaining == 4) {
+            if (tide_turns_remaining == 10) {
                 switch (location) {
                     future_street:
                         print "^The water surges higher with each wave now. The stairway to the submerged level is half-flooded -- still passable, but the current is vicious.^";
@@ -3648,7 +3777,7 @@ Object flood_water "floodwater"
                         print "^Torres slams her fist on the desk. ~High tide in minutes. Anyone below the waterline needs to get out NOW.~^";
                 }
             }
-            if (tide_turns_remaining == 2) {
+            if (tide_turns_remaining == 4) {
                 switch (location) {
                     future_street:
                         print "^The water is nearly at the lip of the stairway. In minutes it will be impassable. If you need anything from below, this is your last chance.^";
@@ -3807,6 +3936,10 @@ Object curator "Museum Curator" future_museum
                     } else {
                         print "~St. Margaret's Church? Lost in the Blitz, I'm afraid. Incendiary bomb, 1941. Nobody got to it in time. We have a photograph in the collection. One of many irreplaceable things this city has lost.~^";
                     }
+                    rtrue;
+                }
+                if (second == 'clock' or 'memorial' or 'led' or 'digital' or 'frozen') {
+                    print "~The memorial clock? Ah.~ The curator's voice softens. ~It stopped at 3:17 AM on the seventh of March, 2038. The exact moment the Barrier failed. We could fix it, of course. But some moments deserve to be remembered exactly as they happened.~ They gaze at the frozen digits. ~The city moved on. The clock didn't. I think that's important.~^";
                     rtrue;
                 }
                 print "The curator adjusts their cardigan. ~I'm afraid I don't know much about that. But do look around -- the museum speaks for itself.~^";
@@ -4056,12 +4189,13 @@ Object solarium_dest "Workshop"
     move coins to player;
     move newspaper to newsboy;
     StartDaemon(dr_thyme);
+    StartDaemon(frost_tracker);
     SetTime(14*60+48, 1);   ! 2:48 PM (3 min fast), +1 min/turn
 
-    print "London, 1895.^^";
+    print "London, 1895. The Great Frost.^^";
     print "The door of Greybaum, Tedium and Sons closes behind you with a finality usually reserved for coffin lids. Sacked. After four years of impeccable ledger-keeping, one small fire in the filing room, and an honest difference of opinion about whether the senior partner's toupee counted as a business expense.^^";
-    print "You step onto Praed Street with nothing but your grandfather's pocket watch and a handful of coins -- your final wages. The London fog wraps around you like a damp, disapproving relative.^^";
-    print "You'll need to find work. Perhaps a newspaper would have something in the classifieds.^^";
+    print "You step onto Praed Street with nothing but your grandfather's pocket watch and a handful of coins -- your final wages. The cold hits you like a wall. The Great Frost has London in its grip -- the worst winter in living memory. Puddles are frozen solid, breath turns to ice, and the fog cuts through your coat as if it isn't there.^^";
+    print "You need to get out of this cold. And you'll need to find work. Perhaps a newspaper would have something in the classifieds.^^";
     print "Type HELP for a list of commands.^^";
 ];
 
@@ -4101,6 +4235,10 @@ Object solarium_dest "Workshop"
     }
     if (deadflag == 6) {
         print "stranded by the tide";
+        rtrue;
+    }
+    if (deadflag == 7) {
+        print "frozen to death";
         rtrue;
     }
 ];

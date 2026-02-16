@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 INF="temporal_apprentice.inf"
-Z5="temporal_apprentice.z5"
+Z5="temporal_apprentice.z8"
 DFROTZ="/usr/games/dfrotz"
 INFORM6="inform6"
 LIB="+/usr/local/share/inform6/lib/"
@@ -50,7 +50,7 @@ run_test_absent() {
 }
 
 echo "=== Compiling $INF ==="
-"$INFORM6" "$LIB" "$INF" "$Z5"
+"$INFORM6" -v8 "$LIB" "$INF" "$Z5"
 echo ""
 
 echo "=== Running tests ==="
@@ -1436,92 +1436,39 @@ give soldier to hawking" "nostalgia is not proof"
 
 # --- Cambridge Party Timer ---
 echo "[Cambridge Party Timer]"
+# Timer is 40 turns. After arrival daemon fires: 39 effective turns.
+# Warnings at: 30, 20, 12, 6, 3, 1. Party ends at 0.
+# Generate wait sequences using printf
+PARTY_WAIT_9=$(printf 'z\n%.0s' {1..9})     # reach turn 30
+PARTY_WAIT_19=$(printf 'z\n%.0s' {1..19})   # reach turn 20
+PARTY_WAIT_38=$(printf 'z\n%.0s' {1..38})   # reach turn 1
+PARTY_WAIT_39=$(printf 'z\n%.0s' {1..39})   # reach turn 0
+PARTY_WAIT_33=$(printf 'z\n%.0s' {1..33})   # reach turn 0 from hall (6 extra moves to get invitation + enter)
 run_test "Party sound on arrival" "$CAMBRIDGE_SETUP" "champagne glasses"
 run_test "Party hourglass hint" "$CAMBRIDGE_SETUP" "hourglass"
 run_test "Party wind-down warning" "$CAMBRIDGE_SETUP
-z
-z
-z
-z
-z
-z" "student passes"
+$PARTY_WAIT_19" "student passes"
 run_test "Convince Hawking stops timer" "$CONVINCE_SETUP
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z" "temporal harmonics"
+$PARTY_WAIT_39" "temporal harmonics"
 run_test "Party ends if too slow" "$CAMBRIDGE_SETUP
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z" "Destroy it"
+$PARTY_WAIT_38" "Destroy it"
 run_test "Party over: game ends" "$CAMBRIDGE_SETUP
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z" "stranded in 2009"
+$PARTY_WAIT_39" "stranded in 2009"
+run_test "Stranded epilogue: Whipple Museum" "$CAMBRIDGE_SETUP
+$PARTY_WAIT_39" "Whipple Museum"
+run_test "Stranded epilogue: cat has followers" "$CAMBRIDGE_SETUP
+$PARTY_WAIT_39" "four thousand followers"
 run_test "Party over: hall empty" "$CAMBRIDGE_SETUP
 north
+east
+take invitation
+west
 give invitation to porter
 north
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-look" "Nobody came"
+$PARTY_WAIT_33
+look" "no one came"
 run_test "Destroy it warning from gates" "$CAMBRIDGE_SETUP
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z" "Destroy it"
+$PARTY_WAIT_38" "Destroy it"
 
 # --- Cambridge Install-As-You-Go ---
 echo "[Cambridge Install-As-You-Go]"
@@ -1751,107 +1698,65 @@ travel to workshop" "crystal is cracked"
 
 # --- Future High Tide ---
 echo "[Future High Tide]"
+# Timer is 40 turns. After arrival daemon fires: 39 effective turns.
+# Warnings at: 30, 20, 10, 4, 1. Tide hits at 0.
+TIDE_WAIT_9=$(printf 'z\n%.0s' {1..9})      # reach turn 30
+TIDE_WAIT_29=$(printf 'z\n%.0s' {1..29})    # reach turn 10
+TIDE_WAIT_35=$(printf 'z\n%.0s' {1..35})    # reach turn 4
+TIDE_WAIT_38=$(printf 'z\n%.0s' {1..38})    # reach turn 1
+TIDE_WAIT_39=$(printf 'z\n%.0s' {1..39})    # reach turn 0
+
 # Tide warning on arrival
 run_test "Tide warning on arrival" "$FUTURE_SETUP" "RISING FAST TODAY"
 
-# Tide water rising warning (turn 10: after 3 player actions)
+# Tide water rising warning (turn 30: 9 waits)
 run_test "Tide rising warning" "$FUTURE_SETUP
-z
-z
-z" "cat that wants feeding"
+$TIDE_WAIT_9" "cat that wants feeding"
 
-# Kai tide marker warning (turn 7: go east, then wait)
+# Kai tide marker warning (turn 20: 2 waits + east + 16 waits)
+TIDE_KAI=$(printf 'z\n%.0s' {1..16})
 run_test "Kai tide marker warning" "$FUTURE_SETUP
 z
 z
 east
-z
-z
-z" "water.s not waiting"
+$TIDE_KAI" "water.s not waiting"
 
-# Torres tide warning (turn 7: go west, then wait)
+# Torres tide warning (turn 20: 2 waits + west + 16 waits)
 run_test "Torres tide warning" "$FUTURE_SETUP
 z
 z
 west
-z
-z
-z" "wouldn.t dawdle"
+$TIDE_KAI" "wouldn.t dawdle"
 
-# Tide surging warning (turn 4: 9 waits)
+# Tide surging warning (turn 10: 29 waits)
 run_test "Tide surging warning" "$FUTURE_SETUP
-z
-z
-z
-z
-z
-z
-z
-z
-z" "current is vicious"
+$TIDE_WAIT_29" "current is vicious"
 
-# Tide last chance warning (turn 2: 11 waits)
+# Tide last chance warning (turn 4: 35 waits)
 run_test "Tide last chance warning" "$FUTURE_SETUP
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z" "last chance"
+$TIDE_WAIT_35" "last chance"
 
-# Tide desperate warning (turn 1: 12 waits)
+# Tide desperate warning (turn 1: 38 waits)
 run_test "Tide desperate warning" "$FUTURE_SETUP
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z" "One more surge"
+$TIDE_WAIT_38" "One more surge"
 
-# Tide death: game over without processor (13 waits)
+# Tide death: game over without processor (39 waits)
 run_test "Tide death without processor" "$FUTURE_SETUP
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z
-z" "stranded in 2045"
+$TIDE_WAIT_39" "stranded in 2045"
 
-# Swept from lab when tide hits
+# Swept from lab when tide hits (5 turns to get gear + 33 waits + down to lab)
+TIDE_WAIT_33=$(printf 'z\n%.0s' {1..33})
 run_test "Swept from lab by tide" "$FUTURE_SETUP
 north
 up
 open panel
 down
 south
-z
-z
-z
-z
-z
-z
-z
+$TIDE_WAIT_33
 down" "sweeps you upward"
 
 # Processor stops tide timer (get processor, then wait many turns — game continues)
+TIDE_WAIT_40=$(printf 'z\n%.0s' {1..40})
 run_test "Processor stops tide timer" "$FUTURE_SETUP
 north
 up
@@ -1861,14 +1766,7 @@ south
 down
 open cabinet
 take processor
-z
-z
-z
-z
-z
-z
-z
-z
+$TIDE_WAIT_40
 inventory" "quantum processor"
 
 # Tide-aware street description (rising)
@@ -2463,6 +2361,44 @@ south
 south
 examine boats" "flat-bottomed cargo"
 
+# --- Timepieces ---
+echo "[Timepieces]"
+run_test "Examine water clock in Bathhouse" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+examine water clock" "clepsydra"
+run_test "Examine clepsydra in Bathhouse" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+examine clepsydra" "HOROLOGIUM AQUAE"
+run_test "Examine pub clock" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+west
+west
+south
+examine clock" "twenty-three minutes past four"
+run_test "Examine sundial in Forum" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine sundial" "bronze gnomon"
+run_test "Examine workshop clock" "$ENTER_WORKSHOP
+examine clock" "Adjusted for Temporal Drift"
+run_test "HG Wells magazine in workshop" "$ENTER_WORKSHOP
+examine magazine" "The Time Machine"
+run_test "Wells margin notes: NICKEL BARS" "$ENTER_WORKSHOP
+examine magazine" "NICKEL BARS"
+run_test "Ask Thyme about Wells" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+ask dr thyme about wells" "Nickel bars"
+run_test "Examine study clock in Cambridge" "$CONVINCE_SETUP
+east
+examine clock" "three minutes fast"
+run_test "Examine tide clock in Future" "$FUTURE_SETUP
+west
+examine tide clock" "WHEN THE HAND POINTS UP"
+
 # --- New scenery: Main Workshop ---
 echo "[Scenery: Main Workshop]"
 run_test "Examine jars in Main Workshop" "$ENTER_WORKSHOP
@@ -2877,6 +2813,89 @@ north
 up
 examine antenna" "panel"
 
+# --- Timepieces ---
+echo "[Timepieces]"
+# Roman: sundial in forum
+run_test "Examine sundial in forum" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+examine sundial" "bronze gnomon"
+# Roman: hourglass in temple (need lodestone chain + Marcus + Livia to enter)
+run_test "Examine hourglass in temple" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east
+examine hourglass" "colour of dried blood"
+# Roman: astrolabe at merchants
+run_test "Examine astrolabe at merchants" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+south
+examine astrolabe" "star maps"
+# Blitz: distant clock tower
+run_test "Examine clock tower in Blitz" "$BLITZ_SETUP
+examine clock" "clock tower still chimes"
+# Blitz: Tommy's wristwatch
+run_test "Examine Tommy's wristwatch" "$BLITZ_SETUP
+down
+examine wristwatch" "luminous dial"
+# Cambridge: Corpus Clock at gates
+run_test "Examine Corpus Clock" "$CAMBRIDGE_SETUP
+examine corpus" "Chronophage"
+# Cambridge: mantel clock in study
+run_test "Examine mantel clock in study" "$CONVINCE_SETUP
+east
+examine mantel clock" "three minutes fast"
+# Future: memorial clock in museum
+run_test "Examine memorial clock in museum" "$FUTURE_SETUP
+north
+examine memorial clock" "03:17 AM"
+# Future: tide clock in refuge
+run_test "Examine tide clock in refuge" "$FUTURE_SETUP
+west
+examine tide clock" "WHEN THE HAND POINTS UP"
+
+# --- Timepiece NPC Dialogue ---
+echo "[Timepiece NPC Dialogue]"
+# Livia about hourglass
+run_test "Ask Livia about hourglass" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+show lodestone to marcus
+east
+ask livia about hourglass" "measures the mysteries"
+# Livia about sundial
+run_test "Ask Livia about sundial" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+show lodestone to marcus
+east
+ask livia about sundial" "when to argue"
+# Tommy about his wristwatch
+run_test "Ask Tommy about wristwatch" "$BLITZ_SETUP
+down
+ask tommy about watch" "Standard issue"
+# Hawking about Chronophage
+run_test "Ask Hawking about Chronophage" "$CONVINCE_SETUP
+ask hawking about chronophage" "eats time"
+# Hawking about mantel clock
+run_test "Ask Hawking about mantel clock" "$CONVINCE_SETUP
+ask hawking about mantel" "someone I have not yet met"
+# Torres about tide clock
+run_test "Ask Torres about tide clock" "$FUTURE_SETUP
+west
+ask torres about clock" "yacht club"
+# Curator about memorial clock
+run_test "Ask curator about memorial clock" "$FUTURE_SETUP
+north
+ask curator about memorial" "3:17 AM"
+
 # --- Issue #45: Missing scenery ---
 echo "[Issue #45: Missing Scenery]"
 run_test_absent "Newspaper not in inventory at start" "inventory" "carrying.*newspaper"
@@ -3069,7 +3088,7 @@ west" "Praed Street stretches"
 run_test "Praed Street accessible from start" "look" "Praed Street"
 
 # Praed Street room description
-run_test "Praed Street description: fog" "$REACH_PRAED" "curtain of London fog"
+run_test "Praed Street description: frost" "$REACH_PRAED" "Great Frost"
 run_test "Praed Street description: Brass Tap sign" "$REACH_PRAED" "BRASS TAP"
 
 # Workshop entrance always mentions Praed Street west
@@ -3080,13 +3099,13 @@ look" "Praed Street"
 run_test "Examine street gas lamps" "$REACH_PRAED
 examine lamps" "disapproving aunts"
 run_test "Examine street fog" "$REACH_PRAED
-examine fog" "pea-soup"
+examine fog" "Great Frost"
 run_test "Examine hansom cabs" "$REACH_PRAED
 examine cabs" "ghosts with hooves"
 run_test "Examine hanging sign" "$REACH_PRAED
 examine sign" "wrought-iron bracket"
 run_test "Examine street cobblestones" "$REACH_PRAED
-examine cobblestones" "horse-related matter"
+examine cobblestones" "black ice"
 
 # Praed Street directional blocks
 run_test "Praed Street north blocked" "$REACH_PRAED
@@ -3394,7 +3413,7 @@ run_test "Door didn't open by itself" "$ENDGAME_CMD" "didn.t open by itself"
 # --- Opening deadline ---
 echo "[Opening Deadline]"
 # 27 turns of 'z' (wait) = 2:48 + 27 = 3:15 PM, triggers deadline
-WASTE_TIME="z
+WASTE_TIME="south
 z
 z
 z
@@ -3449,6 +3468,44 @@ z
 z
 z
 z" "cathedral"
+
+# --- Great Frost ---
+echo "[Great Frost]"
+FROST_WAIT=$(printf 'z\n%.0s' {1..4})
+run_test "Frost warning at turn 4" "$FROST_WAIT" "Great Frost has London"
+FROST_DEATH=$(printf 'z\n%.0s' {1..12})
+run_test "Frost kills at turn 12" "$FROST_DEATH" "dusted with rime"
+run_test "Pub resets frost" "z
+z
+z
+south
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "coal fire"
+run_test_absent "No frost death indoors" "south
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "frozen to death"
 
 echo ""
 echo "=== Results ==="
