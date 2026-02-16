@@ -836,6 +836,9 @@ Object workshop_entrance "Workshop Entrance"
             if (endgame_phase == 1) {
                 "You are pressed against the wall behind the front door. Through the eastern doorway you can hear your past self rummaging on the shelves while Dr. Thyme mutters about Tuesday spanners. Neither of them is looking this way. The workshop is east.";
             }
+            if (components_installed && endgame_phase == 0) {
+                "The alley. The fog. The brass plate. You've seen this before -- from the other side. The heavy oak door is closed. Praed Street is west. Freedom is west. You reach for the door handle.";
+            }
             print "A narrow alley off Praed Street, thick with London fog and the eternal smell of coal smoke. Gas lamps throw jaundiced circles on the cobblestones. A brass plate beside a heavy oak door reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- NO SALESMEN.~^^";
             if (door_open)
                 print "The oak door stands open, revealing the workshop beyond to the east.^";
@@ -844,6 +847,10 @@ Object workshop_entrance "Workshop Entrance"
             print "The alley continues west to Praed Street.^";
         ],
          e_to [;
+            if (endgame_knocks_heard && endgame_phase == 0) {
+                BootstrapStart();
+                rtrue;
+            }
             if (endgame_phase == 1) {
                 BootstrapCross();
                 rtrue;
@@ -852,6 +859,10 @@ Object workshop_entrance "Workshop Entrance"
             "The heavy oak door is firmly closed. Perhaps you should knock.";
          ],
          in_to [;
+            if (endgame_knocks_heard && endgame_phase == 0) {
+                BootstrapStart();
+                rtrue;
+            }
             if (endgame_phase == 1) {
                 BootstrapCross();
                 rtrue;
@@ -860,11 +871,42 @@ Object workshop_entrance "Workshop Entrance"
             "The heavy oak door is firmly closed. Perhaps you should knock.";
          ],
          w_to [;
+            if (components_installed && endgame_phase == 0) {
+                the_time = arrival_time;
+                endgame_knocks_heard = true;
+                endgame_turns = 0;
+                score = score + 5;
+                print "You grasp the door handle. Cold brass. Almost there. Almost out. Almost --^^";
+                print "KNOCK. KNOCK. KNOCK.^^";
+                print "From the other side of the door. Six inches from your face.^^";
+                print "You let go of the handle as if it's red hot. Your hand goes to your pocket watch. ";
+                PrintTime12(the_time);
+                print ". The exact time you arrived. You remember this. You remember standing on the other side of this door, rain starting, checking this very watch, about to walk away --^^";
+                print "It didn't open by itself.^^";
+                print "The knocking has stopped. Whoever is out there is waiting. You could open the door...^";
+                rtrue;
+            }
             if (endgame_phase == 1)
                 "You can't leave. If your past self finds you outside, the loop breaks -- and everything you've done unravels.";
             return praed_street;
          ],
          each_turn [;
+            if (endgame_knocks_heard && endgame_phase == 0) {
+                endgame_turns++;
+                if (endgame_turns == 1)
+                    print "^Through the door you can hear breathing. Shifting weight. Your past self is deciding whether to leave. You know what you decided.^";
+                if (endgame_turns == 2) {
+                    print "^You look down at your hands. They're... translucent. You can see the cobblestones through your fingers. If your past self walks away, none of this ever happened. None of YOU ever happened.^";
+                }
+                if (endgame_turns >= 3) {
+                    print "^Footsteps. Receding. Your past self has turned away and is walking back toward Praed Street.^^";
+                    print "You watch your hands dissolve into fog. Your arms. The pocket watch falls through fingers that are no longer there and clatters on the cobblestones.^^";
+                    print "The last thing you see is the brass plate -- DR. J. THYME -- TEMPORAL ENGINEERING -- gleaming in the gaslight. Then the fog takes you and there is nothing at all.^^";
+                    print "=== PARADOX COLLAPSE ===^^";
+                    print "You never opened the door. Your past self walked away. Without an apprentice, Dr. Thyme finished his tea, locked up the workshop, and placed a new advert in the paper the following week. The time machine gathered dust. The cat slept on it every afternoon but never once activated it by accident, because cats only cause temporal incidents when there's someone around to blame.^^";
+                    deadflag = 3;
+                }
+            }
             if (endgame_phase == 1) {
                 endgame_turns++;
                 if (endgame_turns == 1)
@@ -916,6 +958,26 @@ Object entrance_door "oak door"
                     if (door_open)
                         "The door is already open.";
                     "The door doesn't budge. It seems to be stuck -- or perhaps it only opens from outside.";
+                }
+                if (endgame_knocks_heard) {
+                    BootstrapStart();
+                    rtrue;
+                }
+                if (components_installed && endgame_phase == 0) {
+                    ! Same trigger as trying to go west
+                    the_time = arrival_time;
+                    endgame_knocks_heard = true;
+                    endgame_turns = 0;
+                    score = score + 5;
+                    print "You grasp the door handle. Cold brass. Almost there. Almost out. Almost --^^";
+                    print "KNOCK. KNOCK. KNOCK.^^";
+                    print "From the other side of the door. Six inches from your face.^^";
+                    print "You let go of the handle as if it's red hot. Your hand goes to your pocket watch. ";
+                    PrintTime12(the_time);
+                    print ". The exact time you arrived. You remember this. You remember standing on the other side of this door, rain starting, checking this very watch, about to walk away --^^";
+                    print "It didn't open by itself.^^";
+                    print "The knocking has stopped. Whoever is out there is waiting. You could open the door...^";
+                    rtrue;
                 }
                 if (door_open)
                     "The door is already open.";
@@ -1241,6 +1303,10 @@ Object main_workshop "Main Workshop"
                 "You are standing in the workshop. Dr. Thyme is hunched over the workbench, oblivious. Your past self has their back to you, rummaging on the shelves. Neither of them knows you're here. The store room door is open to the north.";
             }
             print "The workshop is a cathedral of improbable engineering. Brass gears the size of dinner plates mesh with copper pipes that disappear into the walls. Glass jars of luminous liquids line shelves alongside what appear to be several jars of marmalade. The ceiling is lost in a tangle of tubes and wires.^^";
+            if (components_installed && endgame_phase == 0) {
+                print "Dr. Thyme is hunched over the workbench, face three inches from something intricate, muttering to himself about calibration constants. He hasn't noticed you. He hasn't noticed anything except whatever he's adjusting with a pair of very small tweezers.^^";
+                "The entrance is west. The front door is... right there. You could just... leave. Quietly.";
+            }
             if (cat_accident == false) {
                 if (hired == false && thyme_departed == false) {
                     print "A man is hunched over the workbench. He glances up, sees you, and scowls. ~No salesmen! Can't you read the plate?~ He returns to his work.^^";
@@ -1272,10 +1338,6 @@ Object main_workshop "Main Workshop"
                 print "The workbench holds tools and the remains of Dr. Thyme's tea (cold, abandoned). The store room is north, the entrance west, and the corridor east.^";
         ],
          w_to [;
-            if (endgame_knocks_heard) {
-                BootstrapStart();
-                rtrue;
-            }
             if (endgame_phase == 2)
                 "You just came from there. Your past self could turn around at any moment. The store room is north.";
             return workshop_entrance;
@@ -1302,15 +1364,6 @@ Object main_workshop "Main Workshop"
             return solarium;
          ],
          each_turn [;
-            if (endgame_knocks_heard) {
-                endgame_turns++;
-                if (endgame_turns == 1)
-                    print "^The knocking has stopped. Whoever is outside -- whoever YOU were -- is waiting. You should open the door before your past self leaves.^";
-                if (endgame_turns >= 2) {
-                    print "^You can't wait any longer. If your past self walks away, the loop breaks -- and you with it.^^";
-                    BootstrapStart();
-                }
-            }
             if (endgame_phase == 2) {
                 endgame_turns++;
                 if (endgame_turns == 1)
@@ -3593,6 +3646,10 @@ Object solarium_dest "Workshop"
 ! DEATH MESSAGE (multiple endings)
 ! ===================================================================
 
+[ DeathMessage;
+    print "You never existed";
+];
+
 [ PrintEnding;
     if (score >= MAX_SCORE) {
         print "^^=== PERFECT ENDING ===^^";
@@ -3623,10 +3680,10 @@ Object solarium_dest "Workshop"
     endgame_phase = 1;
     endgame_turns = 0;
     StopDaemon(copernicus);
-    print "You ease the door open a crack and peer through. There you are -- younger by an afternoon, damp from the fog, clutching a copy of the Times. You watch your past self fish out a pocket watch, check the time, snap the case shut. As you watch, your past self glances down the alley, shifts weight, and starts to turn away.^^";
-    print "No.^^";
-    print "You yank the door wide and press yourself flat against the wall behind it, heart slamming. Footsteps stop. A pause. Then your past self turns back, stares at the open doorway -- at the empty doorway -- and steps cautiously inside.^^";
-    print "You hold your breath behind the door as your past self looks around the entrance, then walks east into the workshop. You hear Dr. Thyme's voice: ~The number four spanner. On the shelf behind you. The brass one.~^^";
+    print "You ease the door open a crack and peer through. There you are -- younger by an afternoon, damp from the fog, clutching a copy of the Times. You watch your past self fish out a pocket watch, check the time, snap the case shut. You remember doing that. You remember the exact weight of the watch in your hand.^^";
+    print "Your past self glances down the alley, shifts weight, and starts to turn away.^^";
+    print "You yank the door wide and press yourself flat against the wall behind it, heart hammering. Footsteps stop. A pause. Then your past self turns back, stares at the open doorway -- at the empty doorway -- and steps cautiously inside.^^";
+    print "You hold your breath behind the door as your past self walks east into the workshop. Muffled voices -- ~No salesmen!~ -- then a rustle of newspaper -- then, after a pause: ~The number four spanner. On the shelf. The brass one.~^^";
     print "You are alone behind the front door. Through the eastern doorway, you can hear your past self rummaging on the shelves.^";
     PlayerTo(workshop_entrance, 1);
 ];
@@ -4147,23 +4204,7 @@ Object solarium_dest "Workshop"
         }
         workshop_cleaned = true;
         score = score + 5;
-        print "You spend a surprisingly therapeutic twenty minutes tidying the workshop. Tools are returned to their racks. Marmalade jars are alphabetised (Dr. Thyme has opinions about marmalade). Copper shavings are swept. The workbench is cleared.^^";
-        if (components_installed) {
-            endgame_knocks_heard = true;
-            endgame_turns = 0;
-            the_time = arrival_time;
-            print "As you hang up the dustpan, you hear it.^^";
-            print "Three knocks on the front door.^^";
-            print "Knock. Knock. Knock.^^";
-            print "Your hand goes to your pocket watch. ";
-            PrintTime12(the_time);
-            print ". The exact time you arrived. You remember standing in that alley, rain starting, checking this very watch before the door swung open by itself.^^";
-            print "It didn't open by itself.^^";
-            print "The door creaks on its hinges but doesn't open. Whoever is out there -- whoever YOU are -- is waiting. You could open the door...^";
-        } else {
-            "The workshop gleams. Dr. Thyme will be pleased. Now, about that time machine...";
-        }
-        rtrue;
+        "You spend a surprisingly therapeutic twenty minutes tidying the workshop. Tools are returned to their racks. Marmalade jars are alphabetised (Dr. Thyme has opinions about marmalade). Copper shavings are swept. The workbench is cleared. Dr. Thyme will be pleased.";
     }
     "There's nothing here that needs cleaning.";
 ];

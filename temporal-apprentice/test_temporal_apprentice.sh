@@ -1623,8 +1623,9 @@ up
 repair machine
 travel to workshop
 west
-clean
-open front door
+west
+west
+open door
 east
 north"
 run_test "Install all components" "$ENDGAME_CMD" "fully repaired"
@@ -1633,7 +1634,7 @@ run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 189"
 
 # --- Bootstrap Paradox Endgame ---
 echo "[Bootstrap Paradox]"
-run_test "Three knocks after tidying" "$ENDGAME_CMD" "Knock. Knock. Knock"
+run_test "Knocks at the door" "$ENDGAME_CMD" "KNOCK. KNOCK. KNOCK"
 run_test "Player recognises own knocks" "$ENDGAME_CMD" "The exact time you arrived"
 run_test "Bootstrap loop closes" "$ENDGAME_CMD" "loop is closed"
 run_test "Dr Thyme returns after bootstrap" "$ENDGAME_CMD" "Dr. Thyme has returned from tea"
@@ -1701,8 +1702,9 @@ up
 repair machine
 travel to workshop
 west
-clean
-open front door"
+west
+west
+open door"
 run_test "Phase 1: behind the door" "$ENDGAME_DOOR" "alone behind the front door"
 run_test "Phase 1: east hint" "$ENDGAME_DOOR" "workshop is east"
 run_test "Phase 1: can't leave" "$ENDGAME_DOOR
@@ -1777,14 +1779,15 @@ up
 repair machine
 travel to workshop
 west
-clean
+west
+west
 look
 look
 look
 look
 look
 look"
-run_test "Bootstrap auto-triggers after delay" "$ENDGAME_AUTO" "loop is closed"
+run_test "Paradox collapse if door not opened" "$ENDGAME_AUTO" "PARADOX COLLAPSE"
 
 # --- Ending Tiers ---
 echo "[Ending Tiers]"
@@ -1859,8 +1862,9 @@ up
 repair machine
 travel to workshop
 west
-clean
-open front door
+west
+west
+open door
 east
 north"
 run_test "Rough ending (critical path + Eleanor gift)" "$ROUGH_ENDGAME" "ROUGH ENDING"
@@ -1942,8 +1946,9 @@ up
 repair machine
 travel to workshop
 west
-clean
-open front door
+west
+west
+open door
 east
 north"
 run_test "Good ending (critical path + 3 side quests)" "$GOOD_ENDGAME" "GOOD ENDING"
@@ -2030,8 +2035,9 @@ up
 repair machine
 travel to workshop
 west
-clean
-open front door
+west
+west
+open door
 east
 north"
 run_test "Perfect ending (all side quests)" "$PERFECT_ENDGAME" "PERFECT ENDING"
