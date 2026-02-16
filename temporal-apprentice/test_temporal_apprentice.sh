@@ -3059,6 +3059,65 @@ run_test "Endgame knocks match arrival time" "$ENDGAME_CMD" "exact time you arri
 run_test "Bootstrap: past self checks watch" "$ENDGAME_CMD" "watch your past self fish out a pocket watch"
 run_test "Door didn't open by itself" "$ENDGAME_CMD" "didn.t open by itself"
 
+# --- Opening deadline ---
+echo "[Opening Deadline]"
+# 27 turns of 'look' = 2:48 + 27 = 3:15 PM, triggers deadline
+WASTE_TIME="look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look"
+run_test "Thyme leaves at quarter past three" "$WASTE_TIME" "enormous overcoat"
+run_test "Missed appointment ends game" "$WASTE_TIME" "Somewhere in London there was a job"
+run_test "Deadline with newspaper shows ad" "buy newspaper
+$WASTE_TIME" "quarter past three"
+run_test "Deadline without newspaper" "$WASTE_TIME" "didn.t even buy a newspaper"
+run_test "Ad mentions quarter past three" "buy newspaper
+examine newspaper" "quarter past three"
+run_test "Hired before deadline is safe" "$ENTER_WORKSHOP
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look
+look" "cathedral"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"

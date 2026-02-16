@@ -1025,8 +1025,8 @@ Object newspaper "newspaper"
             if (cat_accident == false) {
                 print "Today's Times, fresh off the press and still smelling of ink and ambition. ";
                 if (ad_circled)
-                    "The advert you circled reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Competitive wages. No salesmen.~ 14 Praed Street. The rest of the front page is the usual: municipal drainage projects, colonial dispatches, and a long letter about the declining quality of hansom cabs.";
-                "In the classifieds you notice an advert: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Competitive wages. No salesmen.~ 14 Praed Street. The rest of the front page is the usual: municipal drainage projects, colonial dispatches, and a long letter about the declining quality of hansom cabs.";
+                    "The advert you circled reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Apply in person before quarter past three. Competitive wages. No salesmen.~ 14 Praed Street. The rest of the front page is the usual: municipal drainage projects, colonial dispatches, and a long letter about the declining quality of hansom cabs.";
+                "In the classifieds you notice an advert: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Apply in person before quarter past three. Competitive wages. No salesmen.~ 14 Praed Street. The rest of the front page is the usual: municipal drainage projects, colonial dispatches, and a long letter about the declining quality of hansom cabs.";
             }
             ! Phase 3: Museum display (scenery = in museum case)
             if (self has scenery) {
@@ -1817,7 +1817,27 @@ Object dr_thyme "Dr. Thyme" main_workshop
          ],
          daemon [;
             if (thyme_departed) { StopDaemon(self); rtrue; }
-            if (turns >= spanner_turn + 5) {
+            ! Opening timeout: Thyme closes shop at quarter past three
+            if (hired == false && the_time >= 15*60+15) {
+                print "^A door slams somewhere down the alley. Hurried footsteps on cobblestones. A man in an enormous overcoat sweeps past";
+                if (location == praed_street or workshop_entrance)
+                    print ", not seeing you in the fog";
+                print ", muttering about Mrs. Pemberton's scones. He reaches the corner and is swallowed by the fog.^^";
+                if (newspaper in player) {
+                    print "You look down at the newspaper. ~Apply in person before quarter past three.~ You check your watch. ";
+                    PrintTime12(the_time);
+                    print ".^^";
+                    print "The advert stares back at you. The workshop is dark. The opportunity has walked away in an enormous overcoat.^";
+                } else {
+                    print "You check your watch. ";
+                    PrintTime12(the_time);
+                    print ". Somewhere in London there was a job, and you didn't even buy a newspaper to find it.^";
+                }
+                deadflag = 4;
+                rtrue;
+            }
+            ! Post-spanner: Thyme departs for tea after 5 turns
+            if (spanner_given && turns >= spanner_turn + 5) {
                 if (location == main_workshop)
                     ThymeDeparts();
                 else {
@@ -3616,6 +3636,7 @@ Object solarium_dest "Workshop"
     move pocket_watch to player;
     move coins to player;
     move newspaper to newsboy;
+    StartDaemon(dr_thyme);
     SetTime(14*60+48, 1);   ! 2:48 PM (3 min fast), +1 min/turn
 
     print "London, 1895.^^";
@@ -3647,7 +3668,14 @@ Object solarium_dest "Workshop"
 ! ===================================================================
 
 [ DeathMessage;
-    print "You never existed";
+    if (deadflag == 3) {
+        print "ceased to exist";
+        rtrue;
+    }
+    if (deadflag == 4) {
+        print "missed your appointment";
+        rtrue;
+    }
 ];
 
 [ PrintEnding;
