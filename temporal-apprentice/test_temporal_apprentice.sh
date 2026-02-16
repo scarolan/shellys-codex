@@ -274,6 +274,9 @@ tidy up the workshop" "marginally less chaotic"
 run_test "tidy up some more (regression #68)" "$ENTER_SOLARIUM
 west
 tidy up some more" "marginally less chaotic"
+run_test_absent "no zcl leak in tidy up some more (#68)" "$ENTER_SOLARIUM
+west
+tidy up some more" "zcl"
 run_test "bare clean still works" "$ENTER_SOLARIUM
 west
 clean" "marginally less chaotic"
