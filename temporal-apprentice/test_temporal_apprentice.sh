@@ -254,6 +254,36 @@ run_test "Cannot clean while rag on machine" "$ENTER_SOLARIUM
 clean
 clean" "cat has stolen"
 
+# --- Cleaning synonyms (issue #70) ---
+echo "[Cleaning Synonyms]"
+run_test "wipe workbench with rag" "$ENTER_SOLARIUM
+west
+wipe workbench with rag" "marginally less chaotic"
+run_test "clean workbench with rag" "$ENTER_SOLARIUM
+west
+clean workbench with rag" "marginally less chaotic"
+run_test "scrub workshop" "$ENTER_SOLARIUM
+west
+scrub workshop" "marginally less chaotic"
+run_test "polish workbench" "$ENTER_SOLARIUM
+west
+polish workbench" "marginally less chaotic"
+run_test "tidy up the workshop" "$ENTER_SOLARIUM
+west
+tidy up the workshop" "marginally less chaotic"
+run_test "tidy up some more (regression #68)" "$ENTER_SOLARIUM
+west
+tidy up some more" "marginally less chaotic"
+run_test "bare clean still works" "$ENTER_SOLARIUM
+west
+clean" "marginally less chaotic"
+run_test "bare tidy still works" "$ENTER_SOLARIUM
+west
+tidy" "marginally less chaotic"
+run_test "bare sweep still works" "$ENTER_SOLARIUM
+west
+sweep" "marginally less chaotic"
+
 # --- Examine machine before accident ---
 echo "[Machine Examine Pre-Accident]"
 run_test "Examine machine in solarium" "$ENTER_SOLARIUM

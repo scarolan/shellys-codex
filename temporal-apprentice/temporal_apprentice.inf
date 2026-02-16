@@ -592,13 +592,19 @@ Global machine_raised = false;
         i->2 = 'g';
         Tokenise__(buffer, parse);
     }
-    if (w == 'clean' or 'tidy' or 'sweep') {
+    if (w == 'clean' or 'tidy' or 'sweep' or 'wipe' or 'scrub' or 'polish') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
         i->1 = 'c';
         i->2 = 'l';
         while (len > 3) { len--; i->len = ' '; }
+        ! Blank all trailing words so parser sees only "zcl"
+        if (parse->1 > 1) {
+            i = WordAddress(2);
+            len = (buffer + 2 + buffer->1) - i;
+            while (len > 0) { len--; i->len = ' '; }
+        }
         Tokenise__(buffer, parse);
     }
     if (w == 'knock' or 'rap') {
