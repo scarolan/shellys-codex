@@ -3468,6 +3468,12 @@ look
 inventory" "cleaning rag"
 run_test "Immediate departure via talk still works" "$SPANNER_GIVEN
 talk to dr thyme" "Mrs. Pemberton"
+run_test "Note visible after standard talk departure" "$SPANNER_GIVEN
+talk to dr thyme
+look" "hastily scrawled note"
+run_test "Read note after standard talk departure" "$SPANNER_GIVEN
+talk to dr thyme
+read note" "SCONES"
 run_test "Off-screen departure from store room" "$SPANNER_GIVEN
 north
 look

@@ -136,6 +136,7 @@ Global machine_raised = false;
     door_open = false;
     move cleaning_rag to player;
     move front_door_key to player;
+    move thyme_note to main_workshop;
     remove dr_thyme;
 ];
 
