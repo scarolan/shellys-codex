@@ -1827,6 +1827,8 @@ Object time_machine "time machine" solarium
                 if (noun == quantum_processor && processor_installed)
                     "The crystalline processor is already seated in its brass harness.";
                 "The time machine's innards are far too delicate for casual insertion. Try REPAIR MACHINE or FIX MACHINE to install components properly.";
+            Push, Pull:
+                "The time machine must weigh half a ton -- brass, crystal, lead-acid accumulator and all. You lean into it with everything you've got and succeed only in making your shoes squeak on the floor.";
             Enter, Go, Climb:
                 if (cat_accident == false)
                     "You place your hands on the brass housing. It hums under your fingers, warm despite the cold air, vibrating at a frequency you feel in your teeth. But there's no hatch, no compartment, no seat. This isn't something you climb into -- it takes everything nearby along for the ride. To travel through time, try TRAVEL TO followed by a destination.";
