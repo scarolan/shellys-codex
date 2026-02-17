@@ -4109,6 +4109,8 @@ Object curator "Museum Curator" future_museum
                 rtrue;
             Give:
                 "~How kind. We'll add it to the collection.~ They probably won't.";
+            Tell:
+                "The curator listens with scholarly patience. ~Fascinating. I'll make a note for the archives.~ They produce a small notebook and pretend to write something down.";
          ],
     has animate proper;
 

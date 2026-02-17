@@ -2993,6 +2993,13 @@ ask torres about clock" "yacht club"
 run_test "Ask curator about memorial clock" "$FUTURE_SETUP
 north
 ask curator about memorial" "3:17 AM"
+# Tell curator (issue #118)
+run_test "Tell curator produces character response" "$FUTURE_SETUP
+north
+tell curator about time" "scholarly patience"
+run_test_absent "Tell curator no generic reaction" "$FUTURE_SETUP
+north
+tell curator about flood" "provokes no reaction"
 
 # --- Issue #45: Missing scenery ---
 echo "[Issue #45: Missing Scenery]"
