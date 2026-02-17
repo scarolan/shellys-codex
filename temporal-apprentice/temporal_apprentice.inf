@@ -1253,7 +1253,7 @@ Object street_gas_lamps "street gas lamps" praed_street
     has scenery pluralname;
 
 Object street_cobblestones "cobblestones" praed_street
-    with name 'cobbleston' 'cobble' 'cobbles' 'stones' 'pavement' 'road',
+    with name 'cobbleston' 'cobble' 'cobbles' 'stones' 'pavement' 'road' 'ice' 'puddle' 'puddles',
          description "The cobblestones are glazed with black ice, worn into shallow bowls by generations of traffic. The puddles that usually collect in them have frozen solid, each one a tiny skating rink for rats.",
     has scenery pluralname;
 
@@ -1263,7 +1263,7 @@ Object street_fog "fog" praed_street
     has scenery;
 
 Object street_hansom_cabs "hansom cabs" praed_street
-    with name 'cab' 'cabs' 'hansom' 'carriage' 'carriages' 'driver' 'drivers',
+    with name 'cab' 'cabs' 'hansom' 'carriage' 'carriages' 'driver' 'drivers' 'horse' 'horses',
          description "The hansoms materialise from the fog like ghosts with hooves, clatter past in a blur of varnished wood and bad language, and vanish again into the murk. The drivers appear to navigate entirely by instinct, profanity, and an unshakeable faith in the self-preservation instincts of pedestrians.",
          before [;
             Enter:
@@ -1319,7 +1319,7 @@ Object paddington_station "Paddington Station"
     has light;
 
 Object station_canopy "iron-and-glass canopy" paddington_station
-    with name 'canopy' 'roof' 'iron' 'glass' 'arch' 'arches' 'girder' 'girders',
+    with name 'canopy' 'roof' 'iron' 'glass' 'arch' 'arches' 'girder' 'girders' 'icicle' 'icicles',
          description "Isambard Kingdom Brunel's masterpiece of engineering -- a vast triple-span roof of wrought iron and glass that turns the station into a luminous cavern. Condensation drips from the girders at intervals, giving the whole structure the atmosphere of a very large, very well-organised greenhouse.",
     has scenery;
 
@@ -1342,6 +1342,11 @@ Object station_clock "clock tower" paddington_station
          description "A magnificent four-faced clock tower rising from the concourse, each face showing a slightly different time -- whether by design or neglect is anyone's guess. The minute hands move with the ponderous certainty of an institution that considers itself more important than the trains it serves.",
     has scenery;
 
+Object station_platforms "platforms" paddington_station
+    with name 'platform' 'platforms' 'concourse',
+         description "The platforms stretch westward under Brunel's great canopy, each one a departure point for destinations that sound increasingly fictional the further from London they get. Passengers huddle in overcoats, breath rising in plumes, luggage piled around them like small fortifications against the cold.",
+    has scenery pluralname;
+
 Object brass_tap "The Brass Tap"
     with description "The warmth hits you like a blessing. A snug Victorian pub that has been slowly pickling in its own atmosphere since the reign of Queen Victoria's grandfather, and on a night like this, the most beautiful room in London. The ceiling is the colour of strong tea from decades of tobacco smoke. A long mahogany bar dominates one wall, its surface polished to a mirror finish by generations of elbows. Behind it, bottles of varying respectability jostle for space. A coal fire crackles magnificently in the grate -- the most important fire in Paddington.^^The barkeep, a woman of magnificent proportions and deeply suspicious eyebrows, presides over her domain with the quiet authority of someone who has heard every excuse in the English language and believed none of them.^^The door north leads back to Praed Street and the killing cold.",
          n_to praed_street,
@@ -1350,6 +1355,11 @@ Object brass_tap "The Brass Tap"
          w_to "The only things west are the coal fire, a brass spittoon, and a cat that may or may not be alive. None of them are exits.",
          s_to "The back wall is solid brick. The publican's licence and a portrait of the Queen hang there. Neither is a door.",
     has light;
+
+Object tap_ceiling "ceiling" brass_tap
+    with name 'ceiling' 'roof',
+         description "The ceiling is the colour of strong tea -- or possibly weak coffee -- stained by decades of tobacco smoke into a uniform amber that would make a restorer weep and a publican shrug. It has the sticky patina of a surface that has absorbed every argument, song, and questionable decision made below it since the 1840s.",
+    has scenery;
 
 Object tap_bar "mahogany bar" brass_tap
     with name 'bar' 'mahogany' 'counter',
@@ -2398,6 +2408,11 @@ Object docks_cargo "cargo" roman_docks
          description "Amphorae of wine and oil, bundles of British timber, ingots of Cornish tin -- the raw materials of empire, stacked on the dockside waiting for transport. The Romans are nothing if not thorough about logistics.",
     has scenery;
 
+Object docks_workers "workers" roman_docks
+    with name 'worker' 'workers' 'laborer' 'laborers' 'men',
+         description "Broad-shouldered dockworkers heave amphorae and timber with the rhythmic efficiency of men who get paid by the load. They are a mix of Roman soldiers doing punishment detail and local Britons who have discovered that the Empire pays in actual coins rather than cattle. The language barrier is solved by pointing, grunting, and the universal grammar of heavy lifting.",
+    has scenery pluralname animate;
+
 ! --- Roman NPCs ---
 
 Object marcus "Centurion Marcus" roman_forum
@@ -2669,6 +2684,11 @@ Object tommy_radio "wireless set" blitz_shelter
 Object tommy_wristwatch "Tommy's wristwatch" blitz_shelter
     with name 'wristwatch' 'watch' 'wrist',
          description "A military-issue wristwatch strapped to Tommy's left wrist, its luminous dial glowing faintly green in the shelter's dim light. The crystal is scratched from Dunkirk to North Africa and back, but it still keeps perfect time. Tommy glances at it constantly -- checking how long until the all-clear, how long until dawn, how long until this war ends. The seconds hand sweeps round with the mechanical optimism of something that believes there will always be a next minute.",
+    has scenery;
+
+Object shelter_singing "singing" blitz_shelter
+    with name 'singing' 'song' 'voice' 'music',
+         description "Someone deeper in the shelter is singing ~We'll Meet Again~ in a voice that is slightly off-key but absolutely committed. Others join in for the chorus, creating a harmony that Vera Lynn might charitably describe as ~enthusiastic.~ It echoes off the tiled walls with a warmth that the Underground was never designed to provide.",
     has scenery;
 
 Object blitz_church "Bombed Church"
@@ -3592,6 +3612,11 @@ Object future_buildings "buildings" future_street
          description "Victorian terraces rise from the floodwater like rows of red-brick teeth. The ground floors are submerged, their windows dark and silted. Upper floors have been converted into living spaces, connected by the network of catwalks. Washing lines stretch between buildings, and window boxes defy the apocalypse with geraniums.",
     has scenery pluralname;
 
+Object future_sign "faded sign" future_street
+    with name 'sign' 'faded' 'schedule' 'wall',
+         description "A faded sign bolted to the brickwork reads: ~HIGH TIDE SCHEDULE -- CONSULT BEFORE DESCENT.~ Someone has scrawled beneath it in marker pen: ~RISING FAST TODAY.~ Below that, in different handwriting: ~IT'S ALWAYS RISING FAST TODAY.~",
+    has scenery;
+
 Object future_museum "Thames Barrier Museum"
     with description [;
             print "The museum occupies the upper floors of what was once the Thames Barrier control centre. Display cases hold artefacts salvaged from flooded London -- underground signs, a red telephone box, soggy copies of the Evening Standard dated 2038.^^";
@@ -3810,6 +3835,11 @@ Object lab_lights "fluorescent lights" future_lab
     with name 'light' 'lights' 'fluorescent',
          description "The fluorescent lights still flicker underwater, powered by some backup system that has outlasted all rational expectation. They cast an eerie, greenish glow through the murk, making the submerged laboratory look like a very expensive fish tank.",
     has scenery pluralname;
+
+Object lab_plaque "plaque" future_lab
+    with name 'plaque' 'wall',
+         description "A brass plaque on the wall reads: ~HAWKING TEMPORAL RESEARCH CENTRE -- FOUNDED 2031.~ So he published after all. The plaque is green with underwater corrosion but still legible -- brass was a good choice for a building that was always going to end up submerged.",
+    has scenery;
 
 Object flood_water "floodwater"
     with name 'water' 'flood' 'thames' 'floodwater' 'murky',
