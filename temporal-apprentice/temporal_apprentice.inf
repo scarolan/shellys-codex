@@ -4534,14 +4534,14 @@ Object solarium_dest "Workshop"
     if (time_machine notin location) {
         "The time machine isn't here. You'll need to find it first.";
     }
-    ! Era-specific access gates
-    if (location == roman_tunnels && marcus_impressed == false) {
+    ! Era-specific access gates (don't block when destination matches current era)
+    if (location == roman_tunnels && marcus_impressed == false && noun ~= roman_dest) {
         "You haven't found what you need in this era yet. The lodestone that powers the temporal compass is failing -- you'll need to find a replacement before the machine can navigate safely.";
     }
-    if (location == blitz_street && machine_dug_out == false) {
+    if (location == blitz_street && machine_dug_out == false && noun ~= blitz_dest) {
         "The time machine is half-buried under rubble from the last bombing raid. You'll need to dig it out before you can use it.";
     }
-    if (location == future_street && has_diving_gear == false) {
+    if (location == future_street && has_diving_gear == false && noun ~= future_dest) {
         "The time machine sank when it arrived. You can see it just below the waterline, but you'd need diving gear to reach it.";
     }
     ! One-time fix text for Future
