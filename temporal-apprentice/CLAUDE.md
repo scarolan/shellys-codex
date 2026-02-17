@@ -37,7 +37,7 @@ You play a newly hired apprentice to Dr. Justin Thyme, an eccentric Victorian in
 
 **Eras and locations:**
 - **Workshop Hub (1895):** Workshop Entrance, Main Workshop, Store Room
-- **Roman Londinium (60 AD):** Forum, Via Principalis, Temple of Mithras, Bathhouse, Merchant's Quarter, Thames Dockside
+- **Roman Londinium (60 AD):** Drainage Tunnels (arrival), Forum, Via Principalis, Temple of Mithras, Bathhouse, Merchant's Quarter, Thames Dockside
 - **WWII London (1941):** Blacked-Out Street, Underground Shelter, Bombed Church, The Crown & Anchor, Fire Watch Rooftop, Rubble Site
 - **Cambridge (2009):** College Gates, Porter's Lodge, Party Hall, Hawking's Study, College Garden
 - **Future London (2045):** Flooded Street, Thames Barrier Museum, Elevated Walkway, Climate Refuge, Submerged Laboratory, Museum Rooftop
@@ -58,7 +58,7 @@ You play a newly hired apprentice to Dr. Justin Thyme, an eccentric Victorian in
 - Hawking's formula (2009) → needed to identify processor (2045)
 
 **Time machine travel:** The machine travels WITH the player (Wells-style). Each era has a gate that prevents immediate departure:
-- **Roman:** Soldiers surround the machine → impress Marcus (show lodestone) to clear them
+- **Roman:** Machine hidden in drainage tunnels → need wool cloak to reach Forum, impress Marcus (show lodestone) to unlock travel
 - **Blitz:** Machine buried under rubble → dig it out with Tommy's help
 - **Cambridge:** Destination dial jammed → apply Hawking's calibration formula
 - **Future:** Machine sank underwater → haul it up with diving gear

@@ -214,18 +214,18 @@ Global machine_raised = false;
 
 [ NPC_Talk_Marcus;
     if (marcus_impressed) {
-        print "Marcus clasps your arm in a Roman greeting. ~Hail, friend! The gods clearly favour you. Any seer who commands thunder stones is welcome on the Via Principalis.~^";
+        print "Marcus clasps your arm in a Roman greeting. ~Ave, amice! Di te favunt!~ Hail, friend -- the gods favour you, or possibly tolerate you; your Latin isn't entirely sure. He uses the word ~haruspex~ -- seer -- with genuine respect, and gestures grandly at the Via Principalis.^";
         rtrue;
     }
-    print "The centurion blocks your path with professional indifference. ~Halt. The Via Principalis is restricted to Roman citizens and military personnel.~ He eyes your strange clothing. ~You are clearly neither. Move along.~^";
+    print "The centurion blocks your path with professional indifference. ~Consiste. Via Principalis -- cives et milites solum.~ Halt, the Via is for citizens and soldiers only. He eyes your strange clothing and adds something too fast to follow, though the dismissive hand-wave translates perfectly.^";
 ];
 
 [ NPC_Ask_Marcus topic;
     if (topic == 'boudica' or 'boudicca' or 'revolt' or 'army' or 'iceni') {
         if (marcus_impressed) {
-            print "Marcus lowers his voice. ~The Iceni queen gathers her forces to the north. Between you and me, I've requested a transfer to Gaul. The food is terrible but at least the locals aren't on fire.~^";
+            print "Marcus lowers his voice. ~Regina Icenorum copias congregat.~ The Iceni queen gathers her forces -- you catch that much. ~Inter nos~ -- between us -- he's requested a transfer to Gaul. Something about the food being terrible but at least the locals aren't on fire. You think. His slang is outrunning your vocabulary.^";
         } else {
-            print "Marcus stiffens. ~I will not discuss military matters with a civilian. Especially one dressed like... whatever you are.~^";
+            print "Marcus stiffens. ~Res militaris. Noli quaerere.~ Military matters -- don't ask. He adds something about your clothing that your Latin mercifully fails to translate.^";
         }
         rtrue;
     }
@@ -260,10 +260,10 @@ Global machine_raised = false;
     if (marcus_impressed) {
         print "Livia regards you with cautious interest. ~Marcus speaks highly of you. He says you command the thunder stones. Impressive, if true. Perhaps you are worthy of the temple's secrets.~^^";
         livia_trusts = true;
-        print "She steps aside from the inner sanctum. ~You may enter freely.~^";
+        print "She steps aside from the inner sanctum. ~Intra libere.~ Enter freely. Even your Latin is up to that.^";
         rtrue;
     }
-    print "Livia stands at the entrance to the inner sanctum, arms folded. ~This is a place of sacred mystery. Only the initiated may pass beyond this point.~ She doesn't look like she's in a negotiating mood.^";
+    print "Livia stands at the entrance to the inner sanctum, arms folded. ~Locus sacer mysteriorum. Initiati solum.~ A sacred place of mysteries, initiates only. Her Latin is formal and unhurried -- easier to follow than Marcus's military bark, but somehow more final.^";
 ];
 
 [ NPC_Ask_Livia topic;
@@ -1794,8 +1794,8 @@ Object time_machine "time machine" solarium
                         print " A crack runs clean through the crystalline processor.";
                 }
                 print "^^";
-                if (location == roman_forum && marcus_impressed == false)
-                    print "Roman soldiers have formed a nervous perimeter around the machine. Their centurion eyes it with deep suspicion.^^";
+                if (location == roman_tunnels)
+                    print "The machine is tucked away safely in the drainage tunnels beneath the Forum.^^";
                 if (location == blitz_street && machine_dug_out == false)
                     print "The machine is half-buried under bomb rubble. You'll need help shifting it.^^";
                 if (location == cambridge_gates)
@@ -2035,33 +2035,94 @@ Object dr_thyme "Dr. Thyme" main_workshop
 ! ROMAN LONDINIUM — 60 AD
 ! ===================================================================
 
+Object roman_tunnels "Drainage Tunnels"
+    with description [;
+            print "You are in a low, vaulted tunnel of Roman brick, slick with moisture and ancient grime. The air smells of damp stone, stale water, and the slow patience of centuries.^^";
+            if (time_machine in self)
+                print "The time machine squats in the tunnel like a brass toad, clicking and hissing as it cools. Condensation beads on its copper pipes.^^";
+            "Daylight and the sound of voices filter down from a stone stairway leading up to the north. The voices are speaking Latin -- rough, colloquial Latin, but three years of grudging study at university make it recognisable enough.";
+        ],
+         n_to [;
+            if (roman_robe hasnt worn) {
+                "You take one step toward the daylight and catch sight of your own reflection in the standing water -- a wild-haired stranger in Victorian trousers and a waistcoat. You'd be arrested on sight. Or worse. You need to find something less conspicuous to wear.";
+            }
+            return roman_forum;
+         ],
+         u_to [;
+            if (roman_robe hasnt worn) {
+                "You take one step toward the daylight and catch sight of your own reflection in the standing water -- a wild-haired stranger in Victorian trousers and a waistcoat. You'd be arrested on sight. Or worse. You need to find something less conspicuous to wear.";
+            }
+            return roman_forum;
+         ],
+    has light;
+
+Object tunnel_walls "tunnel walls" roman_tunnels
+    with name 'wall' 'walls' 'brick' 'brickwork' 'tunnel' 'tunnels' 'vaulting' 'graffiti',
+         description "The tunnel walls are lined with Roman brick, each one stamped by legionary hands seventeen centuries ago. Faded graffiti is scratched into the mortar -- soldiers' names, crude jokes, and one surprisingly elegant drawing of a chariot race.",
+    has scenery;
+
+Object tunnel_water "drainage channel" roman_tunnels
+    with name 'water' 'channel' 'drainage' 'puddle' 'standing' 'grime' 'moisture',
+         description "A shallow channel of dark water runs along the centre of the tunnel floor, carrying Rome's municipal drainage toward the Thames. It reflects the dim light from above in oily ripples.",
+    has scenery;
+
+Object tunnel_stairway "stone stairway" roman_tunnels
+    with name 'stairway' 'stairs' 'stair' 'steps' 'step',
+         description "Worn stone steps lead upward toward daylight and the bustle of the Forum above. The edges are smooth from centuries of Roman boots.",
+    has scenery;
+
+Object tunnel_light "daylight" roman_tunnels
+    with name 'daylight' 'light' 'sunlight',
+         description "Warm Mediterranean sunlight filters down the stairway from the Forum above, painting a bright rectangle on the wet tunnel floor.",
+    has scenery;
+
+Object roman_skeleton "skeleton" roman_tunnels
+    with name 'skeleton' 'bones' 'remains' 'body' 'dead',
+         description [;
+            if (roman_robe in roman_tunnels)
+                "A Roman skeleton slumped against the tunnel wall, still wearing a rough-spun wool cloak. Poor fellow must have got lost down here. The cloak, however, has outlasted him admirably.";
+            "A Roman skeleton slumped against the tunnel wall, picked clean by time. Whatever killed him, it wasn't fashion -- you've already taken his cloak.";
+         ],
+    has scenery;
+
+Object roman_robe "wool cloak" roman_tunnels
+    with name 'cloak' 'wool' 'garment' 'disguise',
+         initial "A rough-spun wool cloak is draped over the skeleton's shoulders.",
+         description [;
+            if (self has worn)
+                "A rough-spun wool cloak that smells of centuries and questionable drainage. With the hood up, you could pass for an eccentric provincial -- which, technically, you are.";
+            "A rough-spun wool cloak, threadbare but intact -- Roman wool was built to last, even if Romans weren't.";
+         ],
+         after [;
+            Wear:
+                "You pull the cloak around your shoulders and flip up the hood. It smells of centuries and questionable drainage, but with the hood up, you might pass for an eccentric provincial. Which, technically, you are.";
+         ],
+    has clothing;
+
 Object roman_forum "The Forum"
     with description [;
             print "The heart of Roman Londinium spreads before you in the warm Mediterranean sunlight that has no business being in London. Toga-clad citizens bustle between colonnaded buildings, haggling, gossiping, and doing whatever it is Romans do at the Forum (politics, mostly, with occasional stabbings).^^";
-            if (time_machine in self && marcus_impressed == false)
-                print "The time machine sits beside a marble column, surrounded by wary Roman soldiers who are prodding it with their swords and debating whether it's Greek.^^";
-            else if (time_machine in self)
-                print "The time machine sits beside a marble column, gleaming incongruously in the Mediterranean sun.^^";
             print "The Via Principalis leads north";
             if (marcus_impressed == false)
                 print " (a centurion blocks the way)";
             print ". The Temple of Mithras is to the east";
             if (livia_trusts == false)
                 print " (a priestess guards the entrance)";
-            print ". The Bathhouse lies west, and the Merchant's Quarter south.^";
+            print ". The Bathhouse lies west, the Merchant's Quarter south, and a stone stairway leads down into darkness.^";
         ],
          n_to [;
             if (marcus_impressed) return roman_via;
-            print "The centurion blocks your path with his shield. ~Roman citizens and military only. You are clearly neither.~^";
+            print "The centurion blocks your path with his shield. ~Consiste! Cives et milites solum!~ Halt -- citizens and soldiers only. Your schoolboy Latin gets that much. He jabs a finger at you and adds something you're fairly sure means ~go away.~^";
             rfalse;
          ],
          e_to [;
             if (livia_trusts) return roman_temple;
-            print "Priestess Livia bars the entrance. ~Only the initiated may enter the Temple of Mithras.~^";
+            print "Priestess Livia bars the entrance. ~Initiati solum.~ Initiates only. Her Latin is slow, precise, and does not invite negotiation.^";
             rfalse;
          ],
          w_to roman_bath,
          s_to roman_merchants,
+         d_to roman_tunnels,
     has light;
 
 Object forum_column "marble column" roman_forum
@@ -2071,7 +2132,7 @@ Object forum_column "marble column" roman_forum
 
 Object forum_citizens "citizens"
     with name 'citizen' 'citizens' 'people' 'crowd',
-         description "Toga-clad citizens bustle about their daily business -- haggling, gossiping, and occasionally stabbing each other, as was the Roman custom. They eye your strange clothing with the polite bewilderment of people who have seen stranger things come up the Thames.",
+         description "Toga-clad citizens bustle about their daily business -- haggling, gossiping, and occasionally stabbing each other, as was the Roman custom. Their rapid-fire street Latin is just about followable, provided you don't think too hard about the grammar your tutor would have insisted upon.",
          found_in roman_forum roman_via roman_temple roman_bath roman_merchants roman_docks,
     has scenery animate pluralname;
 
@@ -2306,7 +2367,7 @@ Object marcus "Centurion Marcus" roman_forum
             if (marcus_impressed) {
                 "Marcus stands at attention, though his expression has softened from ~bureaucratic hostility~ to ~grudging respect.~ He still thinks you dress like a lunatic, but a lunatic who commands thunder stones deserves some courtesy.";
             }
-            "A broad-shouldered centurion in polished armour, radiating the quiet authority of a man who has spent twenty years telling people where they can and cannot walk. His name plate reads ~MARCVS RVFVS~ and his expression reads ~absolutely not.~";
+            "A broad-shouldered centurion in polished armour, radiating the quiet authority of a man who has spent twenty years telling people where they can and cannot walk. His name plate reads ~MARCVS RVFVS~ and his expression reads ~absolutely not.~ He speaks in clipped military Latin -- short sentences, small words, the verbal equivalent of a drawn sword.";
          ],
          life [;
             Ask:
@@ -2318,13 +2379,13 @@ Object marcus "Centurion Marcus" roman_forum
                 if (noun == lodestone) {
                     "~Keep your thunder stone, seer. Its magic is yours to command. I need no gifts -- only your assurance that you serve Rome.~";
                 }
-                "Marcus eyes the offering. ~I am a centurion of Rome. I am not bribed.~ A pause. ~Unless it's wine. Good wine.~";
+                "Marcus eyes the offering. ~Centurio Romanus sum. Non corrumpor.~ I am a Roman centurion, I am not bribed. A pause. ~Nisi vinum bonum.~ Unless good wine. His Latin slows down for the important parts.";
             Show:
                 if (noun == lodestone && marcus_impressed == false) {
                     marcus_impressed = true;
                     score = score + 5;
                     print "You hold the lodestone near Marcus's iron gladius. The sword twitches towards the stone, and Marcus leaps back as if stung.^^";
-                    print "~By Jupiter!~ he breathes, eyes wide. ~The stone commands iron itself! You are a seer -- a wielder of divine power!~ He salutes hastily. ~Forgive my rudeness, great one. The Via Principalis is open to you, and I shall tell Priestess Livia of your... gifts.~^";
+                    print "~Pro Iuppiter!~ he breathes, eyes wide. By Jupiter. ~Lapis ferrum imperat!~ The stone commands iron -- you don't need a university degree for that one. He salutes hastily. ~Ignosce, magne. Via Principalis tibi patet.~ Forgive me, great one -- the Via is open to you. He's speaking faster now, something about telling Priestess Livia of your gifts. The word ~haruspex~ keeps coming up. Seer. He thinks you're a seer.^";
                     rtrue;
                 }
                 "Marcus glances at it without interest. ~Very nice. Now move along.~";
@@ -2347,7 +2408,7 @@ Object livia "Priestess Livia" roman_forum
 
 Object felix "Felix the Merchant" roman_merchants
     with name 'felix' 'merchant' 'trader' 'seller' 'vendor',
-         description "A rotund man with the shrewd eyes of someone who can calculate profit margins in three currencies simultaneously. His stall is piled with stones and minerals, each one, he assures you, imbued with cosmic power.",
+         description "A rotund man with the shrewd eyes of someone who can calculate profit margins in three currencies simultaneously. His merchant's Latin is slow, clear, and deliberately simple -- the universal dialect of a man who wants your money and has learned that clarity sells. His stall is piled with stones and minerals, each one, he assures you, imbued with cosmic power.",
          add_to_scope [; if (has_lodestone == false) PlaceInScope(lodestone); ],
          life [;
             Ask:
@@ -2355,7 +2416,7 @@ Object felix "Felix the Merchant" roman_merchants
                     if (has_lodestone) {
                         print "~You already have the finest lodestone in the Empire! What more could you want? ...Another lodestone? I might have one in the back, but it'll cost you.~^";
                     } else {
-                        print "~Ah, the lodestone! A magnificent specimen. Pulls iron like a senator pulls favours.~ He strokes it lovingly. ~One gold aureus, and it's yours. A bargain!~^";
+                        print "Felix's eyes light up. ~Eheu! Lapis magnetis! Magnificus!~ The lodestone -- magnificent! He strokes it lovingly. ~Ferrum trahit sicut...~ He mimes iron being pulled, in case your Latin needs help. It does, slightly. ~Unus aureus!~ He holds up one finger. One gold coin. The merchant's dialect of pointing at things and naming prices transcends all language barriers.^";
                     }
                     rtrue;
                 }
@@ -4072,16 +4133,16 @@ Object copernicus "silver-grey cat" main_workshop
                     give self proper;
                     remove cleaning_rag;
                     print "You reach toward the cat, but your hand brushes the cleaning rag draped over him. This is a mistake.^^";
-                    print "The cat, with the unerring instinct of cats everywhere for finding the worst possible moment to be difficult, twists away from your grasp. His back legs scrabble for purchase on the control panel, and one powerful hind paw connects squarely with a large brass lever marked ~ABSOLUTELY DO NOT TOUCH.~^^";
+                    print "The cat, with the unerring instinct of cats everywhere for finding the worst possible moment to be difficult, twists away from your grasp. His back legs scrabble for purchase on the control panel, and one powerful hind paw connects squarely with a large brass lever marked ~TEMPORAL ACCELERATOR~^^";
                     print "The lever moves. The machine screams. The workshop dissolves into a whirlwind of light and sound and what might be the faint smell of marmalade.^^";
                     print "Something inside the machine gives a grinding lurch -- the compass housing flares white-hot, dims, flares again, and settles to a feeble glow. The lodestone. Seventeen careful test activations it survived, and one uncontrolled transit has nearly finished it off.^^";
                     print "When the universe stops vibrating, you are somewhere -- and somewhen -- else entirely.^^";
                     StartDaemon(copernicus);
                     objectloop (x in solarium)
-                        if (x hasnt scenery && x ~= time_machine && x ~= copernicus)
+                        if (x hasnt scenery && x ~= time_machine && x ~= copernicus && x ~= player)
                             move x to player;
-                    move time_machine to roman_forum;
-                    PlayerTo(roman_forum);
+                    move time_machine to roman_tunnels;
+                    PlayerTo(roman_tunnels);
                     rtrue;
                 }
                 "The cat goes boneless with the practiced ease of a cat who has perfected the art of being unpickupable. He weighs approximately seven hundred pounds when he doesn't want to be held.";
@@ -4472,8 +4533,8 @@ Object solarium_dest "Workshop"
         "The time machine isn't here. You'll need to find it first.";
     }
     ! Era-specific access gates
-    if (location == roman_forum && marcus_impressed == false) {
-        "Roman soldiers have surrounded the machine, treating it as a curiosity -- or possibly a siege weapon. You'll need to impress their centurion before they'll let you near it.";
+    if (location == roman_tunnels && marcus_impressed == false) {
+        "You haven't found what you need in this era yet. The lodestone that powers the temporal compass is failing -- you'll need to find a replacement before the machine can navigate safely.";
     }
     if (location == blitz_street && machine_dug_out == false) {
         "The time machine is half-buried under rubble from the last bombing raid. You'll need to dig it out before you can use it.";
@@ -4507,15 +4568,15 @@ Object solarium_dest "Workshop"
         rtrue;
     }
     if (noun == roman_dest) {
-        if (location == roman_forum) {
+        if (current_era == 1) {
             "You're already in Roman Londinium.";
         }
         if (visited_roman == false) visited_roman = true;
         current_era = 1;
-        move time_machine to roman_forum;
-        move copernicus to roman_forum;
-        print "You set the destination dial to ~60 AD~ and pull the lever. The machine screams, the world dissolves, and when reality reassembles itself, you're standing in blazing Mediterranean sunlight that has absolutely no business being in London.^";
-        PlayerTo(roman_forum);
+        move time_machine to roman_tunnels;
+        move copernicus to roman_tunnels;
+        print "You set the destination dial to ~60 AD~ and pull the lever. The machine screams, the world dissolves, and when reality reassembles itself, you're in a damp brick tunnel. Daylight and voices filter down from somewhere above.^";
+        PlayerTo(roman_tunnels);
         rtrue;
     }
     if (noun == blitz_dest) {
@@ -4688,8 +4749,8 @@ Object solarium_dest "Workshop"
     ! Redirect component nouns (e.g. "use lodestone") to the machine
     if (noun == lodestone or vacuum_tube or quantum_processor or formula_printout && time_machine in location)
         noun = time_machine;
-    if (location == roman_forum && marcus_impressed == false) {
-        "Roman soldiers have surrounded the machine, treating it as a curiosity -- or possibly a siege weapon. You'll need to impress their centurion before they'll let you near it.";
+    if (location == roman_tunnels && marcus_impressed == false) {
+        "You haven't completed your task in this era yet. Best explore the city above before tinkering with the machine.";
     }
     if (time_machine in location && noun == time_machine) {
         if (components_installed) {

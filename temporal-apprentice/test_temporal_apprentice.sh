@@ -93,13 +93,27 @@ east"
 # 3) talk to dr thyme (gives rag + key, Thyme leaves)
 # 4) east (auto-unlocks and enters solarium, cat follows)
 # 5) clean (cat steals rag on the spot in solarium)
-# 6) take cat (cat kicks lever, accident fires -> Roman Forum)
-CAT_ACCIDENT="take spanner
+# 6) take cat (cat kicks lever, accident fires -> Drainage Tunnels)
+# 7) take cloak, wear cloak, north (exit tunnels to Forum)
+
+# Cat accident ONLY — stays in tunnels (for testing machine/tunnels directly)
+CAT_TO_TUNNELS="take spanner
 give spanner to dr thyme
 talk to dr thyme
 east
 clean
 take cat"
+
+# Cat accident + tunnel exit — arrives in Forum
+CAT_ACCIDENT="take spanner
+give spanner to dr thyme
+talk to dr thyme
+east
+clean
+take cat
+take cloak
+wear cloak
+north"
 
 # --- Compilation ---
 echo "[Compilation]"
@@ -267,7 +281,7 @@ look" "cleaning rag dangling"
 run_test "Cat steals rag" "$ENTER_SOLARIUM
 clean" "snatches the rag"
 run_test "Take cat triggers accident" "$ENTER_WORKSHOP
-$CAT_ACCIDENT" "ABSOLUTELY DO NOT TOUCH"
+$CAT_ACCIDENT" "TEMPORAL ACCELERATOR"
 run_test "Sent to Roman forum" "$ENTER_WORKSHOP
 $CAT_ACCIDENT" "Roman Londinium"
 run_test "Lodestone depleted in cat accident" "$ENTER_WORKSHOP
@@ -380,15 +394,15 @@ echo "[Machine Examine Pre-Accident]"
 run_test "Examine machine in solarium" "$ENTER_SOLARIUM
 examine machine" "barely contained energy"
 run_test_absent "Examine machine does not trigger accident" "$ENTER_SOLARIUM
-examine machine" "ABSOLUTELY DO NOT TOUCH"
+examine machine" "TEMPORAL ACCELERATOR"
 
 echo "[Progressive Damage]"
 # After cat accident (Roman): only lodestone mentioned
 run_test "Roman era: lodestone fading" "$ENTER_WORKSHOP
-$CAT_ACCIDENT
+$CAT_TO_TUNNELS
 examine machine" "lodestone is fading"
 run_test_absent "Roman era: no Crookes tube damage yet" "$ENTER_WORKSHOP
-$CAT_ACCIDENT
+$CAT_TO_TUNNELS
 examine machine" "Crookes tube is webbed"
 # After Blitz transit: Crookes tube also broken
 run_test "Blitz transit: Crookes tube shattered" "$ENTER_WORKSHOP
@@ -403,6 +417,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 examine machine" "Crookes tube is webbed"
@@ -423,6 +438,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine" "lodestone into the compass housing"
 
 # Issue #86: 'use' and 'replace' as repair synonyms
@@ -438,6 +454,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 use lodestone" "lodestone into the compass housing"
 
 run_test "Roman: replace installs lodestone (issue #86)" "$ENTER_WORKSHOP
@@ -452,6 +469,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 replace lodestone" "lodestone into the compass housing"
 
 # Roman: can't travel to Blitz without lodestone installed
@@ -467,6 +485,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 travel to blitz" "compass housing is dark"
 
 # Blitz: repair machine installs tube (needs toolkit)
@@ -485,6 +504,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -515,6 +535,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -548,6 +569,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -574,10 +596,10 @@ $CAT_ACCIDENT
 look" "Forum"
 run_test "Marcus blocks north" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-north" "Roman citizens and military"
+north" "Cives et milites solum"
 run_test "Livia blocks temple" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
-east" "Only the initiated"
+east" "Initiati solum"
 run_test "Bathhouse accessible" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "Steam billows"
@@ -816,24 +838,43 @@ $CAT_ACCIDENT
 south
 south
 bury" "two thousand years"
-run_test "Machine present after accident" "$ENTER_WORKSHOP
-$CAT_ACCIDENT
-look" "surrounded by wary Roman soldiers"
-run_test "Machine gate: soldiers block travel" "$ENTER_WORKSHOP
-$CAT_ACCIDENT
-travel to blitz" "impress their centurion"
-run_test "Machine gate: soldiers block repair" "$ENTER_WORKSHOP
-$CAT_ACCIDENT
-west
-take fish
-give fish to copernicus
-ask copernicus about grate
-take aureus
-east
-south
-give aureus to felix
+# --- Drainage Tunnels ---
+echo "[Drainage Tunnels]"
+run_test "Cat accident sends to tunnels" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+look" "vaulted tunnel of Roman brick"
+run_test "Machine in tunnels after accident" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+look" "brass toad"
+run_test "Skeleton visible in tunnels" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+examine skeleton" "slumped against the tunnel wall"
+run_test "Take cloak from skeleton" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+take cloak" "Taken"
+run_test "Wear cloak" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+take cloak
+wear cloak" "pull the cloak"
+run_test "Can't go up without cloak" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+north" "arrested on sight"
+run_test "Up with cloak reaches Forum" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+take cloak
+wear cloak
 north
-fix machine" "impress their centurion"
+look" "Forum"
+run_test "Down from Forum returns to tunnels" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+down
+look" "vaulted tunnel of Roman brick"
+run_test "Machine gate: quest blocks travel" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+travel to blitz" "haven.t found what you need"
+run_test "Machine gate: quest blocks repair" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+fix machine" "haven.t completed your task"
 run_test "Travel to workshop from Roman" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -846,6 +887,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 travel to workshop" "back in the solarium"
 run_test "Solarium has machine after travel home" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
@@ -859,6 +901,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 travel to workshop
 look" "worse for wear"
 run_test "Already home guard" "$ENTER_WORKSHOP
@@ -873,6 +916,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 travel to workshop
 travel to workshop" "already home"
 TOTAL=$((TOTAL + 1))
@@ -888,6 +932,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 travel to workshop
 travel to workshop" | "$DFROTZ" -h 999 -w 200 "$Z5" 2>&1)
 _after_home=$(echo "$_home_output" | grep -n "already home" | tail -1 | cut -d: -f1)
@@ -919,6 +964,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz" "1941"
 run_test "Crookes tube shatters in Blitz transit" "$ENTER_WORKSHOP
@@ -933,6 +979,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz" "champagne flute"
 run_test "Eras must be sequential" "$ENTER_WORKSHOP
@@ -947,6 +994,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to cambridge" "reach that far yet"
 
@@ -965,6 +1013,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz"
 run_test "Blitz street" "$BLITZ_SETUP" "blackout"
@@ -1249,6 +1298,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -1305,6 +1355,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -1349,6 +1400,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -1405,6 +1457,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 east
@@ -1545,6 +1598,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -1808,6 +1862,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -1887,6 +1942,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -1964,6 +2020,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -2041,6 +2098,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 east
@@ -2125,6 +2183,7 @@ south
 bury
 north
 north
+down
 repair machine
 travel to blitz
 east
@@ -2209,6 +2268,7 @@ south
 bury
 north
 north
+down
 repair machine
 travel to blitz
 north
@@ -2449,6 +2509,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 west
@@ -2972,6 +3033,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 east
@@ -2995,6 +3057,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+down
 repair machine
 travel to blitz
 north
@@ -3051,7 +3114,8 @@ east
 south
 give aureus to felix
 north
-show lodestone to marcus"
+show lodestone to marcus
+down"
 run_test "Insert lodestone in machine hints repair" "$MACHINE_CMD_SETUP
 insert lodestone in machine" "REPAIR MACHINE"
 run_test_absent "Insert lodestone no generic refusal" "$MACHINE_CMD_SETUP
