@@ -1159,7 +1159,7 @@ talk to livia
 east
 carve
 west
-south
+down
 repair machine
 travel to blitz
 north" "TEMPUS FUGIT"
