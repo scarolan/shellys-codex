@@ -2085,6 +2085,10 @@ Object roman_skeleton "skeleton" roman_tunnels
                 "A Roman skeleton slumped against the tunnel wall, still wearing a rough-spun wool cloak. Poor fellow must have got lost down here. The cloak, however, has outlasted him admirably.";
             "A Roman skeleton slumped against the tunnel wall, picked clean by time. Whatever killed him, it wasn't fashion -- you've already taken his cloak.";
          ],
+         before [;
+            Ask, Tell, Answer:
+                "The skeleton maintains a dignified silence. Whatever secrets it had, it's keeping them.";
+         ],
     has scenery;
 
 Object roman_robe "wool cloak" roman_tunnels
@@ -4524,6 +4528,9 @@ Object solarium_dest "Workshop"
     if (noun == curator) {
         "The curator perks up. ~A visitor! Wonderful. Feel free to ask me about any of the exhibits. We don't get many visitors since... well, since the water.~";
     }
+    if (noun == roman_skeleton) {
+        "The skeleton maintains a dignified silence. Whatever secrets it had, it's keeping them.";
+    }
     if (noun has animate) {
         if (noun has pluralname)
             print (The) noun, " don't seem interested in conversation.^";
@@ -5033,7 +5040,16 @@ Object solarium_dest "Workshop"
 Include "Grammar";
 
 Verb 'talk'
-    * 'to' creature                         -> TalkTo;
+    * 'to' noun                             -> TalkTo;
+
+Extend 'ask' first
+    * noun 'about' topic                    -> Ask;
+
+Extend 'tell' first
+    * noun 'about' topic                    -> Tell;
+
+Extend 'answer' first
+    * noun topic                            -> Answer;
 
 Verb 'help'
     *                                       -> Help;
