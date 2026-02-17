@@ -395,7 +395,11 @@ Global machine_raised = false;
         rtrue;
     }
     if (topic == 'help') {
-        print "~Fix my radio and I'll help with whatever you need. That's the deal, mate.~^";
+        if (radio_fixed) {
+            print "~Radio's sorted, thanks to you. I'm a man of my word -- I'll help you dig through that rubble whenever you're ready.~^";
+        } else {
+            print "~Fix my radio and I'll help with whatever you need. That's the deal, mate.~^";
+        }
         rtrue;
     }
     print "Tommy scratches his chin. ~Can't help you there, I'm afraid. My expertise is limited to radios and digging.~^";
