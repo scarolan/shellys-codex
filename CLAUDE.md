@@ -47,7 +47,7 @@ Tests compile the game, then pipe commands into dfrotz and grep output for expec
 
 - **GitHub repo:** `scarolan/shellys-codex`
 - **GitHub Project board:** #5 (`gh project item-add 5 --owner scarolan --url <issue-url>`)
-- **Filing issues:** Use `bug` or `enhancement` label only — do NOT add `shelly` label via CLI. Always add CLI-created issues to the project board (auto-add only works for UI-created issues).
+- **Filing issues:** "Put it in the backlog" means all three steps: (1) `gh issue create` with `bug`/`enhancement` label, (2) `gh project item-add 5 --owner scarolan --url <URL>`, (3) `gh issue edit <URL> --add-label shelly`. CLI-created issues are NOT auto-added to the board — you must do it manually.
 
 ## Shelly automation pipeline
 
