@@ -2071,6 +2071,10 @@ Object tunnel_water "drainage channel" roman_tunnels
 Object tunnel_stairway "stone stairway" roman_tunnels
     with name 'stairway' 'stairs' 'stair' 'steps' 'step',
          description "Worn stone steps lead upward toward daylight and the bustle of the Forum above. The edges are smooth from centuries of Roman boots.",
+         before [;
+            Climb, Enter:
+                <<Go n_obj>>;
+         ],
     has scenery;
 
 Object tunnel_light "daylight" roman_tunnels

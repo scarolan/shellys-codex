@@ -877,6 +877,24 @@ take cloak
 wear cloak
 north
 look" "Forum"
+run_test "Climb stairs without cloak gives disguise gate" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+climb stairs" "arrested on sight"
+run_test "Enter stairway without cloak gives disguise gate" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+enter stairway" "arrested on sight"
+run_test "Climb stairs with cloak reaches Forum" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+take cloak
+wear cloak
+climb stairs
+look" "Forum"
+run_test "Enter stairway with cloak reaches Forum" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+take cloak
+wear cloak
+enter stairway
+look" "Forum"
 run_test "Down from Forum returns to tunnels" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 down
