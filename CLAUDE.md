@@ -43,6 +43,12 @@ Tests compile the game, then pipe commands into dfrotz and grep output for expec
 - Tests must pass before committing
 - The `shelly` label on GitHub issues triggers automated processing
 
+## Operations
+
+- **GitHub repo:** `scarolan/shellys-codex`
+- **GitHub Project board:** #5 (`gh project item-add 5 --owner scarolan --url <issue-url>`)
+- **Filing issues:** Use `bug` or `enhancement` label only — do NOT add `shelly` label via CLI. Always add CLI-created issues to the project board (auto-add only works for UI-created issues).
+
 ## Shelly automation pipeline
 
 This repo is serviced by **Shelly**, an autonomous agent dispatcher. When issues are labeled `shelly`, they flow through: tidy → delegate → test → commit → push → notify.
