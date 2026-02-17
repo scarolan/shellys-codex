@@ -609,7 +609,7 @@ Global machine_raised = false;
         print "~Help? This is a pub, not the Salvation Army. But if you need directions, advice, or someone to tell you you're making a terrible mistake, you've come to the right place. That's basically what barkeeps are for.~^";
         rtrue;
     }
-    print "The barkeep shrugs with the eloquence of a woman who has elevated indifference to an art form. ~Can't help you with that, love. Try the bitter -- it won't answer your questions, but it'll make you care less about them.~^";
+    print "The barkeep shrugs with the eloquence of a woman who has elevated indifference to an art form. ~Can't help you with that, luv. Try the bitter -- it won't answer your questions, but it'll make you care less about them.~^";
 ];
 
 [ NPC_Ask_Newsboy topic;
@@ -924,6 +924,11 @@ Object workshop_entrance "Workshop Entrance"
                 rtrue;
             }
             if (door_open) return main_workshop;
+            if (knock_count >= 3) {
+                door_open = true;
+                print "You push the door open -- it yields easily, the cold having shrunk the frame -- and step inside.^";
+                return main_workshop;
+            }
             "The heavy oak door is firmly closed. Perhaps you should knock.";
          ],
          in_to [;
@@ -936,6 +941,11 @@ Object workshop_entrance "Workshop Entrance"
                 rtrue;
             }
             if (door_open) return main_workshop;
+            if (knock_count >= 3) {
+                door_open = true;
+                print "You push the door open -- it yields easily, the cold having shrunk the frame -- and step inside.^";
+                return main_workshop;
+            }
             "The heavy oak door is firmly closed. Perhaps you should knock.";
          ],
          w_to [;
@@ -956,6 +966,7 @@ Object workshop_entrance "Workshop Entrance"
             }
             if (endgame_phase == 1)
                 "You can't leave. If your past self finds you outside, the loop breaks -- and everything you've done unravels.";
+            door_open = false;
             return praed_street;
          ],
          each_turn [;
@@ -1185,12 +1196,29 @@ Object frost_tracker "frost"
 ! ===================================================================
 
 Object praed_street "Praed Street"
-    with description "Praed Street stretches east to west through an icy fog that turns every breath into a small ghost. The Great Frost has London by the throat -- puddles are frozen solid, the cobblestones glitter with rime, and the gas lamps wear caps of ice that scatter the light into jaundiced halos. Hansom cabs clatter past at irregular intervals, their horses' breath billowing like locomotive steam, their drivers huddled in greatcoats and misery.^^A narrow alley leads east. A hanging sign to the south reads ~THE BRASS TAP~ in letters that have given up all pretence of being gold -- and from the door, a sliver of warm light and the smell of coal smoke. Paddington Station looms to the west.",
+    with description [;
+            if (rag_stolen) {
+                "Praed Street has gone from cold to murderous. The fog has thickened to a grey wall, the temperature has dropped another ten degrees, and the wind has found the gap between your collar and your neck with surgical precision. Ice is forming on the hanging sign outside the Brass Tap -- the door is shut and the windows dark. Even the gas lamps seem dimmer, as if the cold is strangling the flames. Paddington Station is a vague glow to the west, but the street between here and there has become a wind tunnel. The alley east -- and the workshop -- is the only sensible option.";
+            }
+            "Praed Street stretches east to west through an icy fog that turns every breath into a small ghost. The Great Frost has London by the throat -- puddles are frozen solid, the cobblestones glitter with rime, and the gas lamps wear caps of ice that scatter the light into jaundiced halos. Hansom cabs clatter past at irregular intervals, their horses' breath billowing like locomotive steam, their drivers huddled in greatcoats and misery.^^A narrow alley leads east. A hanging sign to the south reads ~THE BRASS TAP~ in letters that have given up all pretence of being gold -- and from the door, a sliver of warm light and the smell of coal smoke. Paddington Station looms to the west.";
+         ],
          e_to workshop_entrance,
-         s_to brass_tap,
-         in_to brass_tap,
+         s_to [;
+            if (rag_stolen)
+                "The Brass Tap is dark. The barkeep has bolted the door and gone home -- even she has limits, and the Great Frost has found them. A handwritten sign in the window reads ~CLOSED ON ACCOUNT OF THE PIPES FREEZING. AGAIN.~";
+            return brass_tap;
+         ],
+         in_to [;
+            if (rag_stolen)
+                "The Brass Tap is dark. The barkeep has bolted the door and gone home -- even she has limits, and the Great Frost has found them. A handwritten sign in the window reads ~CLOSED ON ACCOUNT OF THE PIPES FREEZING. AGAIN.~";
+            return brass_tap;
+         ],
          n_to "You step off the kerb and are nearly flattened by a hansom cab. The driver shouts something anatomically creative and vanishes into the fog. Perhaps best to stay on the pavement.",
-         w_to paddington_station,
+         w_to [;
+            if (rag_stolen)
+                "The wind roaring down from Paddington has turned the street into an ice floe. You take three steps west and the cold drives you back like a physical blow. You'll die out there. The workshop is east.";
+            return paddington_station;
+         ],
     has light;
 
 Object street_gas_lamps "street gas lamps" praed_street
@@ -1225,11 +1253,15 @@ Object street_hansom_cabs "hansom cabs" praed_street
 
 Object newsboy "newsboy" praed_street
     with name 'newsboy' 'boy' 'lad' 'urchin' 'kid',
-         description "A sharp-faced lad of perhaps twelve, wearing a cap three sizes too large and a coat that appears to have been inherited from someone considerably wider. His fingers are black with newsprint and his expression suggests a keen commercial intelligence that most adults never achieve.",
+         description [;
+            if (newspaper in self)
+                "A sharp-faced lad of perhaps twelve, shivering violently in a cap three sizes too large and a coat that appears to have been inherited from someone considerably wider and is doing nothing against this cold. His fingers are blue-white with cold and black with newsprint. His nose is running freely. He stamps his feet on the frozen cobblestones with the desperate energy of someone trying to keep his blood moving through sheer force of will.";
+            "A sharp-faced lad of perhaps twelve, shivering violently despite his oversized coat. His nose is the colour of a beetroot and his ears have gone a concerning shade of purple. He seems in no hurry to leave, though -- tuppence is tuppence, and the cold hasn't killed him yet.";
+         ],
          initial [;
             if (newspaper in self)
-                "A newsboy on the corner waves a folded paper. ~Paper! Tuppence! Get your Times!~";
-            "The newsboy loiters on the corner, having sold you his last copy. He picks his teeth with an air of entrepreneurial satisfaction.";
+                "A newsboy on the corner stamps his feet against the cold, blowing on fingers that have gone the colour of raw sausages. ~P-p-paper! T-tuppence! Get your T-Times!~";
+            "The newsboy stamps his feet on the corner, blowing on his fingers. He's sold his last copy -- to you -- but seems reluctant to leave. Perhaps he has nowhere warmer to go.";
          ],
          life [;
              Give:
@@ -1436,6 +1468,7 @@ Object main_workshop "Main Workshop"
          w_to [;
             if (endgame_phase == 2)
                 "You just came from there. Your past self could turn around at any moment. The store room is north.";
+            door_open = false;
             return workshop_entrance;
          ],
          n_to [;
@@ -1632,7 +1665,7 @@ Object solarium "The Solarium"
                         print "And there, perched atop the controls like a furry emperor surveying his domain, is Copernicus. Your cleaning rag dangles from his mouth like a battle standard.^^";
                     else
                         print "And there, perched atop the controls like a furry emperor surveying his domain, is the cat. Your cleaning rag dangles from his mouth like a battle standard.^^";
-                    print "So this is what Dr. Thyme didn't want you to see. You understand the concern. You also understand that getting your rag back is going to require getting the cat off this machine. This seems... inadvisable.^";
+                    print "So this is what Dr. Thyme didn't want you to see. You understand the concern.^";
                 } else {
                     if (copernicus_named)
                         print "Copernicus is already here, naturally. The concept of a forbidden room is entirely beneath him.^";
@@ -1847,13 +1880,13 @@ Object hartley_journal "leather-bound journal" workbench
             print "Dr. Thyme's handwriting starts elegant and deteriorates through the pages into what might be either advanced mathematics or the ravings of a lunatic. Certain entries are dated with alarming notation such as ~TUESDAY (THE FIRST ONE)~ and ~SOME TIME AFTER WEDNESDAY BUT POSSIBLY BEFORE.~ Key excerpts:^^";
             print "~TEMPORAL COMPASS -- The compass core requires a lodestone of exceptional purity. Naturally magnetic iron ore, the stronger the better. I have tested fourteen specimens from various suppliers; thirteen were inadequate and the fourteenth pulled every nail out of the floorboards. Lodestones of sufficient quality are exceedingly rare. The finest magnetite deposits are quarried in the Mediterranean basin. My current stone has weakened noticeably after only seventeen test activations and will need replacing sooner than expected.~^^";
             print "~OSCILLATION CIRCUIT -- The circuit employs a modified Crookes tube: an evacuated glass envelope through which cathode rays pass at controlled intervals, generating the temporal oscillation field. I have hand-blown seven; four shattered during calibration, two proved insufficiently evacuated, and the seventh serves adequately though its tolerances are marginal. The precision required exceeds what any single craftsman can reliably achieve. A manufacturing process capable of producing tubes to exact specification would solve this, but no such process exists.~^^";
-            print "~NAVIGATION -- REMAINS THE CENTRAL PROBLEM. The machine moves through time but landings are imprecise. I set coordinates for March and arrive in November, aim for London and materialise in Croydon (arguably worse). Precise navigation requires a mathematical framework for describing the geometry of time itself. The temporal harmonics governing exact positioning are beyond anything I can derive. The mathematics simply do not exist yet.~^^";
+            print "~NAVIGATION -- REMAINS THE CENTRAL PROBLEM. The machine stays fixed in space while time flows around it -- the world whirls past like a magic lantern show while one sits in a protective bubble. But temporal landings are imprecise. I set coordinates for March and arrive in November. Last Tuesday I aimed for 1066 and got 1842. Precise navigation requires a mathematical framework for describing the geometry of time itself. The temporal harmonics governing exact positioning are beyond anything I can derive. The mathematics simply do not exist yet.~^^";
             print "~FIELD GENERATOR -- Requires continuous recalculation of seventeen simultaneous differential equations, each dependent on the others. I have attempted these by hand. It takes eleven weeks per set of coordinates and the error margin remains unacceptable. Mr. Babbage's engine falls short by several orders of magnitude. ADDENDUM: A parcel arrived this morning. No return address. Postmark illegible. Inside, packed in straw, a crystalline component fitted into a brass harness with copper solder tabs -- as if someone had built an adapter specifically for my machine. A note reading: FOR THE FIELD GENERATOR. YOU WILL UNDERSTAND IN TIME. The harness fitted the generator housing perfectly. I soldered the tabs to the existing bus and ran a test. IT WORKS. Seventeen equations, resolved instantaneously. I have written to the General Post Office requesting sender information. They have not replied.~^^";
             print "~POWER SUPPLY -- The temporal field demands enormous current. Gas engines vibrate too much and steam is out of the question in a glass-roofed room. After reading of Morris and Salom's Electrobat carriage in Philadelphia -- they have built an entire vehicle powered by lead-acid accumulators! -- I have adapted the principle for the machine's on-board power. A six-cell accumulator in an iron cradle provides portable current for transit. The cells are charged from the mains via a transformer in the solarium. I have arranged an electrical supply from the Vestry of St. Pancras, whose generating station on Stanhope Street is the only one in London with sufficient capacity. The cable run from their grid to Praed Street required some creative routing through the Metropolitan Railway tunnels, for which I paid the foreman in marmalade. The quarterly bill is eye-watering.~^^";
             if (copernicus_named)
                 print "The margins are full of cat doodles, tea stains, and the note: ~KEEP COPERNICUS AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY. NOTE TO SELF -- when hiding from yourself in the pantry, bring a sandwich.~^";
             else
-                print "The margins are full of cat doodles, tea stains, and the note: ~KEEP THE CAT AWAY FROM THE CONTROLS.~ This is underlined seventeen times. A later addendum reads: ~I MEAN IT. I LOST AN ENTIRE TUESDAY. NOTE TO SELF -- when hiding from yourself in the pantry, bring a sandwich.~^";
+                print "The margins are full of cat doodles, tea stains and complex equations. There's also a note: ~NOTE TO SELF -- when hiding from yourself in the pantry, bring a sandwich.~^";
         ],
          initial "A leather-bound journal sits prominently on the workbench.";
 
@@ -3313,7 +3346,7 @@ Object hawking "Professor Hawking" cambridge_hall
                 if (has_formula == false) {
                     print "^Without Hawking's formula, the time machine can never be properly calibrated. You are stranded in 2009 with a machine that can't aim and a physicist who has just destroyed the only work that could help you.^^";
                     print "=== EPILOGUE: A LIFE OUT OF TIME ===^^";
-                    print "You try the machine anyway. The first attempt lands you in Peterborough. The second deposits you six feet above the Cam. You stop trying.^^";
+                    print "You try the machine anyway. The first attempt lands you in 2009 again, three weeks earlier. You hide in a cupboard until you've left. The second deposits you in 2009 for a third time, during a fire drill. You stop trying.^^";
                     print "Cambridge is not the worst place to be stranded. You talk your way into a job at the Whipple Museum of the History of Science, where your knowledge of Victorian instruments is considered ~remarkably authentic.~ You publish a paper on brass-gear manufacturing that baffles peer reviewers with its practical detail.^^";
                     print "You learn to use a mobile telephone. It takes two years.^^";
                     print "Copernicus adapts with the ease of a creature who has never cared what century it is. Students photograph him on the college sundial and post images to ~the internet.~ He has four thousand followers by Christmas. You have twelve, three of which are bots.^^";
@@ -3965,9 +3998,9 @@ Object copernicus "silver-grey cat" main_workshop
          ],
          description [;
             if (copernicus_named) {
-                "A magnificently smug British Shorthair of considerable girth and negligible conscience. Copernicus is shaded silver -- a white undercoat tipped with grey along his back, flanks, and head, fading to pale silver on his legs and pure white at the chin and chest. In certain light he looks like a cat made of smoke. His round face, copper eyes, and plush coat give him the air of a very small, very disapproving judge. His purr is thunderous, and his talent for sitting on the worst possible thing at the worst possible time is genuinely supernatural. A small brass name tag hangs from his collar.";
+                "A magnificently smug British Shorthair of considerable girth and negligible conscience. Copernicus is shaded silver -- a white undercoat tipped with grey along his back, flanks, and head, fading to pale silver on his legs and pure white at the chin and chest. In certain light he looks like a cat made of smoke. His round face, copper eyes, and plush coat give him the air of a very small, very disapproving judge. His purr is thunderous. A small brass name tag hangs from his collar.";
             }
-            "A magnificently smug British Shorthair of considerable girth and negligible conscience. He is shaded silver -- a white undercoat tipped with grey along his back, flanks, and head, fading to pale silver on his legs and pure white at the chin and chest. In certain light he looks like a cat made of smoke. His round face, copper eyes, and plush coat give him the air of a very small, very disapproving judge. His purr is thunderous, and his talent for sitting on the worst possible thing at the worst possible time is genuinely supernatural. A small brass name tag hangs from his collar.";
+            "A magnificently smug British Shorthair of considerable girth and negligible conscience. He is shaded silver -- a white undercoat tipped with grey along his back, flanks, and head, fading to pale silver on his legs and pure white at the chin and chest. In certain light he looks like a cat made of smoke. His round face, copper eyes, and plush coat give him the air of a very small, very disapproving judge. His purr is thunderous. A small brass name tag hangs from his collar.";
          ],
          life [;
             Ask:
@@ -4143,7 +4176,6 @@ Object cleaning_rag "cleaning rag"
                         print "In a flash of silver fur, Copernicus snatches the rag and bolts. Before you can react, the cat has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
                     else
                         print "In a flash of silver fur, the cat snatches the rag and bolts. Before you can react, he has leapt atop the contraption in the centre of the room, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
-                    print "Getting that rag back is going to require getting the cat off the machine. This seems... inadvisable.^";
                     rtrue;
                 }
          ];
@@ -4336,7 +4368,7 @@ Object solarium_dest "Workshop"
         remove coins;
         move pint_of_ale to player;
         print "You put your remaining coins on the bar. The barkeep eyes them, sweeps them up, and pulls a pint of dark ale with the practiced efficiency of someone who has been doing this since before you were born.^^";
-        "~There you go, love. Don't drink it too fast -- I'm not mopping up after you.~";
+        "~There you go, luv. Don't drink it too fast -- I'm not mopping up after you.~";
     }
     "That's not something you can buy here.";
 ];
@@ -4358,6 +4390,14 @@ Object solarium_dest "Workshop"
 
 [ KnockSub;
     if (location == workshop_entrance && door_open == false) {
+        if (front_door_key in player) {
+            door_open = true;
+            "You don't need to knock, you have the key to the door. You let yourself in.";
+        }
+        if (knock_count >= 3) {
+            door_open = true;
+            "You knock once and push the door open. The cold has shrunk the frame -- it yields easily.";
+        }
         knock_count++;
         if (knock_count == 1) {
             "You rap on the heavy oak door. The sound echoes in the alley. No response.";
@@ -4788,7 +4828,6 @@ Object solarium_dest "Workshop"
                     print "In a flash of silver fur, Copernicus snatches the rag right out of your hand! Before you can react, the cat has leapt atop the contraption, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
                 else
                     print "In a flash of silver fur, the cat snatches the rag right out of your hand! Before you can react, he has leapt atop the contraption, the cleaning rag trailing from his mouth like a battle standard. He settles among the controls with an expression of absolute triumph.^^";
-                print "Getting that rag back is going to require getting the cat off the machine. This seems... inadvisable.^";
                 rtrue;
             }
         }
@@ -4809,8 +4848,8 @@ Object solarium_dest "Workshop"
 [ PetSub;
     if (noun == copernicus) {
         if (copernicus_named)
-            "Copernicus permits exactly 2.4 seconds of stroking before biting your finger. Not maliciously -- just to remind you who's in charge. (Hint: not you.)";
-        "The cat permits exactly 2.4 seconds of stroking before biting your finger. Not maliciously -- just to remind you who's in charge. (Hint: not you.)";
+            "Copernicus permits exactly 2.4 seconds of stroking before biting your finger.";
+        "The cat permits exactly 2.4 seconds of stroking before biting your finger.";
     }
     if (noun has animate)
         "That's a person, not a pet. Victorian social norms frown upon this.";

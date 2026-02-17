@@ -3507,6 +3507,40 @@ z
 z
 z" "frozen to death"
 
+echo "[Post-Rag-Theft Weather]"
+# After cat steals rag: exit solarium -> workshop -> entrance -> praed street
+RAG_TO_PRAED="$ENTER_SOLARIUM
+clean
+west
+west
+west"
+run_test "Brass Tap closed after rag theft" "$RAG_TO_PRAED
+south" "CLOSED ON ACCOUNT"
+run_test "Paddington blocked after rag theft" "$RAG_TO_PRAED
+west" "die out there"
+run_test "Praed Street worsened after rag theft" "$RAG_TO_PRAED" "gone from cold to murderous"
+run_test "Door closes behind player" "$ENTER_SOLARIUM
+clean
+west
+west
+west
+east
+east" "push the door open"
+run_test "No re-knock after first visit" "$ENTER_SOLARIUM
+clean
+west
+west
+west
+east
+east" "yields easily"
+run_test "Knock with key skips sequence" "$ENTER_SOLARIUM
+clean
+west
+west
+west
+east
+knock" "you have the key"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"
