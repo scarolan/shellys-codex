@@ -2720,7 +2720,7 @@ Object blitz_church "Bombed Church"
     has light;
 
 Object church_roof "roof" blitz_church
-    with name 'roof' 'ceiling',
+    with name 'roof' 'ceiling' 'timber' 'timbers',
          description [;
             if (fire_turns_remaining > 0 && church_saved == false)
                 "The remaining roof timbers are ablaze, fire racing along ancient wood like it's been waiting centuries for this moment. The heat is intense.";
