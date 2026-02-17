@@ -899,7 +899,7 @@ Global machine_raised = false;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
-    if (w == 'circle' or 'mark' or 'ring') {
+    if (w == 'circle' or 'mark') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
