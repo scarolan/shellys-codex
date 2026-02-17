@@ -856,6 +856,9 @@ run_test "Wear cloak" "$ENTER_WORKSHOP
 $CAT_TO_TUNNELS
 take cloak
 wear cloak" "pull the cloak"
+run_test "Wear cloak implicit take" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+wear cloak" "pull the cloak"
 run_test "Can't go up without cloak" "$ENTER_WORKSHOP
 $CAT_TO_TUNNELS
 north" "arrested on sight"

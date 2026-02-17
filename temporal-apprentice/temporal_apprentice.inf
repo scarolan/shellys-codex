@@ -2095,6 +2095,13 @@ Object roman_robe "wool cloak" roman_tunnels
                 "A rough-spun wool cloak that smells of centuries and questionable drainage. With the hood up, you could pass for an eccentric provincial -- which, technically, you are.";
             "A rough-spun wool cloak, threadbare but intact -- Roman wool was built to last, even if Romans weren't.";
          ],
+         before [;
+            Wear:
+                if (self notin player) {
+                    <Take self>;
+                    if (self notin player) rtrue;
+                }
+         ],
          after [;
             Wear:
                 "You pull the cloak around your shoulders and flip up the hood. It smells of centuries and questionable drainage, but with the hood up, you might pass for an eccentric provincial. Which, technically, you are.";
