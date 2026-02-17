@@ -711,6 +711,12 @@ Global machine_raised = false;
         i->1 = 'b';
         i->2 = 'r';
         while (len > 3) { len--; i->len = ' '; }
+        ! Blank words after noun so "bury X in ground" becomes "zbr X"
+        if (parse->1 > 2) {
+            i = WordAddress(3);
+            len = (buffer + 2 + buffer->1) - i;
+            while (len > 0) { len--; i->len = ' '; }
+        }
         Tokenise__(buffer, parse);
     }
     if (w == 'travel' or 'teleport') {
@@ -752,6 +758,12 @@ Global machine_raised = false;
         i->1 = 'e';
         i->2 = 'x';
         while (len > 3) { len--; i->len = ' '; }
+        ! Blank words after noun so "extinguish X with Y" becomes "zex X"
+        if (parse->1 > 2) {
+            i = WordAddress(3);
+            len = (buffer + 2 + buffer->1) - i;
+            while (len > 0) { len--; i->len = ' '; }
+        }
         Tokenise__(buffer, parse);
     }
     if (w == 'pet' or 'stroke') {
@@ -890,6 +902,12 @@ Global machine_raised = false;
         i->1 = 'c';
         i->2 = 'i';
         while (len > 3) { len--; i->len = ' '; }
+        ! Blank words after noun so "circle X with pencil" becomes "zci X"
+        if (parse->1 > 2) {
+            i = WordAddress(3);
+            len = (buffer + 2 + buffer->1) - i;
+            while (len > 0) { len--; i->len = ' '; }
+        }
         Tokenise__(buffer, parse);
     }
     rfalse;
