@@ -1394,7 +1394,7 @@ Object tap_bottles "bottles" brass_tap
 
 Object tap_dartboard "dartboard" brass_tap
     with name 'dartboard' 'dart' 'darts' 'board',
-         description "A cork dartboard hangs on the east wall, its surface so perforated it resembles a map of the lunar surface. Someone has written ~LANDLORD'S RULES: NO THROWING DURING EARTHQUAKES, SÉANCES, OR ARGUMENTS ABOUT THE BOER WAR~ on a card pinned beside it.",
+         description "A cork dartboard hangs on the east wall, its surface so perforated it resembles a map of the lunar surface. Someone has written ~LANDLORD'S RULES: NO THROWING DURING EARTHQUAKES, S@'EANCES, OR ARGUMENTS ABOUT THE BOER WAR~ on a card pinned beside it.",
     has scenery;
 
 Object tap_clock "mantel clock" brass_tap
