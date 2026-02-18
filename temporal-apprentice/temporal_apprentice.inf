@@ -1335,7 +1335,7 @@ Object newsboy "newsboy" praed_street
          ],
          initial [;
             if (newspaper in self)
-                "A newsboy on the corner stamps his feet against the cold, blowing on fingers that have gone the colour of raw sausages. ~P-p-paper! T-tuppence! Get your T-Times!~";
+                "A newsboy on the corner stamps his feet against the cold, blowing on fingers that poke out of mittens with more holes than wool. ~P-p-paper! T-tuppence! Get your T-Times!~";
             "The newsboy stamps his feet on the corner, blowing on his fingers. He's sold his last copy -- to you -- but seems reluctant to leave. Perhaps he has nowhere warmer to go.";
          ],
          life [;
