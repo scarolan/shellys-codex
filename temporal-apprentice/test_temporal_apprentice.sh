@@ -3655,6 +3655,63 @@ west
 east
 knock" "you have the key"
 
+# --- Clock tower chimes ---
+echo "[Clock Tower Chimes]"
+# Wait in the pub for 12 turns to hear the 3:00 PM muffled chime
+run_test "Clock chime at 3:00 PM from Brass Tap" "south
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" "clock tower strikes"
+
+# After cat accident, chimes should NOT fire (daemon stops)
+TOTAL=$((TOTAL + 1))
+_clock_output=$(echo "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z
+z" | "$DFROTZ" -h 999 -w 200 "$Z5" 2>&1)
+# Extract only text after the Roman tunnel (post cat-accident)
+_drain_line=$(echo "$_clock_output" | grep -n "vaulted tunnel" | head -1 | cut -d: -f1)
+if [ -n "$_drain_line" ]; then
+    _post_accident=$(echo "$_clock_output" | tail -n +"$_drain_line")
+    if echo "$_post_accident" | grep -qi "clock tower strikes"; then
+        FAIL=$((FAIL + 1))
+        echo "  FAIL: No clock chime after cat accident (should NOT contain: clock tower strikes)"
+    else
+        PASS=$((PASS + 1))
+        echo "  PASS: No clock chime after cat accident"
+    fi
+else
+    FAIL=$((FAIL + 1))
+    echo "  FAIL: No clock chime after cat accident (could not find tunnel marker)"
+fi
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"

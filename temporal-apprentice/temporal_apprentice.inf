@@ -118,6 +118,7 @@ Global lodestone_last_room = 0;
 Global ad_circled = false;
 Global hired = false;
 Global frost_turns = 0;
+Global last_bong = 0;
 
 Global machine_dug_out = false;
 Global machine_raised = false;
@@ -1215,6 +1216,57 @@ Object frost_tracker "frost"
   has;
 
 ! ===================================================================
+! CLOCK TOWER DAEMON — Paddington Station chimes
+! ===================================================================
+
+Object clock_daemon "clock"
+    with daemon [hour bongs i;
+            if (cat_accident) { StopDaemon(self); return; }
+            ! Check if we've crossed a :30 boundary
+            if (the_time / 30 == last_bong) return;
+            last_bong = the_time / 30;
+            ! Only chime in 1895 rooms
+            if (location ~= praed_street or paddington_station or workshop_entrance
+                or brass_tap or main_workshop or store_room or solarium) return;
+            ! Determine hour vs half-hour
+            if (the_time % 60 == 0) {
+                hour = (the_time / 60) % 12;
+                if (hour == 0) hour = 12;
+                bongs = hour;
+            } else {
+                bongs = 1;
+            }
+            ! Room-specific messages
+            print "^";
+            switch (location) {
+                paddington_station:
+                    print "The clock tower above you ";
+                praed_street:
+                    print "Paddington's clock tower ";
+                workshop_entrance:
+                    print "Somewhere behind the fog, a clock tower ";
+                brass_tap:
+                    print "Muffled by the pub walls, a clock tower ";
+                main_workshop, store_room:
+                    print "Faintly, from the direction of the station, a clock tower ";
+                solarium:
+                    print "Distantly, barely audible through the glass ceiling, a clock tower ";
+            }
+            print "strikes ";
+            if (bongs == 1)
+                print "once";
+            else {
+                for (i = 1 : i <= bongs : i++) {
+                    if (i > 1 && i == bongs) print " ...";
+                    else if (i > 1) print " ...";
+                }
+                print " ", bongs, " times";
+            }
+            print ".^";
+        ],
+    has ;
+
+! ===================================================================
 ! PRAED STREET & THE BRASS TAP (optional 1895 locations)
 ! ===================================================================
 
@@ -1867,7 +1919,7 @@ Object time_machine "time machine" solarium
                     "You place your hands on the brass housing. It hums under your fingers, warm despite the cold air, vibrating at a frequency you feel in your teeth. But there's no hatch, no compartment, no seat. This isn't something you climb into -- it takes everything nearby along for the ride. To travel through time, try TRAVEL TO followed by a destination.";
                 "You step close and feel the temporal field prickle against your skin -- that familiar charge pressing in like static before a storm. The field extends several feet in every direction; there's no cockpit to climb into. To travel through time, try TRAVEL TO followed by a destination.";
          ],
-         add_to_scope roman_dest blitz_dest hawking_dest future_dest solarium_dest crookes_tube_scenery cat_basket machine_battery,
+         add_to_scope roman_dest blitz_dest hawking_dest future_dest solarium_dest crookes_tube_scenery lodestone_scenery processor_scenery cat_basket machine_battery,
     has scenery;
 
 Object crookes_tube_scenery "Crookes tube" time_machine
@@ -1878,6 +1930,26 @@ Object crookes_tube_scenery "Crookes tube" time_machine
             if (visited_blitz)
                 "The Crookes tube is webbed with fractures, fine cracks radiating through the evacuated glass like ice on a winter puddle. Cathode rays still flicker weakly inside, but the temporal oscillation field is failing. You need a replacement.";
             "A hand-blown glass envelope, evacuated and sealed with meticulous care. Inside, cathode rays dance at controlled intervals, generating the temporal oscillation field. Dr. Thyme's journal mentions blowing seven of these before getting one that worked. This is the seventh.";
+         ],
+    has scenery;
+
+Object lodestone_scenery "lodestone" time_machine
+    with name 'lodestone' 'stone' 'magnet',
+         description [;
+            if (lodestone_installed)
+                "The new lodestone sits snug in the compass housing, glowing a steady warm amber. The needle holds true north without a tremor -- Mediterranean magnetite of exceptional purity, doing exactly what it was quarried to do.";
+            "The original lodestone is fading. It still sits in the compass housing, but the glow has dimmed to a sullen flicker and the needle drifts lazily, unable to hold a bearing. Dr. Thyme's journal warned this would happen -- seventeen test activations was more than any natural magnet could sustain.";
+         ],
+    has scenery;
+
+Object processor_scenery "quantum processor" time_machine
+    with name 'processor' 'quantum' 'chip' 'cpu' 'crystal' 'crystalline' 'component',
+         description [;
+            if (processor_installed)
+                "The crystalline processor sits in its brass harness, glowing with a steady inner light. Copper solder tabs connect it to the field generator bus. It hums -- the same low, thrumming chord that seems to resonate with reality itself. Seventeen simultaneous differential equations, resolved instantaneously.";
+            if (visited_future)
+                "A crack runs clean through the crystalline processor in its brass harness. The field generator sputters and fails, unable to sustain the calculations it needs. You'll need a replacement -- but this technology shouldn't exist yet.";
+            "A crystalline component seated in a brass harness with copper solder tabs. It arrived by post, packed in straw, with a note reading: FOR THE FIELD GENERATOR. YOU WILL UNDERSTAND IN TIME. It resolves seventeen simultaneous differential equations instantaneously.";
          ],
     has scenery;
 
@@ -4362,7 +4434,9 @@ Object solarium_dest "Workshop"
     move newspaper to newsboy;
     StartDaemon(dr_thyme);
     StartDaemon(frost_tracker);
+    StartDaemon(clock_daemon);
     SetTime(14*60+48, 1);   ! 2:48 PM (3 min fast), +1 min/turn
+    last_bong = the_time / 30;  ! prevent immediate bong on turn 1
 
     print "London, 1895. The Great Frost.^^";
     print "The door of Greybaum, Tedium and Sons closes behind you with a finality usually reserved for coffin lids. Sacked. After four years of impeccable ledger-keeping, one small fire in the filing room, and an honest difference of opinion about whether the senior partner's toupee counted as a business expense.^^";
