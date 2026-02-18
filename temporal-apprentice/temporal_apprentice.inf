@@ -1976,6 +1976,8 @@ Object store_supplies "supplies" store_room
 Object dr_thyme "Dr. Thyme" main_workshop
     with name 'thyme' 'justin' 'doctor' 'dr' 'man',
          description [;
+            if (components_installed && endgame_phase == 0)
+                "Dr. Thyme is hunched over the workbench, face three inches from something intricate, muttering about calibration constants. He's wearing the same waistcoat, the same rolled shirtsleeves dusted with copper filings. He looks up and beams at you with genuine delight.";
             if (cat_accident || thyme_departed)
                 "Dr. Thyme is out getting tea and scones. His timing, as always, was impeccable.";
             if (hired == false)
@@ -4443,6 +4445,7 @@ Object solarium_dest "Workshop"
     endgame_phase = 1;
     endgame_turns = 0;
     StopDaemon(copernicus);
+    remove dr_thyme;
     print "You ease the door open a crack and peer through. There you are -- younger by an afternoon, damp from the fog, clutching a copy of the Times. You watch your past self fish out a pocket watch, check the time, snap the case shut. You remember doing that. You remember the exact weight of the watch in your hand.^^";
     print "Your past self glances down the alley, shifts weight, and starts to turn away.^^";
     print "You yank the door wide and press yourself flat against the wall behind it, heart hammering. Footsteps stop. A pause. Then your past self turns back, stares at the open doorway -- at the empty doorway -- and steps cautiously inside.^^";
@@ -4848,6 +4851,7 @@ Object solarium_dest "Workshop"
             }
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
+                move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
             rtrue;
@@ -4864,6 +4868,7 @@ Object solarium_dest "Workshop"
             print "The oscillation circuit is restored.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
+                move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
             rtrue;
@@ -4876,6 +4881,7 @@ Object solarium_dest "Workshop"
             print "The machine shudders. The destination dial, which has always felt approximate, suddenly clicks with precision. For the first time, the machine can AIM.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
+                move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
             rtrue;
@@ -4892,6 +4898,7 @@ Object solarium_dest "Workshop"
             print "The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself. The temporal field generator is restored.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
+                move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
             rtrue;
