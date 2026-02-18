@@ -4840,6 +4840,9 @@ Object solarium_dest "Workshop"
             "The machine is already repaired. It hums contentedly.";
         }
         ! Install lodestone
+        if (has_lodestone && lodestone_installed == false && lodestone notin player) {
+            "You don't have the lodestone with you.";
+        }
         if (has_lodestone && lodestone_installed == false) {
             lodestone_installed = true;
             remove lodestone;
@@ -4857,6 +4860,9 @@ Object solarium_dest "Workshop"
             rtrue;
         }
         ! Install vacuum tube (needs toolkit)
+        if (has_vacuum_tube && tube_installed == false && vacuum_tube notin player) {
+            "You don't have the vacuum tube with you.";
+        }
         if (has_vacuum_tube && tube_installed == false) {
             if (toolkit notin player) {
                 "The vacuum tube won't fit -- the contacts are bent at the wrong angle for Thyme's housing. You'd need the toolkit, specifically the needle-nose pliers, to coax them into alignment.";
@@ -4874,6 +4880,9 @@ Object solarium_dest "Workshop"
             rtrue;
         }
         ! Transcribe formula
+        if (has_formula && formula_transcribed == false && formula_printout notin player) {
+            "You don't have the formula printout with you.";
+        }
         if (has_formula && formula_transcribed == false) {
             formula_transcribed = true;
             score = score + 2;
@@ -4887,6 +4896,9 @@ Object solarium_dest "Workshop"
             rtrue;
         }
         ! Install processor (needs toolkit)
+        if (has_processor && processor_installed == false && quantum_processor notin player) {
+            "You don't have the crystalline processor with you.";
+        }
         if (has_processor && processor_installed == false) {
             if (toolkit notin player) {
                 "The crystalline processor needs to be soldered into the brass harness with precision. You'd need the toolkit for this kind of delicate work.";
