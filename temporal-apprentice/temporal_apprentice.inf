@@ -122,6 +122,7 @@ Global last_bong = 0;
 
 Global machine_dug_out = false;
 Global machine_raised = false;
+Global machine_unlocked = false;
 
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
@@ -135,6 +136,7 @@ Global machine_raised = false;
     print "The front door slams shut behind him. You are alone. Well -- alone except for the cat, who watches you from atop a shelf with an expression of absolute calculation.^";
     thyme_departed = true;
     door_open = false;
+    knock_count = 0;
     move cleaning_rag to player;
     move front_door_key to player;
     move thyme_note to main_workshop;
@@ -695,6 +697,13 @@ Global machine_raised = false;
     }
     wn = 1;
     w = NextWord();
+    if (w == 'catch') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 't'; i->1 = 'a'; i->2 = 'k'; i->3 = 'e';
+        while (len > 4) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
     if (w == 'carve' or 'engrave' or 'inscribe') {
         i = WordAddress(1);
         len = WordLength(1);
@@ -733,6 +742,32 @@ Global machine_raised = false;
         i->2 = 'v';
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
+        ! "ztv to future" (meaning next hop) → rewrite to "ztv forward"
+        wn = 2;
+        w2 = NextWord();
+        if (w2 == 'to' && parse->1 >= 3) {
+            wn = 3;
+            w2 = NextWord();
+            if (w2 == 'future') {
+                ! Blank "to future" and write "forward" after ztv
+                i = WordAddress(2);
+                len = (buffer + 2 + buffer->1) - i;
+                while (len > 0) { len--; i->len = ' '; }
+                i = WordAddress(2);
+                i->0 = 'f'; i->1 = 'o'; i->2 = 'r'; i->3 = 'w';
+                i->4 = 'a'; i->5 = 'r'; i->6 = 'd';
+                Tokenise__(buffer, parse);
+            } else {
+                ! Strip trailing words after noun to fix multi-word destinations
+                ! e.g. "ztv to blitz london" → "ztv to blitz"
+                if (parse->1 > 3) {
+                    i = WordAddress(4);
+                    len = (buffer + 2 + buffer->1) - i;
+                    while (len > 0) { len--; i->len = ' '; }
+                    Tokenise__(buffer, parse);
+                }
+            }
+        }
     }
     if (w == 'repair' or 'fix' or 'mend' or 'install' or 'attach' or 'transcribe' or 'use' or 'replace') {
         i = WordAddress(1);
@@ -935,7 +970,10 @@ Object workshop_entrance "Workshop Entrance"
             if (door_open)
                 print "The oak door stands open, revealing the workshop beyond to the east.^";
             else
-                print "The heavy oak door is closed. You should probably knock.^";
+                if (front_door_key in player)
+                    print "The heavy oak door is closed. You could use your key to get back in.^";
+                else
+                    print "The heavy oak door is closed. You should probably knock.^";
             print "The alley continues west to Praed Street.^";
         ],
          e_to [;
@@ -947,10 +985,16 @@ Object workshop_entrance "Workshop Entrance"
                 BootstrapCross();
                 rtrue;
             }
-            if (door_open) return main_workshop;
+            if (door_open) {
+                door_open = false;
+                return main_workshop;
+            }
+            if (front_door_key in player) {
+                print "You unlock the oak door with the brass key and step inside. The door closes behind you with a solid click.^";
+                return main_workshop;
+            }
             if (knock_count >= 3) {
-                door_open = true;
-                print "You push the door open -- it yields easily, the cold having shrunk the frame -- and step inside.^";
+                print "You push the door open -- it yields easily, the cold having shrunk the frame -- and step inside. The door swings shut behind you.^";
                 return main_workshop;
             }
             "The heavy oak door is firmly closed. Perhaps you should knock.";
@@ -964,10 +1008,16 @@ Object workshop_entrance "Workshop Entrance"
                 BootstrapCross();
                 rtrue;
             }
-            if (door_open) return main_workshop;
+            if (door_open) {
+                door_open = false;
+                return main_workshop;
+            }
+            if (front_door_key in player) {
+                print "You unlock the oak door with the brass key and step inside. The door closes behind you with a solid click.^";
+                return main_workshop;
+            }
             if (knock_count >= 3) {
-                door_open = true;
-                print "You push the door open -- it yields easily, the cold having shrunk the frame -- and step inside.^";
+                print "You push the door open -- it yields easily, the cold having shrunk the frame -- and step inside. The door swings shut behind you.^";
                 return main_workshop;
             }
             "The heavy oak door is firmly closed. Perhaps you should knock.";
@@ -1051,7 +1101,10 @@ Object entrance_door "oak door"
          ],
          before [;
             Close:
-                "You've come this far. No point closing it now.";
+                if (door_open == false)
+                    "The door is already closed.";
+                door_open = false;
+                "You pull the heavy oak door shut. It closes with a solid, satisfying thunk.";
             Open, Push, Pull:
                 if (location == main_workshop) {
                     if (endgame_knocks_heard) {
@@ -1349,7 +1402,7 @@ Object newsboy "newsboy" praed_street
     has animate proper;
 
 Object street_sign "hanging sign" praed_street
-    with name 'sign' 'hanging' 'brass' 'tap',
+    with name 'sign' 'hanging' 'brass' 'tap' 'pub',
          description "A wrought-iron bracket supports a sign depicting a brass tap from which golden liquid flows. The gilding has mostly flaked away, leaving the sign looking like a tap dispensing rust. Below, in smaller letters: ~EST. 1847 -- ALES, SPIRITS, PIES -- WARMTH AND QUESTIONABLE COMPANY.~",
          before [;
             Enter:
@@ -1456,7 +1509,7 @@ Object tap_clock "mantel clock" brass_tap
     has scenery;
 
 Object pint_of_ale "pint of ale"
-    with name 'pint' 'ale' 'beer' 'bitter' 'drink' 'glass',
+    with name 'pint' 'ale' 'beer' 'bitter' 'drink' 'glass' 'porter' 'mild' 'gin',
          description "A pint of dark ale in a heavy glass tankard. It has a head like a thundercloud and smells of hops and mild regret.",
          before [;
             Drink:
@@ -1890,14 +1943,9 @@ Object time_machine "time machine" solarium
                 else if (location == future_street && machine_raised == false)
                     print "With your diving gear, you could haul the machine up from the water.^^";
                 if (location == future_street && has_diving_gear == false) {
-                    ! dial underwater — already described above, skip destination list
+                    ! dial underwater — already described above, skip dial text
                 } else {
-                    print "The destination dial still works. You could travel to:^";
-                    if (visited_roman) print "  Roman Londinium (60 AD)^";
-                    if (visited_blitz || visited_roman) print "  Blitz London (1941)^";
-                    if (visited_hawking || visited_blitz) print "  Cambridge (2009)^";
-                    if (visited_future || visited_hawking) print "  Future London (2045)^";
-                    print "  Workshop (1895)^";
+                    print "The destination dial is damaged -- the markings are too faded to read. Only two settings are clear: FORWARD and HOME.^";
                 }
             }
          ],
@@ -1916,8 +1964,8 @@ Object time_machine "time machine" solarium
                 "The time machine must weigh half a ton -- brass, crystal, lead-acid accumulator and all. You lean into it with everything you've got and succeed only in making your shoes squeak on the floor.";
             Enter, Go, Climb:
                 if (cat_accident == false)
-                    "You place your hands on the brass housing. It hums under your fingers, warm despite the cold air, vibrating at a frequency you feel in your teeth. But there's no hatch, no compartment, no seat. This isn't something you climb into -- it takes everything nearby along for the ride. To travel through time, try TRAVEL TO followed by a destination.";
-                "You step close and feel the temporal field prickle against your skin -- that familiar charge pressing in like static before a storm. The field extends several feet in every direction; there's no cockpit to climb into. To travel through time, try TRAVEL TO followed by a destination.";
+                    "You place your hands on the brass housing. It hums under your fingers, warm despite the cold air, vibrating at a frequency you feel in your teeth. But there's no hatch, no compartment, no seat. This isn't something you climb into -- it takes everything nearby along for the ride. To travel through time, try TRAVEL FORWARD or TRAVEL HOME.";
+                "You step close and feel the temporal field prickle against your skin -- that familiar charge pressing in like static before a storm. The field extends several feet in every direction; there's no cockpit to climb into. To travel through time, try TRAVEL FORWARD or TRAVEL HOME.";
          ],
          add_to_scope roman_dest blitz_dest hawking_dest future_dest solarium_dest crookes_tube_scenery lodestone_scenery processor_scenery cat_basket machine_battery,
     has scenery;
@@ -2356,7 +2404,7 @@ Object temple_hourglass "ritual hourglass" roman_temple
 Object roman_bath "Roman Bathhouse"
     with description [;
             print "Steam billows from heated pools where Romans lounge in varying states of undress and philosophical debate. The acoustics are extraordinary -- you can hear every argument about politics, olive oil, and whether Gaul is really worth the bother.^^";
-            print "A drain grate in the corner occasionally rattles. Something is moving down there.^^";
+            print "A drain grate is set into the corner of the floor.^^";
             print "The Forum is back to the east.^";
         ],
          e_to roman_forum,
@@ -4208,6 +4256,14 @@ Object copernicus "silver-grey cat" main_workshop
             }
             rtrue;
          ],
+         describe [;
+            if (location == roman_bath) {
+                if (copernicus_named)
+                    "^Copernicus is balanced on a dry marble ledge, fur bristling with indignation at the steam. He watches the bathwater with the expression of a cat who considers the entire concept of immersion a personal affront.";
+                "^A silver-grey cat is balanced on a dry marble ledge, fur bristling with indignation at the steam. He watches the bathwater with the expression of a cat who considers the entire concept of immersion a personal affront.";
+            }
+            rfalse;
+         ],
          description [;
             if (copernicus_named) {
                 "A magnificently smug British Shorthair of considerable girth and negligible conscience. Copernicus is shaded silver -- a white undercoat tipped with grey along his back, flanks, and head, fading to pale silver on his legs and pure white at the chin and chest. In certain light he looks like a cat made of smoke. His round face, copper eyes, and plush coat give him the air of a very small, very disapproving judge. His purr is thunderous. A small brass name tag hangs from his collar.";
@@ -4689,22 +4745,22 @@ Object solarium_dest "Workshop"
     if (time_machine notin location) {
         "The time machine isn't here. You'll need to find it first.";
     }
-    ! Era-specific access gates (don't block when destination matches current era)
-    if (location == roman_tunnels && marcus_impressed == false && noun ~= roman_dest) {
-        "You haven't found what you need in this era yet. The lodestone that powers the temporal compass is failing -- you'll need to find a replacement before the machine can navigate safely.";
-    }
-    if (location == blitz_street && machine_dug_out == false && noun ~= blitz_dest) {
-        "The time machine is half-buried under rubble from the last bombing raid. You'll need to dig it out before you can use it.";
-    }
-    if (location == future_street && has_diving_gear == false && noun ~= future_dest) {
-        "The time machine sank when it arrived. You can see it just below the waterline, but you'd need diving gear to reach it.";
-    }
-    ! One-time fix text for Future
-    if (location == future_street && machine_raised == false) {
-        machine_raised = true;
-        print "You strap on the diving gear and haul the time machine up from the murky water. It surfaces with a reluctant gurgle, shedding Thames water and what appears to be a very confused eel.^^";
-    }
     if (noun == solarium_dest) {
+        ! Era-specific access gates for travel home
+        if (location == roman_tunnels && marcus_impressed == false) {
+            "You haven't found what you need in this era yet. The lodestone that powers the temporal compass is failing -- you'll need to find a replacement before the machine can navigate safely.";
+        }
+        if (location == blitz_street && machine_dug_out == false) {
+            "The time machine is half-buried under rubble from the last bombing raid. You'll need to dig it out before you can use it.";
+        }
+        if (location == future_street && has_diving_gear == false) {
+            "The time machine sank when it arrived. You can see it just below the waterline, but you'd need diving gear to reach it.";
+        }
+        ! One-time fix text for Future
+        if (location == future_street && machine_raised == false) {
+            machine_raised = true;
+            print "You strap on the diving gear and haul the time machine up from the murky water. It surfaces with a reluctant gurgle, shedding Thames water and what appears to be a very confused eel.^^";
+        }
         if (location == solarium) {
             "You're already home. The machine hums contentedly in the corner, as if to say it agrees.";
         }
@@ -4724,11 +4780,13 @@ Object solarium_dest "Workshop"
         PlayerTo(solarium);
         rtrue;
     }
-    if (noun == roman_dest) {
-        if (current_era == 1) {
-            "You're already in Roman Londinium.";
-        }
-        if (visited_roman == false) visited_roman = true;
+    ! Any other named destination redirects to TRAVEL FORWARD
+    TravelForwardSub();
+    rtrue;
+];
+
+[ DoTransit dest;
+    if (dest == roman_dest) {
         current_era = 1;
         move time_machine to roman_tunnels;
         move copernicus to roman_tunnels;
@@ -4736,16 +4794,7 @@ Object solarium_dest "Workshop"
         PlayerTo(roman_tunnels);
         rtrue;
     }
-    if (noun == blitz_dest) {
-        if (location == blitz_street) {
-            "You're already in wartime London.";
-        }
-        if (visited_roman == false) {
-            "The dial won't turn that far. With the lodestone this weak, the machine can only reach nearby eras. You'll need to build up temporal range one hop at a time.";
-        }
-        if (lodestone_installed == false) {
-            "The compass housing is dark. The machine can't navigate without a working lodestone. You need to install a replacement.";
-        }
+    if (dest == blitz_dest) {
         if (visited_blitz == false) visited_blitz = true;
         current_era = 2;
         move time_machine to blitz_street;
@@ -4759,16 +4808,7 @@ Object solarium_dest "Workshop"
         PlayerTo(blitz_street);
         rtrue;
     }
-    if (noun == hawking_dest) {
-        if (location == cambridge_gates) {
-            "You're already in Cambridge.";
-        }
-        if (visited_blitz == false) {
-            "The lodestone can't reach that far yet. Each hop seems to extend the range a little, but you'll need to work your way there.";
-        }
-        if (tube_installed == false) {
-            "The Crookes tube is fractured. The oscillation circuit can't sustain a transit. You need to install a replacement.";
-        }
+    if (dest == hawking_dest) {
         if (visited_hawking == false) visited_hawking = true;
         current_era = 3;
         move time_machine to cambridge_gates;
@@ -4777,16 +4817,7 @@ Object solarium_dest "Workshop"
         PlayerTo(cambridge_gates);
         rtrue;
     }
-    if (noun == future_dest) {
-        if (location == future_street) {
-            "You're already in future London.";
-        }
-        if (visited_hawking == false) {
-            "The machine strains but can't reach 2045 yet. The failing lodestone limits your range. One more hop might extend it far enough.";
-        }
-        if (formula_transcribed == false) {
-            "The machine can travel but can't aim this far. You need to transcribe the navigation formula into the calibration matrix.";
-        }
+    if (dest == future_dest) {
         if (visited_future == false) visited_future = true;
         current_era = 4;
         move time_machine to future_street;
@@ -4804,7 +4835,61 @@ Object solarium_dest "Workshop"
         PlayerTo(future_street);
         rtrue;
     }
-    "The machine's dial doesn't seem to have that setting. Try: Roman Londinium, Blitz London, Cambridge, Future London, or Workshop.";
+    rfalse;
+];
+
+[ TravelForwardSub;
+    if (cat_accident == false) {
+        "The time machine isn't activated yet. Perhaps you should examine it more closely.";
+    }
+    if (time_machine notin location) {
+        "The time machine isn't here. You'll need to find it first.";
+    }
+    ! Era-specific access gates
+    if (location == roman_tunnels && marcus_impressed == false) {
+        "You haven't found what you need in this era yet. The lodestone that powers the temporal compass is failing -- you'll need to find a replacement before the machine can navigate safely.";
+    }
+    if (location == blitz_street && machine_dug_out == false) {
+        "The time machine is half-buried under rubble from the last bombing raid. You'll need to dig it out before you can use it.";
+    }
+    if (location == future_street && has_diving_gear == false) {
+        "The time machine sank when it arrived. You can see it just below the waterline, but you'd need diving gear to reach it.";
+    }
+    ! One-time fix text for Future
+    if (location == future_street && machine_raised == false) {
+        machine_raised = true;
+        print "You strap on the diving gear and haul the time machine up from the murky water. It surfaces with a reluctant gurgle, shedding Thames water and what appears to be a very confused eel.^^";
+    }
+    ! Determine next unvisited era and dispatch
+    if (visited_roman == false) {
+        DoTransit(roman_dest);
+        rtrue;
+    }
+    if (lodestone_installed == false) {
+        "The compass housing is dark. The machine can't navigate without a working lodestone. You need to install a replacement before pushing forward.";
+    }
+    if (visited_blitz == false) {
+        DoTransit(blitz_dest);
+        rtrue;
+    }
+    if (tube_installed == false) {
+        "The Crookes tube is fractured. The oscillation circuit can't sustain a transit. You need to install a replacement before pushing forward.";
+    }
+    if (visited_hawking == false) {
+        DoTransit(hawking_dest);
+        rtrue;
+    }
+    if (formula_transcribed == false) {
+        "The machine can travel but can't aim this far. You need to transcribe the navigation formula into the calibration matrix before pushing forward.";
+    }
+    if (visited_future == false) {
+        DoTransit(future_dest);
+        rtrue;
+    }
+    if (location == future_street && processor_installed == false) {
+        "The crystal is cracked. The field generator won't sustain another transit. You need to install a replacement.";
+    }
+    "You've visited every era the machine can reach. Try TRAVEL HOME to return to the workshop.";
 ];
 
 [ CarveSub;
@@ -4928,6 +5013,7 @@ Object solarium_dest "Workshop"
             }
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
+                machine_unlocked = true;
                 move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
@@ -4948,6 +5034,7 @@ Object solarium_dest "Workshop"
             print "The oscillation circuit is restored.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
+                machine_unlocked = true;
                 move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
@@ -4964,6 +5051,7 @@ Object solarium_dest "Workshop"
             print "The machine shudders. The destination dial, which has always felt approximate, suddenly clicks with precision. For the first time, the machine can AIM.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
+                machine_unlocked = true;
                 move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
@@ -4984,6 +5072,7 @@ Object solarium_dest "Workshop"
             print "The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself. The temporal field generator is restored.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
+                machine_unlocked = true;
                 move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
@@ -5168,7 +5257,8 @@ Object solarium_dest "Workshop"
     print "  give X to Y ..... hand something to someone^";
     print "  show X to Y ..... display something to someone^^";
     print "[SPECIAL ACTIONS]^";
-    print "  travel to X ..... use the time machine (where it is)^";
+    print "  travel forward ... advance to the next era^";
+    print "  travel home ...... return to the workshop^";
     print "  carve ........... carve an inscription^";
     print "  bury ............ bury something for posterity^";
     print "  dig ............. excavate rubble^";
@@ -5220,7 +5310,9 @@ Verb 'zbr'
     * noun                                  -> Bury;
 
 Verb 'ztv'
-    * 'to' noun                             -> TravelTo;
+    * 'to' noun                             -> TravelTo
+    * 'forward'                             -> TravelForward
+    *                                       -> TravelForward;
 
 Verb 'zrp'
     *                                       -> Repair

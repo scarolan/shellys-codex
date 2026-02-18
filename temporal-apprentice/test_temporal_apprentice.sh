@@ -144,7 +144,7 @@ run_test "Close door from outside" "east
 knock
 knock
 knock
-close door" "No point closing it now"
+close door" "solid, satisfying thunk"
 
 # --- Spanner Puzzle ---
 echo "[Spanner Puzzle]"
@@ -419,7 +419,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 examine machine" "Crookes tube is webbed"
 # Crystal cracking during Future transit
 
@@ -486,7 +486,7 @@ give aureus to felix
 north
 show lodestone to marcus
 down
-travel to blitz" "compass housing is dark"
+travel forward" "compass housing is dark"
 
 # Blitz: repair machine installs tube (needs toolkit)
 run_test "Blitz: repair installs tube" "$ENTER_WORKSHOP
@@ -506,7 +506,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -537,7 +537,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -571,7 +571,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -585,7 +585,7 @@ open box
 take tube
 east
 dig
-travel to cambridge" "Crookes tube is fractured"
+travel forward" "Crookes tube is fractured"
 
 # (Cambridge and Future install-as-you-go tests are below, after their setups are defined)
 
@@ -603,6 +603,23 @@ east" "Initiati solum"
 run_test "Bathhouse accessible" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "Steam billows"
+run_test_absent "Drain grate no rattling in room desc" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west" "rattles"
+run_test_absent "Drain grate no movement hint in room desc" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west" "Something is moving"
+run_test "Drain grate mentioned in room desc" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west" "drain grate"
+run_test "Examine drain grate reveals glint" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+examine drain" "glints"
+run_test "Copernicus bathhouse description" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+look" "dry marble ledge"
 run_test "Fish visible in bathhouse" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west" "small silvery fish"
@@ -610,6 +627,10 @@ run_test "Take fish from pool" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 take fish" "undignified chase"
+run_test "Catch fish from pool" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+catch fish" "undignified chase"
 run_test "Cat ignores grate without bribe" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -901,7 +922,7 @@ down
 look" "vaulted tunnel of Roman brick"
 run_test "Machine gate: quest blocks travel" "$ENTER_WORKSHOP
 $CAT_TO_TUNNELS
-travel to blitz" "haven.t found what you need"
+travel forward" "haven.t found what you need"
 run_test "Machine gate: quest blocks repair" "$ENTER_WORKSHOP
 $CAT_TO_TUNNELS
 fix machine" "haven.t completed your task"
@@ -996,7 +1017,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz" "1941"
+travel forward" "1941"
 run_test "Crookes tube shatters in Blitz transit" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -1011,7 +1032,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz" "champagne flute"
+travel forward" "champagne flute"
 run_test "Eras must be sequential" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -1026,7 +1047,8 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to cambridge" "reach that far yet"
+travel forward
+travel forward" "half-buried under rubble"
 
 # --- WWII London ---
 echo "[WWII London]"
@@ -1045,7 +1067,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz"
+travel forward"
 run_test "Blitz street" "$BLITZ_SETUP" "blackout"
 run_test "Shelter accessible" "$BLITZ_SETUP
 down" "air raid shelter"
@@ -1161,7 +1183,7 @@ carve
 west
 down
 repair machine
-travel to blitz
+travel forward
 north" "TEMPUS FUGIT"
 run_test "Fire extinguish" "$BLITZ_SETUP
 north
@@ -1337,7 +1359,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -1352,7 +1374,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge"
+travel forward"
 run_test "Cambridge gates" "$CAMBRIDGE_SETUP" "Gonville"
 run_test "Cambridge machine stable" "$CAMBRIDGE_SETUP
 examine machine" "stable here"
@@ -1394,7 +1416,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -1409,7 +1431,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -1439,7 +1461,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -1454,7 +1476,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -1496,7 +1518,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 east
 take soldier
 west
@@ -1514,7 +1536,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -1614,7 +1636,7 @@ take printout
 west
 south
 south
-travel to future" "can.t aim this far"
+travel forward" "can.t aim this far"
 
 # --- Future London ---
 echo "[Future London 2045]"
@@ -1637,7 +1659,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -1652,7 +1674,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -1668,7 +1690,7 @@ west
 south
 south
 repair machine
-travel to future"
+travel forward"
 # --- Museum Invitation Display ---
 echo "[Museum Invitation Display]"
 run_test "Hawking invitation in museum" "$FUTURE_SETUP
@@ -1901,7 +1923,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -1916,7 +1938,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -1932,7 +1954,7 @@ west
 south
 south
 repair machine
-travel to future
+travel forward
 north
 up
 open panel
@@ -1981,7 +2003,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -1996,7 +2018,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -2012,7 +2034,7 @@ west
 south
 south
 repair machine
-travel to future
+travel forward
 north
 up
 open panel
@@ -2059,7 +2081,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -2074,7 +2096,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -2090,7 +2112,7 @@ west
 south
 south
 repair machine
-travel to future
+travel forward
 north
 up
 open panel
@@ -2137,7 +2159,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 east
 take soldier
 west
@@ -2158,7 +2180,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -2174,7 +2196,7 @@ west
 south
 south
 repair machine
-travel to future
+travel forward
 north
 up
 open panel
@@ -2222,7 +2244,7 @@ north
 north
 down
 repair machine
-travel to blitz
+travel forward
 east
 take soldier
 west
@@ -2243,7 +2265,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -2259,7 +2281,7 @@ west
 south
 south
 repair machine
-travel to future
+travel forward
 north
 up
 open panel
@@ -2307,7 +2329,7 @@ north
 north
 down
 repair machine
-travel to blitz
+travel forward
 north
 up
 extinguish
@@ -2333,7 +2355,7 @@ take tube
 east
 dig
 repair machine
-travel to cambridge
+travel forward
 north
 east
 take invitation
@@ -2349,7 +2371,7 @@ west
 south
 south
 repair machine
-travel to future
+travel forward
 north
 up
 open panel
@@ -2406,8 +2428,29 @@ echo "[Travel-to Scope]"
 run_test "Travel to dest where machine is not" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south
-travel to blitz" "time machine isn.t here"
+travel forward" "time machine isn.t here"
 run_test "Travel to dest before cat accident not in scope" "travel to roman" "can.t see any such thing"
+run_test "Travel to roman redirects to forward" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+down
+repair machine
+travel to roman" "1941"
+run_test_absent "Machine desc no named destinations" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+examine machine" "Roman Londinium"
+run_test "Machine desc shows FORWARD and HOME" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+examine machine" "FORWARD and HOME"
 
 # --- Scenery objects ---
 echo "[Scenery Objects]"
@@ -2549,7 +2592,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 west
 take valve
 east
@@ -2773,7 +2816,7 @@ carve
 west
 south
 repair machine
-travel to blitz
+travel forward
 north
 examine inscription" "TEMPUS FUGIT"
 
@@ -3080,7 +3123,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 east
 take soldier
 west
@@ -3104,7 +3147,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to blitz
+travel forward
 north
 up
 extinguish
@@ -3166,22 +3209,22 @@ insert lodestone in machine" "REPAIR MACHINE"
 run_test_absent "Insert lodestone no generic refusal" "$MACHINE_CMD_SETUP
 insert lodestone in machine" "can.t contain things"
 run_test "Enter machine hints travel" "$MACHINE_CMD_SETUP
-enter machine" "TRAVEL TO"
+enter machine" "TRAVEL FORWARD"
 run_test_absent "Enter machine no generic refusal" "$MACHINE_CMD_SETUP
 enter machine" "not something you can enter"
 run_test "Board machine hints travel" "$MACHINE_CMD_SETUP
-board machine" "TRAVEL TO"
+board machine" "TRAVEL FORWARD"
 run_test_absent "Board machine no unrecognised verb" "$MACHINE_CMD_SETUP
 board machine" "not a verb I recognise"
 
 # --- Issue #72: climb onto machine ---
 echo "[Issue #72: Climb Machine]"
 run_test "Climb machine hints travel" "$MACHINE_CMD_SETUP
-climb machine" "TRAVEL TO"
+climb machine" "TRAVEL FORWARD"
 run_test_absent "Climb machine no generic refusal" "$MACHINE_CMD_SETUP
 climb machine" "can.t see any such thing"
 run_test "Get on machine hints travel" "$ENTER_SOLARIUM
-get on machine" "TRAVEL TO"
+get on machine" "TRAVEL FORWARD"
 
 # --- Issue #77: Praed Street & Brass Tap ---
 echo "[Issue #77: Praed Street & Brass Tap]"
@@ -3640,14 +3683,14 @@ west
 west
 west
 east
-east" "push the door open"
+east" "brass key"
 run_test "No re-knock after first visit" "$ENTER_SOLARIUM
 clean
 west
 west
 west
 east
-east" "yields easily"
+east" "closes behind you"
 run_test "Knock with key skips sequence" "$ENTER_SOLARIUM
 clean
 west
