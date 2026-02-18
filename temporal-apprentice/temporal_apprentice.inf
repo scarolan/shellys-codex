@@ -4418,7 +4418,7 @@ Object future_dest "Future London"
     has proper;
 
 Object solarium_dest "Workshop"
-    with name 'workshop' 'solarium' 'home' '1895' 'victorian',
+    with name 'workshop' 'home' '1895' 'victorian',
     has proper;
 
 ! ===================================================================
