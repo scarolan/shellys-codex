@@ -735,6 +735,7 @@ Global machine_unlocked = false;
         Tokenise__(buffer, parse);
     }
     if (w == 'travel' or 'teleport') {
+        ! Rewrite verb to ztv
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
@@ -742,31 +743,87 @@ Global machine_unlocked = false;
         i->2 = 'v';
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
-        ! "ztv to future" (meaning next hop) → rewrite to "ztv forward"
-        wn = 2;
-        w2 = NextWord();
-        if (w2 == 'to' && parse->1 >= 3) {
-            wn = 3;
-            w2 = NextWord();
-            if (w2 == 'future') {
-                ! Blank "to future" and write "forward" after ztv
-                i = WordAddress(2);
-                len = (buffer + 2 + buffer->1) - i;
-                while (len > 0) { len--; i->len = ' '; }
-                i = WordAddress(2);
-                i->0 = 'f'; i->1 = 'o'; i->2 = 'r'; i->3 = 'w';
-                i->4 = 'a'; i->5 = 'r'; i->6 = 'd';
-                Tokenise__(buffer, parse);
-            } else {
-                ! Strip trailing words after noun to fix multi-word destinations
-                ! e.g. "ztv to blitz london" → "ztv to blitz"
+        wn = 2; w2 = NextWord();
+        if (w2 == 'home' or 'back') {
+            ! "travel home/back" → "ztv to home"
+            ! Blank entire buffer and rewrite from start
+            i = buffer + 2;
+            len = buffer->1;
+            while (len > 0) { len--; (i+len)->0 = ' '; }
+            i->0 = 'z'; i->1 = 't'; i->2 = 'v'; i->3 = ' ';
+            i->4 = 't'; i->5 = 'o'; i->6 = ' ';
+            i->7 = 'h'; i->8 = 'o'; i->9 = 'm'; i->10 = 'e';
+            if (buffer->1 < 11) buffer->1 = 11;
+            Tokenise__(buffer, parse);
+        } else if (w2 == 'to' && parse->1 >= 3) {
+            wn = 3; w2 = NextWord();
+            if (w2 == 'workshop' or 'home' or '1895' or 'victorian') {
+                ! Keep as "ztv to <noun>" for going home
                 if (parse->1 > 3) {
                     i = WordAddress(4);
                     len = (buffer + 2 + buffer->1) - i;
                     while (len > 0) { len--; i->len = ' '; }
                     Tokenise__(buffer, parse);
                 }
+            } else {
+                ! ALL other "travel to X" → "ztv forward"
+                i = buffer + 2;
+                len = buffer->1;
+                while (len > 0) { len--; (i+len)->0 = ' '; }
+                i->0 = 'z'; i->1 = 't'; i->2 = 'v'; i->3 = ' ';
+                i->4 = 'f'; i->5 = 'o'; i->6 = 'r'; i->7 = 'w';
+                i->8 = 'a'; i->9 = 'r'; i->10 = 'd';
+                if (buffer->1 < 11) buffer->1 = 11;
+                Tokenise__(buffer, parse);
             }
+        }
+        ! else: bare "travel" or "travel forward [in time]" already match grammar
+        ! Strip trailing words after "forward" (e.g. "travel forward in time")
+        wn = 2; w2 = NextWord();
+        if (w2 == 'forward' && parse->1 > 2) {
+            i = WordAddress(3);
+            len = (buffer + 2 + buffer->1) - i;
+            while (len > 0) { len--; i->len = ' '; }
+            Tokenise__(buffer, parse);
+        }
+    }
+    if (w == 'time') {
+        wn = 2; w2 = NextWord();
+        if (w2 == 'travel' or 'teleport') {
+            ! "time travel" → "ztv forward"
+            i = buffer + 2;
+            len = buffer->1;
+            while (len > 0) { len--; (i+len)->0 = ' '; }
+            i->0 = 'z'; i->1 = 't'; i->2 = 'v'; i->3 = ' ';
+            i->4 = 'f'; i->5 = 'o'; i->6 = 'r'; i->7 = 'w';
+            i->8 = 'a'; i->9 = 'r'; i->10 = 'd';
+            if (buffer->1 < 11) buffer->1 = 11;
+            Tokenise__(buffer, parse);
+        }
+    }
+    if (w == 'activate') {
+        ! "activate machine" → "ztv forward"
+        i = buffer + 2;
+        len = buffer->1;
+        while (len > 0) { len--; (i+len)->0 = ' '; }
+        i->0 = 'z'; i->1 = 't'; i->2 = 'v'; i->3 = ' ';
+        i->4 = 'f'; i->5 = 'o'; i->6 = 'r'; i->7 = 'w';
+        i->8 = 'a'; i->9 = 'r'; i->10 = 'd';
+        if (buffer->1 < 11) buffer->1 = 11;
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'pull' or 'yank') {
+        wn = 2; w2 = NextWord();
+        if (w2 == 'lever' or 'levers') {
+            ! "pull lever" / "yank lever" → "ztv forward"
+            i = buffer + 2;
+            len = buffer->1;
+            while (len > 0) { len--; (i+len)->0 = ' '; }
+            i->0 = 'z'; i->1 = 't'; i->2 = 'v'; i->3 = ' ';
+            i->4 = 'f'; i->5 = 'o'; i->6 = 'r'; i->7 = 'w';
+            i->8 = 'a'; i->9 = 'r'; i->10 = 'd';
+            if (buffer->1 < 11) buffer->1 = 11;
+            Tokenise__(buffer, parse);
         }
     }
     if (w == 'repair' or 'fix' or 'mend' or 'install' or 'attach' or 'transcribe' or 'use' or 'replace') {
@@ -1960,14 +2017,20 @@ Object time_machine "time machine" solarium
                 if (noun == quantum_processor && processor_installed)
                     "The crystalline processor is already seated in its brass harness.";
                 "The time machine's innards are far too delicate for casual insertion. Try REPAIR MACHINE or FIX MACHINE to install components properly.";
+            SwitchOn:
+                if (cat_accident)
+                    <<TravelForward>>;
+                "The machine isn't yours to activate. Not yet, anyway.";
             Push, Pull:
+                if (cat_accident)
+                    "You don't push the machine -- you push the lever. Try TRAVEL FORWARD or TRAVEL HOME.";
                 "The time machine must weigh half a ton -- brass, crystal, lead-acid accumulator and all. You lean into it with everything you've got and succeed only in making your shoes squeak on the floor.";
             Enter, Go, Climb:
                 if (cat_accident == false)
                     "You place your hands on the brass housing. It hums under your fingers, warm despite the cold air, vibrating at a frequency you feel in your teeth. But there's no hatch, no compartment, no seat. This isn't something you climb into -- it takes everything nearby along for the ride. To travel through time, try TRAVEL FORWARD or TRAVEL HOME.";
                 "You step close and feel the temporal field prickle against your skin -- that familiar charge pressing in like static before a storm. The field extends several feet in every direction; there's no cockpit to climb into. To travel through time, try TRAVEL FORWARD or TRAVEL HOME.";
          ],
-         add_to_scope roman_dest blitz_dest hawking_dest future_dest solarium_dest crookes_tube_scenery lodestone_scenery processor_scenery cat_basket machine_battery,
+         add_to_scope solarium_dest crookes_tube_scenery lodestone_scenery processor_scenery cat_basket machine_battery,
     has scenery;
 
 Object crookes_tube_scenery "Crookes tube" time_machine
@@ -4507,10 +4570,6 @@ Object solarium_dest "Workshop"
 
 [ InScope actor;
     if (actor == player && cat_accident) {
-        PlaceInScope(roman_dest);
-        PlaceInScope(blitz_dest);
-        PlaceInScope(hawking_dest);
-        PlaceInScope(future_dest);
         PlaceInScope(solarium_dest);
     }
     if (actor == tommy)
@@ -4767,6 +4826,14 @@ Object solarium_dest "Workshop"
         if (location == future_street && processor_installed == false) {
             "The crystal is cracked. The field generator won't sustain another transit. You need to install a replacement.";
         }
+        ! Pre-transit preparation flavor
+        if (copernicus in location) {
+            if (copernicus_named)
+                print "Copernicus recognises what's happening. He hops into his wicker basket and curls up with the air of a seasoned commuter settling in for the journey home.^^";
+            else
+                print "The cat seems to know what's coming. He hops into the wicker basket and curls up tight, watching you.^^";
+        }
+        print "You step to the controls, hands finding the familiar brass. The temporal field gathers around you like a held breath.^^";
         current_era = 0;
         move copernicus to solarium;
         move time_machine to solarium;
@@ -4780,12 +4847,19 @@ Object solarium_dest "Workshop"
         PlayerTo(solarium);
         rtrue;
     }
-    ! Any other named destination redirects to TRAVEL FORWARD
-    TravelForwardSub();
-    rtrue;
+    ! Safety net: non-home destination shouldn't reach here (BeforeParsing rewrites them)
+    "The dial is too damaged to aim precisely. Try TRAVEL FORWARD or TRAVEL HOME.";
 ];
 
 [ DoTransit dest;
+    ! Pre-transit preparation flavor
+    if (copernicus in location) {
+        if (copernicus_named)
+            print "Copernicus recognises the signs. He leaps into his wicker basket with a practiced thump, curling into a tight ball and fixing you with copper eyes that say ~get on with it, then.~^^";
+        else
+            print "The cat recognises the signs. He leaps into the wicker basket with a practiced thump, curling tight and watching you with narrowed copper eyes.^^";
+    }
+    print "You step to the controls and rest your hands on the brass housing. The metal is warm, almost alive, thrumming with a frequency you feel in your wrists and teeth. The temporal field swells outward, pressing against your skin like static before a storm. You take a breath.^^";
     if (dest == roman_dest) {
         current_era = 1;
         move time_machine to roman_tunnels;
@@ -5256,9 +5330,13 @@ Object solarium_dest "Workshop"
     print "  ask X about Y ... ask someone about a topic^";
     print "  give X to Y ..... hand something to someone^";
     print "  show X to Y ..... display something to someone^^";
+    print "[TIME TRAVEL]^";
+    print "  travel forward .... advance to the next era^";
+    print "  travel home ....... return to the workshop^";
+    print "  pull lever ........ same as travel forward^";
+    print "  activate machine .. same as travel forward^";
+    print "  time travel ....... same as travel forward^^";
     print "[SPECIAL ACTIONS]^";
-    print "  travel forward ... advance to the next era^";
-    print "  travel home ...... return to the workshop^";
     print "  carve ........... carve an inscription^";
     print "  bury ............ bury something for posterity^";
     print "  dig ............. excavate rubble^";

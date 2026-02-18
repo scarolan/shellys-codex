@@ -2429,7 +2429,7 @@ run_test "Travel to dest where machine is not" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south
 travel forward" "time machine isn.t here"
-run_test "Travel to dest before cat accident not in scope" "travel to roman" "can.t see any such thing"
+run_test "Travel to dest before cat accident rewrites to forward" "travel to roman" "isn.t activated"
 run_test "Travel to roman redirects to forward" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -2451,6 +2451,46 @@ examine machine" "Roman Londinium"
 run_test "Machine desc shows FORWARD and HOME" "$ENTER_WORKSHOP
 $CAT_TO_TUNNELS
 examine machine" "FORWARD and HOME"
+
+# --- Travel synonym tests ---
+echo "[Travel Synonyms]"
+
+# Setup for travel synonym tests (in tunnels after cat accident with machine)
+TRAVEL_GATE_SETUP="$ENTER_WORKSHOP
+$CAT_TO_TUNNELS"
+
+# Setup for travel home tests (in tunnels with lodestone installed)
+TRAVEL_HOME_SETUP="$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+down
+repair machine"
+
+run_test "pull lever triggers forward travel" "$TRAVEL_GATE_SETUP
+pull lever" "lodestone"
+run_test "yank lever triggers forward travel" "$TRAVEL_GATE_SETUP
+yank lever" "lodestone"
+run_test "time travel triggers forward travel" "$TRAVEL_GATE_SETUP
+time travel" "lodestone"
+run_test "activate machine triggers forward travel" "$TRAVEL_GATE_SETUP
+activate machine" "lodestone"
+run_test "travel to blitz london triggers forward travel" "$TRAVEL_GATE_SETUP
+travel to blitz london" "lodestone"
+run_test "travel forward in time triggers forward travel" "$TRAVEL_GATE_SETUP
+travel forward in time" "lodestone"
+run_test "travel home returns to workshop" "$TRAVEL_HOME_SETUP
+travel home" "solarium"
+run_test "travel back returns to workshop" "$TRAVEL_HOME_SETUP
+travel back" "solarium"
 
 # --- Scenery objects ---
 echo "[Scenery Objects]"
