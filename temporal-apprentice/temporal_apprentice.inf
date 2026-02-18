@@ -6,7 +6,7 @@
 
 Constant Story "The Temporal Apprentice";
 Constant Headline "^A Time-Travelling Adventure^^";
-Constant MAX_SCORE 189;
+Constant MAX_SCORE 194;
 
 Replace DrawStatusLine;
 Replace GamePrologue;

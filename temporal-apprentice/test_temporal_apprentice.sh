@@ -1952,7 +1952,7 @@ east
 north"
 run_test "Install all components" "$ENDGAME_CMD" "fully repaired"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
-run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 189"
+run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 194"
 
 # --- Bootstrap Paradox Endgame ---
 echo "[Bootstrap Paradox]"
@@ -2362,6 +2362,7 @@ up
 repair machine
 travel to workshop
 west
+clean workshop
 west
 west
 open door
