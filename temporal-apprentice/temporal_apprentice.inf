@@ -1726,7 +1726,7 @@ Object corridor_door "corridor door"
     has scenery;
 
 Object front_door_key "front door key"
-    with name 'key' 'front' 'door' 'brass',
+    with name 'key' 'front' 'brass',
          description "A heavy brass key, warm from Dr. Thyme's waistcoat pocket. It opens the front door of 14 Praed Street. Presumably.";
 
 ! ===================================================================
