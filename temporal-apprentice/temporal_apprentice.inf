@@ -1780,7 +1780,7 @@ Object solarium_controls "controls" solarium
     has scenery pluralname;
 
 Object time_machine "time machine" solarium
-    with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal' 'crystal' 'crystals' 'resonator' 'resonators',
+    with name 'machine' 'time' 'device' 'contraption' 'engine' 'temporal' 'crystal' 'crystals' 'resonator' 'resonators' 'brass' 'fittings',
          description [;
             if (cat_accident == false) {
                 print "A magnificent contraption of brass, crystal, and what might be a repurposed church organ. Brass housings encase crystal resonators connected by a bewildering maze of copper tubing. A set of controls features several levers, a compass-like dial, and what appears to be a bicycle bell. A battered wicker basket is bolted to one side, its cushion matted with silver fur. Underneath, a heavy lead-acid accumulator sits in an iron cradle -- the machine's own portable power supply. The whole thing hums with barely contained energy.^^";
@@ -3618,6 +3618,11 @@ Object future_sign "faded sign" future_street
          description "A faded sign bolted to the brickwork reads: ~HIGH TIDE SCHEDULE -- CONSULT BEFORE DESCENT.~ Someone has scrawled beneath it in marker pen: ~RISING FAST TODAY.~ Below that, in different handwriting: ~IT'S ALWAYS RISING FAST TODAY.~",
     has scenery;
 
+Object future_tide_marks "tide marks" future_street
+    with name 'tide' 'marks' 'mark' 'brickwork' 'brick',
+         description "Brown tide marks climb the brickwork in horizontal bands, each one recording a high-water mark like rings in a tree. The lowest are pale and old, the highest disturbingly fresh. The Thames has been keeping score, and it's winning.",
+    has scenery pluralname;
+
 Object future_museum "Thames Barrier Museum"
     with description [;
             print "The museum occupies the upper floors of what was once the Thames Barrier control centre. Display cases hold artefacts salvaged from flooded London -- underground signs, a red telephone box, soggy copies of the Evening Standard dated 2038.^^";
@@ -3665,13 +3670,13 @@ Object eleanor_display "wartime art display" future_museum
          ],
     has scenery;
 
-Object church_display "church model" future_museum
-    with name 'church' 'model' 'margaret',
+Object church_display "church display" future_museum
+    with name 'church' 'model' 'margaret' 'photograph' 'photo' 'skyline',
          description [;
             if (church_saved) {
                 "A beautifully detailed scale model of St. Margaret's Church, complete with tiny sandbags on the roof. The plaque reads: ~St. Margaret's Church -- survived the Blitz of 1941 when a fire watcher smothered an incendiary with sandbags. The church still stands above the floodwaters, one of the few medieval buildings to survive both war and water.~ You feel a fierce, irrational pride.";
             }
-            "You don't see any such display.";
+            "A black-and-white photograph shows a gap-toothed London skyline, a jagged absence where a church spire ought to be. The caption reads: ~Site of St. Margaret's Church, destroyed by incendiary bomb, 1941. One of many irreplaceable buildings lost to the Blitz.~ The photograph has the flat finality of history that was never rewritten.";
          ],
     has scenery;
 
