@@ -722,7 +722,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus" "commands iron"
-run_test "Temple accessible after Marcus" "$ENTER_WORKSHOP
+run_test "Temple accessible after offering watch" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 take fish
@@ -734,7 +734,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east" "Temple of Mithras"
 run_test "Carve inscription" "$ENTER_WORKSHOP
 take journal
@@ -752,7 +752,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve" "TEMPUS FUGIT"
 
@@ -774,7 +774,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve stone with toolkit" "TEMPUS FUGIT"
 run_test "carve stone with chisel" "$ENTER_WORKSHOP
@@ -793,7 +793,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve stone with chisel" "TEMPUS FUGIT"
 run_test "engrave stone with toolkit" "$ENTER_WORKSHOP
@@ -812,7 +812,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 engrave stone with toolkit" "TEMPUS FUGIT"
 run_test "inscribe stone with toolkit" "$ENTER_WORKSHOP
@@ -831,7 +831,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 inscribe stone with toolkit" "TEMPUS FUGIT"
 run_test "bare carve still works" "$ENTER_WORKSHOP
@@ -850,15 +850,63 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve" "TEMPUS FUGIT"
 
-run_test "Bury time capsule" "$ENTER_WORKSHOP
+run_test "Give watch to Livia grants temple access" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
 south
+give aureus to felix
+north
+show lodestone to marcus
+give watch to livia" "Enter freely"
+run_test "Livia demands offering after Marcus" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
 south
-bury" "two thousand years"
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia" "demand.*offering"
+run_test "Livia still blocks temple without offering" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+talk to livia
+east" "Initiati solum"
+run_test "Livia rejects non-watch gifts" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+give coins to livia" "no need of material things"
 # --- Drainage Tunnels ---
 echo "[Drainage Tunnels]"
 run_test "Cat accident sends to tunnels" "$ENTER_WORKSHOP
@@ -1177,7 +1225,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve
 west
@@ -1338,6 +1386,42 @@ up
 dig
 travel to workshop" "back in the solarium"
 
+# --- Issue #126: QA bug fixes ---
+echo "[Issue #126 QA Fixes]"
+# Bug 1: "remove lodestone" should give a sensible message, not library default
+run_test_absent "Remove lodestone: no library default (issue #126)" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+remove lodestone" "isn.t in or on anything"
+run_test "Remove lodestone: sensible message (issue #126)" "$ENTER_WORKSHOP
+$CAT_TO_TUNNELS
+remove lodestone" "mounted in the compass housing"
+# Bug 2: installing lodestone should not say "One component down"
+run_test_absent "No 'component down' on lodestone install (issue #126)" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+down
+repair machine" "One component down"
+# Bug 3: Tommy visible at rubble site when helping
+run_test "Tommy at rubble site when helping (issue #126)" "$BLITZ_SETUP
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+look" "Tommy"
+
 # --- Cambridge ---
 echo "[Cambridge 2009]"
 # Get lodestone, impress Marcus, install lodestone, travel to Blitz, get tube, install tube, dig machine, travel to Cambridge
@@ -1376,6 +1460,9 @@ dig
 repair machine
 travel forward"
 run_test "Cambridge gates" "$CAMBRIDGE_SETUP" "Gonville"
+run_test "Return to Cambridge after travel home (issue #126)" "$CAMBRIDGE_SETUP
+travel home
+travel forward" "Gonville"
 run_test "Cambridge machine stable" "$CAMBRIDGE_SETUP
 examine machine" "stable here"
 run_test "Find invitation" "$CAMBRIDGE_SETUP
@@ -2216,7 +2303,7 @@ east
 north"
 run_test "Rough ending (critical path + Eleanor gift)" "$ROUGH_ENDGAME" "ROUGH ENDING"
 
-# Good ending: critical path + Eleanor (+25) + inscription (+20) + capsule (+20) = 150
+# Good ending: critical path + Eleanor (+25) + inscription (+20) + offering (+20) = 150
 GOOD_ENDGAME="$ENTER_WORKSHOP
 take journal
 north
@@ -2233,15 +2320,10 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve
 west
-south
-south
-bury
-north
-north
 down
 repair machine
 travel forward
@@ -2301,7 +2383,7 @@ east
 north"
 run_test "Good ending (critical path + 3 side quests)" "$GOOD_ENDGAME" "GOOD ENDING"
 
-# Perfect ending: all events (score = 180)
+# Perfect ending: all events (score = 194)
 PERFECT_ENDGAME="$ENTER_WORKSHOP
 take journal
 north
@@ -2318,15 +2400,10 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve
 west
-south
-south
-bury
-north
-north
 down
 repair machine
 travel forward
@@ -2758,7 +2835,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 examine torches" "iron brackets"
 run_test "Examine altar in Temple" "$ENTER_WORKSHOP
@@ -2773,7 +2850,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 examine altar" "clay figurines"
 run_test "Examine carvings in Temple" "$ENTER_WORKSHOP
@@ -2788,7 +2865,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 examine carvings" "cosmic bull"
 
@@ -2850,7 +2927,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve
 west
@@ -3014,7 +3091,7 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 examine hourglass" "colour of dried blood"
 # Roman: astrolabe at merchants
@@ -3135,18 +3212,26 @@ south
 give aureus to felix
 north
 show lodestone to marcus
-talk to livia
+give watch to livia
 east
 carve
 examine newspaper" "MYSTERIOUS INSCRIPTION"
 
-# Headline shift: capsule_buried
-run_test "Headline shifts after capsule_buried" "$ENTER_WORKSHOP
+# Headline shift: watch_offered
+run_test "Headline shifts after watch_offered" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
 south
-south
-bury
-examine newspaper" "POCKET WATCH IN ROMAN STRATUM"
+give aureus to felix
+north
+show lodestone to marcus
+give watch to livia
+examine newspaper" "POCKET WATCH FOUND ON ROMAN PRIESTESS"
 
 # Headline shift: eleanor_gift
 run_test "Headline shifts after eleanor_gift" "$ENTER_WORKSHOP

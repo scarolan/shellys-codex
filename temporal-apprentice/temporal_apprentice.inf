@@ -68,7 +68,7 @@ Global formula_transcribed = false;
 Global processor_installed = false;
 
 Global inscription_carved = false;
-Global capsule_buried = false;
+Global watch_offered = false;
 Global church_saved = false;
 Global eleanor_gift = 0;
 
@@ -258,13 +258,11 @@ Global machine_unlocked = false;
 
 [ NPC_Talk_Livia;
     if (livia_trusts) {
-        print "Livia smiles warmly. ~The mysteries of Mithras are open to you, traveller. The walls of this temple have stood for generations. May they stand for generations more.~^";
+        print "Livia smiles warmly, your grandfather's watch catching the light on its leather cord. ~The mysteries of Mithras are open to you, traveller. The walls of this temple have stood for generations. May they stand for generations more.~^";
         rtrue;
     }
     if (marcus_impressed) {
-        print "Livia regards you with cautious interest. ~Marcus speaks highly of you. He says you command the thunder stones. Impressive, if true. Perhaps you are worthy of the temple's secrets.~^^";
-        livia_trusts = true;
-        print "She steps aside from the inner sanctum. ~Intra libere.~ Enter freely. Even your Latin is up to that.^";
+        print "Livia regards you with cautious interest. ~Marcus speaks highly of you. He says you command the thunder stones.~ She pauses, studying you. ~Impressive, if true. But the mysteries demand more than a soldier's word. They demand an offering.~ Her gaze is steady. ~Something personal. Something that marks the passage of time.~^";
         rtrue;
     }
     print "Livia stands at the entrance to the inner sanctum, arms folded. ~Locus sacer mysteriorum. Initiati solum.~ A sacred place of mysteries, initiates only. Her Latin is formal and unhurried -- easier to follow than Marcus's military bark, but somehow more final.^";
@@ -561,11 +559,11 @@ Global machine_unlocked = false;
         }
         rtrue;
     }
-    if (topic == 'capsule' or 'time' or 'buried' or 'box') {
-        if (capsule_buried) {
-            print "~Oh yeah! The museum curator found an ancient time capsule recently. Roman-era, they think. It's on display. Pretty cool, actually.~^";
+    if (topic == 'priestess' or 'watch' or 'mithras' or 'roman') {
+        if (watch_offered) {
+            print "~Oh yeah! The museum has this Roman priestess exhibit. They found a pocket watch around her neck -- like, a Victorian one. Two thousand years old but looks brand new. Pretty wild, right?~^";
         } else {
-            print "~Time capsule? Don't know anything about that.~^";
+            print "~Roman stuff? The museum has some bits and pieces. Ask the curator.~^";
         }
         rtrue;
     }
@@ -1245,16 +1243,16 @@ Object newspaper "newspaper"
             if (self has scenery) {
                 print "Through the climate-controlled glass, you can make out a single yellowed page of the Times. Your stomach lurches with recognition. There -- the pencil circle around the advert for TEMPORAL ENGINEERING. There -- the fold where you always tucked it under your arm. There -- the smudge of newsprint from the newsboy's grubby fingers.^^";
                 print "A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
-                if (capsule_buried)
-                    print "A smaller note adds: ~Found alongside brass pocket watch. See Roman Time Capsule exhibit.~^^";
+                if (watch_offered)
+                    print "A smaller note adds: ~Found alongside brass pocket watch. See Priestess of Mithras exhibit.~^^";
                 ! Show headlines through the glass
                 print "The headlines are still legible through the glass:^";
                 if (inscription_carved)
                     print "  ~MYSTERIOUS INSCRIPTION IN CITY CHURCH~ -- the ink looks freshly printed, though the paper around it is yellowed with age.^";
                 else
                     print "  ~RESTORATION WORKS AT CITY CHURCHES -- Stonemasons Report Nothing of Interest.~^";
-                if (capsule_buried)
-                    print "  ~VICTORIAN POCKET WATCH IN ROMAN STRATUM~ -- the letters shimmer and rearrange as you watch.^";
+                if (watch_offered)
+                    print "  ~VICTORIAN POCKET WATCH FOUND ON ROMAN PRIESTESS~ -- the letters shimmer and rearrange as you watch.^";
                 else
                     print "  ~THAMES EXCAVATION YIELDS POTTERY FRAGMENTS -- Scholars Describe Find as Adequate.~^";
                 if (eleanor_gift)
@@ -1275,8 +1273,8 @@ Object newspaper "newspaper"
                 print "  ~MYSTERIOUS INSCRIPTION IN CITY CHURCH -- Latin Graffiti Predates Foundation by Centuries.~ The ink looks freshly printed, though the paper around it has yellowed.^";
             else
                 print "  ~RESTORATION WORKS AT CITY CHURCHES -- Stonemasons Report Nothing of Interest.~^";
-            if (capsule_buried)
-                print "  ~VICTORIAN POCKET WATCH IN ROMAN STRATUM -- Thames Excavation Yields Impossible Anachronism.~ The letters shimmer and rearrange as you watch.^";
+            if (watch_offered)
+                print "  ~VICTORIAN POCKET WATCH FOUND ON ROMAN PRIESTESS -- Temple Excavation Yields Impossible Anachronism.~ The letters shimmer and rearrange as you watch.^";
             else
                 print "  ~THAMES EXCAVATION YIELDS POTTERY FRAGMENTS -- Scholars Describe Find as Adequate.~^";
             if (eleanor_gift)
@@ -2042,6 +2040,12 @@ Object crookes_tube_scenery "Crookes tube" time_machine
                 "The Crookes tube is webbed with fractures, fine cracks radiating through the evacuated glass like ice on a winter puddle. Cathode rays still flicker weakly inside, but the temporal oscillation field is failing. You need a replacement.";
             "A hand-blown glass envelope, evacuated and sealed with meticulous care. Inside, cathode rays dance at controlled intervals, generating the temporal oscillation field. Dr. Thyme's journal mentions blowing seven of these before getting one that worked. This is the seventh.";
          ],
+         before [;
+            Take, Remove:
+                if (tube_installed)
+                    "The vacuum tube is firmly seated in the oscillation circuit. Removing it would undo your repairs.";
+                "The Crookes tube is fractured, but it's still mounted in the oscillation circuit. You need a replacement, not a removal -- try REPAIR MACHINE once you have a new tube.";
+         ],
     has scenery;
 
 Object lodestone_scenery "lodestone" time_machine
@@ -2050,6 +2054,12 @@ Object lodestone_scenery "lodestone" time_machine
             if (lodestone_installed)
                 "The new lodestone sits snug in the compass housing, glowing a steady warm amber. The needle holds true north without a tremor -- Mediterranean magnetite of exceptional purity, doing exactly what it was quarried to do.";
             "The original lodestone is fading. It still sits in the compass housing, but the glow has dimmed to a sullen flicker and the needle drifts lazily, unable to hold a bearing. Dr. Thyme's journal warned this would happen -- seventeen test activations was more than any natural magnet could sustain.";
+         ],
+         before [;
+            Take, Remove:
+                if (lodestone_installed)
+                    "The lodestone is firmly seated in the compass housing. Removing it would undo your repairs.";
+                "The lodestone is fading, but it's still mounted in the compass housing. You need a replacement, not a removal -- try REPAIR MACHINE once you have a new lodestone.";
          ],
     has scenery;
 
@@ -2061,6 +2071,12 @@ Object processor_scenery "quantum processor" time_machine
             if (visited_future)
                 "A crack runs clean through the crystalline processor in its brass harness. The field generator sputters and fails, unable to sustain the calculations it needs. You'll need a replacement -- but this technology shouldn't exist yet.";
             "A crystalline component seated in a brass harness with copper solder tabs. It arrived by post, packed in straw, with a note reading: FOR THE FIELD GENERATOR. YOU WILL UNDERSTAND IN TIME. It resolves seventeen simultaneous differential equations instantaneously.";
+         ],
+         before [;
+            Take, Remove:
+                if (processor_installed)
+                    "The quantum processor is firmly seated in its brass harness. Removing it would undo your repairs.";
+                "The processor is cracked, but it's still mounted in its brass harness. You need a replacement, not a removal -- try REPAIR MACHINE once you have a new processor.";
          ],
     has scenery;
 
@@ -2553,7 +2569,7 @@ Object merchant_astrolabe "brass astrolabe" roman_merchants
 Object roman_docks "Thames Dockside"
     with description [;
             print "The Thames is narrower here than in your time, and considerably less polluted (though give the Romans a few more years). Small wooden boats bob at rickety piers while workers haul cargo -- amphorae, timber, British tin.^^";
-            print "The ground near the waterline is soft and muddy. Good for burying things, if one were so inclined.^^";
+            print "The ground near the waterline is soft and muddy, churned by the boots of dockworkers and the drag of cargo.^^";
             print "The Merchant's Quarter is back to the north.^";
         ],
          n_to roman_merchants,
@@ -2561,12 +2577,8 @@ Object roman_docks "Thames Dockside"
 
 Object soft_mud "soft mud" roman_docks
     with name 'mud' 'ground' 'earth' 'dirt' 'soil',
-         description [;
-            if (capsule_buried) {
-                "The mud has been patted down where you buried your pocket watch. With any luck, someone will dig it up in about two thousand years and be very confused.";
-            }
-            "The mud here is soft and deep. Ideal for burying something for posterity, if you happened to have something worth preserving.";
-         ],
+         description "The mud here is soft and deep, dark with Thames silt. Boot prints fill with water almost as fast as they're made.",
+
     has scenery;
 
 Object docks_area "docks" roman_docks
@@ -2642,6 +2654,22 @@ Object livia "Priestess Livia" roman_forum
             Tell:
                 "Livia listens with an expression that suggests she's evaluating your spiritual worth and finding it slightly below average.";
             Give:
+                if (noun == pocket_watch && marcus_impressed) {
+                    watch_offered = true;
+                    livia_trusts = true;
+                    score = score + 20;
+                    remove pocket_watch;
+                    print "You hold out your grandfather's pocket watch. Livia takes it carefully, turning the brass case in the Mediterranean sunlight. She presses it to her ear and her eyes widen at the ticking.^^";
+                    print "~Tempus,~ she breathes. Time. She threads a leather cord through the fob ring and ties it around her neck. The watch hangs against her white robes, catching the sun in small golden flashes.^^";
+                    print "~A worthy offering.~ She steps aside from the inner sanctum. ~Intra libere.~ Enter freely.^";
+                    rtrue;
+                }
+                if (noun == pocket_watch && marcus_impressed == false) {
+                    "Livia barely glances at you. ~I do not accept offerings from strangers. Seek Marcus's blessing first.~";
+                }
+                if (noun == tin_soldier) {
+                    "Livia turns the tin soldier over in her fingers. ~A child's toy. The mysteries demand something more personal.~ She hands it back.";
+                }
                 "~I have no need of material things,~ she says, in the tone of someone who has quite a nice collection of material things at home.";
          ],
     has animate proper female;
@@ -2836,7 +2864,7 @@ Object distant_clock "distant clock tower" blitz_street
 Object blitz_shelter "Underground Shelter"
     with description [;
             print "The tube station has been pressed into service as an air raid shelter. Families huddle on platforms with blankets, thermoses, and the grim determination that defines the Blitz spirit. Someone is singing ~We'll Meet Again~ slightly off-key.^^";
-            print "Corporal Tommy sits in a corner with his wireless set. Young Eleanor sits nearby, drawing intently.^^";
+            print "Young Eleanor sits nearby, drawing intently.^^";
             print "The exit leads back up to the street.^";
         ],
          u_to blitz_street,
@@ -3246,9 +3274,26 @@ Object peggy "Warden Peggy" blitz_street
          ],
     has animate proper female;
 
-Object tommy "Corporal Tommy" blitz_shelter
+Object tommy "Corporal Tommy"
     with name 'tommy' 'corporal' 'soldier',
+         found_in [;
+            if (tommy_helping) {
+                if (location == blitz_shelter or blitz_street or blitz_rubble)
+                    rtrue;
+            }
+            if (location == blitz_shelter)
+                rtrue;
+            rfalse;
+         ],
+         initial [;
+            if (location == blitz_shelter)
+                "Corporal Tommy sits in a corner with his wireless set.";
+            "Tommy is here, sleeves rolled up and ready to dig.";
+         ],
          description [;
+            if (location ~= blitz_shelter) {
+                "Tommy stands amid the rubble, sleeves rolled up, surveying the debris with a soldier's calm. One arm in a sling, the other ready to work. ~Just point me at it,~ he says.";
+            }
             if (radio_fixed)
                 "Tommy sits by his now-functioning wireless, headphones on, occasionally scribbling notes. He looks ten years younger with something useful to do.";
             "A young man in a rumpled uniform, his arm in a sling from Dunkirk. He fiddles hopelessly with his dead wireless set.";
@@ -3283,8 +3328,6 @@ Object tommy "Corporal Tommy" blitz_shelter
 Object eleanor "Young Eleanor" blitz_shelter
     with name 'eleanor' 'girl' 'child',
          description [;
-            if (eleanor_gift == 1)
-                "Eleanor clutches the pocket watch you gave her, a smile breaking through for the first time. She's already drawing a picture of it -- a brass circle with elaborate cogs, surrounded by cats.";
             if (eleanor_gift == 2)
                 "Eleanor marches the tin soldier you gave her across her drawings, a smile breaking through for the first time. She's already drawn a whole army of tin soldiers to keep it company -- all surrounded by cats, naturally.";
             "A girl of about eight, pale and quiet, hunched over a stack of salvaged paper. She draws with intense concentration -- cats, mostly. Dozens of cats in every pose. She hasn't spoken since the bombing that took her mother.";
@@ -3297,17 +3340,14 @@ Object eleanor "Young Eleanor" blitz_shelter
                 "Eleanor listens solemnly, then draws you a picture of what you just said. It's surprisingly accurate.";
             Give:
                 if (eleanor_gift) "Eleanor clutches her gift and smiles at you. She doesn't need anything else.";
-                if (noun == pocket_watch || noun == tin_soldier) {
+                if (noun == pocket_watch) {
+                    "Eleanor turns the watch over in her small hands, listening to the tick. Then she gently pushes it back towards you. She doesn't say a word, but her eyes say: this is yours. Keep it.";
+                }
+                if (noun == tin_soldier) {
                     score = score + 25;
-                    if (noun == pocket_watch) {
-                        eleanor_gift = 1;
-                        remove pocket_watch;
-                        print "Eleanor takes the pocket watch and turns it over in her small hands. For the first time, something like wonder crosses her face. She holds it to her ear, listening to the tick-tick-tick, and the faintest ghost of a smile appears.^^";
-                    } else {
-                        eleanor_gift = 2;
-                        remove tin_soldier;
-                        print "Eleanor takes the tin soldier and stands it on her knee. For the first time, something like a real smile crosses her face. She makes the soldier march across her drawing pad, and a tiny giggle escapes.^^";
-                    }
+                    eleanor_gift = 2;
+                    remove tin_soldier;
+                    print "Eleanor takes the tin soldier and stands it on her knee. For the first time, something like a real smile crosses her face. She makes the soldier march across her drawing pad, and a tiny giggle escapes.^^";
                     print "She tucks the gift carefully into her pocket, then -- solemnly -- tears out her best cat drawing and offers it to you. It shows a magnificently smug silver cat.^^";
                     move eleanor_drawing_item to player;
                     "You suspect this drawing might survive rather longer than you'd expect.";
@@ -3811,8 +3851,8 @@ Object future_tide_marks "tide marks" future_street
 Object future_museum "Thames Barrier Museum"
     with description [;
             print "The museum occupies the upper floors of what was once the Thames Barrier control centre. Display cases hold artefacts salvaged from flooded London -- underground signs, a red telephone box, soggy copies of the Evening Standard dated 2038.^^";
-            if (capsule_buried)
-                print "A special exhibit catches your eye: ~ROMAN TIME CAPSULE -- DISCOVERED AT THAMES DOCKSIDE EXCAVATION.~ Inside the case, unmistakably, is your grandfather's pocket watch. The label reads: ~Circa 60 AD. Remarkably well-preserved. Origin unknown.~^^";
+            if (watch_offered)
+                print "A special exhibit catches your eye: ~PRIESTESS OF MITHRAS -- TEMPLE EXCAVATION, ROMAN LONDINIUM.~ Inside the case, hanging from a leather cord, is your grandfather's pocket watch. The label reads: ~Brass timepiece found among burial goods of a Roman priestess. Circa 60 AD. Origin of timepiece unknown.~^^";
             if (eleanor_gift)
                 print "Another display: ~WARTIME ART COLLECTION.~ Among the children's drawings is one labelled ~Eleanor Morrison, aged 8, 1941.~ It shows a silver cat. You recognise the style immediately.^^";
             if (church_saved)
@@ -3835,11 +3875,11 @@ Object delorean "DeLorean" future_museum
          description "A stainless steel DeLorean DMC-12, mounted on a display platform. The plaque reads: ~Time Machine (Replica) -- As featured in the Back to the Future documentary trilogy (1985-1990). Note: actual time travel requires considerably more brass and considerably less plutonium.~",
     has scenery;
 
-Object time_capsule_display "time capsule display" future_museum
-    with name 'capsule' 'display' 'exhibit',
+Object priestess_display "priestess display" future_museum
+    with name 'priestess' 'display' 'exhibit' 'mithras',
          description [;
-            if (capsule_buried) {
-                "Your grandfather's pocket watch sits in a museum case, nearly two thousand years after you buried it in Roman mud. The label reads: ~Circa 60 AD. Brass timepiece of unknown origin. Remarkably well-preserved. Donated by Thames Archaeological Society.~ You feel simultaneously proud and deeply weird.";
+            if (watch_offered) {
+                "A brass timepiece on a leather cord, displayed in a climate-controlled case. The label reads: ~Found around the neck of a Roman priestess during the Temple of Mithras excavation, Londinium. Circa 60 AD. The timepiece is a Victorian pocket watch of unknown provenance -- an impossible anachronism that has baffled archaeologists since its discovery.~ You feel simultaneously proud and deeply weird.";
             }
             "You don't see any such display.";
          ],
@@ -4255,11 +4295,11 @@ Object curator "Museum Curator" future_museum
                     print "~We preserve what we can. London has survived plague, fire, war, and now water. The Thames Barrier held for seventy years. That's not a failure -- that's an engineering triumph that bought us time.~^";
                     rtrue;
                 }
-                if (second == 'capsule' or 'watch' or 'roman' or 'buried') {
-                    if (capsule_buried) {
-                        print "~The Roman time capsule? Remarkable find. A Victorian pocket watch buried in a Roman-era stratum. The archaeologists are still arguing about it. Personally, I think someone was playing silly games with time.~ They wink.^";
+                if (second == 'priestess' or 'watch' or 'roman' or 'mithras') {
+                    if (watch_offered) {
+                        print "~The Priestess of Mithras? Remarkable find. A Victorian pocket watch on a Roman priestess -- the archaeologists are still arguing about it. Found on a leather cord around her neck.~ They lean closer. ~Personally, I think someone was playing silly games with time.~ They wink.^";
                     } else {
-                        print "~Time capsules? We have a few. People love burying things for the future. The future, I can tell you, is mostly interested in not drowning.~^";
+                        print "~Roman finds? We have a few. The temple excavation turned up some interesting artefacts. Nothing earth-shattering.~^";
                     }
                     rtrue;
                 }
@@ -4273,12 +4313,7 @@ Object curator "Museum Curator" future_museum
                 }
                 if (second == 'eleanor' or 'drawing' or 'art') {
                     if (eleanor_gift) {
-                        print "~Eleanor Morrison? Wonderful artist. Survived the Blitz, became one of Britain's most celebrated painters. Her early cat drawings are quite collectible. She always credited a stranger during the war who gave her ";
-                        if (eleanor_gift == 1)
-                            print "a pocket watch";
-                        else
-                            print "a tin soldier";
-                        print " and, she said, hope.~^";
+                        print "~Eleanor Morrison? Wonderful artist. Survived the Blitz, became one of Britain's most celebrated painters. Her early cat drawings are quite collectible. She always credited a stranger during the war who gave her a tin soldier and, she said, hope.~^";
                     } else {
                         print "~We have some wartime art in the collection. Children's drawings, mostly. Poignant stuff.~^";
                     }
@@ -4607,7 +4642,7 @@ Object solarium_dest "Workshop"
 [ PrintEnding;
     if (score >= MAX_SCORE) {
         print "^^=== PERFECT ENDING ===^^";
-        print "Every component recovered. Every inscription carved, every capsule buried, every church saved, every drawing inspired. You have not merely repaired the time machine -- you have woven yourself into the fabric of history.^^";
+        print "Every component recovered. Every inscription carved, every offering made, every church saved, every drawing inspired. You have not merely repaired the time machine -- you have woven yourself into the fabric of history.^^";
         print "Dr. Thyme returns from tea to find his machine in better condition than when he left. Copernicus sits atop it, naturally. ~I see you've had a productive afternoon,~ he says, peering at you over an imaginary pair of spectacles. ~Tea?~^^";
         print "You accept. The scones are excellent.^";
     } else if (score >= 135) {
@@ -4954,6 +4989,11 @@ Object solarium_dest "Workshop"
         rtrue;
     }
     if (formula_transcribed == false) {
+        if (has_formula == false) {
+            ! Player visited Cambridge but left without the formula — let them return
+            DoTransit(hawking_dest);
+            rtrue;
+        }
         "The machine can travel but can't aim this far. You need to transcribe the navigation formula into the calibration matrix before pushing forward.";
     }
     if (visited_future == false) {
@@ -4985,18 +5025,6 @@ Object solarium_dest "Workshop"
 ];
 
 [ BurySub;
-    if (location == roman_docks) {
-        if (capsule_buried) {
-            "You've already buried your time capsule. The mud is only so deep.";
-        }
-        if (pocket_watch notin player) {
-            "You need something worth burying for posterity. Your pocket watch, perhaps?";
-        }
-        capsule_buried = true;
-        score = score + 20;
-        remove pocket_watch;
-        "You dig a hole in the soft Thames mud and carefully bury your grandfather's pocket watch, wrapping it in a piece of cloth from your jacket. Two thousand years from now, someone will be very confused.^^You pat the mud flat. Somewhere in the far future, a museum curator has just had a very good day.";
-    }
     "This doesn't seem like a good place to bury anything.";
 ];
 
@@ -5030,9 +5058,6 @@ Object solarium_dest "Workshop"
         print "You and Tommy set to work on the rubble. He's stronger than he looks -- one good arm notwithstanding -- and between you, you shift enough brick and timber to reach the metal box.^^";
         print "~Military supply crate,~ Tommy says, wiping sweat from his brow. ~From the look of it, someone was shipping electronics. Your lucky day.~^";
         rtrue;
-    }
-    if (location == roman_docks) {
-        "The mud here is soft enough. If you want to bury something, try BURY.";
     }
     "There's nothing useful to dig here.";
 ];
@@ -5081,7 +5106,6 @@ Object solarium_dest "Workshop"
             remove lodestone;
             score = score + 2;
             print "You ease the new lodestone into the compass housing. It clicks home with a satisfying snap, and the needle swings wildly before settling, trembling, on true north. The housing glows -- faintly at first, then steady, warm amber. The machine's navigational field hums back to life.^^";
-            print "One component down.^";
             if (has_vacuum_tube && tube_installed == false && has_formula && formula_transcribed == false && has_processor && processor_installed == false) {
                 ! Don't check for all-installed yet, let the player install more
             }
