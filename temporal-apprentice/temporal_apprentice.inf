@@ -145,7 +145,7 @@ Global machine_unlocked = false;
 
 [ NPC_Talk_Thyme;
     if (components_installed) {
-        print "~Splendid work, my boy! Absolutely splendid! I knew hiring an apprentice was the right decision. Well, the cat helped too, I suppose.~^";
+        print "Dr. Thyme stares at the machine, then at you, then back at the machine. ~I was gone for twenty minutes. I went to get a scone.~ He circles the machine slowly, touching each component with trembling fingers. ~The lodestone -- Mediterranean magnetite. The tube -- military precision. And this --~ he stops at the processor, face pale -- ~this shouldn't exist yet.~ He turns to you. ~Who are you? What happened while I was out?~^";
         rtrue;
     }
     if (cat_accident) {
@@ -432,6 +432,9 @@ Global machine_unlocked = false;
     if (topic == 'time' or 'travel' or 'machine' or 'temporal') {
         if (hawking_convinced) {
             print "~Here is what fascinates me. You came here in a machine that works. But the theory explaining WHY it works didn't exist until tonight. If I hadn't thrown this party, if you hadn't come, if I'd destroyed my notes...~ The synthesiser pauses. ~Would your machine still function? Would you still be here?~ Another pause. ~I suspect the universe does not permit that question to have a comfortable answer.~^";
+        } else if (hawking_phase == 0) {
+            hawking_phase = 1;
+            print "~I have spent my career studying the nature of time. Closed timelike curves, chronology protection, the grandfather paradox. And now someone walks in claiming to have solved it with brass and steam.~ The synthesiser almost sounds amused. ~I'm listening. Show me something that shouldn't exist in 2009.~^";
         } else {
             print "~I have spent my career studying the nature of time. Closed timelike curves, chronology protection, the grandfather paradox. And now someone walks in claiming to have solved it with brass and steam.~ The synthesiser almost sounds amused. ~I'm listening.~^";
         }
@@ -1880,7 +1883,7 @@ Object solarium "The Solarium"
                     if (time_machine in self) {
                         print "The time machine dominates the room";
                         if (components_installed)
-                            print ", humming with renewed purpose. All four components are installed and the machine sings with quiet confidence.^^";
+                            print ", humming with renewed purpose.^^";
                         else {
                             print ", looking worse for wear since the cat's intervention.";
                             if (lodestone_installed || tube_installed || formula_transcribed || processor_installed) {
@@ -1956,7 +1959,7 @@ Object time_machine "time machine" solarium
                         print "The silver-grey cat is sitting near the control panel, because of course he is.^";
                 }
             } else if (components_installed) {
-                print "The time machine gleams with renewed purpose. All four components are installed and the machine hums with a steady, confident rhythm. The temporal field generator glows a satisfying blue.^";
+                print "The time machine gleams with renewed purpose. The temporal field generator glows a satisfying blue.^";
             } else {
                 print "The time machine looks decidedly worse for wear since Copernicus's intervention.";
                 ! Progressive damage + installed status
@@ -3251,8 +3254,6 @@ Object vacuum_tube "vacuum tube" metal_box
                     score = score + 8;
                     move self to player;
                     print "You carefully extract the vacuum tube from its packing straw. It's warm to the touch and hums faintly -- temporal resonance.";
-                    if (has_lodestone && has_vacuum_tube && has_formula && has_processor)
-                        print " That's all four components. Time to go home.";
                     print "^";
                     rtrue;
                 }
@@ -4240,8 +4241,6 @@ Object quantum_processor "quantum processor" quantum_cabinet
                     score = score + 8;
                     move self to player;
                     print "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. Built on Hawking's theory. Which exists because you went to his party. Which you could only attend because of a machine powered by this crystal. Somewhere, somewhen, someone is going to pack one of these into a brass harness, write a cryptic note, and post it to 14 Praed Street.";
-                    if (has_lodestone && has_vacuum_tube && has_formula && has_processor)
-                        print " That's all four components. Time to go home.";
                     print "^";
                     rtrue;
                 }
@@ -4480,20 +4479,29 @@ Object copernicus "silver-grey cat" main_workshop
                         4: print "Copernicus chases a pigeon with terrifying efficiency. The pigeon escapes. Barely.^";
                        };
                     2: switch (random(4)) {
-                        1: print "Copernicus curls up next to Eleanor, who immediately begins drawing him.^";
+                        1: if (eleanor in location)
+                               print "Copernicus curls up next to Eleanor, who immediately begins drawing him.^";
+                           else
+                               print "Copernicus stares at the ceiling during an air raid with complete indifference. The concept of bombing has not impressed him.^";
                         2: print "Copernicus stares at the ceiling during an air raid with complete indifference. The concept of bombing has not impressed him.^";
                         3: print "Someone in the shelter shares their spam sandwich with Copernicus. He accepts it as his due.^";
                         4: print "Copernicus sits in a doorway and refuses to move. Several people have to step over him. He is unconcerned.^";
                        };
                     3: switch (random(4)) {
-                        1: print "Copernicus hops onto Professor Hawking's lap. The synthesiser says: ~I approve of this cat.~^";
+                        1: if (hawking in location)
+                               print "Copernicus hops onto Professor Hawking's lap. The synthesiser says: ~I approve of this cat.~^";
+                           else
+                               print "Copernicus sits on a stack of physics papers with the expression of a cat who is improving them.^";
                         2: print "Copernicus bats at a champagne cork across the floor of the Great Hall.^";
                         3: print "A Cambridge student tries to photograph Copernicus. Copernicus turns his back. Every. Single. Time.^";
                         4: print "Copernicus sits on a stack of physics papers with the expression of a cat who is improving them.^";
                        };
                     4: switch (random(4)) {
                         1: print "Copernicus peers over the edge of the walkway at the water below with the expression of a cat who finds the entire ocean personally offensive.^";
-                        2: print "Kai reaches out to pet Copernicus. He allows it, which Kai takes as the highest honour of her life.^";
+                        2: if (kai in location)
+                               print "Kai reaches out to pet Copernicus. He allows it, which Kai takes as the highest honour of her life.^";
+                           else
+                               print "Copernicus finds the driest spot in the entire flooded district and sits on it. Of course he does.^";
                         3: print "Copernicus sniffs the flooded air and sneezes. He gives the water a look of pure contempt.^";
                         4: print "Copernicus finds the driest spot in the entire flooded district and sits on it. Of course he does.^";
                        };
@@ -5093,6 +5101,12 @@ Object solarium_dest "Workshop"
     if (location == roman_tunnels && marcus_impressed == false) {
         "You haven't completed your task in this era yet. Best explore the city above before tinkering with the machine.";
     }
+    if (location == future_street && machine_raised == false) {
+        if (has_diving_gear == false)
+            "The machine is still underwater. You'll need diving gear to reach it.";
+        machine_raised = true;
+        print "You strap on the diving gear and haul the time machine up from the murky water. It surfaces with a reluctant gurgle, shedding Thames water and what appears to be a very confused eel.^^";
+    }
     if (time_machine in location && noun == time_machine) {
         if (components_installed) {
             "The machine is already repaired. It hums contentedly.";
@@ -5112,7 +5126,6 @@ Object solarium_dest "Workshop"
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
                 machine_unlocked = true;
-                move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
             rtrue;
@@ -5133,7 +5146,6 @@ Object solarium_dest "Workshop"
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
                 machine_unlocked = true;
-                move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
             rtrue;
@@ -5150,7 +5162,6 @@ Object solarium_dest "Workshop"
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
                 machine_unlocked = true;
-                move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
             rtrue;
@@ -5171,7 +5182,6 @@ Object solarium_dest "Workshop"
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
                 machine_unlocked = true;
-                move dr_thyme to main_workshop;
                 print "^The Temporal Displacement Engine is fully repaired.^";
             }
             rtrue;
