@@ -3438,7 +3438,7 @@ Object eleanor "Young Eleanor" blitz_shelter
             Tell:
                 "Eleanor listens solemnly, then draws you a picture of what you just said. It's surprisingly accurate.";
             Give:
-                if (eleanor_gift) "Eleanor clutches her gift and smiles at you. She doesn't need anything else.";
+                if (eleanor_gift) "Eleanor glances at the offering, then shakes her head gently and goes back to marching her tin soldier across the drawings. She has everything she needs.";
                 if (noun == pocket_watch) {
                     "Eleanor turns the watch over in her small hands, listening to the tick. Then she gently pushes it back towards you. She doesn't say a word, but her eyes say: this is yours. Keep it.";
                 }
