@@ -2810,7 +2810,7 @@ Object felix "Felix the Merchant" roman_merchants
     has animate proper male;
 
 Object lodestone "lodestone"
-    with name 'lodestone' 'stone' 'magnet' 'thunder',
+    with name 'lodestone' 'stone' 'magnet' 'magnetite' 'thunder',
          description [;
             print "A chunk of naturally magnetic iron ore, dense and dark. Mediterranean magnetite of exceptional purity.";
             if (toolkit in player)
@@ -4854,6 +4854,15 @@ Object solarium_dest "Workshop"
         move pint_of_ale to player;
         print "You put your remaining coins on the bar. The barkeep eyes them, sweeps them up, and pulls a pint of dark ale with the practiced efficiency of someone who has been doing this since before you were born.^^";
         "~There you go, luv. Don't drink it too fast -- I'm not mopping up after you.~";
+    }
+    if (noun == lodestone) {
+        if (felix notin location)
+            "There's nobody here selling lodestones.";
+        if (has_lodestone)
+            "You've already bought the lodestone. Felix assures you it's the only one worth having.";
+        if (gold_aureus notin player)
+            "Felix wants one gold aureus for the lodestone. You don't have one.";
+        <<Give gold_aureus felix>>;
     }
     "That's not something you can buy here.";
 ];

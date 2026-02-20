@@ -680,6 +680,16 @@ take aureus
 east
 south
 give aureus to felix" "lodestone"
+run_test "Buy lodestone completes transaction" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+buy lodestone" "lodestone"
 run_test "Lodestone pulls at iron hooks on purchase" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
