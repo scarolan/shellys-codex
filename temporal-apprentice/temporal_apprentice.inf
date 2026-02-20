@@ -4118,7 +4118,7 @@ Object flood_water "floodwater"
                 }
                 StopDaemon(self);
                 if (has_processor == false) {
-                    print "^The submerged laboratory is sealed beneath the tide. The quantum processor -- the last component you need -- is down there, locked in a cabinet, as unreachable as if it were on the moon. Without it, the time machine's field generator will never work. You are stranded in 2045.^";
+                    print "^The submerged laboratory is sealed beneath the tide. The quantum processor is down there, locked in a cabinet, as unreachable as if it were on the moon. Without it, the time machine's field generator will never work. You are stranded in 2045.^";
                     deadflag = 6;
                 }
                 rtrue;
