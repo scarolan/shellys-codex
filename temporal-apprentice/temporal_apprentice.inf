@@ -4650,7 +4650,7 @@ Object solarium_dest "Workshop"
 [ PrintEnding;
     if (score >= MAX_SCORE) {
         print "^^=== PERFECT ENDING ===^^";
-        print "Every component recovered. Every inscription carved, every offering made, every church saved, every drawing inspired. You have not merely repaired the time machine -- you have woven yourself into the fabric of history.^^";
+        print "Every thread restored. Every inscription carved, every offering made, every church saved, every drawing inspired. You have not merely repaired the time machine -- you have woven yourself into the fabric of history.^^";
         print "Dr. Thyme returns from tea to find his machine in better condition than when he left. Copernicus sits atop it, naturally. ~I see you've had a productive afternoon,~ he says, peering at you over an imaginary pair of spectacles. ~Tea?~^^";
         print "You accept. The scones are excellent.^";
     } else if (score >= 135) {
