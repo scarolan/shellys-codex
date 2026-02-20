@@ -5091,7 +5091,7 @@ Object solarium_dest "Workshop"
     "There's nothing to extinguish here.";
 ];
 
-[ RepairSub;
+[ RepairSub count;
     ! Handle bare "repair" or "install" with no noun when machine is present
     if (noun == 0 && time_machine in location)
         noun = time_machine;
@@ -5186,30 +5186,57 @@ Object solarium_dest "Workshop"
             }
             rtrue;
         }
-        ! Nothing to install -- show progressive checklist
-        print "The machine needs repairs:^";
-        ! Lodestone is always known (broke in the cat accident)
-        if (lodestone_installed) print "  [x] Lodestone (temporal compass -- installed)^";
-        else if (has_lodestone) print "  [>] Lodestone (temporal compass -- ready to install)^";
-        else print "  [ ] Lodestone (temporal compass -- fading)^";
-        ! Crookes tube only after Blitz transit
+        ! Nothing to install -- describe the machine's visible state
+        ! Count installed components to set overall mood
+        count = 0;
+        if (lodestone_installed) count++;
+        if (tube_installed) count++;
+        if (formula_transcribed) count++;
+        if (processor_installed) count++;
+        ! Overall mood opener
+        if (count == 0)
+            print "You run your hands over the machine's hull. It sits cold and lifeless, brass tarnished, every gauge dark.";
+        if (count == 1)
+            print "You run your hands over the machine. A faint warmth stirs beneath the brass -- signs of life, but only just.";
+        if (count == 2)
+            print "You run your hands over the machine. Parts of it glow now, humming softly, though other sections remain stubbornly dark.";
+        if (count == 3)
+            print "You run your hands over the machine. It thrums with barely contained energy, almost alive -- but something is still missing.";
+        ! Lodestone (always known -- broke in the cat accident)
+        if (lodestone_installed)
+            print " The compass needle holds steady, its housing warm with amber light.";
+        else if (has_lodestone)
+            print " The compass housing flickers -- the old lodestone is spent, but you feel the weight of a fresh one in your bag.";
+        else
+            print " The compass needle drifts aimlessly, its lodestone too weak to hold a bearing.";
+        ! Oscillation circuit (only after Blitz transit)
         if (visited_blitz) {
-            if (tube_installed) print "  [x] Vacuum tube (oscillation circuit -- installed)^";
-            else if (has_vacuum_tube) print "  [>] Vacuum tube (oscillation circuit -- ready to install)^";
-            else print "  [ ] Vacuum tube (oscillation circuit -- fracturing)^";
+            if (tube_installed)
+                print " The oscillation circuit hums like a contented beehive, its vacuum tube glowing a steady orange.";
+            else if (has_vacuum_tube)
+                print " The oscillation circuit is silent, its glass tube shattered -- though you have something that might fit the empty socket.";
+            else
+                print " The oscillation circuit is dead, its vacuum tube a web of fractures. You'll need a replacement.";
         }
-        ! Formula only after visiting Cambridge
+        ! Temporal harmonics (only after visiting Cambridge)
         if (visited_hawking) {
-            if (formula_transcribed) print "  [x] Hawking's formula (temporal harmonics -- transcribed)^";
-            else if (has_formula) print "  [>] Hawking's formula (temporal harmonics -- ready to transcribe)^";
-            else print "  [ ] Hawking's formula (temporal harmonics)^";
+            if (formula_transcribed)
+                print " The calibration matrix is alive with equations, each dial clicking with precision.";
+            else if (has_formula)
+                print " The destination dial wobbles vaguely -- the calibration matrix is blank, waiting for the right mathematics. You have a printout that might hold the answer.";
+            else
+                print " The destination dial wobbles without conviction. The calibration matrix is blank -- the machine can't aim without the proper equations.";
         }
-        ! Crystal only after Future transit
+        ! Field generator (only after Future transit)
         if (visited_future) {
-            if (processor_installed) print "  [x] Crystalline processor (field generator -- installed)^";
-            else if (has_processor) print "  [>] Crystalline processor (field generator -- ready to install)^";
-            else print "  [ ] Crystalline processor (field generator -- cracked)^";
+            if (processor_installed)
+                print " The field generator sings a low, resonant chord, its crystalline heart pulsing with light.";
+            else if (has_processor)
+                print " The field generator is dark, its crystal cracked beyond use -- but the one in your possession looks like it was made for the empty harness.";
+            else
+                print " The field generator sits dark and silent, its crystalline processor fractured. Without a replacement, the temporal field can't form.";
         }
+        print "^";
         rtrue;
     }
     "You can't repair that.";
