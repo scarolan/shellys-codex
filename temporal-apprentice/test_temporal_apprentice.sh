@@ -973,7 +973,7 @@ $CAT_TO_TUNNELS
 travel forward" "haven.t found what you need"
 run_test "Machine gate: quest blocks repair" "$ENTER_WORKSHOP
 $CAT_TO_TUNNELS
-fix machine" "haven.t completed your task"
+fix machine" "compass needle is dead"
 run_test "Travel to workshop from Roman" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west

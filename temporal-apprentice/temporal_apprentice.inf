@@ -5099,7 +5099,7 @@ Object solarium_dest "Workshop"
     if (noun == lodestone or vacuum_tube or quantum_processor or formula_printout && time_machine in location)
         noun = time_machine;
     if (location == roman_tunnels && marcus_impressed == false) {
-        "You haven't completed your task in this era yet. Best explore the city above before tinkering with the machine.";
+        "The temporal compass needle is dead -- the lodestone that powers it has failed. You'll need to find a replacement up in the city before you can repair the machine.";
     }
     if (location == future_street && machine_raised == false) {
         if (has_diving_gear == false)
