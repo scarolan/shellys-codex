@@ -1078,7 +1078,7 @@ Object workshop_entrance "Workshop Entrance"
                 "The alley. The fog. The brass plate. You've seen this before -- from the other side. The heavy oak door is closed. Praed Street is west. Freedom is west. You reach for the door handle.";
             }
             print "A narrow alley off Praed Street, its walls sheathed in frost and the cobblestones treacherous with ice. The fog here is bitter -- it cuts through your coat like a knife through wet paper. A brass plate beside a heavy oak door reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- NO SALESMEN.~^^";
-            if (door_open)
+            if (door_open || knock_count >= 3)
                 print "The oak door stands open, revealing the workshop beyond to the east.^";
             else
                 if (front_door_key in player)
@@ -1206,15 +1206,16 @@ Object entrance_door "oak door"
                     "From inside, the oak door stands open to the west, letting in wisps of London fog and the smell of coal smoke. The brass hinges gleam with recent oiling. That suspicious dent at cat-height is even more pronounced from this side.";
                 "The heavy oak door to the west is firmly shut against the London fog. From inside, you can see the substantial brass lock and the magnificent hinges. The dent at cat-height looks rather like something hit it at speed.";
             }
-            if (door_open)
+            if (door_open || knock_count >= 3)
                 "The heavy oak door stands open. The hinges are magnificent brass affairs. A suspicious dent at cat-height suggests this is not the first time something has made a dramatic entrance.";
             "A heavy oak door, firmly closed. Scarred by decades of London weather and possibly one or two small explosions. The brass hinges are magnificent. The dent at cat-height is suspicious.";
          ],
          before [;
             Close:
-                if (door_open == false)
+                if (door_open == false && knock_count < 3)
                     "The door is already closed.";
                 door_open = false;
+                knock_count = 0;
                 "You pull the heavy oak door shut. It closes with a solid, satisfying thunk.";
             Open, Push, Pull:
                 if (location == main_workshop) {

@@ -145,6 +145,19 @@ knock
 knock
 knock
 close door" "solid, satisfying thunk"
+run_test "Door open after round-trip" "east
+knock
+knock
+knock
+west
+east
+look" "stands open"
+run_test "Close door reverts description" "east
+knock
+knock
+knock
+close door
+look" "closed"
 
 # --- Spanner Puzzle ---
 echo "[Spanner Puzzle]"
