@@ -1635,14 +1635,14 @@ Object tap_clock "mantel clock" brass_tap
     has scenery;
 
 Object pint_of_ale "pint of ale"
-    with name 'pint' 'ale' 'beer' 'bitter' 'drink' 'glass' 'porter' 'mild' 'gin',
+    with name 'pint' 'ale' 'beer' 'bitter' 'glass' 'porter' 'mild' 'gin',
          description "A pint of dark ale in a heavy glass tankard. It has a head like a thundercloud and smells of hops and mild regret.",
          before [;
             Drink:
                 remove self;
                 "You take a long, slow pull. The ale is excellent -- dark, malty, with a finish that suggests the barkeep's grandmother knew what she was doing. The glass empties with a satisfied sigh.";
             Drop:
-                "You set the glass on the bar. The barkeep gives you a look that suggests unfinished drinks are a personal affront.";
+                "The barkeep gives you a look that suggests unfinished drinks are a personal affront. You think better of it.";
          ];
 
 Object barkeep "barkeep" brass_tap
