@@ -5512,6 +5512,8 @@ Object solarium_dest "Workshop"
             "You shout at Copernicus. He blinks once, slowly, which is cat for ~Are you quite finished?~";
         "You shout at the cat. He blinks once, slowly, which is cat for ~Are you quite finished?~";
     }
+    if (noun == nothing)
+        "You yell into the void. The void does not respond.";
     if (noun has animate)
         "Shouting at people is rarely productive, and never polite.";
     "You yell into the void. The void does not respond.";
@@ -5528,6 +5530,8 @@ Object solarium_dest "Workshop"
             "You try to shoo Copernicus away. He yawns magnificently and stays put. Cats do not recognise the concept of ~shoo.~";
         "You try to shoo the cat away. He yawns magnificently and stays put. Cats do not recognise the concept of ~shoo.~";
     }
+    if (noun == nothing)
+        "You flap your hands at nothing in particular. You look ridiculous.";
     if (noun has animate)
         "Shooing people is generally considered rude.";
     "You flap your hands at nothing in particular. You look ridiculous.";
@@ -5552,10 +5556,10 @@ Object solarium_dest "Workshop"
             "You let out your best meow. Copernicus tilts his head, ears swivelling like satellite dishes, then responds with a slow, deliberate chirrup. You have no idea what you just agreed to, but it probably involves tuna.";
         "You let out your best meow. The cat tilts his head, ears swivelling like satellite dishes, then responds with a slow, deliberate chirrup. You have no idea what you just agreed to, but it probably involves tuna.";
     }
-    if (noun has animate)
-        "You meow at them. They stare at you with visible concern for your wellbeing.";
     if (noun == nothing)
         "You meow into the empty room. The acoustics are surprisingly good, but the audience is nonexistent.";
+    if (noun has animate)
+        "You meow at them. They stare at you with visible concern for your wellbeing.";
     "You meow at that. It does not meow back. Unsurprising, really.";
 ];
 
