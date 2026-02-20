@@ -656,6 +656,9 @@ take fish
 give fish to copernicus
 ask copernicus about grate
 take aureus" "Taken"
+run_test "Ask about grate outside bathhouse hints redirect" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+ask copernicus about grate" "recall seeing one in the bathhouse"
 run_test "Swim in bathhouse" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
@@ -2061,7 +2064,7 @@ east
 north"
 run_test "Install all components" "$ENDGAME_CMD" "tear a hole in the fabric of time"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
-run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 194"
+run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 209"
 
 # --- Bootstrap Paradox Endgame ---
 echo "[Bootstrap Paradox]"
@@ -2383,7 +2386,7 @@ east
 north"
 run_test "Good ending (critical path + 3 side quests)" "$GOOD_ENDGAME" "GOOD ENDING"
 
-# Perfect ending: all events (score = 194)
+# Perfect ending: all events (score = 209)
 PERFECT_ENDGAME="$ENTER_WORKSHOP
 take journal
 north
@@ -2400,6 +2403,14 @@ south
 give aureus to felix
 north
 show lodestone to marcus
+north
+take amphora
+south
+south
+south
+bury newspaper
+north
+north
 give watch to livia
 east
 carve
@@ -3280,7 +3291,7 @@ down
 south
 examine newspaper" "600TH ANNIVERSARY"
 
-# Newspaper lost during Future transit
+# Newspaper lost during Future transit (destroyed, not deposited)
 run_test "Newspaper torn away message" "$FUTURE_SETUP" "rips the newspaper from your hands"
 TOTAL=$((TOTAL + 1))
 _future_inv_output=$(echo "$FUTURE_SETUP
@@ -3301,15 +3312,270 @@ else
     echo "  FAIL: Newspaper gone from inventory after Future transit (could not find inventory listing)"
 fi
 
-# Museum newspaper display
-run_test "Museum newspaper display: ale stain" "$FUTURE_SETUP
-north" "ale stain"
-run_test "Museum newspaper display: SEALED AMPHORA" "$FUTURE_SETUP
+# Transit rip no longer deposits newspaper in museum
+run_test_absent "Museum omits newspaper if not buried" "$FUTURE_SETUP
 north" "SEALED AMPHORA"
-run_test "Museum newspaper examine: display case sealed" "$FUTURE_SETUP
+
+# --- Via Principalis: soldiers & notice board ---
+echo "[Via Principalis Enrichment]"
+# Need lodestone + Marcus impressed to reach Via
+VIA_SETUP="$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
 north
-take newspaper" "display case is sealed"
-run_test "Museum newspaper examine: pencil circle through glass" "$FUTURE_SETUP
+show lodestone to marcus
+north"
+run_test "Via soldiers respond to Ask about Boudica" "$VIA_SETUP
+ask soldiers about boudica" "fifty thousand"
+run_test "Via notice board" "$VIA_SETUP
+examine board" "UNFOUNDED and UNHELPFUL"
+run_test "Via soldiers respond to Ask about Marcus" "$VIA_SETUP
+ask soldiers about marcus" "Twenty years on the frontier"
+run_test "Via soldiers respond to Ask about docks" "$VIA_SETUP
+ask soldiers about docks" "stow it in the mud"
+run_test_absent "Via soldiers default response (not generic)" "$VIA_SETUP
+ask soldiers about weather" "no reply"
+run_test "Take amphora from Via" "$VIA_SETUP
+take amphora" "Taken"
+
+# --- Thames Dockside: Burial Mechanic ---
+echo "[Newspaper Burial]"
+# Bury newspaper without amphora at docks
+run_test "Bury newspaper without amphora" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+south
+south
+bury newspaper" "some kind of container"
+# Bury newspaper with pencil at docks
+run_test "Bury newspaper with pencil" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+take amphora
+south
+south
+south
+bury newspaper" "MY NAME DOESN'T MATTER"
+run_test "Bury newspaper with pencil: amphora" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+take amphora
+south
+south
+south
+bury newspaper" "amphora"
+# Bury newspaper without pencil at docks
+run_test "Bury newspaper without pencil" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+take amphora
+south
+south
+south
+drop pencil
+bury newspaper" "wish you had something to write"
+run_test "Bury newspaper without pencil: amphora" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+take amphora
+south
+south
+south
+drop pencil
+bury newspaper" "amphora"
+# Bury at wrong location
+run_test "Bury wrong location" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+bury newspaper" "doesn't seem like a good place"
+# Bury without newspaper at docks (bare bury)
+run_test "Bury without newspaper at docks" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+south
+south
+drop newspaper
+bury" "choose carefully"
+
+# --- Museum: Pocket Watch Centrepiece ---
+echo "[Museum Pocket Watch Centrepiece]"
+# Need watch_offered=true (give watch to livia) for the exhibit to appear
+WATCH_FUTURE_SETUP="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+give watch to livia
+down
+repair machine
+travel forward
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+repair machine
+travel forward
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show toolkit to hawking
+east
+take printout
+west
+south
+south
+repair machine
+travel forward"
+run_test "Museum shows watch as centrepiece" "$WATCH_FUTURE_SETUP
+north" "Priestess of Mithras"
+run_test "Museum watch: archaeological anachronism" "$WATCH_FUTURE_SETUP
+north" "archaeological anachronism"
+
+# --- Museum: Newspaper Display After Burial ---
+echo "[Museum Newspaper After Burial]"
+# Build a FUTURE_SETUP that buries the newspaper first (with pencil)
+BURY_FUTURE_SETUP="$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+north
+take amphora
+south
+south
+south
+bury newspaper
+north
+north
+down
+repair machine
+travel forward
+west
+take valve
+east
+down
+give valve to tommy
+ask tommy about rubble
+up
+west
+dig
+open box
+take tube
+east
+dig
+repair machine
+travel forward
+north
+east
+take invitation
+west
+give invitation to porter
+north
+tell hawking about time
+show journal to hawking
+show toolkit to hawking
+east
+take printout
+west
+south
+south
+repair machine
+travel forward"
+run_test "Museum shows newspaper if buried" "$BURY_FUTURE_SETUP
+north" "SEALED AMPHORA"
+run_test "Museum inscribed message" "$BURY_FUTURE_SETUP
+north" "shaky but deliberate"
+run_test "Museum newspaper examine after burial" "$BURY_FUTURE_SETUP
 north
 examine newspaper" "pencil circle"
 
@@ -3880,6 +4146,38 @@ else
     FAIL=$((FAIL + 1))
     echo "  FAIL: No clock chime after cat accident (could not find tunnel marker)"
 fi
+
+# --- Watch Calibration ---
+echo "[Watch Calibration]"
+run_test "Set watch at Paddington" "west
+set watch" "right time"
+run_test "Calibrate synonym" "west
+calibrate watch" "right time"
+run_test "Already calibrated" "west
+set watch
+set watch" "already keeping perfect time"
+run_test "Wrong location" "set watch" "nothing accurate enough"
+run_test "Clock hints discrepancy" "west
+examine clock" "three minutes ahead"
+run_test "Clock after calibration" "west
+set watch
+examine clock" "matches the north face"
+
+CALIBRATE_PREFIX="west
+set watch
+east"
+run_test "Bootstrap with calibrated watch" "$CALIBRATE_PREFIX
+$ENDGAME_CMD" "Paddington.s clock"
+
+# --- Ring Bell (issue #142) ---
+echo "[Ring Bell]"
+run_test "Ring bell in solarium" "$ENTER_SOLARIUM
+ring bell" "Ding"
+run_test "Ring controls in solarium" "$ENTER_SOLARIUM
+ring controls" "Ding"
+run_test_absent "Ring bell is not a parser error" "$ENTER_SOLARIUM
+ring bell" "not a verb I recognise"
+run_test "Ring bell outside solarium" "ring bell" "Ringing that would accomplish nothing"
 
 echo ""
 echo "=== Results ==="

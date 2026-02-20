@@ -6,7 +6,7 @@
 
 Constant Story "The Temporal Apprentice";
 Constant Headline "^A Time-Travelling Adventure^^";
-Constant MAX_SCORE 194;
+Constant MAX_SCORE 209;
 
 Replace DrawStatusLine;
 Replace GamePrologue;
@@ -98,6 +98,8 @@ Global tide_high = false;
 
 Global copernicus_named = false;
 Global thyme_departed = false;
+Global newspaper_buried = false;
+Global newspaper_inscribed = false;
 Global rag_stolen = false;
 Global rag_on_machine = false;
 Global cat_bribed = false;
@@ -123,6 +125,7 @@ Global last_bong = 0;
 Global machine_dug_out = false;
 Global machine_raised = false;
 Global machine_unlocked = false;
+Global watch_calibrated = false;
 
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
@@ -826,6 +829,31 @@ Global machine_unlocked = false;
             Tokenise__(buffer, parse);
         }
     }
+    if (w == 'calibrate' or 'synchronize' or 'synchronise' or 'sync') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z'; i->1 = 's'; i->2 = 'w';
+        while (len > 3) { len--; i->len = ' '; }
+        ! Blank all trailing words so "calibrate watch" becomes "zsw"
+        if (parse->1 > 1) {
+            i = WordAddress(2);
+            len = (buffer + 2 + buffer->1) - i;
+            while (len > 0) { len--; i->len = ' '; }
+        }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'set' or 'adjust' or 'wind') {
+        wn = 2; w2 = NextWord();
+        if (w2 == 'watch' or 'timepiece' or 'pocket') {
+            ! "set watch" / "adjust watch" / "wind watch" → "zsw"
+            i = buffer + 2;
+            len = buffer->1;
+            while (len > 0) { len--; (i+len)->0 = ' '; }
+            i->0 = 'z'; i->1 = 's'; i->2 = 'w';
+            if (buffer->1 < 3) buffer->1 = 3;
+            Tokenise__(buffer, parse);
+        }
+    }
     if (w == 'repair' or 'fix' or 'mend' or 'install' or 'attach' or 'transcribe' or 'use' or 'replace') {
         i = WordAddress(1);
         len = WordLength(1);
@@ -888,6 +916,21 @@ Global machine_unlocked = false;
         i->2 = 'l';
         while (len > 3) { len--; i->len = ' '; }
         ! Blank all trailing words so parser sees only "zcl"
+        if (parse->1 > 1) {
+            i = WordAddress(2);
+            len = (buffer + 2 + buffer->1) - i;
+            while (len > 0) { len--; i->len = ' '; }
+        }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'ring') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'r';
+        i->2 = 'n';
+        while (len > 3) { len--; i->len = ' '; }
+        ! Blank all trailing words so "ring bell" becomes "zrn"
         if (parse->1 > 1) {
             i = WordAddress(2);
             len = (buffer + 2 + buffer->1) - i;
@@ -1245,8 +1288,15 @@ Object newspaper "newspaper"
             if (self has scenery) {
                 print "Through the climate-controlled glass, you can make out a single yellowed page of the Times. Your stomach lurches with recognition. There -- the pencil circle around the advert for TEMPORAL ENGINEERING. There -- the fold where you always tucked it under your arm. There -- the smudge of newsprint from the newsboy's grubby fingers.^^";
                 print "A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
-                if (watch_offered)
-                    print "A smaller note adds: ~Found alongside brass pocket watch. See Priestess of Mithras exhibit.~^^";
+                print "A smaller note adds: ~See also: Priestess of Mithras exhibit -- brass timepiece found at same excavation site.~^^";
+                if (newspaper_inscribed) {
+                    print "In the margin, in pencil, in handwriting you recognise as your own:^^";
+                    print "  I WAS HERE. MY NAME DOESN'T MATTER.^";
+                    print "  I CAME FROM 1895. I DON'T KNOW IF I'M GOING HOME.^";
+                    print "  IF YOU FIND THIS, KNOW THAT TIME IS NOT WHAT YOU THINK IT IS.^";
+                    print "  -- THE TEMPORAL APPRENTICE, 60 AD^^";
+                    print "The pencil marks are two thousand years old. Your hand remembers writing them yesterday.^^";
+                }
                 ! Show headlines through the glass
                 print "The headlines are still legible through the glass:^";
                 if (inscription_carved)
@@ -1502,7 +1552,14 @@ Object station_porters "porters" paddington_station
 
 Object station_clock "clock tower" paddington_station
     with name 'clock' 'tower' 'faces' 'four',
-         description "A magnificent four-faced clock tower rising from the concourse, each face showing a slightly different time -- whether by design or neglect is anyone's guess. The minute hands move with the ponderous certainty of an institution that considers itself more important than the trains it serves.",
+         description [;
+            print "A magnificent four-faced clock tower rising from the concourse, each face showing a slightly different time -- whether by design or neglect is anyone's guess. The minute hands move with the ponderous certainty of an institution that considers itself more important than the trains it serves.";
+            if (watch_calibrated)
+                "^Your watch now matches the north face exactly.";
+            if (pocket_watch in player)
+                "^Your grandfather's pocket watch reads three minutes ahead of even the fastest face.";
+            new_line;
+         ],
     has scenery;
 
 Object station_platforms "platforms" paddington_station
@@ -2412,6 +2469,7 @@ Object forum_sundial "sundial" roman_forum
 Object roman_via "Via Principalis"
     with description [;
             print "A wide, meticulously paved road stretches north towards the military barracks. Roman soldiers drill with mechanical precision, their armour catching the sunlight. The discipline is impressive, the smell less so.^^";
+            print "A wooden notice board is nailed to the barracks wall, covered in dispatches and wax tablets.^^";
             print "To the north, beyond the barracks, you can see smoke rising on the horizon. Distant figures move in ways that suggest they are not Roman and are not happy about it.^^";
             print "The Forum lies back to the south.^";
         ],
@@ -2421,6 +2479,26 @@ Object roman_via "Via Principalis"
 Object via_soldiers "Roman soldiers" roman_via
     with name 'soldiers' 'soldier' 'troops' 'legionary' 'legionaries',
          description "Roman soldiers drill with the mechanical precision of men who have been told exactly where to stand and are deeply committed to standing there. Their armour gleams, their formations are flawless, and their morale is... well, they've heard the rumours about Boudica.",
+         life [;
+            Ask, Tell:
+                if (second == 'boudica' or 'boudicca' or 'iceni' or 'army' or 'war' or 'battle') {
+                    "The soldier shifts uncomfortably. ~Non loquimur de ea.~ We don't talk about her. But his eyes flick north involuntarily. ~Fifty thousand, the scouts say. Fifty thousand.~ He swallows. ~The centurion says reinforcements are coming from Camulodunum.~ He doesn't sound convinced.";
+                }
+                if (second == 'marcus' or 'centurion') {
+                    "~Centurion Marcus?~ The soldier straightens instinctively. ~Twenty years on the frontier. Fought in Pannonia, Germania, places I can't pronounce. If anyone can hold this post...~ He trails off, which is not the ringing endorsement he intended.";
+                }
+                if (second == 'temple' or 'livia' or 'mithras' or 'priestess') {
+                    "~The priestess has been making extra offerings all week.~ The soldier's voice drops. ~That's never a good sign. Last time she prayed that hard, we lost two cohorts at Camulodunum.~";
+                }
+                if (second == 'dock' or 'docks' or 'ship' or 'ships' or 'thames' or 'river' or 'boat') {
+                    "~Some of the merchants are loading boats at the river.~ He gives you a meaningful look. ~Supplies, they say. For the campaign.~ He doesn't believe it. ~If you've got anything worth keeping, better to stow it in the mud than leave it for the Iceni.~";
+                }
+                switch (random(3)) {
+                    1: "The soldier gives you a suspicious look. ~Move along, civilian. This is a military area.~";
+                    2: "The soldier's expression suggests that whatever you just said was not his problem, is not going to become his problem, and that you should stop making it his problem.";
+                    3: "~Nihil scio.~ The soldier stares straight ahead with the determined blankness of a man who has perfected the art of knowing nothing.";
+                }
+         ],
     has scenery animate pluralname;
 
 Object via_barracks "military barracks" roman_via
@@ -2440,6 +2518,21 @@ Object boudica_npc "distant army" roman_via
             Take: "That's an entire army. And a very angry one at that. Let's admire it from a safe distance.";
          ],
     has scenery pluralname;
+
+Object via_tabula "notice board" roman_via
+    with name 'board' 'notice' 'tabula' 'notices' 'orders' 'dispatch',
+         description "A wooden board nailed to the barracks wall, covered in wax tablets and scratched-out orders. The latest dispatch reads: ~BY ORDER OF THE GARRISON COMMANDER: All rumours of barbarian activity to the north are UNFOUNDED and UNHELPFUL. Soldiers spreading alarm will be assigned to latrine duty. Morale is EXCELLENT.~ Below it, someone has scratched in smaller letters: ~Morale is not excellent.~",
+    has scenery;
+
+Object via_amphora "empty amphora" roman_via
+    with name 'amphora' 'jar' 'clay' 'empty' 'pot',
+         description "A large clay amphora, the kind used to ship wine from Gaul. This one has been emptied, tipped on its side, and repurposed as a doorstop by soldiers who clearly value function over aesthetics.",
+         initial "An empty amphora lies on its side by the barracks wall.",
+         before [;
+            Receive, Insert:
+                "The amphora's mouth is packed with dried clay residue. It's good for storing one thing at most -- something you'd want to protect for a very long time.";
+         ],
+    has ;
 
 Object roman_temple "Temple of Mithras"
     with description [;
@@ -2579,7 +2672,7 @@ Object roman_docks "Thames Dockside"
 
 Object soft_mud "soft mud" roman_docks
     with name 'mud' 'ground' 'earth' 'dirt' 'soil',
-         description "The mud here is soft and deep, dark with Thames silt. Boot prints fill with water almost as fast as they're made.",
+         description "The mud here is soft and deep, dark with Thames silt. Boot prints fill with water almost as fast as they're made. The riverbank is a graveyard of lost sandals and dropped cargo -- once the mud takes something, the Thames doesn't give it back.",
 
     has scenery;
 
@@ -2611,6 +2704,12 @@ Object docks_cargo "cargo" roman_docks
 Object docks_workers "workers" roman_docks
     with name 'worker' 'workers' 'laborer' 'laborers' 'men',
          description "Broad-shouldered dockworkers heave amphorae and timber with the rhythmic efficiency of men who get paid by the load. They are a mix of Roman soldiers doing punishment detail and local Britons who have discovered that the Empire pays in actual coins rather than cattle. The language barrier is solved by pointing, grunting, and the universal grammar of heavy lifting.",
+         life [;
+            Ask, Tell:
+                if (second == 'amphora' or 'amphorae' or 'cargo' or 'goods')
+                    "You point at the cargo. A worker shrugs expansively and waves at the pile of amphorae -- the universal gesture for ~help yourself.~ He mimes counting on his fingers, then waves that away too. Nobody's keeping inventory of the empties.";
+                "The worker looks at you blankly. The language barrier is real and the pointing-and-grunting grammar doesn't extend to abstract concepts.";
+         ],
     has scenery pluralname animate;
 
 ! --- Roman NPCs ---
@@ -3852,15 +3951,21 @@ Object future_museum "Thames Barrier Museum"
     with description [;
             print "The museum occupies the upper floors of what was once the Thames Barrier control centre. Display cases hold artefacts salvaged from flooded London -- underground signs, a red telephone box, soggy copies of the Evening Standard dated 2038.^^";
             if (watch_offered)
-                print "A special exhibit catches your eye: ~PRIESTESS OF MITHRAS -- TEMPLE EXCAVATION, ROMAN LONDINIUM.~ Inside the case, hanging from a leather cord, is your grandfather's pocket watch. The label reads: ~Brass timepiece found among burial goods of a Roman priestess. Circa 60 AD. Origin of timepiece unknown.~^^";
+                print "The centrepiece of the museum stops you dead: ~PRIESTESS OF MITHRAS -- TEMPLE EXCAVATION, ROMAN LONDINIUM.~ Inside a climate-controlled case, hanging from a leather cord, is your grandfather's pocket watch. The brass catches the light exactly the way it did in his hands, in your hands, in the priestess's hands. The label reads: ~Brass timepiece found among burial goods of a Roman priestess. Circa 60 AD. The mechanism is Victorian, circa 1870. This remains the single most significant archaeological anachronism ever documented. Provenance: unknown.~ Still three minutes fast, after two thousand years.^^";
             if (eleanor_gift)
                 print "Another display: ~WARTIME ART COLLECTION.~ Among the children's drawings is one labelled ~Eleanor Morrison, aged 8, 1941.~ It shows a silver cat. You recognise the style immediately.^^";
             if (church_saved)
                 print "A scale model of St. Margaret's Church dominates one corner: ~SAVED FROM THE BLITZ -- St. Margaret's Church survived the incendiary raids of 1941, thanks to a fire watcher who smothered the flames with sandbags.~ The church still stands, even above the floodwaters.^^";
             else
                 print "A photograph shows a gap-toothed London skyline. The caption reads: ~Site of St. Margaret's Church, destroyed by incendiary bomb, 1941. One of many irreplaceable buildings lost to the Blitz.~^^";
-            if (newspaper in self)
-                print "Near the entrance, a climate-controlled case holds a single yellowed page of the Times. You feel a jolt of recognition -- the ale stain from the Brass Tap, the pencil circle around the advert, the fold where you always tuck it under your arm. A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN. NOTE: INK APPEARS TO CHANGE UNDER OBSERVATION. DO NOT ADJUST DISPLAY.~^^";
+            if (newspaper_buried) {
+                print "Near the entrance, a climate-controlled case holds a single yellowed page of the Times. You feel a jolt of recognition -- the ale stain, the pencil circle around the advert, the fold where you always tuck it under your arm. ";
+                if (newspaper_inscribed)
+                    print "In the margin, in faded pencil, someone has written a message. The handwriting is shaky but deliberate. You know exactly whose it is.";
+                else
+                    print "No note, no explanation -- just a Victorian newspaper sealed in a Roman amphora, waiting patiently for someone to understand.";
+                print "^^A placard reads: ~VICTORIAN NEWSPAPER, 1895. RECOVERED FROM SEALED AMPHORA, ROMAN STRATUM, THAMES EXCAVATION SITE. THE VESSEL'S WAX SEAL WAS INTACT WHEN FOUND. PROVENANCE UNKNOWN.~^^";
+            }
             if (visited_hawking)
                 print "A small framed card hangs near the DeLorean: ~INVITATION TO PROFESSOR HAWKING'S PARTY FOR TIME TRAVELLERS, JUNE 28, 2009. Sent after the event. Only one guest is known to have attended.~ You remember the champagne, the balloons, the quiet click of the synthesiser.^^";
             print "A DeLorean sits in the corner with a sign reading ~TIME TRAVEL IN POPULAR CULTURE.~^^";
@@ -3879,7 +3984,7 @@ Object priestess_display "priestess display" future_museum
     with name 'priestess' 'display' 'exhibit' 'mithras',
          description [;
             if (watch_offered) {
-                "A brass timepiece on a leather cord, displayed in a climate-controlled case. The label reads: ~Found around the neck of a Roman priestess during the Temple of Mithras excavation, Londinium. Circa 60 AD. The timepiece is a Victorian pocket watch of unknown provenance -- an impossible anachronism that has baffled archaeologists since its discovery.~ You feel simultaneously proud and deeply weird.";
+                "The centrepiece of the museum: a brass pocket watch on a leather cord, displayed under glass in a climate-controlled case. The case reads: ~PRIESTESS OF MITHRAS -- TEMPLE EXCAVATION, LONDINIUM. Brass timepiece found among the burial goods of a high priestess. Circa 60 AD. The mechanism is Victorian, circa 1870. Carbon dating of the leather cord confirms Roman origin. This remains the single most significant archaeological anachronism ever documented. Provenance: unknown.~ Your grandfather's watch. Still three minutes fast, after two thousand years.";
             }
             "You don't see any such display.";
          ],
@@ -4381,6 +4486,9 @@ Object copernicus "silver-grey cat" main_workshop
                     }
                     if (bath_drain has general)
                         "Copernicus glances at the grate, unimpressed. He's already done his bit.";
+                    if (copernicus_named)
+                        "Copernicus's ears prick up at the word ~grate~ -- but there's no drain here to investigate. You recall seeing one in the bathhouse.";
+                    "The cat's ears prick up at the word ~grate~ -- but there's no drain here to investigate. You recall seeing one in the bathhouse.";
                 }
                 if (copernicus_named)
                     "Copernicus regards you with the serene indifference of a creature who has transcended the need for conversation.";
@@ -4399,6 +4507,9 @@ Object copernicus "silver-grey cat" main_workshop
                     }
                     if (bath_drain has general)
                         "Copernicus glances at the grate, unimpressed. He's already done his bit.";
+                    if (copernicus_named)
+                        "Copernicus's ears prick up at the word ~grate~ -- but there's no drain here to investigate. You recall seeing one in the bathhouse.";
+                    "The cat's ears prick up at the word ~grate~ -- but there's no drain here to investigate. You recall seeing one in the bathhouse.";
                 }
                 if (copernicus_named)
                     "Copernicus flicks an ear. This is the feline equivalent of ~I hear you but I couldn't possibly care less.~";
@@ -4677,7 +4788,10 @@ Object solarium_dest "Workshop"
     endgame_turns = 0;
     StopDaemon(copernicus);
     remove dr_thyme;
-    print "You ease the door open a crack and peer through. There you are -- younger by an afternoon, damp from the fog, clutching a copy of the Times. You watch your past self fish out a pocket watch, check the time, snap the case shut. You remember doing that. You remember the exact weight of the watch in your hand.^^";
+    print "You ease the door open a crack and peer through. There you are -- younger by an afternoon, damp from the fog, clutching a copy of the Times. You watch your past self fish out a pocket watch, check the time, snap the case shut. ";
+    if (watch_calibrated)
+        print "The hands set precisely to Paddington's clock, three minutes corrected, the steady tick finally honest. ";
+    print "You remember doing that. You remember the exact weight of the watch in your hand.^^";
     print "Your past self glances down the alley, shifts weight, and starts to turn away.^^";
     print "You yank the door wide and press yourself flat against the wall behind it, heart hammering. Footsteps stop. A pause. Then your past self turns back, stares at the open doorway -- at the empty doorway -- and steps cautiously inside.^^";
     print "You hold your breath behind the door as your past self walks east into the workshop. Muffled voices -- ~No salesmen!~ -- then a rustle of newspaper -- then, after a pause: ~The number four spanner. On the shelf. The brass one.~^^";
@@ -4789,6 +4903,16 @@ Object solarium_dest "Workshop"
     if (location == workshop_entrance && door_open)
         "The door is already open.";
     "Knocking on that seems unlikely to accomplish anything.";
+];
+
+[ RingBellSub;
+    if (location == solarium) {
+        print "You flick the bicycle bell on the control panel. ";
+        print_ret "~Ding!~ The sound is absurdly cheerful for a time machine. Copernicus's ears swivel toward it with feline disapproval.";
+    }
+    if (location == blitz_street)
+        "The clock tower bells are far above you, and quite beyond reach. You'll have to content yourself with listening.";
+    "Ringing that would accomplish nothing, though you briefly consider it.";
 ];
 
 [ TalkToSub;
@@ -4944,9 +5068,8 @@ Object solarium_dest "Workshop"
             print "You set the dial to ~2045~ and pull the lever. The machine aims true for the first time -- Hawking's formula works, the destination dial clicking to precise coordinates with mechanical confidence. But mid-transit there is a sharp, crystalline CRACK from the field generator housing. The formula is demanding more from the processor than it was ever designed to handle -- a fracture line runs through the crystal like a fault through glass. The machine bucks, nearly throws you out of the seat, and deposits you somewhere very wet.^^";
         }
         if (newspaper in player) {
-            print "^The temporal wind rips the newspaper from your hands. The pages tumble into the vortex, scattering through centuries like leaves in a storm, and vanish.^";
-            move newspaper to future_museum;
-            give newspaper scenery;
+            print "^The temporal wind rips the newspaper from your hands. The pages scatter into the vortex like startled birds, tumbling through centuries. They're gone.^";
+            remove newspaper;
         }
         PlayerTo(future_street);
         rtrue;
@@ -5032,7 +5155,44 @@ Object solarium_dest "Workshop"
 ];
 
 [ BurySub;
+    if (location == roman_docks && noun == newspaper) {
+        if (newspaper notin player)
+            "You're not holding the newspaper.";
+        if (via_amphora notin player)
+            "You kneel and try to push the newspaper into the mud, but it's hopeless -- the wet earth would destroy the paper in days. You'd need some kind of container to seal it in.";
+        newspaper_buried = true;
+        move newspaper to future_museum;
+        give newspaper scenery;
+        if (pencil in player) {
+            newspaper_inscribed = true;
+            score = score + 15;
+            print "You kneel in the mud and smooth the newspaper flat against your knee. Your hand is shaking -- from the cold, you tell yourself. You fish out the pencil and write in the margin, pressing hard enough to dent the newsprint:^^";
+            print "  I WAS HERE. MY NAME DOESN'T MATTER.^";
+            print "  I CAME FROM 1895. I DON'T KNOW IF I'M GOING HOME.^";
+            print "  IF YOU FIND THIS, KNOW THAT TIME IS NOT WHAT YOU THINK IT IS.^";
+            print "  -- THE TEMPORAL APPRENTICE, 60 AD^^";
+        } else {
+            score = score + 5;
+            print "You kneel in the mud and smooth the newspaper flat against your knee. You wish you had something to write with -- there's so much you'd want to say. But the newspaper itself will have to be enough. The advert, the circled ink, the fold where you always tucked it under your arm. Proof enough.^^";
+        }
+        print "You roll the newspaper carefully and slide it into the amphora. You pack the neck with Thames clay, pressing it shut with your thumbs until the seal is smooth and tight. Then you dig.^^";
+        remove via_amphora;
+        "The soft mud swallows the amphora with a sound like a slow exhalation. You pat the earth flat and stand up, mud to the elbows, shaking slightly. Two thousand years. Maybe someone will find it. Maybe it won't matter. But you were here, and now the ground knows it.";
+    }
+    if (location == roman_docks)
+        "You could bury something here -- the mud is soft and deep. But you'd need to choose carefully what deserves the effort.";
     "This doesn't seem like a good place to bury anything.";
+];
+
+[ SetWatchSub;
+    if (pocket_watch notin player)
+        "You'd need your watch for that.";
+    if (location ~= paddington_station)
+        "There's nothing accurate enough here to set your watch by.";
+    if (watch_calibrated)
+        "Your watch is already keeping perfect time -- you set it against the station clock not five minutes ago.";
+    watch_calibrated = true;
+    "You hold your grandfather's watch up beside the north face of the clock tower -- the one the porters seem to trust. The second hands align. You ease the crown out with your thumbnail and nudge the minute hand back three minutes, feeling the tiny clicks through the brass case. There. For the first time in your memory, the watch reads the right time.";
 ];
 
 [ DigRubbleSub;
@@ -5474,6 +5634,9 @@ Verb 'zkn'
     * 'on' noun                             -> Knock
     * noun                                  -> Knock;
 
+Verb 'zrn'
+    *                                       -> RingBell;
+
 Verb 'zcl'
     *                                       -> Clean
     * noun                                  -> Clean;
@@ -5500,6 +5663,9 @@ Verb 'zby'
 
 Verb 'zci'
     * noun                                  -> ZCir;
+
+Verb 'zsw'
+    *                                       -> SetWatch;
 
 Verb 'board'
     * noun                                  -> Enter;
