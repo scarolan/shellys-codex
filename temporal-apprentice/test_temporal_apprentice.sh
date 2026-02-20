@@ -2059,7 +2059,7 @@ west
 open door
 east
 north"
-run_test "Install all components" "$ENDGAME_CMD" "fully repaired"
+run_test "Install all components" "$ENDGAME_CMD" "tear a hole in the fabric of time"
 run_test "Game ends with win" "$ENDGAME_CMD" "ENDING"
 run_test "Final score displayed" "$ENDGAME_CMD" "out of a possible 194"
 

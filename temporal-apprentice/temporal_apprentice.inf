@@ -5126,7 +5126,7 @@ Object solarium_dest "Workshop"
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
                 machine_unlocked = true;
-                print "^The Temporal Displacement Engine is fully repaired.^";
+                print "^Something shifts. The hum deepens into a resonant chord that you feel in your sternum, in your teeth. Brass fittings that were dull moments ago now gleam with an inner light, and the air around the machine shimmers like heat rising from summer asphalt. Every dial snaps to attention. Every gauge needle steadies. The Temporal Displacement Engine isn't just repaired -- it's ALIVE, thrumming with purpose, ready to tear a hole in the fabric of time itself.^";
             }
             rtrue;
         }
@@ -5146,7 +5146,7 @@ Object solarium_dest "Workshop"
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
                 machine_unlocked = true;
-                print "^The Temporal Displacement Engine is fully repaired.^";
+                print "^Something shifts. The hum deepens into a resonant chord that you feel in your sternum, in your teeth. Brass fittings that were dull moments ago now gleam with an inner light, and the air around the machine shimmers like heat rising from summer asphalt. Every dial snaps to attention. Every gauge needle steadies. The Temporal Displacement Engine isn't just repaired -- it's ALIVE, thrumming with purpose, ready to tear a hole in the fabric of time itself.^";
             }
             rtrue;
         }
@@ -5162,7 +5162,7 @@ Object solarium_dest "Workshop"
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
                 machine_unlocked = true;
-                print "^The Temporal Displacement Engine is fully repaired.^";
+                print "^Something shifts. The hum deepens into a resonant chord that you feel in your sternum, in your teeth. Brass fittings that were dull moments ago now gleam with an inner light, and the air around the machine shimmers like heat rising from summer asphalt. Every dial snaps to attention. Every gauge needle steadies. The Temporal Displacement Engine isn't just repaired -- it's ALIVE, thrumming with purpose, ready to tear a hole in the fabric of time itself.^";
             }
             rtrue;
         }
@@ -5182,7 +5182,7 @@ Object solarium_dest "Workshop"
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
                 components_installed = true;
                 machine_unlocked = true;
-                print "^The Temporal Displacement Engine is fully repaired.^";
+                print "^Something shifts. The hum deepens into a resonant chord that you feel in your sternum, in your teeth. Brass fittings that were dull moments ago now gleam with an inner light, and the air around the machine shimmers like heat rising from summer asphalt. Every dial snaps to attention. Every gauge needle steadies. The Temporal Displacement Engine isn't just repaired -- it's ALIVE, thrumming with purpose, ready to tear a hole in the fabric of time itself.^";
             }
             rtrue;
         }
