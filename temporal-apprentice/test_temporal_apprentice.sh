@@ -910,6 +910,55 @@ give aureus to felix
 north
 show lodestone to marcus
 give coins to livia" "no need of material things"
+run_test "Give aureus to Marcus gets rejection not parser error (issue #140)" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+give aureus to marcus" "Non corrumpor"
+run_test "Give fish to Marcus gets rejection (issue #140)" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+east
+give fish to marcus" "Non corrumpor"
+run_test "Give journal to Marcus gets rejection (issue #140)" "$ENTER_WORKSHOP
+take journal
+$CAT_ACCIDENT
+give journal to marcus" "Non corrumpor"
+run_test "Give toolkit to Livia gets rejection (issue #140)" "$ENTER_WORKSHOP
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+give toolkit to livia" "no need of material things"
+run_test "Give journal to Livia gets rejection (issue #140)" "$ENTER_WORKSHOP
+take journal
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+give journal to livia" "no need of material things"
 # --- Drainage Tunnels ---
 echo "[Drainage Tunnels]"
 run_test "Cat accident sends to tunnels" "$ENTER_WORKSHOP

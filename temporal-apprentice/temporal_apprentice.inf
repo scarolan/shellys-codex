@@ -2610,9 +2610,8 @@ Object gold_aureus "gold aureus"
          initial "A gold aureus gleams on the wet tiles where Copernicus batted it.",
          before [;
              Take:
-                 if (parent(self) ~= roman_bath) {
+                 if (bath_drain hasnt general)
                      "You can't see any such thing.";
-                 }
          ];
 
 Object roman_merchants "Merchant's Quarter"
