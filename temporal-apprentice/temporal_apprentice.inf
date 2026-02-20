@@ -4533,8 +4533,11 @@ Object copernicus "silver-grey cat" main_workshop
                 "The cat gives you a look that suggests you should reconsider every decision that led to this moment. You reconsider.";
             Give:
                 if (noun == bath_fish) {
+                    if (location ~= roman_bath) {
+                        "Copernicus sniffs the fish with interest, but something about this place doesn't feel right to him. He keeps glancing toward the bathhouse, ears pricked at the sound of running water.";
+                    }
                     remove bath_fish;
-                    if (location == roman_bath && bath_drain hasnt general) {
+                    if (bath_drain hasnt general) {
                         give bath_drain general;
                         move gold_aureus to roman_bath;
                         cat_bribed = true;
