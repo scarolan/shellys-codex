@@ -1164,7 +1164,7 @@ take valve
 east
 down
 give valve to tommy
-ask tommy about rubble" "willing to help"
+ask tommy about rubble" "I'll help you dig"
 run_test "Ask tommy for help (issue #87)" "$BLITZ_SETUP
 down
 ask tommy for help" "Fix my radio"

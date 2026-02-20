@@ -382,7 +382,6 @@ Global machine_unlocked = false;
             print "~The rubble site? Dangerous, that. But I suppose I owe you one for the valve. Tell you what -- I'll help you dig if you need it. Just say the word.~^";
             tommy_helping = true;
             score = score + 3;
-            print "[Tommy is now willing to help you dig.]^";
         } else {
             print "~Can't help with the rubble, mate. Not while the radio's down. Fix the wireless and we'll talk.~^";
         }
