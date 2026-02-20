@@ -3359,6 +3359,10 @@ Object vacuum_tube "vacuum tube" metal_box
                 if (blitz_rubble hasnt general) "It's buried under rubble. You need help digging it out first.";
                 if (metal_box hasnt open) "It's inside the metal box. Open the box first.";
                 if (parent(self) ~= player) {
+                    if (has_vacuum_tube) {
+                        move self to player;
+                        "Taken.";
+                    }
                     has_vacuum_tube = true;
                     score = score + 8;
                     move self to player;
