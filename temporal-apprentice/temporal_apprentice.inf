@@ -700,6 +700,17 @@ Global watch_calibrated = false;
     }
     wn = 1;
     w = NextWord();
+    ! Block direct use of internal z-verbs
+    if (w == 'zcr' or 'zbr' or 'ztv' or 'zrp' or 'zex' or 'zdg' or 'zpt'
+           or 'zkn' or 'zrn' or 'zcl' or 'zyl' or 'zsh' or 'zkk' or 'zmw'
+           or 'zby' or 'zci' or 'zsw') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z'; i->1 = 'z'; i->2 = 'z';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+        return;
+    }
     if (w == 'catch') {
         i = WordAddress(1);
         len = WordLength(1);
