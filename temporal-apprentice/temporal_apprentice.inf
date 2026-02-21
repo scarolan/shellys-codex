@@ -400,6 +400,10 @@ Global watch_calibrated = false;
     }
     if (topic == 'help') {
         if (radio_fixed) {
+            if (tommy_helping == false) {
+                tommy_helping = true;
+                score = score + 3;
+            }
             print "~Radio's sorted, thanks to you. I'm a man of my word -- I'll help you dig through that rubble whenever you're ready.~^";
         } else {
             print "~Fix my radio and I'll help with whatever you need. That's the deal, mate.~^";
@@ -3751,9 +3755,13 @@ Object hawking "Professor Hawking" cambridge_hall
                     rtrue;
                 }
                 if (noun == lodestone or vacuum_tube or hartley_journal or toolkit or time_machine) {
-                    if (hawking_phase >= 1 && hawking_convinced == false) {
+                    if (hawking_phase == 1 && hawking_convinced == false) {
                         hawking_phase = 2;
                         print "Hawking examines the object with intense curiosity. ~Unusual. The craftsmanship is clearly Victorian, but the materials...~ He trails off, calculating. ~This is not from 2009. But I need the final proof. Something that demonstrates temporal mechanics directly.~^";
+                        rtrue;
+                    }
+                    if (hawking_phase == 2 && hawking_convinced == false) {
+                        print "The synthesiser clicks. ~Yes, I've seen that. Interesting, but not the proof I asked for. Show me something that demonstrates temporal mechanics directly -- something with a signature that shouldn't exist in 2009.~^";
                         rtrue;
                     }
                 }
