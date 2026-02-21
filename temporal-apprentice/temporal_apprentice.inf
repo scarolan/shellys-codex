@@ -4845,7 +4845,7 @@ Object solarium_dest "Workshop"
     ! Phase 3: hide in store room, watch the loop close
     endgame_phase = 3;
     print "You slip into the store room and press yourself between a crate marked ~CONTENTS UNKNOWN -- DO NOT OPEN ON WEDNESDAYS~ and a shelf of specimen jars.^^";
-    print "Through the gap you watch your past self fumble with the spanner. Watch Thyme hand over the cleaning rag and the key. Watch yourself find the journal, read the warning about the cat -- underlined seventeen times -- and ignore it completely.^^";
+    print "Through the gap you watch your past self fumble with the spanner. Watch Thyme hand over the cleaning rag and the key. Watch yourself find the journal, flip through the ravings about Tuesdays and pantry sandwiches, and set it aside with the quiet confidence of someone who has no idea what is about to happen.^^";
     print "Dr. Thyme leaps up, checks three watches simultaneously, and bolts for the door muttering about Mrs. Pemberton's scones. The front door slams.^^";
     print "Your past self unfurls the cleaning rag. The cat pounces. In a flash of silver fur the rag is gone and so is the cat -- a grey blur bolting east down the corridor. Your past self hesitates for exactly one second, then chases after.^^";
     print "From the solarium comes a crash, a mechanical scream, and the unmistakeable smell of marmalade and burnt copper.^^";
