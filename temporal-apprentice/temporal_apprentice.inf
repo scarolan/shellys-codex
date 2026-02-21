@@ -5032,10 +5032,10 @@ Object solarium_dest "Workshop"
         move time_machine to solarium;
         if (components_installed) {
             the_time = arrival_time - 12;
-            print "You set the dial to ~1895~ and pull the lever. For the first time, the machine moves through time like silk through water -- no screaming, no bucking, no ominous sounds from the engineering. Just a smooth, confident hum and the gentle sensation of reality rearranging itself politely.^^";
+            print "You turn the dial to HOME and pull the lever. For the first time, the machine moves through time like silk through water -- no screaming, no bucking, no ominous sounds from the engineering. Just a smooth, confident hum and the gentle sensation of reality rearranging itself politely.^^";
             print "You're back in the solarium. Home.^";
         } else {
-            print "You set the dial to ~1895~ and pull the lever. The machine hums, reality folds neatly like a well-pressed handkerchief, and you're back in the solarium. Home.^";
+            print "You turn the dial to HOME and pull the lever. The machine hums, reality folds neatly like a well-pressed handkerchief, and you're back in the solarium. Home.^";
         }
         PlayerTo(solarium);
         rtrue;
@@ -5057,7 +5057,7 @@ Object solarium_dest "Workshop"
         current_era = 1;
         move time_machine to roman_tunnels;
         move copernicus to roman_tunnels;
-        print "You set the destination dial to ~60 AD~ and pull the lever. The machine screams, the world dissolves, and when reality reassembles itself, you're in a damp brick tunnel. Daylight and voices filter down from somewhere above.^";
+        print "You wrench the dial to FORWARD and pull the lever. The machine screams, the world dissolves, and when reality reassembles itself, you're in a damp brick tunnel that smells of centuries. Daylight and voices filter down from somewhere above. The voices are not speaking English.^";
         PlayerTo(roman_tunnels);
         rtrue;
     }
@@ -5067,9 +5067,9 @@ Object solarium_dest "Workshop"
         move time_machine to blitz_street;
         move copernicus to blitz_street;
         if (tube_installed) {
-            print "You set the dial to ~1941~ and pull the lever. With the new Crookes tube humming in harmony with the lodestone, the transit is smooth and sure -- the oscillation circuit holding steady, the navigational field crisp. The machine deposits you somewhere dark and cold, and something overhead is making a very concerning droning noise.^";
+            print "You push the dial to FORWARD and pull the lever. With the new Crookes tube humming in harmony with the lodestone, the transit is smooth and sure -- the oscillation circuit holding steady, the navigational field crisp. The machine deposits you somewhere dark and cold, and something overhead is making a very concerning droning noise.^";
         } else {
-            print "You set the dial to ~1941~ and brace yourself. The new lodestone glows bright as you pull the lever -- the transit is stronger than before, the navigational field sharp and confident. But mid-transit, something inside makes a sound like a champagne flute being set down too hard. The Crookes tube. The fresh lodestone is pushing more power through the circuit than the old tube can handle. You can see a web of fractures spreading through the glass.^^";
+            print "You push the dial to FORWARD and brace yourself. The new lodestone glows bright as you pull the lever -- the transit is stronger than before, the navigational field sharp and confident. But mid-transit, something inside makes a sound like a champagne flute being set down too hard. The Crookes tube. The fresh lodestone is pushing more power through the circuit than the old tube can handle. You can see a web of fractures spreading through the glass.^^";
             print "The machine deposits you somewhere dark, cold, and something overhead is making a very concerning droning noise.^";
         }
         PlayerTo(blitz_street);
@@ -5080,7 +5080,7 @@ Object solarium_dest "Workshop"
         current_era = 3;
         move time_machine to cambridge_gates;
         move copernicus to cambridge_gates;
-        print "You set the dial to ~2009~ and activate the machine. With fresh lodestone and tube, the transit is the smoothest yet -- the navigational field holds steady, the oscillation circuit hums without complaint. Mid-transit you feel the machine lock onto something, pulled toward a specific date like a compass needle swinging north. Something in 2009 is doing half the work for you. Someone has left a light on for time travellers. You materialise beside a bicycle rack.^";
+        print "You push the dial to FORWARD and activate the machine. With fresh lodestone and tube, the transit is the smoothest yet -- the navigational field holds steady, the oscillation circuit hums without complaint. Mid-transit you feel the machine lock onto something, pulled toward a specific moment like a compass needle swinging north. Something out there is doing half the work for you. Someone has left a light on for time travellers. You materialise beside a bicycle rack.^";
         PlayerTo(cambridge_gates);
         rtrue;
     }
@@ -5090,9 +5090,9 @@ Object solarium_dest "Workshop"
         move time_machine to future_street;
         move copernicus to future_street;
         if (processor_installed) {
-            print "You set the dial to ~2045~ and pull the lever. With the new processor crystal seated firmly in the field generator, the machine aims true -- Hawking's formula and the upgraded hardware working in concert, the destination dial clicking to precise coordinates with quiet confidence. The transit is smooth, almost gentle, and deposits you somewhere very wet.^^";
+            print "You push the dial to FORWARD and pull the lever. With the new processor crystal seated firmly in the field generator, the machine hums with a confidence it has never shown before -- Hawking's formula and the upgraded hardware working in concert. The transit is smooth, almost gentle, and deposits you somewhere very wet.^^";
         } else {
-            print "You set the dial to ~2045~ and pull the lever. The machine aims true for the first time -- Hawking's formula works, the destination dial clicking to precise coordinates with mechanical confidence. But mid-transit there is a sharp, crystalline CRACK from the field generator housing. The formula is demanding more from the processor than it was ever designed to handle -- a fracture line runs through the crystal like a fault through glass. The machine bucks, nearly throws you out of the seat, and deposits you somewhere very wet.^^";
+            print "You push the dial to FORWARD and pull the lever. The machine aims with new purpose -- Hawking's formula is working, the navigational field clicking into alignment for the first time. But mid-transit there is a sharp, crystalline CRACK from the field generator housing. The formula is demanding more from the processor than it was ever designed to handle -- a fracture line runs through the crystal like a fault through glass. The machine bucks, nearly throws you out of the seat, and deposits you somewhere very wet.^^";
         }
         if (newspaper in player) {
             print "^The temporal wind rips the newspaper from your hands. The pages scatter into the vortex like startled birds, tumbling through centuries. They're gone.^";
