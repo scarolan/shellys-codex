@@ -3104,8 +3104,8 @@ Object blitz_pub "The Crown and Anchor"
 
 Object tin_soldier "tin soldier" blitz_pub
     with name 'tin' 'soldier' 'toy',
-         description "A small tin soldier, slightly dented but still standing at attention. A tiny bit of wartime defiance in miniature.",
-         initial "A small tin soldier stands on the bar, holding its ground against the Blitz.";
+         description "A small tin soldier in scarlet, slightly dented, slightly listing, but still at attention. He has, against considerable odds, survived the Blitz -- which is more than can be said for several buildings in the immediate vicinity.",
+         initial "A small tin soldier stands on the bar. He has survived the Blitz with considerably more dignity than the surrounding architecture.";
 
 Object pub_bar "bar" blitz_pub
     with name 'bar' 'counter',
@@ -3669,7 +3669,7 @@ Object hall_ceiling "vaulted ceiling" cambridge_hall
 
 Object cambridge_study "Hawking's Study"
     with description [;
-            print "The study of the most famous physicist alive is surprisingly cosy. Books line every wall, a computer with a speech synthesiser sits on the desk, and models of black holes and the cosmos hang from the ceiling like a nerd's mobile.^^";
+            print "The study of the most famous physicist alive is surprisingly cosy. Books line every wall, a computer with a speech synthesiser sits on the desk, and models of black holes and the cosmos hang from the ceiling on fine wire -- the sort of mobile one might hang above the cot of a child one fully expected to revolutionise physics, which, in retrospect, would have been prophetic.^^";
             if (formula_printout in cambridge_study)
                 print "A dot-matrix printout hangs from the printer, its perforated edges still attached.^^";
             print "The hall is back to the west.^";
@@ -4731,7 +4731,7 @@ Object solarium_dest "Workshop"
     print "London, 1895. The Great Frost.^^";
     print "The door of Greybaum, Tedium and Sons closes behind you with a finality usually reserved for coffin lids. Sacked. After four years of impeccable ledger-keeping, one small fire in the filing room, and an honest difference of opinion about whether the senior partner's toupee counted as a business expense.^^";
     print "You step onto Praed Street with nothing but your grandfather's pocket watch and a handful of coins -- your final wages. The cold hits you like a wall. The Great Frost has London in its grip -- the worst winter in living memory. Puddles are frozen solid, breath turns to ice, and the fog cuts through your coat as if it isn't there.^^";
-    print "You need to get out of this cold. And you'll need to find work. Perhaps a newspaper would have something in the classifieds.^^";
+    print "The cold has precisely one suggestion, and it is that standing still on Praed Street in January is a form of optimism that the universe will not reward. Across the street, a newsboy is stamping his feet and waving copies of the Times with the manic energy of someone being paid by the edition.^^";
     print "Type HELP for a list of commands.^^";
 ];
 
@@ -5237,7 +5237,7 @@ Object solarium_dest "Workshop"
         score = score + 3;
         print "You and Tommy attack the rubble burying the time machine. Brick by brick, beam by beam, you clear the debris. Tommy works with the cheerful determination of a man who has seen worse things this week.^^";
         print "~Funny-looking contraption,~ Tommy says, wiping plaster dust from his face. ~What is it, some kind of engine?~^^";
-        print "~Something like that,~ you reply.^^";
+        print "~Experimental transport,~ you say. ~Mostly brass. Theoretical in places.~ Tommy nods with the easy acceptance of a man who has decided that the war is already strange enough that a brass contraption in a bomb crater barely registers.^^";
         print "The time machine stands free, battered but functional.^";
         rtrue;
     }
