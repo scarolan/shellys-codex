@@ -2223,6 +2223,14 @@ east" "store room"
 run_test "Phase 2: wrong way east" "$ENDGAME_DOOR
 east
 east" "not the solarium"
+run_test "Phase 2: talk to past self triggers paradox" "$ENDGAME_DOOR
+east
+talk to past self" "PARADOX COLLAPSE"
+run_test "Phase 2: past self confrontation text" "$ENDGAME_DOOR
+east
+talk to past self" "That.s MY COAT"
+run_test "Phase 1: past self not visible from entrance" "$ENDGAME_DOOR
+talk to past self" "can.t see any such thing"
 
 # Auto-trigger bootstrap after 2 turns
 ENDGAME_AUTO="$ENTER_WORKSHOP

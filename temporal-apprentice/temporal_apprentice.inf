@@ -1777,6 +1777,28 @@ Object main_workshop "Main Workshop"
          ],
     has light;
 
+Object past_self "your past self"
+    with name 'past' 'self' 'me' 'myself' 'apprentice' 'younger',
+         description [;
+            if (endgame_phase == 1)
+                "Through the doorway you can see yourself -- younger by an afternoon, damp, slightly confused -- rummaging on the shelves for a brass spanner. You remember the exact feeling: cold hands, new job, no idea what was coming.";
+            "Your past self is right there, back turned, scanning the shelves. The same coat. The same damp hair. The same magnificent ignorance of everything that is about to go spectacularly wrong.";
+         ],
+         before [;
+            TalkTo, Tell, Ask, Answer, Show, Give:
+                ParadoxConfrontation();
+                rtrue;
+            Touch, Pull, Push, Attack:
+                ParadoxConfrontation();
+                rtrue;
+            default:
+                if (action == ##ThrowAt) {
+                    ParadoxConfrontation();
+                    rtrue;
+                }
+         ],
+    has animate proper concealed;
+
 Object workbench "workbench" main_workshop
     with name 'workbench' 'bench' 'table' 'desk',
          description [;
@@ -4789,6 +4811,10 @@ Object solarium_dest "Workshop"
         print "frozen to death";
         rtrue;
     }
+    if (deadflag == 8) {
+        print "erased from history";
+        rtrue;
+    }
 ];
 
 [ PrintEnding;
@@ -4815,6 +4841,22 @@ Object solarium_dest "Workshop"
     }
 ];
 
+[ ParadoxConfrontation;
+    print "You step forward. You open your mouth. Every atom of you wants to say: don't chase the cat. Don't touch the rag. Walk away. Go home. Live a normal, boring, non-temporal life.^^";
+    print "Your past self turns around.^^";
+    print "For one vertiginous second you are staring into your own face. The same eyes. The same startled expression you wore the morning you knocked over the specimen jar in the store room.^^";
+    print "Your past self goes absolutely white.^^";
+    print "~What -- who -- that's my coat. That's MY COAT. Why are you wearing my --~^^";
+    print "They don't finish the sentence. They bolt. They crash through the front door, scatter the dustbins in the alley, and are gone -- footsteps hammering down Praed Street, getting fainter, getting lost in the fog.^^";
+    print "They are not coming back.^^";
+    print "The workshop is very quiet. You look down at your hands. They are becoming transparent. You can see the workbench through your fingers. The brass gears. The marmalade jars.^^";
+    print "The pocket watch slips through what used to be your palm and strikes the floor with a bright, final chime.^^";
+    print "=== PARADOX COLLAPSE ===^^";
+    print "Your past self never took the job. Never met the cat. Never chased the rag. The time machine gathered dust in the solarium until Dr. Thyme dismantled it for parts on a rainy Thursday. He placed a new advert in the Times the following week, but the only applicant was a man who wanted to sell him encyclopaedias.^^";
+    print "Copernicus lived to the age of nineteen, which is extraordinary for a cat, and never once activated anything more dangerous than a sunbeam.^^";
+    deadflag = 8;
+];
+
 [ BootstrapStart;
     ! Phase 1: open the door, past-self enters, player hides behind door
     endgame_knocks_heard = false;
@@ -4830,6 +4872,7 @@ Object solarium_dest "Workshop"
     print "You yank the door wide and press yourself flat against the wall behind it, heart hammering. Footsteps stop. A pause. Then your past self turns back, stares at the open doorway -- at the empty doorway -- and steps cautiously inside.^^";
     print "You hold your breath behind the door as your past self walks east into the workshop. Muffled voices -- ~No salesmen!~ -- then a rustle of newspaper -- then, after a pause: ~The number four spanner. On the shelf. The brass one.~^^";
     print "You are alone behind the front door. Through the eastern doorway, you can hear your past self rummaging on the shelves.^";
+    move past_self to main_workshop;
     PlayerTo(workshop_entrance, 1);
 ];
 
@@ -4846,6 +4889,7 @@ Object solarium_dest "Workshop"
 [ BootstrapFinale;
     ! Phase 3: hide in store room, watch the loop close
     endgame_phase = 3;
+    remove past_self;
     print "You slip into the store room and press yourself between a crate marked ~CONTENTS UNKNOWN -- DO NOT OPEN ON WEDNESDAYS~ and a shelf of specimen jars.^^";
     print "Through the gap you watch your past self fumble with the spanner. Watch Thyme hand over the cleaning rag and the key. Watch yourself find the journal, flip through the ravings about Tuesdays and pantry sandwiches, and set it aside with the quiet confidence of someone who has no idea what is about to happen.^^";
     print "Dr. Thyme leaps up, checks three watches simultaneously, and bolts for the door muttering about Mrs. Pemberton's scones. The front door slams.^^";
