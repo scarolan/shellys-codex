@@ -705,7 +705,7 @@ Global watch_calibrated = false;
     wn = 1;
     w = NextWord();
     ! Block direct use of internal z-verbs
-    if (w == 'zcr' or 'zbr' or 'ztv' or 'zrp' or 'zex' or 'zdg' or 'zpt'
+    if (w == 'zcr' or 'zbr' or 'ztv' or 'ztd' or 'zrp' or 'zex' or 'zdg' or 'zpt'
            or 'zkn' or 'zrn' or 'zcl' or 'zyl' or 'zsh' or 'zkk' or 'zmw'
            or 'zby' or 'zci' or 'zsw') {
         i = WordAddress(1);
@@ -784,14 +784,12 @@ Global watch_calibrated = false;
                     Tokenise__(buffer, parse);
                 }
             } else {
-                ! ALL other "travel to X" → "ztv forward"
+                ! ALL other "travel to X" → "ztd" (dial is broken)
                 i = buffer + 2;
                 len = buffer->1;
                 while (len > 0) { len--; (i+len)->0 = ' '; }
-                i->0 = 'z'; i->1 = 't'; i->2 = 'v'; i->3 = ' ';
-                i->4 = 'f'; i->5 = 'o'; i->6 = 'r'; i->7 = 'w';
-                i->8 = 'a'; i->9 = 'r'; i->10 = 'd';
-                if (buffer->1 < 11) buffer->1 = 11;
+                i->0 = 'z'; i->1 = 't'; i->2 = 'd';
+                if (buffer->1 < 3) buffer->1 = 3;
                 Tokenise__(buffer, parse);
             }
         }
@@ -1669,7 +1667,11 @@ Object barkeep "barkeep" brass_tap
 
 Object pocket_watch "pocket watch"
     with name 'watch' 'pocket' 'timepi' 'fob',
-         description "Your grandfather's pocket watch. A handsome brass piece, slightly dented, perpetually three minutes fast. The irony of carrying a faulty timepiece to a job in temporal engineering has not escaped you.",
+         description [;
+            if (watch_calibrated)
+                "Your grandfather's pocket watch. A handsome brass piece, slightly dented, now keeping perfect time -- you set it against the Paddington clock tower and it hasn't missed a beat since. The irony of needing a railway clock to fix a timepiece you're carrying through the centuries is not lost on you.";
+            "Your grandfather's pocket watch. A handsome brass piece, slightly dented, perpetually three minutes fast. The irony of carrying a faulty timepiece to a job in temporal engineering has not escaped you.";
+         ],
          before [;
             Listen:
                 "Tick. Tick. Tick. Reassuringly constant, unlike everything else in your life at the moment.";
@@ -3975,8 +3977,12 @@ Object future_museum "Thames Barrier Museum"
             print "The museum occupies the upper floors of what was once the Thames Barrier control centre. Display cases hold artefacts salvaged from flooded London -- underground signs, a red telephone box, soggy copies of the Evening Standard dated 2038.^^";
             if (watch_offered)
                 print "The centrepiece of the museum stops you dead: ~PRIESTESS OF MITHRAS -- TEMPLE EXCAVATION, ROMAN LONDINIUM.~ Inside a climate-controlled case, hanging from a leather cord, is your grandfather's pocket watch. The brass catches the light exactly the way it did in his hands, in your hands, in the priestess's hands. The label reads: ~Brass timepiece found among burial goods of a Roman priestess. Circa 60 AD. The mechanism is Victorian, circa 1870. This remains the single most significant archaeological anachronism ever documented. Provenance: unknown.~ Still three minutes fast, after two thousand years.^^";
-            if (eleanor_gift)
-                print "Another display: ~WARTIME ART COLLECTION.~ Among the children's drawings is one labelled ~Eleanor Morrison, aged 8, 1941.~ It shows a silver cat. You recognise the style immediately.^^";
+            if (eleanor_gift) {
+                print "Another display: ~WARTIME ART COLLECTION.~ Among the children's drawings is one labelled ~Eleanor Morrison, aged 8, 1941.~ It shows a tin soldier standing guard over a sleeping cat.";
+                if (eleanor_drawing_item in player)
+                    print " You glance down at the cat drawing in your own possession -- the same careful lines, the same artist. She must have drawn this one after you left.";
+                print "^^";
+            }
             if (church_saved)
                 print "A scale model of St. Margaret's Church dominates one corner: ~SAVED FROM THE BLITZ -- St. Margaret's Church survived the incendiary raids of 1941, thanks to a fire watcher who smothered the flames with sandbags.~ The church still stands, even above the floodwaters.^^";
             else
@@ -4017,7 +4023,7 @@ Object eleanor_display "wartime art display" future_museum
     with name 'wartime' 'art' 'eleanor',
          description [;
             if (eleanor_gift) {
-                "The display includes several children's drawings from the Blitz. One is unmistakably Eleanor's work -- the same silver cat, the same careful lines. The label reads: ~Eleanor Morrison, aged 8, 1941. Morrison went on to become a celebrated artist.~ You smile.";
+                "The display includes several children's drawings from the Blitz. One is unmistakably Eleanor's work -- a tin soldier standing guard over a sleeping cat, rendered with the same careful lines you recognise. The label reads: ~Eleanor Morrison, aged 8, 1941. Morrison went on to become a celebrated artist.~ You smile.";
             }
             "You don't see any such display.";
          ],
@@ -5112,6 +5118,12 @@ Object solarium_dest "Workshop"
     rfalse;
 ];
 
+[ TravelDeniedSub;
+    if (cat_accident == false)
+        "You don't have a time machine. You barely have a job.";
+    "The destination dial is damaged beyond reading -- the markings are scorched away. Only two settings are legible: FORWARD and HOME. Try TRAVEL FORWARD or TRAVEL HOME.";
+];
+
 [ TravelForwardSub;
     if (cat_accident == false) {
         "The time machine isn't activated yet. Perhaps you should examine it more closely.";
@@ -5645,6 +5657,9 @@ Verb 'zcr'
 Verb 'zbr'
     *                                       -> Bury
     * noun                                  -> Bury;
+
+Verb 'ztd'
+    *                                       -> TravelDenied;
 
 Verb 'ztv'
     * 'to' noun                             -> TravelTo

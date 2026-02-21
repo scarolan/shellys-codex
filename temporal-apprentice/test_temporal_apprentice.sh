@@ -2589,8 +2589,8 @@ run_test "Travel to dest where machine is not" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 south
 travel forward" "time machine isn.t here"
-run_test "Travel to dest before cat accident rewrites to forward" "travel to roman" "isn.t activated"
-run_test "Travel to roman redirects to forward" "$ENTER_WORKSHOP
+run_test "Travel to named dest before cat accident denied" "travel to roman" "don.t have a time machine"
+run_test "Travel to roman denied after cat accident" "$ENTER_WORKSHOP
 $CAT_ACCIDENT
 west
 take fish
@@ -2604,7 +2604,7 @@ north
 show lodestone to marcus
 down
 repair machine
-travel to roman" "1941"
+travel to roman" "destination dial is damaged"
 run_test_absent "Machine desc no named destinations" "$ENTER_WORKSHOP
 $CAT_TO_TUNNELS
 examine machine" "Roman Londinium"
