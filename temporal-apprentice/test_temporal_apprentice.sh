@@ -283,11 +283,16 @@ talk to dr thyme" "tidy up"
 run_test "Thyme warns about solarium" "$ENTER_WORKSHOP
 take spanner
 give spanner to dr thyme
-talk to dr thyme" "do NOT go into the solarium"
+talk to dr thyme" "into the solarium"
 run_test "Thyme departs" "$ENTER_WORKSHOP
 take spanner
 give spanner to dr thyme
 talk to dr thyme" "front door slams"
+run_test "Thyme gives toolkit on departure" "$ENTER_WORKSHOP
+take spanner
+give spanner to dr thyme
+talk to dr thyme
+inventory" "toolkit"
 run_test "Cat on machine with rag" "$ENTER_SOLARIUM
 clean
 look" "cleaning rag dangling"
@@ -1364,6 +1369,11 @@ z
 z
 z
 z
+z
+z
+z
+z
+z
 z" "roof of St. Margaret.s collapses"
 run_test "Church burned: street description" "$BLITZ_SETUP
 z
@@ -1373,8 +1383,18 @@ z
 z
 z
 z
+z
+z
+z
+z
+z
 look" "gutted shell"
 run_test "Church burned: rooftop blocked" "$BLITZ_SETUP
+z
+z
+z
+z
+z
 z
 z
 z
@@ -1392,12 +1412,27 @@ z
 z
 z
 z
+z
+z
+z
+z
+z
 talk to peggy" "grandmother was married"
 run_test "Fire escalation warning" "$BLITZ_SETUP
+z
+z
+z
+z
+z
 z
 z" "Smoke pours from the church"
 run_test "Fire countdown in shelter" "$BLITZ_SETUP
 down
+z
+z
+z
+z
+z
 z
 z
 z" "Dust trickles from the ceiling"
@@ -1409,9 +1444,19 @@ z
 z
 z
 z
+z
+z
+z
+z
+z
 z" "That was St. Margaret"
 run_test "Church collapse heard in pub" "$BLITZ_SETUP
 east
+z
+z
+z
+z
+z
 z
 z
 z

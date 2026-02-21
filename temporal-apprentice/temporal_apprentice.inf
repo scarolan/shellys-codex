@@ -134,14 +134,15 @@ Global watch_calibrated = false;
 [ ThymeDeparts;
     print "^Dr. Thyme suddenly freezes, stares at the clock on the wall, and leaps to his feet.^^";
     print "~Mrs. Pemberton's! The scones! She only holds them until half three and it's --~ He checks three separate watches, each showing a different time. ~-- it's NEARLY that. Or possibly past. Time is --~ He waves his hand vaguely. ~-- a matter of perspective.~^^";
-    print "He grabs his enormous overcoat from the hooks by the door and shoves a brass key into your hand.^^";
-    print "~Front door key. Lock up when I'm back. Or before. Temporal engineering.~ He's already halfway out. ~DO tidy up while I'm out. Place is a state. And do NOT go into the solarium. The door at the end of the corridor. Under ANY circumstances.~^^";
+    print "He grabs his enormous overcoat from the hooks by the door and shoves a brass key into your hand. Then he ducks into the store room and emerges with a battered leather toolkit, which he drops into your arms.^^";
+    print "~Front door key. Lock up when I'm back. Or before. Temporal engineering.~ He's already halfway out. ~The toolkit has everything you'll need. DO tidy up while I'm out. Place is a state. And do NOT go into the solarium. The door at the end of the corridor. Under ANY circumstances.~^^";
     print "The front door slams shut behind him. You are alone. Well -- alone except for the cat, who watches you from atop a shelf with an expression of absolute calculation.^";
     thyme_departed = true;
     door_open = false;
     knock_count = 0;
     move cleaning_rag to player;
     move front_door_key to player;
+    move toolkit to player;
     move thyme_note to main_workshop;
     remove dr_thyme;
 ];
@@ -1306,7 +1307,10 @@ Object newspaper "newspaper"
                 print "Today's Times, fresh off the press and still smelling of ink and ambition. ";
                 if (ad_circled)
                     "The advert you circled reads: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Apply in person before quarter past three. Competitive wages. No salesmen.~ 14 Praed Street. The rest of the front page is the usual: municipal drainage projects, colonial dispatches, and a long letter about the declining quality of hansom cabs.";
-                "In the classifieds you notice an advert: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Apply in person before quarter past three. Competitive wages. No salesmen.~ 14 Praed Street. The rest of the front page is the usual: municipal drainage projects, colonial dispatches, and a long letter about the declining quality of hansom cabs.";
+                print "In the classifieds you notice an advert: ~DR. J. THYME -- TEMPORAL ENGINEERING -- seeks apprentice with good penmanship and a flexible relationship with linear time. Apply in person before quarter past three. Competitive wages. No salesmen.~ 14 Praed Street. The rest of the front page is the usual: municipal drainage projects, colonial dispatches, and a long letter about the declining quality of hansom cabs.";
+                if (pencil in player)
+                    " You could circle the advert with your pencil, to show which one caught your eye.";
+                "";
             }
             ! Phase 3: Museum display (scenery = in museum case)
             if (self has scenery) {
@@ -2327,6 +2331,7 @@ Object dr_thyme "Dr. Thyme" main_workshop
                     door_open = false;
                     move cleaning_rag to main_workshop;
                     move front_door_key to main_workshop;
+                    move toolkit to main_workshop;
                     move thyme_note to main_workshop;
                     remove dr_thyme;
                 }
@@ -2954,7 +2959,7 @@ Object blitz_street "Blacked-Out Street"
                 print "The time machine stands in the street, dusted with plaster and looking thoroughly out of place in wartime London.^^";
             if (fire_event == false) {
                 fire_event = true;
-                fire_turns_remaining = 7;
+                fire_turns_remaining = 12;
                 StartDaemon(rooftop_fire);
                 print "A siren shrieks. Then another. The drone of bombers swells until it fills the sky.^^";
                 print "Then the incendiaries come -- a cascade of bright points arcing overhead like malevolent fireflies. A cluster strikes the church roof to the north. For a heartbeat, the magnesium flare turns night into day. Then flames take hold, racing along ancient timbers.^^";
@@ -3271,6 +3276,24 @@ Object rooftop_fire "fire" blitz_rooftop
             }
             ! Escalating warnings while fire burns
             switch (fire_turns_remaining) {
+                9: switch (location) {
+                    blitz_street:
+                        print "^A thin haze of smoke drifts from the direction of the church.^";
+                    blitz_shelter:
+                        print "^Something smells like smoke.^";
+                    blitz_pub:
+                        print "^Someone at the bar sniffs. ~Can you smell smoke?~^";
+                }
+                7: switch (location) {
+                    blitz_street:
+                        print "^The smoke from the church is getting thicker. Flames are visible through the windows.^";
+                    blitz_shelter:
+                        print "^A faint smell of burning drifts down the stairwell.^";
+                    blitz_pub:
+                        print "^The smell of smoke is stronger now. The regulars glance at the door.^";
+                    blitz_church:
+                        print "^Smoke curls between the rafters. The incendiary is catching hold of the dry timber.^";
+                }
                 5: switch (location) {
                     blitz_street:
                         print "^Smoke pours from the church to the north. The flames are spreading along the roof timbers.^";
@@ -3773,17 +3796,19 @@ Object hawking "Professor Hawking" cambridge_hall
                 }
                 "The synthesiser clicks. ~Interesting, but not convincing. I need evidence, not anecdotes.~";
             Give, Show:
-                if ((noun == lodestone || (noun == toolkit && lodestone_installed)) && hawking_phase >= 2 && hawking_convinced == false) {
+                if ((noun == lodestone || (noun == toolkit && cat_accident) || (noun == vacuum_tube && visited_blitz)) && hawking_phase >= 2 && hawking_convinced == false) {
                     hawking_convinced = true;
                     score = score + 8;
-                    if (lodestone_installed)
-                        print "Hawking examines your toolkit. His instruments spike immediately. ~This metal has been exposed to temporal radiation,~ the synthesiser announces. ~The molecular signature is unmistakable -- these tools have passed through a temporal field multiple times.~ His instruments go haywire. The synthesiser is silent for a long moment.^^";
-                    else
+                    if (noun == lodestone)
                         print "Hawking watches as the lodestone pulls at every piece of metal in the room. His instruments go haywire. The synthesiser is silent for a long moment.^^";
-                    if (lodestone_installed)
-                        print "~The temporal signature is impossible. These instruments have been exposed to radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
+                    else if (noun == vacuum_tube)
+                        print "Hawking turns the vacuum tube over in his hands. His instruments spike immediately. ~This glass has been exposed to radiation I have no name for,~ the synthesiser announces. ~The molecular structure of the envelope has been altered at a quantum level -- as if the tube has passed through a field that doesn't exist yet.~ His instruments go haywire. The synthesiser is silent for a long moment.^^";
                     else
+                        print "Hawking examines your toolkit. His instruments spike immediately. ~This metal has been exposed to temporal radiation,~ the synthesiser announces. ~The molecular signature is unmistakable -- these tools have passed through a temporal field multiple times.~ His instruments go haywire. The synthesiser is silent for a long moment.^^";
+                    if (noun == lodestone)
                         print "~The magnetic signature is impossible. This stone has been exposed to temporal radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
+                    else
+                        print "~The temporal signature is impossible. This object has been exposed to radiation that won't be theorised for another fifty years.~ Another pause. ~You really are a time traveller.~^^";
                     print "The silence that follows is not empty. You can almost hear the future rearranging itself.^^";
                     print "~I have spent thirty years developing a theoretical framework for temporal harmonics. I was going to destroy my notes if no one came tonight. What would be the point?~ The synthesiser pauses. ~But you came. Which means the theory works. Which means I should publish.~^^";
                     print "He gives a command to his computer. In the study to the east, a dot-matrix printer whirs to life -- the unmistakable sound of perforated paper being fed through an ancient mechanism.^^";
