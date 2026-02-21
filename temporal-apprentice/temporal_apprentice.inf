@@ -3791,6 +3791,12 @@ Object hawking "Professor Hawking" cambridge_hall
                     rtrue;
                 }
                 if (noun == lodestone or vacuum_tube or hartley_journal or toolkit or time_machine) {
+                    if (hawking_phase == 0 && hawking_convinced == false) {
+                        hawking_phase = 1;
+                        print "Hawking examines the object in silence. His instruments hum. The synthesiser clicks to life.^^";
+                        print "~This is not a reproduction. The materials, the craftsmanship -- this is genuinely Victorian.~ A long pause. ~You have my attention. But curiosity is not proof. Show me something that defies the physics of its own era.~^";
+                        rtrue;
+                    }
                     if (hawking_phase == 1 && hawking_convinced == false) {
                         hawking_phase = 2;
                         print "Hawking examines the object with intense curiosity. ~Unusual. The craftsmanship is clearly Victorian, but the materials...~ He trails off, calculating. ~This is not from 2009. But I need the final proof. Something that demonstrates temporal mechanics directly.~^";
