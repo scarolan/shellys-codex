@@ -776,12 +776,22 @@ Global watch_calibrated = false;
         } else if (w2 == 'to' && parse->1 >= 3) {
             wn = 3; w2 = NextWord();
             if (w2 == 'workshop' or 'home' or '1895' or 'victorian') {
-                ! Keep as "ztv to <noun>" for going home
-                if (parse->1 > 3) {
-                    i = WordAddress(4);
-                    len = (buffer + 2 + buffer->1) - i;
-                    while (len > 0) { len--; i->len = ' '; }
+                if (cat_accident == false) {
+                    ! Pre-accident: no machine yet, deny
+                    i = buffer + 2;
+                    len = buffer->1;
+                    while (len > 0) { len--; (i+len)->0 = ' '; }
+                    i->0 = 'z'; i->1 = 't'; i->2 = 'd';
+                    if (buffer->1 < 3) buffer->1 = 3;
                     Tokenise__(buffer, parse);
+                } else {
+                    ! Keep as "ztv to <noun>" for going home
+                    if (parse->1 > 3) {
+                        i = WordAddress(4);
+                        len = (buffer + 2 + buffer->1) - i;
+                        while (len > 0) { len--; i->len = ' '; }
+                        Tokenise__(buffer, parse);
+                    }
                 }
             } else {
                 ! ALL other "travel to X" → "ztd" (dial is broken)
