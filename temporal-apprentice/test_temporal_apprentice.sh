@@ -2632,6 +2632,10 @@ run_test "frotz easter egg" "frotz" "Frobozzian light spell"
 run_test "nitfol easter egg" "nitfol" "animal communication"
 run_test "blorb easter egg" "blorb" "archive format"
 
+echo "[Profanity Handler]"
+run_test_absent "Swear word not unrecognised" "fuck" "not a verb I recognise"
+run_test_absent "British swear not unrecognised" "bollocks" "not a verb I recognise"
+
 # --- Buffer overflow on long input ---
 echo "[Buffer Overflow]"
 run_test_absent "No programming error on long input" "east

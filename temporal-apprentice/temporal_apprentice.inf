@@ -729,7 +729,7 @@ Global magic_word = 0;
     ! Block direct use of internal z-verbs
     if (w == 'zcr' or 'zbr' or 'ztv' or 'ztd' or 'zrp' or 'zex' or 'zdg' or 'zpt'
            or 'zkn' or 'zrn' or 'zcl' or 'zyl' or 'zsh' or 'zkk' or 'zmw'
-           or 'zby' or 'zci' or 'zsw' or 'zxy') {
+           or 'zby' or 'zci' or 'zsw' or 'zxy' or 'zsr') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z'; i->1 = 'z'; i->2 = 'z';
@@ -1086,6 +1086,18 @@ Global magic_word = 0;
         i->0 = 'z';
         i->1 = 'x';
         i->2 = 'y';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'fuck' or 'shit' or 'damn' or 'crap' or 'bollocks'
+           or 'bugger' or 'arse' or 'ass' or 'bastard' or 'piss'
+           or 'bloody' or 'sod' or 'wanker' or 'shite' or 'bitch'
+           or 'cock' or 'tits' or 'twat' or 'bellend' or 'tosser') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 's';
+        i->2 = 'r';
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
@@ -5827,6 +5839,21 @@ Object solarium_dest "Workshop"
     magic_word = 0;
 ];
 
+[ SwearSub;
+    switch (random(8)) {
+        1: if (copernicus_named)
+               "Copernicus flattens his ears. You have offended a creature whose ancestors were worshipped as gods. This was strategically unwise.";
+           "The cat flattens his ears. You have offended a creature whose ancestors were worshipped as gods. This was strategically unwise.";
+        2: "You feel slightly better. The universe remains entirely unchanged. This is the fundamental problem with profanity as a problem-solving strategy.";
+        3: "A passing Victorian lady clutches her pearls. A passing Victorian gentleman does exactly the same thing but pretends he didn't.";
+        4: "Dr. Thyme, were he here, would remind you that language is a precision instrument and you are using it as a blunt object.";
+        5: "You swear with the fluency of someone who has been flung through two thousand years of history by a cat. Which, to be fair, is exactly your situation.";
+        6: "The time machine's instruments flicker briefly. Apparently temporal machinery is sensitive to strong language. Or maybe it's just a coincidence. Best not to test it.";
+        7: "Somewhere in 60 AD, a Roman soldier just said exactly the same word. Latin profanity has better declensions, but the sentiment is identical.";
+        8: "Warden Peggy would wash your mouth out with carbolic soap. She has done it before and she will do it again. She keeps a bar in her tin hat for exactly this purpose.";
+    }
+];
+
 ! ===================================================================
 ! GRAMMAR
 ! ===================================================================
@@ -5921,6 +5948,9 @@ Verb 'zsw'
 
 Verb 'zxy'
     *                                       -> MagicWord;
+
+Verb 'zsr'
+    *                                       -> Swear;
 
 Verb 'board'
     * noun                                  -> Enter;
