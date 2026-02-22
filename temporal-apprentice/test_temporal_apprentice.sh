@@ -2625,6 +2625,13 @@ echo "[Easter Eggs]"
 run_test "Kill Hitler response" "$BLITZ_SETUP
 kill hitler" "family-friendly"
 
+echo "[Magic Words]"
+run_test "xyzzy easter egg" "xyzzy" "colossal cave"
+run_test "plugh easter egg" "plugh" "Plugh yourself"
+run_test "frotz easter egg" "frotz" "Frobozzian light spell"
+run_test "nitfol easter egg" "nitfol" "animal communication"
+run_test "blorb easter egg" "blorb" "archive format"
+
 # --- Buffer overflow on long input ---
 echo "[Buffer Overflow]"
 run_test_absent "No programming error on long input" "east

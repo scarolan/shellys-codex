@@ -126,6 +126,7 @@ Global machine_dug_out = false;
 Global machine_raised = false;
 Global machine_unlocked = false;
 Global watch_calibrated = false;
+Global magic_word = 0;
 
 ! ===================================================================
 ! NPC CONVERSATION ROUTINES
@@ -728,7 +729,7 @@ Global watch_calibrated = false;
     ! Block direct use of internal z-verbs
     if (w == 'zcr' or 'zbr' or 'ztv' or 'ztd' or 'zrp' or 'zex' or 'zdg' or 'zpt'
            or 'zkn' or 'zrn' or 'zcl' or 'zyl' or 'zsh' or 'zkk' or 'zmw'
-           or 'zby' or 'zci' or 'zsw') {
+           or 'zby' or 'zci' or 'zsw' or 'zxy') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z'; i->1 = 'z'; i->2 = 'z';
@@ -1069,6 +1070,23 @@ Global watch_calibrated = false;
             len = WordLength(wn - 1);
             while (len > 0) { len--; i->len = ' '; }
         }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'xyzzy') { magic_word = 1; }
+    if (w == 'plugh') { magic_word = 2; }
+    if (w == 'plover') { magic_word = 3; }
+    if (w == 'frotz') { magic_word = 4; }
+    if (w == 'rezrov') { magic_word = 5; }
+    if (w == 'gnusto') { magic_word = 6; }
+    if (w == 'nitfol') { magic_word = 7; }
+    if (w == 'blorb') { magic_word = 8; }
+    if (magic_word > 0) {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'x';
+        i->2 = 'y';
+        while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
     if (w == 'buy' or 'purchase' or 'order') {
@@ -5795,6 +5813,20 @@ Object solarium_dest "Workshop"
     print "Copernicus gives you a look of profound disappointment.^";
 ];
 
+[ MagicWordSub;
+    switch (magic_word) {
+        1: "A hollow voice says ~Fool.~ Nothing happens. This is not a colossal cave. This is a solarium in Paddington with a cat in it. Significantly more dangerous, in many ways.";
+        2: "A hollow voice says ~Plugh yourself.~ The walls of the cave do not shift, because there are no cave walls. There is a cat, though. The cat is unimpressed.";
+        3: "The emerald of Y'ha-nthlei does not materialise in your hands. Possibly because this is Victorian London and not the Zork universe. The distinction matters, though both have a comparable number of Things Lurking In Dark Places.";
+        4: "You invoke the Frobozzian light spell. Nothing glows. The Flathead dynasty has no jurisdiction here, though Dr. Thyme's filing system bears a suspicious resemblance to the Great Underground Empire -- dark, labyrinthine, and full of things that might eat you.";
+        5: "You speak the Frobozzian unlocking spell with great confidence. No locks open. The Z-machine acknowledges your cultural literacy but politely declines to act on it.";
+        6: "You attempt to copy the spell into your spell book. You don't have a spell book. You have a journal full of ravings about Tuesdays and temporal sandwich theory. It is not the same thing.";
+        7: "You speak the Frobozzian animal communication spell. Copernicus tilts his head. For one electric moment you think it might have worked. Then he yawns and goes back to sleep. So either it didn't work, or it did and he simply has nothing to say to you.";
+        8: "You invoke the name of the Interactive Fiction archive format. Somewhere, an archivist sheds a single tear of pride. Nothing else happens.";
+    }
+    magic_word = 0;
+];
+
 ! ===================================================================
 ! GRAMMAR
 ! ===================================================================
@@ -5886,6 +5918,9 @@ Verb 'zci'
 
 Verb 'zsw'
     *                                       -> SetWatch;
+
+Verb 'zxy'
+    *                                       -> MagicWord;
 
 Verb 'board'
     * noun                                  -> Enter;
