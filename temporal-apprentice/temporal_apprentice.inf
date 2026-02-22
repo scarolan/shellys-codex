@@ -4739,7 +4739,7 @@ Object copernicus "silver-grey cat" main_workshop
             Listen:
                 "Purrrrrrrrr. It's the sound of a small, self-satisfied engine.";
             Smell:
-                "You lean in close. Nothing. Copernicus smells of absolutely nothing -- not fur, not food, not the two thousand years of history he's been dragged through. Cats are ambush predators, and ambush predators don't advertise. He could be eight feet from a dog and the dog would never know.";
+                "You lean in close. Nothing. Copernicus, like most domestic cats, is an obsessive self-groomer. Millions of years of evolution have gifted felis catus with zero body odor, allowing them to silently sneak up on prey or hide from larger predators.";
             Push, Pull:
                 if (copernicus_named)
                     "Copernicus gives you a flat look that says ~I am exactly where I intend to be.~ He somehow becomes heavier.";
