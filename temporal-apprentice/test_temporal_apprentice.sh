@@ -4304,6 +4304,68 @@ run_test_absent "Ring bell is not a parser error" "$ENTER_SOLARIUM
 ring bell" "not a verb I recognise"
 run_test "Ring bell outside solarium" "ring bell" "Ringing that would accomplish nothing"
 
+# --- Detail Polish ---
+echo "[Detail Polish]"
+
+# Pigeon names on solarium ceiling
+run_test "Pigeon names on ceiling" "$ENTER_SOLARIUM
+examine ceiling" "Newton"
+
+# Listen/Smell in workshop
+run_test "Listen in workshop" "$ENTER_WORKSHOP
+listen" "ticks and hums"
+run_test "Smell in workshop" "$ENTER_WORKSHOP
+smell" "marmalade"
+
+# Listen/Smell in solarium
+run_test "Listen in solarium" "$ENTER_SOLARIUM
+listen" "machine hums"
+run_test "Smell in solarium" "$ENTER_SOLARIUM
+smell" "overheated copper"
+
+# Listen/Smell in Roman Forum
+run_test "Listen in Roman forum" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+listen" "merchants hawking"
+run_test "Smell in Roman forum" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+smell" "garum"
+
+# Listen/Smell in Blitz street (reuse BLITZ_SETUP defined earlier)
+run_test "Listen in Blitz" "$BLITZ_SETUP
+listen" "bombers"
+run_test "Smell in Blitz" "$BLITZ_SETUP
+smell" "Cordite"
+
+# Listen to cat (Listen takes a noun in Inform 6)
+run_test "Listen to cat" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+listen to copernicus" "Purrrrrrrrr"
+
+# Show watch to cat (after accident, cat is named Copernicus)
+run_test "Show watch to cat" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+show watch to copernicus" "pendulum"
+
+# Show lodestone to cat (need to buy lodestone first)
+run_test "Show lodestone to cat" "$ENTER_WORKSHOP
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+take aureus
+east
+south
+give aureus to felix
+show lodestone to copernicus" "fur stands on end"
+
+# Marzipan TARDIS and Cambridge Listen (reuse HAWKING_SETUP defined earlier)
+run_test "Examine marzipan TARDIS" "$HAWKING_SETUP
+examine marzipan" "Tom Baker"
+
+run_test "Listen in Cambridge hall" "$HAWKING_SETUP
+listen" "champagne fizzes"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"

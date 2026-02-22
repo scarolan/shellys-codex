@@ -399,6 +399,14 @@ Global watch_calibrated = false;
         print "Tommy glances at his wrist. ~Standard issue. Had it since basic training. Dunkirk, the desert, now this.~ He taps the crystal. ~Still keeps perfect time. More than I can say for the rest of the army.~ He pauses. ~My old man had a pocket watch. Lost it at the Somme. Funny how these things survive what we don't.~^";
         rtrue;
     }
+    if (topic == 'war' or 'dunkirk' or 'army' or 'blitz' or 'bomb' or 'bomber') {
+        print "Tommy goes quiet. His hand goes to his arm -- the one in the sling. ~Dunkirk was...~ He stops. ~The beach was the worst part. Standing in the water, watching the boats come in, knowing there weren't enough.~ He stares at nothing for a moment. ~The wireless was the only thing that kept me sane. Signals from home. Cricket scores.~ He attempts a grin. ~We do love our cricket scores.~^";
+        rtrue;
+    }
+    if (topic == 'peggy' or 'warden') {
+        print "~Peggy? Don't let the tin hat fool you -- she ran a school before the war. Scarier than any sergeant major I ever had. But she keeps this shelter running and everyone in it alive, so I'm not complaining.~^";
+        rtrue;
+    }
     if (topic == 'help') {
         if (radio_fixed) {
             if (tommy_helping == false) {
@@ -469,6 +477,18 @@ Global watch_calibrated = false;
     }
     if (topic == 'mantel' or 'carriage' or 'pendulum' or 'antique') {
         print "~The carriage clock? A gift. From someone I have not yet met.~ The synthesiser pauses longer than usual. ~The card said: 'You will understand in time.' I have spent eleven years trying to determine whether that is a promise, a threat, or a pun.~^";
+        rtrue;
+    }
+    if (topic == 'black' or 'hole' or 'holes' or 'radiation' or 'hawking') {
+        print "The synthesiser pauses longer than usual. ~Black holes are where God divided by zero.~ Another pause. ~I have spent my career proving they are not entirely black. They radiate. They evaporate. They have temperature. The universe, it turns out, does not permit anything to keep a secret forever.~ He glances at the time machine components with sharp eyes. ~Not even time.~^";
+        rtrue;
+    }
+    if (topic == 'universe' or 'cosmos' or 'space' or 'stars') {
+        print "~The universe is under no obligation to make sense to you. Fortunately, it is under considerable obligation to make sense to me.~ The synthesiser pauses for comic timing. ~That was a joke. The universe is under no obligation to make sense to anyone. This is what makes physics interesting and marriage difficult.~^";
+        rtrue;
+    }
+    if (topic == 'wheelchair' or 'chair' or 'disease' or 'illness') {
+        print "~My body is a prison. My mind is free. I have found the trade acceptable.~ The synthesiser pauses. ~Besides, the wheelchair has excellent cornering at speed, and the college porters have learned to get out of the way.~^";
         rtrue;
     }
     if (topic == 'help') {
@@ -1281,7 +1301,12 @@ Object door_hinges "brass hinges"
 Object door_dent "dent"
     with name 'dent' 'mark' 'scratch',
          found_in workshop_entrance main_workshop,
-         description "A suspiciously cat-shaped dent at precisely cat-height. The impact pattern suggests something hit the door at considerable velocity, possibly while pursuing a moth. Copernicus, of course, would deny all involvement, and his expression of wounded innocence would be entirely convincing if not for the tuft of silver fur still embedded in the wood grain.",
+         description [;
+            print "A suspiciously cat-shaped dent at precisely cat-height. The impact pattern suggests something hit the door at considerable velocity, possibly while pursuing a moth. ";
+            if (copernicus_named)
+                "Copernicus, of course, would deny all involvement, and his expression of wounded innocence would be entirely convincing if not for the tuft of silver fur still embedded in the wood grain.";
+            "The cat, of course, would deny all involvement, and his expression of wounded innocence would be entirely convincing if not for the tuft of silver fur still embedded in the wood grain.";
+         ],
     has scenery;
 
 Object entrance_gas_lamps "gas lamps" workshop_entrance
@@ -1778,6 +1803,15 @@ Object main_workshop "Main Workshop"
             }
             return solarium;
          ],
+         before [;
+            Listen:
+                if (noun ~= nothing) rfalse;
+                if (cat_accident == false)
+                    "The workshop ticks and hums. Somewhere behind the walls, pipes gurgle with fluids that are probably not water. A clock on the mantel marks the seconds with a disapproving tsk, tsk, tsk, as if it knows you're not getting enough done.";
+                "The workshop ticks and hums to itself, a mechanical heartbeat that never quite stops. Somewhere in the walls, pipes carry fluids of uncertain provenance. The clock on the mantel keeps time -- or at least its version of time.";
+            Smell:
+                "Ozone, solder flux, and Seville orange marmalade. It's the signature scent of Dr. Thyme's workshop -- equal parts electrical fire and English breakfast.";
+         ],
          each_turn [;
             if (endgame_phase == 2) {
                 endgame_turns++;
@@ -2016,6 +2050,15 @@ Object solarium "The Solarium"
             }
         ],
          w_to main_workshop,
+         before [;
+            Listen:
+                if (noun ~= nothing) rfalse;
+                if (time_machine in self)
+                    "The machine hums -- not the hum of electricity, but something deeper, as if the air itself is vibrating at a frequency that makes your fillings ache. The ferns rustle in a wind that comes from no discernible direction.";
+                "Without the machine, the solarium is eerily quiet. Rain taps the glass ceiling. A pigeon coos. The ferns rustle in ordinary, explicable breezes.";
+            Smell:
+                "Damp earth from the fern pots, the faint sweetness of overheated copper, and something indefinable -- a metallic tang at the back of your throat, like the air before a thunderstorm. The smell of time, perhaps, or at least of machinery that has no business existing.";
+         ],
     has light;
 
 Object solarium_ferns "potted ferns" solarium
@@ -2025,7 +2068,7 @@ Object solarium_ferns "potted ferns" solarium
 
 Object solarium_ceiling "glass ceiling" solarium
     with name 'ceiling' 'glass' 'roof' 'skylight',
-         description "A vaulted glass ceiling, streaked with rain and the unmistakable evidence of London's pigeon population. Grey light filters through, giving the room an underwater quality. One pane near the base has been replaced with a small hinged flap -- a cat-sized entrance.",
+         description "A vaulted glass ceiling, streaked with rain and the unmistakable evidence of London's pigeon population. Grey light filters through, giving the room an underwater quality. Someone -- Dr. Thyme, presumably -- has labelled three particular streaks in tiny copperplate: ~Newton,~ ~Faraday,~ and ~That Bastard.~ One pane near the base has been replaced with a small hinged flap -- a cat-sized entrance.",
     has scenery;
 
 Object cat_flap "cat flap" solarium
@@ -2490,6 +2533,13 @@ Object roman_forum "The Forum"
          w_to roman_bath,
          s_to roman_merchants,
          d_to roman_tunnels,
+         before [;
+            Listen:
+                if (noun == nothing)
+                    "The din of Roman Londinium fills the square: merchants hawking garum and amphorae, two senators arguing at increasing volume, the distant clang of a blacksmith, and somewhere a street musician is murdering a lyre. This is civilisation, apparently.";
+            Smell:
+                "Woodsmoke, roasting meat, a waft of garum (the Roman condiment that smells like someone pickled an anchovy in regret), and underneath it all the warm stone smell of a city baking in improbable sunshine.";
+         ],
     has light;
 
 Object forum_column "marble column" roman_forum
@@ -2981,6 +3031,13 @@ Object blitz_street "Blacked-Out Street"
          n_to blitz_church,
          e_to blitz_pub,
          w_to blitz_rubble,
+         before [;
+            Listen:
+                if (noun ~= nothing) rfalse;
+                "The drone of bombers, the distant crump of explosions, the clatter of shrapnel on roof tiles. Closer: a dog barking, the hiss of a broken water main, and somewhere in the blackout, a woman singing ~We'll Meet Again~ with defiant, slightly off-key conviction.";
+            Smell:
+                "Cordite, brick dust, and the acrid tang of incendiary smoke. Underneath it: coal fires, boiled cabbage, and the unmistakable smell of a city that refuses to stop cooking dinner just because it's being bombed.";
+         ],
     has light;
 
 Object street_rubble "rubble" blitz_street
@@ -3713,12 +3770,24 @@ Object cambridge_hall "Gonville Hall"
             print "Dr. Chen blocks the corridor. ~Professor Hawking's study is private. Unless, of course, he invites you in himself.~^";
             rfalse;
          ],
+         before [;
+            Listen:
+                if (noun ~= nothing) rfalse;
+                if (party_over)
+                    "Silence, apart from the faint hiss of champagne going flat and the occasional bump of a balloon against the ceiling. It's the sound of a party that history forgot to attend.";
+                "The synthesiser hums. Champagne fizzes. A balloon bumps the ceiling. It's the quietest party you've ever been to, but also by some distance the most interesting.";
+         ],
     has light;
 
 Object party_table "banquet table" cambridge_hall
     with name 'table' 'banquet' 'food' 'champagne' 'canapes' 'cake' 'balloon' 'balloons',
          description "The table is a feast for one. Well, for several, but only one has shown up. The champagne is excellent (Dom Perignon, 2001), the canapes are artful, and the cake has a marzipan TARDIS on it. Professor Hawking has a sense of humour.",
     has scenery supporter;
+
+Object marzipan_tardis "marzipan TARDIS" cambridge_hall
+    with name 'marzipan' 'tardis' 'police' 'topper' 'decoration',
+         description "A lovingly detailed marzipan TARDIS, about four inches tall, perched atop the cake. Someone has piped ~IT'S BIGGER ON THE INSIDE~ in blue icing around the base. The door is slightly ajar, revealing a tiny marzipan Tom Baker with a marzipan scarf trailing into the frosting.",
+    has scenery;
 
 Object hall_wheelchair "wheelchair" cambridge_hall
     with name 'wheelchair' 'chair' 'wheels',
@@ -4626,6 +4695,14 @@ Object copernicus "silver-grey cat" main_workshop
                     "Copernicus's eyes go wide. He snatches the fish from your hand with a speed that would shame a striking cobra, and devours it in three enthusiastic bites. He licks his whiskers and begins to purr thunderously.";
                 }
                 "The cat sniffs your offering, finds it beneath his dignity, and looks away.";
+            Show:
+                if (noun == pocket_watch)
+                    "Copernicus watches the brass case swing back and forth, back and forth... his pupils dilate to saucers, his head tracks the pendulum arc with mechanical precision, and then -- with the restraint of a true predator -- he bats it out of your hand. You retrieve it from under the nearest piece of furniture.";
+                if (noun == lodestone)
+                    "You hold the lodestone near Copernicus. His fur stands on end, making him approximately twice his normal size. He gives you a deeply offended look, shakes himself violently, and stalks three feet away to begin an indignant grooming session.";
+                if (noun == vacuum_tube)
+                    "Copernicus peers into the glass tube with one eye, then the other, then taps it experimentally with a paw. The tube rings with a clear, bell-like note. He taps it again. And again. You take it back before he starts a concerto.";
+                "The cat glances at the object, glances at you, and looks away with an expression that says ~I have seen things you cannot imagine, and none of them were as boring as this.~";
             ThrowAt:
                 "Absolutely not. This cat has an air of invincibility about him. He can certainly survive you.";
          ],
@@ -4661,6 +4738,8 @@ Object copernicus "silver-grey cat" main_workshop
                 "The cat allows exactly 2.4 seconds of chin-scratching before biting your finger. Not hard enough to draw blood. Just hard enough to establish boundaries.";
             Listen:
                 "Purrrrrrrrr. It's the sound of a small, self-satisfied engine.";
+            Smell:
+                "Warm fur, a hint of fish, and that indefinable scent that is simply Cat. It's oddly comforting, no matter what century you're in.";
             Push, Pull:
                 if (copernicus_named)
                     "Copernicus gives you a flat look that says ~I am exactly where I intend to be.~ He somehow becomes heavier.";
@@ -4931,7 +5010,7 @@ Object solarium_dest "Workshop"
     ! Phase 3: hide in store room, watch the loop close
     endgame_phase = 3;
     remove past_self;
-    print "You slip into the store room and press yourself between a crate marked ~CONTENTS UNKNOWN -- DO NOT OPEN ON WEDNESDAYS~ and a shelf of specimen jars.^^";
+    print "You slip into the store room and press yourself between a crate marked ~CONTENTS UNKNOWN -- DO NOT OPEN ON WEDNESDAYS~ and a shelf of specimen jars. The air is warm. Of course it is. It was warm the first time you came in here, hours ago. That was you. That warmth was you, pressed into this exact spot, waiting for this exact moment.^^";
     print "Through the gap you watch your past self fumble with the spanner. Watch Thyme hand over the cleaning rag and the key. Watch yourself find the journal, flip through the ravings about Tuesdays and pantry sandwiches, and set it aside with the quiet confidence of someone who has no idea what is about to happen.^^";
     print "Dr. Thyme leaps up, checks three watches simultaneously, and bolts for the door muttering about Mrs. Pemberton's scones. The front door slams.^^";
     print "Your past self unfurls the cleaning rag. The cat pounces. In a flash of silver fur the rag is gone and so is the cat -- a grey blur bolting east down the corridor. Your past self hesitates for exactly one second, then chases after.^^";
