@@ -1734,6 +1734,13 @@ Object brass_tap "The Brass Tap"
          e_to "That wall is occupied by a dartboard, three hunting prints, and a stain of mysterious provenance. There is no exit.",
          w_to "The only things west are the coal fire, a brass spittoon, and a cat that may or may not be alive. None of them are exits.",
          s_to "The back wall is solid brick. The publican's licence and a portrait of the Queen hang there. Neither is a door.",
+         before [;
+            Listen:
+                if (noun ~= nothing) rfalse;
+                "The coal fire crackles and pops in the grate, punctuating a low murmur of conversation, the clink of glasses, and the occasional thud of a dart hitting cork -- or, from the sound of it, plaster. Somewhere a man is losing an argument about horse racing, slowly and with dignity.";
+            Smell:
+                "Coal smoke, spilled ale, and the ghost of a thousand cigarettes embedded permanently in the ceiling. Underneath it all, the honest pub smell of damp wool, furniture polish, and mild regret.";
+         ],
     has light;
 
 Object tap_ceiling "ceiling" brass_tap
