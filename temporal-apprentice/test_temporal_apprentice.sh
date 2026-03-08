@@ -3333,6 +3333,22 @@ tell curator about time" "scholarly patience"
 run_test_absent "Tell curator no generic reaction" "$FUTURE_SETUP
 north
 tell curator about flood" "provokes no reaction"
+# Ask curator about newspaper and time (issue #150)
+run_test "Ask curator about newspaper" "$FUTURE_SETUP
+north
+ask curator about newspaper" "Fleet Street"
+run_test "Ask curator about paper synonym" "$FUTURE_SETUP
+north
+ask curator about paper" "Fleet Street"
+run_test "Ask curator about times synonym" "$FUTURE_SETUP
+north
+ask curator about times" "Fleet Street"
+run_test "Ask curator about time" "$FUTURE_SETUP
+north
+ask curator about time" "machine for travelling"
+run_test "Ask curator about travel synonym" "$FUTURE_SETUP
+north
+ask curator about travel" "machine for travelling"
 
 # --- Issue #45: Missing scenery ---
 echo "[Issue #45: Missing Scenery]"

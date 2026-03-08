@@ -4627,6 +4627,14 @@ Object curator "Museum Curator" future_museum
                     print "~The memorial clock? Ah.~ The curator's voice softens. ~It stopped at 3:17 AM on the seventh of March, 2038. The exact moment the Barrier failed. We could fix it, of course. But some moments deserve to be remembered exactly as they happened.~ They gaze at the frozen digits. ~The city moved on. The clock didn't. I think that's important.~^";
                     rtrue;
                 }
+                if (second == 'newspaper' or 'paper' or 'times') {
+                    print "~The newspaper? That's a genuine copy of The Times from the morning after the Barrier failed. Front page says 'LONDON DROWNS.' Forty-eight point type.~ The curator shakes their head. ~They printed it on the emergency presses in Birmingham. By then, of course, Fleet Street was three metres underwater.~^";
+                    rtrue;
+                }
+                if (second == 'time' or 'travel') {
+                    print "~Time?~ The curator smiles. ~This is a museum. Everything here is about time -- preserving it, remembering it, arguing about it. As for time travel, well.~ They gesture around the room. ~What do you think a museum is, if not a machine for travelling through time?~^";
+                    rtrue;
+                }
                 print "The curator adjusts their cardigan. ~I'm afraid I don't know much about that. But do look around -- the museum speaks for itself.~^";
                 rtrue;
             Give:
