@@ -4992,6 +4992,31 @@ Object solarium_dest "Workshop"
     has proper;
 
 ! ===================================================================
+! SELF DESCRIPTION
+! ===================================================================
+
+[ SelfDescription;
+    print "You catch a glimpse of yourself -- wild hair, sharp eyes, ";
+    if (roman_robe has worn)
+        print "a rough wool cloak thrown over your Victorian clothes";
+    else
+        print "Victorian trousers and a waistcoat that have seen better days";
+    print ". ";
+    if (visited_roman && visited_blitz == false)
+        print "There's dust from Roman Londinium on your boots. ";
+    if (visited_blitz)
+        print "Soot from the Blitz clings to your cuffs. ";
+    if (visited_hawking)
+        print "A faint whiff of champagne lingers from Cambridge. ";
+    if (visited_future)
+        print "Your trouser hems are damp from the flooded streets of 2045. ";
+    if (visited_roman == false && visited_blitz == false &&
+        visited_hawking == false && visited_future == false)
+        "You look like someone who was recently sacked from an accounting firm, which is exactly what you are.";
+    "You look like someone who has been dragged sideways through time, which is exactly what you are.";
+];
+
+! ===================================================================
 ! INITIALISE
 ! ===================================================================
 
@@ -5001,6 +5026,7 @@ Object solarium_dest "Workshop"
     score = 0;
     move pocket_watch to player;
     move coins to player;
+    selfobj.description = SelfDescription;
     move newspaper to newsboy;
     StartDaemon(dr_thyme);
     StartDaemon(frost_tracker);

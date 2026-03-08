@@ -4418,6 +4418,18 @@ examine marzipan" "Tom Baker"
 run_test "Listen in Cambridge hall" "$HAWKING_SETUP
 listen" "champagne fizzes"
 
+# --- Examine Self ---
+echo "[Examine Self]"
+
+run_test "Examine me gives custom description" "$ENTER_WORKSHOP
+examine me" "Victorian trousers and a waistcoat"
+
+run_test_absent "Examine me no longer gives library default" "$ENTER_WORKSHOP
+examine me" "As good-looking as ever"
+
+run_test "Examine self gives custom description" "$ENTER_WORKSHOP
+examine self" "wild hair"
+
 # --- Full Score ---
 echo "[Full Score]"
 
