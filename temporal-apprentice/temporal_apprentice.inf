@@ -1828,6 +1828,8 @@ Object pocket_watch "pocket watch"
          before [;
             Listen:
                 "Tick. Tick. Tick. Reassuringly constant, unlike everything else in your life at the moment.";
+            Open:
+                "You flip open the hinged brass case. The watch face stares back at you, its hands moving with quiet determination. You snap it shut again before sentiment gets the better of you.";
          ];
 
 Object coins "handful of coins"

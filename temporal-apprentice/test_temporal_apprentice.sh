@@ -188,6 +188,8 @@ talk to dr thyme" "front door key"
 echo "[Pocket Watch]"
 run_test "Watch in inventory at start" "inventory" "pocket watch"
 run_test_absent "No watch on ground" "look" "You can.*see.*pocket watch"
+run_test "Open watch custom response" "open watch" "hinged brass case"
+run_test_absent "No default open message for watch" "open watch" "not something you can open"
 
 # --- Workshop Hub ---
 echo "[Workshop Hub]"
