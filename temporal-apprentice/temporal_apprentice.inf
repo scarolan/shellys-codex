@@ -439,7 +439,7 @@ Global magic_word = 0;
         rtrue;
     }
     if (hawking_phase == 2) {
-        print "~Interesting. Very interesting. But I need more evidence. Show me something from your time that shouldn't exist in 2009.~^";
+        print "~You have piqued my scientific interest, which is not easy to do. But interest is not proof.~ A pause. ~Show me one more object -- something that carries a signature no laboratory in 2009 could produce. Then we shall talk.~^";
         rtrue;
     }
 ];
@@ -1101,7 +1101,7 @@ Global magic_word = 0;
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
-    if (w == 'buy' or 'purchase' or 'order') {
+    if (w == 'buy' or 'purchase' or 'order' or 'trade') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z';
@@ -3923,7 +3923,7 @@ Object hawking "Professor Hawking" cambridge_hall
                     }
                     if (hawking_phase == 1 && hawking_convinced == false) {
                         hawking_phase = 2;
-                        print "Hawking examines the object with intense curiosity. ~Unusual. The craftsmanship is clearly Victorian, but the materials...~ He trails off, calculating. ~This is not from 2009. But I need the final proof. Something that demonstrates temporal mechanics directly.~^";
+                        print "Hawking examines the object with intense curiosity. ~Unusual. The craftsmanship is clearly Victorian, but the materials...~ He trails off, calculating. ~This is not from 2009. You have my curiosity, but not yet my conviction.~ A pause. ~Show me something else -- something with a temporal signature that shouldn't exist in this century. One more object, and I may have to revise my entire worldview.~^";
                         rtrue;
                     }
                     if (hawking_phase == 2 && hawking_convinced == false) {
