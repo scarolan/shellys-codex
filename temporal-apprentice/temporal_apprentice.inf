@@ -3216,7 +3216,7 @@ Object church_nave "nave" blitz_church
     has scenery;
 
 Object church_walls "church walls" blitz_church
-    with name 'wall' 'walls' 'inscription',
+    with name 'wall' 'walls' 'inscription' 'stone',
          description [;
             if (inscription_carved) {
                 "The ancient walls bear the scars of both war and time. Through a gap in the bomb damage, a carved inscription is visible: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, 60 AD.~ Nearly two thousand years old. You feel a chill that has nothing to do with the weather.";

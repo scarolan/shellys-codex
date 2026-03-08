@@ -3083,6 +3083,31 @@ repair machine
 travel forward
 north
 examine inscription" "TEMPUS FUGIT"
+run_test "Examine stone in church (inscription carved)" "$ENTER_WORKSHOP
+take journal
+north
+take toolkit
+south
+$CAT_ACCIDENT
+west
+take fish
+give fish to copernicus
+ask copernicus about grate
+take aureus
+east
+south
+give aureus to felix
+north
+show lodestone to marcus
+give watch to livia
+east
+carve
+west
+south
+repair machine
+travel forward
+north
+examine stone" "TEMPUS FUGIT"
 
 # --- New scenery: Fire Watch Rooftop ---
 echo "[Scenery: Rooftop]"
