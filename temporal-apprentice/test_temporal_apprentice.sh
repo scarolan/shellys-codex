@@ -4418,6 +4418,18 @@ examine marzipan" "Tom Baker"
 run_test "Listen in Cambridge hall" "$HAWKING_SETUP
 listen" "champagne fizzes"
 
+# --- Full Score ---
+echo "[Full Score]"
+
+run_test "Full score shows task breakdown" "$ENTER_WORKSHOP
+full score" "buying the newspaper"
+
+run_test "Full score shows multiple tasks" "$ENTER_WORKSHOP
+full score" "circling the advertisement"
+
+run_test "Full score shows hired task" "$ENTER_WORKSHOP
+full score" "getting hired"
+
 echo ""
 echo "=== Results ==="
 echo "  Passed: $PASS / $TOTAL"

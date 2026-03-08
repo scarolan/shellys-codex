@@ -7,11 +7,14 @@
 Constant Story "The Temporal Apprentice";
 Constant Headline "^A Time-Travelling Adventure^^";
 Constant MAX_SCORE 209;
+Constant TASKS_PROVIDED 0;
+Constant NUMBER_TASKS 28;
 
 Replace DrawStatusLine;
 Replace GamePrologue;
 
 Include "Parser";
+Array task_scores -> 2 1 3 3 3 3 5 20 8 20 15 5 3 3 8 25 30 5 8 8 5 8 2 2 2 2 5 5;
 Include "VerbLib";
 
 ! Override library GamePrologue to remove the leading blank line
@@ -46,6 +49,71 @@ Include "VerbLib";
     <Look>;
     #Endif;
     before_first_turn = false;
+];
+
+! ===================================================================
+! FULL-SCORE TASK DEFINITIONS
+! ===================================================================
+! Task  0: Buying the newspaper (2)
+! Task  1: Circling the advertisement (1)
+! Task  2: Getting hired by Dr. Thyme (3)
+! Task  3: Giving the spanner to Dr. Thyme (3)
+! Task  4: Discovering the solarium (3)
+! Task  5: Travelling through time (3)
+! Task  6: Impressing Centurion Marcus (5)
+! Task  7: Earning Priestess Livia's trust (20)
+! Task  8: Obtaining the lodestone (8)
+! Task  9: Carving the temple inscription (20)
+! Task 10: Burying the time capsule (15; 5 without pencil)
+! Task 11: Fixing Tommy's radio (5)
+! Task 12: Enlisting Tommy's help (3)
+! Task 13: Digging out the time machine (3)
+! Task 14: Obtaining the vacuum tube (8)
+! Task 15: Giving Eleanor the tin soldier (25)
+! Task 16: Saving St. Margaret's Church (30)
+! Task 17: Gaining entry to the college (5)
+! Task 18: Convincing Professor Hawking (8)
+! Task 19: Obtaining the calibration formula (8)
+! Task 20: Enlisting Kai's help (5)
+! Task 21: Obtaining the quantum processor (8)
+! Task 22: Installing the lodestone (2)
+! Task 23: Installing the vacuum tube (2)
+! Task 24: Transcribing the formula (2)
+! Task 25: Installing the quantum processor (2)
+! Task 26: Cleaning the workshop (5)
+! Task 27: Dr. Thyme's return (5)
+
+[ PrintTaskName i;
+    switch (i) {
+        0: "buying the newspaper";
+        1: "circling the advertisement";
+        2: "getting hired by Dr. Thyme";
+        3: "giving the spanner to Dr. Thyme";
+        4: "discovering the solarium";
+        5: "travelling through time";
+        6: "impressing Centurion Marcus";
+        7: "earning Priestess Livia's trust";
+        8: "obtaining the lodestone";
+        9: "carving the temple inscription";
+        10: "burying the time capsule";
+        11: "fixing Tommy's radio";
+        12: "enlisting Tommy's help";
+        13: "digging out the time machine";
+        14: "obtaining the vacuum tube";
+        15: "giving Eleanor the tin soldier";
+        16: "saving St. Margaret's Church";
+        17: "gaining entry to the college";
+        18: "convincing Professor Hawking";
+        19: "obtaining the calibration formula";
+        20: "enlisting Kai's help";
+        21: "obtaining the quantum processor";
+        22: "installing the lodestone";
+        23: "installing the vacuum tube";
+        24: "transcribing the formula";
+        25: "installing the quantum processor";
+        26: "cleaning the workshop";
+        27: "Dr. Thyme's return";
+    }
 ];
 
 ! ===================================================================
@@ -386,7 +454,7 @@ Global magic_word = 0;
         } else if (radio_fixed) {
             print "~The rubble site? Dangerous, that. But I suppose I owe you one for the valve. Tell you what -- I'll help you dig if you need it. Just say the word.~^";
             tommy_helping = true;
-            score = score + 3;
+            Achieved(12);
         } else {
             print "~Can't help with the rubble, mate. Not while the radio's down. Fix the wireless and we'll talk.~^";
         }
@@ -412,7 +480,7 @@ Global magic_word = 0;
         if (radio_fixed) {
             if (tommy_helping == false) {
                 tommy_helping = true;
-                score = score + 3;
+                Achieved(12);
             }
             print "~Radio's sorted, thanks to you. I'm a man of my word -- I'll help you dig through that rubble whenever you're ready.~^";
         } else {
@@ -1210,11 +1278,11 @@ Object workshop_entrance "Workshop Entrance"
                 the_time = arrival_time;
                 endgame_knocks_heard = true;
                 endgame_turns = 0;
-                score = score + 5;
+                Achieved(27);
                 print "You grasp the door handle. Cold brass. Almost there. Almost out. Almost --^^";
                 print "KNOCK. KNOCK. KNOCK.^^";
                 print "From the other side of the door. Six inches from your face.^^";
-                print "You let go of the handle as if it's red hot. Your hand goes to your pocket watch. ";
+        print "You let go of the handle as if it's red hot. Your hand goes to your pocket watch. ";
                 PrintTime12(the_time);
                 print ". The exact time you arrived. You remember this. You remember standing on the other side of this door, rain starting, checking this very watch, about to walk away --^^";
                 print "It didn't open by itself.^^";
@@ -1308,7 +1376,7 @@ Object entrance_door "oak door"
                     the_time = arrival_time;
                     endgame_knocks_heard = true;
                     endgame_turns = 0;
-                    score = score + 5;
+                    Achieved(27);
                     print "You grasp the door handle. Cold brass. Almost there. Almost out. Almost --^^";
                     print "KNOCK. KNOCK. KNOCK.^^";
                     print "From the other side of the door. Six inches from your face.^^";
@@ -1715,7 +1783,7 @@ Object tap_clock "mantel clock" brass_tap
     has scenery;
 
 Object pint_of_ale "pint of ale"
-    with name 'pint' 'ale' 'beer' 'bitter' 'glass' 'porter' 'mild' 'gin',
+    with name 'pint' 'ale' 'beer' 'bitter' 'glass' 'porter' 'mild' 'gin' 'drink',
          description "A pint of dark ale in a heavy glass tankard. It has a head like a thundercloud and smells of hops and mild regret.",
          before [;
             Drink:
@@ -2033,7 +2101,7 @@ Object solarium "The Solarium"
     with description [;
             if (solarium_entered == false) {
                 solarium_entered = true;
-                score = score + 3;
+                Achieved(4);
                 if (copernicus notin solarium) {
                     move copernicus to solarium;
                     move cat_name_tag to solarium;
@@ -2437,7 +2505,7 @@ Object dr_thyme "Dr. Thyme" main_workshop
                         "He glances at the paper. ~There are forty-seven adverts in this paper. Which one, precisely, brought you to a temporal engineering workshop at three in the afternoon?~";
                     }
                     hired = true;
-                    score = score + 3;
+                    Achieved(2);
                     print "He squints at the circled advert, then at you, then back at the advert.^^";
                     print "~Ah! The temporal engineering position. Splendid.~ He turns properly for the first time. ~I'm Dr. Thyme. You'll call me Doctor, or sir, or 'that madman with the spanner,' whichever comes most naturally.~^^";
                     print "He gestures at the shelves behind you. ~Now -- the number four spanner, if you please. Brass. Not steel. The steel one is for Tuesdays.~^";
@@ -2452,7 +2520,7 @@ Object dr_thyme "Dr. Thyme" main_workshop
                     spanner_given = true;
                     spanner_turn = turns;
                     StartDaemon(dr_thyme);
-                    score = score + 3;
+                    Achieved(3);
                     remove brass_spanner;
                     print "He takes the spanner without looking, makes a minute adjustment to whatever he's working on, and finally turns.^^";
                     print "~Good. You can follow instructions. That puts you ahead of the last three applicants.~ He peers at you as if reading very small print.^";
@@ -2881,7 +2949,7 @@ Object marcus "Centurion Marcus" roman_forum
             Show:
                 if (noun == lodestone && marcus_impressed == false) {
                     marcus_impressed = true;
-                    score = score + 5;
+                    Achieved(6);
                     print "You hold the lodestone near Marcus's iron gladius. The sword twitches towards the stone, and Marcus leaps back as if stung.^^";
                     print "~Pro Iuppiter!~ he breathes, eyes wide. By Jupiter. ~Lapis ferrum imperat!~ The stone commands iron -- you don't need a university degree for that one. He salutes hastily. ~Ignosce, magne. Via Principalis tibi patet.~ Forgive me, great one -- the Via is open to you. He's speaking faster now, something about telling Priestess Livia of your gifts. The word ~haruspex~ keeps coming up. Seer. He thinks you're a seer.^";
                     rtrue;
@@ -2903,7 +2971,7 @@ Object livia "Priestess Livia" roman_forum
                 if (noun == pocket_watch && marcus_impressed) {
                     watch_offered = true;
                     livia_trusts = true;
-                    score = score + 20;
+                    Achieved(7);
                     remove pocket_watch;
                     print "You hold out your grandfather's pocket watch. Livia takes it carefully, turning the brass case in the Mediterranean sunlight. She presses it to her ear and her eyes widen at the ticking.^^";
                     print "~Tempus,~ she breathes. Time. She threads a leather cord through the fob ring and ties it around her neck. The watch hangs against her white robes, catching the sun in small golden flashes.^^";
@@ -2943,7 +3011,7 @@ Object felix "Felix the Merchant" roman_merchants
             Give:
                 if (noun == gold_aureus && has_lodestone == false) {
                     has_lodestone = true;
-                    score = score + 8;
+                    Achieved(8);
                     remove gold_aureus;
                     move lodestone to player;
                     StartDaemon(lodestone);
@@ -3523,7 +3591,7 @@ Object vacuum_tube "vacuum tube" metal_box
                         "Taken.";
                     }
                     has_vacuum_tube = true;
-                    score = score + 8;
+                    Achieved(14);
                     move self to player;
                     print "You carefully extract the vacuum tube from its packing straw. It's warm to the touch and hums faintly -- temporal resonance.";
                     print "^";
@@ -3580,7 +3648,7 @@ Object tommy "Corporal Tommy"
             Give:
                 if (noun == radio_valve && radio_fixed == false) {
                     radio_fixed = true;
-                    score = score + 5;
+                    Achieved(11);
                     remove radio_valve;
                     print "Tommy's face lights up like a Christmas tree. ~A working valve! You beauty!~ He slots it into the wireless with practiced hands. The set crackles to life, filling the shelter with the BBC Home Service.^^";
                     print "~...and now, the shipping forecast. Viking, North Utsire, South Utsire...~^^";
@@ -3617,7 +3685,7 @@ Object eleanor "Young Eleanor" blitz_shelter
                     "Eleanor turns the watch over in her small hands, listening to the tick. Then she gently pushes it back towards you. She doesn't say a word, but her eyes say: this is yours. Keep it.";
                 }
                 if (noun == tin_soldier) {
-                    score = score + 25;
+                    Achieved(15);
                     eleanor_gift = 2;
                     remove tin_soldier;
                     print "Eleanor takes the tin soldier and stands it on her knee. For the first time, something like a real smile crosses her face. She makes the soldier march across her drawing pad, and a tiny giggle escapes.^^";
@@ -3726,7 +3794,7 @@ Object porter_npc "college porter" cambridge_porter
             Give:
                 if (noun == invitation) {
                     porter_bypassed = true;
-                    score = score + 5;
+                    Achieved(17);
                     remove invitation;
                     print "The porter examines the invitation with the forensic scrutiny of a man who has confiscated more fake invitations than you've had hot dinners.^^";
                     print "~Hmm. This appears to be genuine.~ He sounds almost disappointed. ~Very well. The party is in the Great Hall, through to the north. Do try not to touch anything.~^";
@@ -3736,7 +3804,7 @@ Object porter_npc "college porter" cambridge_porter
             Show:
                 if (noun == invitation) {
                     porter_bypassed = true;
-                    score = score + 5;
+                    Achieved(17);
                     remove invitation;
                     print "The porter examines the invitation. ~Genuine. Proceed to the Great Hall, north.~^";
                     rtrue;
@@ -3879,7 +3947,7 @@ Object formula_printout "printout" cambridge_study
                 }
                 if (has_formula == false) {
                     has_formula = true;
-                    score = score + 8;
+                    Achieved(19);
                     move self to player;
                     "You tear the printout along its perforations and fold it carefully. Hawking nods from the doorway. ~That printout is the seed of everything that comes after. Take good care of it.~ A pause. ~Also, try not to create any paradoxes. The paperwork is terrible.~";
                 }
@@ -3906,7 +3974,7 @@ Object hawking "Professor Hawking" cambridge_hall
             Give, Show:
                 if ((noun == lodestone || (noun == toolkit && cat_accident) || (noun == vacuum_tube && visited_blitz)) && hawking_phase >= 2 && hawking_convinced == false) {
                     hawking_convinced = true;
-                    score = score + 8;
+                    Achieved(18);
                     if (noun == lodestone)
                         print "Hawking watches as the lodestone pulls at every piece of metal in the room. His instruments go haywire. The synthesiser is silent for a long moment.^^";
                     else if (noun == vacuum_tube)
@@ -4277,7 +4345,7 @@ Object comm_panel "maintenance panel" future_rooftop
                 if (kai_helping) "It's already open and fixed.";
                 if (toolkit notin player) "The panel needs proper tools to open. The bolts are rusted shut.";
                 kai_helping = true;
-                score = score + 5;
+                Achieved(20);
                 print "Your Victorian toolkit is, ironically, perfect for the job. The bolts are based on a nineteenth-century standard that never changed. You pop the panel open, reconnect a few wires, and the communications array hums to life.^^";
                 print "Kai appears at the top of the stairs, grinning. ~You fixed it! Torres has been trying to get that working for months!~ She unslings her diving gear. ~Here -- take this. Fair trade. The submerged lab is below the flooded street.~^^";
                 move diving_gear to player;
@@ -4544,7 +4612,7 @@ Object quantum_processor "quantum processor" quantum_cabinet
                 if (lab_unlocked == false) "It's locked in the cabinet. You need to open it first.";
                 if (parent(self) ~= player) {
                     has_processor = true;
-                    score = score + 8;
+                    Achieved(21);
                     move self to player;
                     print "You lift the crystalline processor from its suspension field. It hums in your hands, warm and familiar -- the same hum the time machine's field generator made before the accident. Built on Hawking's theory. Which exists because you went to his party. Which you could only attend because of a machine powered by this crystal. Somewhere, somewhen, someone is going to pack one of these into a brass harness, write a cryptic note, and post it to 14 Praed Street.";
                     print "^";
@@ -4762,7 +4830,7 @@ Object copernicus "silver-grey cat" main_workshop
                     cat_accident = true;
                     visited_roman = true;
                     current_era = 1;
-                    score = score + 3;
+                    Achieved(5);
                     rag_on_machine = false;
                     copernicus_named = true;
                     give self proper;
@@ -5086,7 +5154,7 @@ Object solarium_dest "Workshop"
         if (coins notin player)
             "You pat your pockets. No coins. You've already spent your last wages.";
         move newspaper to player;
-        score = score + 2;
+        Achieved(0);
         "~Tuppence, guv!~ The newsboy plucks two coins from your palm with the speed of a striking cobra and thrusts a folded copy of the Times into your hands. ~Pleasure doing business!~ He bites one of the coins experimentally, nods with satisfaction, and pockets both.";
     }
     if (noun == pint_of_ale) {
@@ -5122,7 +5190,7 @@ Object solarium_dest "Workshop"
         if (ad_circled)
             "You've already circled the advert. The pencil mark stands out clearly against the newsprint.";
         ad_circled = true;
-        score = score + 1;
+        Achieved(1);
         "You fish out the pencil and carefully circle the advert for DR. J. THYME -- TEMPORAL ENGINEERING. The pencil lead leaves a satisfying dark ring around the text. 14 Praed Street. That's right here.";
     }
     "You're not sure what you'd gain by circling that.";
@@ -5408,7 +5476,7 @@ Object solarium_dest "Workshop"
             "Priestess Livia would not appreciate you vandalising her temple walls. Get her permission first.";
         }
         inscription_carved = true;
-        score = score + 20;
+        Achieved(9);
         "You take the small chisel from your toolkit and carefully carve into the ancient stone: ~TEMPUS FUGIT -- THE TEMPORAL APPRENTICE WAS HERE, 60 AD.~ Livia watches with approval. ~A fine inscription. It will endure.~ You suspect she has no idea how right she is.";
     }
     "There's nothing suitable to carve here.";
@@ -5425,14 +5493,14 @@ Object solarium_dest "Workshop"
         give newspaper scenery;
         if (pencil in player) {
             newspaper_inscribed = true;
-            score = score + 15;
+            Achieved(10);
             print "You kneel in the mud and smooth the newspaper flat against your knee. Your hand is shaking -- from the cold, you tell yourself. You fish out the pencil and write in the margin, pressing hard enough to dent the newsprint:^^";
             print "  I WAS HERE. MY NAME DOESN'T MATTER.^";
             print "  I CAME FROM 1895. I DON'T KNOW IF I'M GOING HOME.^";
             print "  IF YOU FIND THIS, KNOW THAT TIME IS NOT WHAT YOU THINK IT IS.^";
             print "  -- THE TEMPORAL APPRENTICE, 60 AD^^";
         } else {
-            score = score + 5;
+            task_scores->10 = 5; Achieved(10);
             print "You kneel in the mud and smooth the newspaper flat against your knee. You wish you had something to write with -- there's so much you'd want to say. But the newspaper itself will have to be enough. The advert, the circled ink, the fold where you always tucked it under your arm. Proof enough.^^";
         }
         print "You roll the newspaper carefully and slide it into the amphora. You pack the neck with Thames clay, pressing it shut with your thumbs until the seal is smooth and tight. Then you dig.^^";
@@ -5467,7 +5535,7 @@ Object solarium_dest "Workshop"
             "The rubble burying the machine is far too heavy to shift alone. You'd need someone strong to help -- someone like Corporal Tommy, perhaps.";
         }
         machine_dug_out = true;
-        score = score + 3;
+        Achieved(13);
         print "You and Tommy attack the rubble burying the time machine. Brick by brick, beam by beam, you clear the debris. Tommy works with the cheerful determination of a man who has seen worse things this week.^^";
         print "~Funny-looking contraption,~ Tommy says, wiping plaster dust from his face. ~What is it, some kind of engine?~^^";
         print "~Experimental transport,~ you say. ~Mostly brass. Theoretical in places.~ Tommy nods with the easy acceptance of a man who has decided that the war is already strange enough that a brass contraption in a bomb crater barely registers.^^";
@@ -5501,7 +5569,7 @@ Object solarium_dest "Workshop"
             "It's too late. The roof has already collapsed. St. Margaret's is gone.";
         }
         church_saved = true;
-        score = score + 30;
+        Achieved(16);
         StopDaemon(rooftop_fire);
         print "You heave sandbag after sandbag over the parapet onto the burning timbers below. Sand cascades onto the incendiary, smothering the magnesium flames. It's exhausting, terrifying, and deeply satisfying work.^^";
         print "The fire sputters and dies. St. Margaret's Church will survive another night -- and, as it turns out, another few centuries. From somewhere below, you hear Warden Peggy's voice: ~About bloody time! Well done!~^";
@@ -5537,7 +5605,7 @@ Object solarium_dest "Workshop"
         if (has_lodestone && lodestone_installed == false) {
             lodestone_installed = true;
             remove lodestone;
-            score = score + 2;
+            Achieved(22);
             print "You ease the new lodestone into the compass housing. It clicks home with a satisfying snap, and the needle swings wildly before settling, trembling, on true north. The housing glows -- faintly at first, then steady, warm amber. The machine's navigational field hums back to life.^^";
             if (has_vacuum_tube && tube_installed == false && has_formula && formula_transcribed == false && has_processor && processor_installed == false) {
                 ! Don't check for all-installed yet, let the player install more
@@ -5559,7 +5627,7 @@ Object solarium_dest "Workshop"
             }
             tube_installed = true;
             remove vacuum_tube;
-            score = score + 2;
+            Achieved(23);
             print "You take the needle-nose pliers from your toolkit and spend ten careful minutes bending each contact pin into alignment. The military-spec tube is close but not quite right -- wider tolerances, heavier glass. But pin by pin, you coax it into the oscillation circuit housing. It slides home. The machine's hum shifts from ~broken refrigerator~ to ~contented beehive.~^^";
             print "The oscillation circuit is restored.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
@@ -5575,7 +5643,7 @@ Object solarium_dest "Workshop"
         }
         if (has_formula && formula_transcribed == false) {
             formula_transcribed = true;
-            score = score + 2;
+            Achieved(24);
             print "You unfold Hawking's printout and begin transcribing the equations into the calibration matrix. The mathematics are breathtaking -- temporal harmonics expressed as intersecting wave functions, each variable dependent on seventeen others. Your hand trembles as you enter the final coefficient.^^";
             print "The machine shudders. The destination dial, which has always felt approximate, suddenly clicks with precision. For the first time, the machine can AIM.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
@@ -5595,7 +5663,7 @@ Object solarium_dest "Workshop"
             }
             processor_installed = true;
             remove quantum_processor;
-            score = score + 2;
+            Achieved(25);
             print "The crystalline processor slides into the brass harness -- the same harness, the same copper solder tabs, the same perfect fit. Whoever built that adapter knew exactly what shape this crystal would be. You solder the connections with steady hands.^^";
             print "The machine shudders, glows, and begins to sing -- a low, thrumming chord that seems to resonate with the fabric of reality itself. The temporal field generator is restored.^";
             if (lodestone_installed && tube_installed && formula_transcribed && processor_installed) {
@@ -5716,7 +5784,7 @@ Object solarium_dest "Workshop"
             "The workshop is already spotless. Well, as spotless as a workshop full of temporal engineering equipment can be.";
         }
         workshop_cleaned = true;
-        score = score + 5;
+        Achieved(26);
         "You spend a surprisingly therapeutic twenty minutes tidying the workshop. Tools are returned to their racks. Marmalade jars are alphabetised (Dr. Thyme has opinions about marmalade). Copper shavings are swept. The workbench is cleared. Dr. Thyme will be pleased.";
     }
     "There's nothing here that needs cleaning.";
