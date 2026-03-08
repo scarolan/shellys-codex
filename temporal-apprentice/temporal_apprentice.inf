@@ -729,7 +729,7 @@ Global magic_word = 0;
     ! Block direct use of internal z-verbs
     if (w == 'zcr' or 'zbr' or 'ztv' or 'ztd' or 'zrp' or 'zex' or 'zdg' or 'zpt'
            or 'zkn' or 'zrn' or 'zcl' or 'zyl' or 'zsh' or 'zkk' or 'zmw'
-           or 'zby' or 'zci' or 'zsw' or 'zxy' or 'zsr') {
+           or 'zby' or 'zci' or 'zsw' or 'zxy' or 'zsr' or 'zdn') {
         i = WordAddress(1);
         len = WordLength(1);
         i->0 = 'z'; i->1 = 'z'; i->2 = 'z';
@@ -1086,6 +1086,15 @@ Global magic_word = 0;
         i->0 = 'z';
         i->1 = 'x';
         i->2 = 'y';
+        while (len > 3) { len--; i->len = ' '; }
+        Tokenise__(buffer, parse);
+    }
+    if (w == 'dance' or 'boogie' or 'waltz' or 'jig') {
+        i = WordAddress(1);
+        len = WordLength(1);
+        i->0 = 'z';
+        i->1 = 'd';
+        i->2 = 'n';
         while (len > 3) { len--; i->len = ' '; }
         Tokenise__(buffer, parse);
     }
@@ -5847,6 +5856,17 @@ Object solarium_dest "Workshop"
     magic_word = 0;
 ];
 
+[ DanceSub;
+    switch (random(6)) {
+        1: "You attempt a spirited jig. Copernicus watches with the quiet contempt that only a cat can muster for voluntary human movement.";
+        2: "You break into an impromptu waltz with an invisible partner. For a brief, glorious moment, you forget you are stranded in time. Then you remember.";
+        3: "You dance with the reckless abandon of someone who has already been flung through two millennia by a cat. What else can the universe possibly do to you?";
+        4: "You perform a little shuffle. Dr. Thyme would note that dancing is merely the application of rhythmic kinetic energy, and that you are applying it very badly.";
+        5: "You bust a move. It is not a good move. Historians will not record this moment, which is probably for the best given that you are literally surrounded by history.";
+        6: "You sway enthusiastically. The time machine's dials flicker in what might be appreciation, or might be structural concern. With temporal machinery, it's hard to tell.";
+    }
+];
+
 [ SwearSub;
     switch (random(8)) {
         1: if (copernicus_named)
@@ -5959,6 +5979,9 @@ Verb 'zxy'
 
 Verb 'zsr'
     *                                       -> Swear;
+
+Verb 'zdn'
+    *                                       -> Dance;
 
 Verb 'board'
     * noun                                  -> Enter;
